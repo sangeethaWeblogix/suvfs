@@ -17,6 +17,10 @@ export type Listing = {
   kg?: string;
   length?: string;
   make?: string;
+  odometer?: string;
+  transmission?: string;
+  fuel_type?: string;
+  seats?: string;
   is_premium?: boolean;
   is_exclusive?: boolean;
   is_featured?: boolean;
@@ -91,6 +95,10 @@ export function normalizePoolProduct(raw: RawPoolProduct): Listing {
     kg: raw.atm != null ? String(raw.atm) : raw.kg,
     length: raw.length != null ? String(raw.length) : raw.length,
     make: raw.make != null ? toDisplayString(raw.make) : undefined,
+    odometer: numToStr(raw.odometer),
+    transmission: numToStr(raw.transmission),
+    fuel_type: numToStr(raw.fuel_type),
+    seats: numToStr(raw.seats),
     is_premium: raw.premium ?? raw.is_premium ?? false,
     is_exclusive: raw.exclusive ?? raw.is_exclusive ?? false,
     is_featured: raw.is_featured ?? raw.featured ?? false,

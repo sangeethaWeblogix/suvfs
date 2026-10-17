@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useEnquiryForm } from "@/app/components/ListContent/enquiryform";
 import { Listing, SeoV2, buildFeaturedOrder, bucketPoolResponseCombined } from "./listingShared";
+import { useListingSpecs } from "./useListingSpecs";
 
 export type { Listing, SeoV2 };
 export { buildFeaturedOrder };
@@ -110,19 +111,12 @@ function formatPrice(p: string | undefined): string {
   return `$${n.toLocaleString("en-AU")}`;
 }
 
-function formatLength(len: string | undefined): string | null {
-  if (!len) return null;
-  const ft = parseFloat(len);
-  if (isNaN(ft)) return null;
-  const m = (ft * 0.3048).toFixed(1);
-  return `${ft} ft (${m}m)`;
-}
-
-function formatKg(kg: string | undefined): string | null {
-  if (!kg) return null;
-  const n = parseFloat(kg);
-  if (isNaN(n)) return null;
-  return `${n.toLocaleString("en-AU")} Kg`;
+// "8553 km" / "8553" -> "8,553 km"
+function formatOdometer(odo: string | undefined): string {
+  if (!odo) return "";
+  const n = Number(odo.replace(/[^0-9.]/g, ""));
+  if (!odo.match(/\d/) || isNaN(n)) return odo;
+  return `${n.toLocaleString("en-AU")} km`;
 }
 
 const AUS_ABBR: Record<string, string> = {
@@ -256,18 +250,20 @@ export function ListingCard({
 
   const price    = formatPrice(item.sale_price || item.regular_price);
   const isNew    = item.condition?.toLowerCase() === "new";
-  const type     = toTitleCase((item.categories?.[0] ?? "").replace(/-/g, " "));
   const sellerType = toTitleCase(item.seller_type ?? "");
-  const lenFmt   = formatLength(item.length);
-  const kgFmt    = formatKg(item.kg);
   const isDealer = item.seller_type !== "private";
+
+  // /pool doesn't send these yet — fall back to the product detail API (batched, temporary)
+  const hasSpecs = !!(item.odometer || item.transmission || item.fuel_type || item.seats);
+  const fetched  = useListingSpecs(item.slug, hasSpecs);
+  const specs    = hasSpecs ? item : (fetched ?? {});
 
   // Always 4 slots so grid rows are the same height across all cards
   const specSlots = [
-    { icon: "/images/category.svg", text: type   || "" },
-    { icon: "/images/length.svg",   text: lenFmt || "" },
-    { icon: "/images/weight.svg",   text: kgFmt  || "" },
-    { icon: "",                     text: "" },
+    { icon: "bi-speedometer2",         text: formatOdometer(specs.odometer) },
+    { icon: "bi-gear-wide-connected",  text: specs.transmission ?? "" },
+    { icon: "bi-fuel-pump",            text: specs.fuel_type ?? "" },
+    { icon: "bi-people",               text: specs.seats ?? "" },
   ];
 
   
@@ -415,9 +411,7 @@ export function ListingCard({
         <div className="lsd-card__specs-grid">
           {specSlots.map((s, i) => (
             <span key={i} className="lsd-card__spec">
-              {s.text && s.icon && (
-                <img src={s.icon} alt="" className="lsd-card__spec-icon" />
-              )}
+              {s.text && <i className={`bi ${s.icon} lsd-card__spec-bi`} aria-hidden="true" />}
               {s.text}
             </span>
           ))}

@@ -549,6 +549,13 @@ input.loc-search-input:focus { box-shadow: 0 0 0 1.5px #7e7e7e !important; }
   font-size: 13px;
   line-height: 1.55;
 }
+.lsd-card__spec-bi {
+  font-size: 15px;
+  line-height: 1;
+  color: #000000;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
 .lsd-card__spec-icon {
   width: 17px;
   height: 17px;
