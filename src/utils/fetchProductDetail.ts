@@ -8,25 +8,63 @@ function normalizeMpnProduct(raw: any) {
   const toRegion = (val: string) =>
     val ? { value: val, slug: val.toLowerCase().replace(/\s+/g, "-"), label: val } : undefined;
 
+  // Plain values -> display text; objects (e.g. make { name, slug }) are kept for link building.
+  const text = (v: any) =>
+    v == null || v === "" ? null : typeof v === "boolean" ? (v ? "Yes" : "No") : typeof v === "object" ? v : String(v);
+
+  // Every vehicle spec the API sends (SKU, dealer, suburb and postcode intentionally left out).
+  // Rows with no value are dropped, so each listing shows only what it has.
   const specs = [
-    { label: "Make",               value: raw.make },
-    { label: "Model",              value: raw.model },
-    { label: "Years",              value: raw.year != null ? String(raw.year) : null },
-    { label: "Conditions",         value: raw.condition },
-    { label: "Length",             value: raw.length != null ? String(raw.length) : null },
-    { label: "ATM",                value: raw.atm != null ? String(raw.atm) : null },
-    { label: "Tare Mass",          value: raw.tare_mass != null ? String(raw.tare_mass) : null },
-    { label: "Ball Weight",        value: raw.ball_weight != null ? String(raw.ball_weight) : null },
-    { label: "Sleeps",             value: raw.sleep != null ? String(raw.sleep) : null },
-    { label: "Axle Configuration", value: raw.axle_configuration },
-    { label: "Suspension",         value: raw.suspension },
-    { label: "Tyre Size",          value: raw.tyre_size },
-    { label: "Brakes",             value: raw.brakes },
-    { label: "Fridge",             value: raw.fridge },
-    { label: "GPS",                value: raw.gps },
-    { label: "Toilet",             value: raw.toilet },
-    { label: "Shower",             value: raw.shower },
-    { label: "Location",           value: raw.state ? toTitleCase(raw.state) : null },
+    { label: "Make",                     value: text(raw.make) },
+    { label: "Model",                    value: text(raw.model) },
+    { label: "Years",                    value: text(raw.year) },
+    { label: "Conditions",               value: text(raw.condition) },
+    { label: "Variant",                  value: text(raw.variant) },
+    { label: "Series",                   value: text(raw.series) },
+    { label: "Body Type",                value: text(raw.body_type) },
+    { label: "Body Size",                value: text(raw.body_size) },
+    { label: "Seats",                    value: text(raw.seats) },
+    { label: "Doors",                    value: text(raw.doors) },
+    { label: "Colour",                   value: text(raw.colour) },
+    { label: "Odometer",                 value: text(raw.odometer) },
+    { label: "Engine Capacity",          value: text(raw.engine_capacity) },
+    { label: "Engine Power",             value: text(raw.engine_power) },
+    { label: "Engine Make",              value: text(raw.engine_make) },
+    { label: "Cylinders",                value: text(raw.cylinders) },
+    { label: "Fuel Type",                value: text(raw.fuel_type) },
+    { label: "Fuel Consumption",         value: text(raw.fuel_consumption) },
+    { label: "Transmission",             value: text(raw.transmission) },
+    { label: "Drive Type",               value: text(raw.drive_type) },
+    { label: "Drivetrain",               value: text(raw.drivetrain) },
+    { label: "Suspension",               value: text(raw.suspension) },
+    { label: "Brakes",                   value: text(raw.brakes) },
+    { label: "Tyre Size",                value: text(raw.tyre_size) },
+    { label: "Length",                   value: text(raw.length) },
+    { label: "Width",                    value: text(raw.width) },
+    { label: "Height",                   value: text(raw.height) },
+    { label: "Wheelbase",                value: text(raw.wheelbase) },
+    { label: "Roof Height",              value: text(raw.roof_height) },
+    { label: "GVM",                      value: text(raw.gvm) },
+    { label: "GCM",                      value: text(raw.gcm) },
+    { label: "Tare Mass",                value: text(raw.tare_mass) },
+    { label: "Payload",                  value: text(raw.payload_weight) },
+    { label: "Braked Towing Capacity",   value: text(raw.braked_towing_capacity) },
+    { label: "Unbraked Towing Capacity", value: text(raw.unbraked_towing_capacity) },
+    { label: "Cargo Volume",             value: text(raw.cargo_volume) },
+    { label: "Load Area Length",         value: text(raw.load_area_length) },
+    { label: "Cab Type",                 value: text(raw.cab_type) },
+    { label: "Tray Type",                value: text(raw.tray_type) },
+    { label: "Battery Capacity",         value: text(raw.battery_capacity) },
+    { label: "Driving Range",            value: text(raw.driving_range) },
+    { label: "Fridge",                   value: text(raw.fridge) },
+    { label: "GPS",                      value: text(raw.gps) },
+    { label: "Toilet",                   value: text(raw.toilet) },
+    { label: "Shower",                   value: text(raw.shower) },
+    { label: "VIN",                      value: text(raw.vin) },
+    { label: "Registration Expiry",      value: text(raw.registration_expiry) },
+    { label: "Service History",          value: text(raw.service_history) },
+    { label: "Warranty",                 value: text(raw.warranty) },
+    { label: "Location",                 value: raw.state ? toTitleCase(raw.state) : null },
   ].filter((s) => s.value != null && s.value !== "");
 
   const cats = Array.isArray(raw.category)
@@ -69,7 +107,7 @@ function normalizeMpnProduct(raw: any) {
 export const fetchProductDetail = cache(async (slug: string) => {
   const MPN_BASE = process.env.MPN_API_BASE;
   const CFS_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
-  const API_KEY  = process.env.CFS_API_KEY;
+  const API_KEY  = process.env.MPN_API_KEY;
 
   // 1. Try new MPN API first
   if (MPN_BASE) {

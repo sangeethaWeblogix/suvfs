@@ -207,8 +207,8 @@ export const fetchListings = async (
       signal: controller.signal,
       headers: {
         Accept: "application/json",
-        ...(!isClient && process.env.CFS_API_KEY
-          ? { "X-Secret-Key": process.env.CFS_API_KEY }
+        ...(!isClient && process.env.MPN_API_KEY
+          ? { "X-Secret-Key": process.env.MPN_API_KEY }
           : {}),
       },
       ...(!isClient && { cache: 'no-store' }),

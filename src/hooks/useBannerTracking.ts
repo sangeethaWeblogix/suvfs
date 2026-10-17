@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { WP_ORIGIN } from "@/lib/apiBase";
 
 type Banner = {
   id: number;
@@ -40,7 +41,7 @@ export function useBannerTracking(banners: Banner[], visitorIp?: string) {
 
     try {
       await fetch(
-        `${process.env.NEXT_PUBLIC_CF7_BASE || "https://admin.marketplacenetwork.com.au"}/wp-json/ads-manager/v1/banners/track`,
+        `${WP_ORIGIN}/wp-json/ads-manager/v1/banners/track`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

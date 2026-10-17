@@ -146,7 +146,7 @@ const CaravansByStateSkeleton: React.FC<{ count?: number }> = ({
     <div
       className="caravans_by_state related-products services section-padding style-1 pt-0"
       aria-busy="true"
-      aria-label="Loading caravans by state…"
+      aria-label="Loading SUVs by state…"
     >
       <div className="container">
         {/* Section heading */}

@@ -25,7 +25,7 @@ export default function PrivacyPolicy() {
               <p>These websites may include, but are not limited to:</p>
 
               <ul>
-                <li>caravansforsale.com.au</li>
+                <li>suvforsale.com.au</li>
                 
               </ul>
 

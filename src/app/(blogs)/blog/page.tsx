@@ -6,7 +6,7 @@ import { fetchBlogs } from "@/api/blog/api";
 export const metadata: Metadata = {
   title: { default: "Latest News, Reviews & Advice", template: "%s " },
   description:
-    "Latest news, in-depth reviews, and expert advice on the latest in the caravan market. Stay informed and make smarter decisions.",
+    "Latest news, in-depth reviews, and expert advice on the latest in the SUV market. Stay informed and make smarter decisions.",
   icons: { icon: "/favicon.ico" },
   robots: "index, follow",
   alternates: {

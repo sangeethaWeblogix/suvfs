@@ -29,7 +29,7 @@ export default function ThankYouClient() {
               height: 80,
               margin: "0 auto 20px",
               borderRadius: "50%",
-              backgroundColor: "#ec7200",
+              backgroundColor: "#4736fe",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -42,11 +42,11 @@ export default function ThankYouClient() {
 
           <Typography variant="h5" fontWeight="bold" gutterBottom>
             Thank you for submitting your information with{" "}
-            <span style={{ color: "#000" }}>caravansforsale.com.au</span>.
+            <span style={{ color: "#000" }}>suvforsale.com.au</span>.
           </Typography>
 
           <Typography variant="body1" color="text.secondary" gutterBottom>
-            Your caravan dealer will contact you as soon as possible.
+            Your SUV dealer will contact you as soon as possible.
           </Typography>
 
           <Link href="/" style={{ textDecoration: "none" }}>
@@ -54,9 +54,9 @@ export default function ThankYouClient() {
               variant="contained"
               sx={{
                 mt: 3,
-                backgroundColor: "orange",
+                backgroundColor: "#4736FE",
                 color: "white",
-                "&:hover": { backgroundColor: "#ec7200" },
+                "&:hover": { backgroundColor: "#4736fe" },
               }}
             >
               Go Back

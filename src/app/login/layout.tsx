@@ -5,9 +5,9 @@ import { ReactNode } from "react";
 
 
  export const metadata: Metadata = {
-   title: "Login | Caravans For Sale – Dealer & Private Seller Access",
+   title: "Login | SUVs For Sale – Dealer & Private Seller Access",
   description:
-     "Access your CaravansForSale.com.au account. Private sellers and dealers can log in to manage listings, post caravans for sale, and connect with thousands of buyers across Australia.",
+     "Access your SuvForSale.com.au account. Private sellers and dealers can log in to manage listings, post SUVs for sale, and connect with thousands of buyers across Australia.",
    icons: { icon: "/favicon.ico" },
    robots: "index, follow",
    verification: {

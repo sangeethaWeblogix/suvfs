@@ -88,18 +88,18 @@ useEffect(() => {
           <div className="col-lg-6">
             <div className="home-post_head">
               <h3>
-                <span>Find Your Ideal Caravan</span>
+                <span>Find Your Ideal SUV</span>
                 <br />– Post Your Requirements
               </h3>
               <p>
                 Tell us what you&apos;re looking for and we&apos;ll match you
-                with the right caravan for sale, from trusted dealers at a
+                with the right SUV for sale, from trusted dealers at a
                 fair price. Make sure your budget and expectations are
                 realistic to help us deliver the best possible outcome. See
-                some examples of what other caravan buyers are looking for.
+                some examples of what other SUV buyers are looking for.
               </p>
               <div className="final_post_btn">
-                <a href="/caravan-enquiry-form/" className="btn">
+                <a href="/suv-enquiry-form/" className="btn">
                   Post Your Requirements
                 </a>
               </div>
@@ -113,9 +113,9 @@ useEffect(() => {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              <h3>Recent Caravan Buyer Requests</h3>
+              <h3>Recent SUV Buyer Requests</h3>
               <p className="sub-text">
-                See examples of what buyers are looking for across our Australian caravan sales marketplace.
+                See examples of what buyers are looking for across our Australian SUV sales marketplace.
               </p>
               <div className="top_cta bg-white">
                 <Swiper

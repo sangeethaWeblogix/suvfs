@@ -1,6 +1,6 @@
 // src/app/listings-sitemap.xml/route.ts
 import { NextResponse } from "next/server";
- const API_KEY = process.env.CFS_API_KEY; // ✅ Add at top of file
+ const API_KEY = process.env.MPN_API_KEY; // ✅ Add at top of file
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://www.caravansforsale.com.au";
@@ -8,7 +8,7 @@ const SITE_URL =
  export async function GET() {
   try {
     const response = await fetch(
-      "https://admin.marketplacenetwork.com.au/wp-json/mpn/v1/search-keyword",
+      `${process.env.NEXT_PUBLIC_CFS_API_BASE}/search-keyword`,
        {
         headers: {
           Accept: "application/json",

@@ -1,6 +1,6 @@
  import { cache } from "react";
  
- const MPN_API_KEY = process.env.CFS_API_KEY;
+ const MPN_API_KEY = process.env.MPN_API_KEY;
  const FETCH_TIMEOUT_MS = 8000;
  const MAX_ATTEMPTS = 3;
  
@@ -27,7 +27,7 @@
  // backend shuffle category_featured_products — without one it returns the
  // same set every time.
  export const fetchBlogDetail = cache(async (slug: string, seed?: number) => {
-   const url = `https://admin.marketplacenetwork.com.au/wp-json/mpn/v1/blog/caravans/${encodeURIComponent(slug)}${seed ? `?seed=${seed}` : ""}`;
+   const url = `${process.env.NEXT_PUBLIC_CFS_API_BASE}/blog/${encodeURIComponent(slug)}${seed ? `?seed=${seed}` : ""}`;
  
    let lastErr: unknown;
    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {

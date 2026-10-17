@@ -9,7 +9,7 @@
  
  // export async function generateStaticParams() {
  //   const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
- //   const API_KEY = process.env.CFS_API_KEY;
+ //   const API_KEY = process.env.MPN_API_KEY;
  //   if (!API_BASE) return [];
  //
  //   const headers: Record<string, string> = {
@@ -70,8 +70,8 @@
    const seo = data?.seo ?? data?.product?.seo ?? {};
    const slugTitle = slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
  
-   const title = seo.metatitle || seo.meta_title || pd.name || data?.name || slugTitle || "Caravan for Sale";
-   const description = seo.metadescription || seo.meta_description || pd.short_description || "View caravan details on Caravans For Sale Australia.";
+   const title = seo.metatitle || seo.meta_title || pd.name || data?.name || slugTitle || "SUV for Sale";
+   const description = seo.metadescription || seo.meta_description || pd.short_description || "View SUV details on SUVs For Sale Australia.";
    const canonicalUrl = `https://www.caravansforsale.com.au/product/${slug}/`;
    const rawImages = pd.image_url ?? pd.images ?? [];
    const images: string[] = (Array.isArray(rawImages) ? rawImages : [rawImages]).filter(Boolean);
@@ -86,7 +86,7 @@
        title,
        description,
        url: canonicalUrl,
-       siteName: "Caravans for Sale",
+       siteName: "SUVs for Sale",
        ...(images.length > 0 && { images: [{ url: images[0], alt: title }] }),
        type: "website",
      },
@@ -99,7 +99,7 @@
  }
  
  async function fetchSimilarProducts(slug: string) {
-   const API_KEY = process.env.CFS_API_KEY;
+   const API_KEY = process.env.MPN_API_KEY;
    const CFS_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
    try {
      const res = await fetch(

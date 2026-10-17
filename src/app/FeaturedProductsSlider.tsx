@@ -79,7 +79,7 @@ const FeaturedProductsSlider = () => {
       <div className="container">
         <div className="title">
           <div className="tpof_tab">
-            <h2>Featured Caravans For Sale</h2>
+            <h2>Featured SUVs For Sale</h2>
             <div className="viewall_bttn">
               <Link href="">
                 <i className="bi bi-chevron-right"></i>

@@ -62,7 +62,7 @@ export default function StateHome({ initialFilters }: Props) {
       // Filter changed and the new page's SEO hasn't loaded yet — fall back
       // to the generic title instead of leaving the previous page's title
       // showing (stale tab title while the new fetch is in flight).
-      document.title = "Caravans For Sale – Australia's Marketplace for New & Used Caravans";
+      document.title = "SUVs For Sale – Australia's Marketplace for New & Used SUVs";
       return;
     }
     if (seo.meta_title) document.title = seo.meta_title;
@@ -385,7 +385,7 @@ export default function StateHome({ initialFilters }: Props) {
             <nav className="lsd-breadcrumb" aria-label="Breadcrumb">
               <Link href="/">Home</Link>
               <svg width="12" height="20" viewBox="0 0 24 24" fill="none" stroke="#3e3e3e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0,display:"block"}} aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-              <Link href="/listings/">Caravans for Sale</Link>
+              <Link href="/listings/">SUVs for Sale</Link>
               {buildFilterBreadcrumbs(filters).map((crumb) => (
                 <span key={crumb.href}>
                   <svg width="12" height="20" viewBox="0 0 24 24" fill="none" stroke="#3e3e3e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0,display:"block"}} aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
@@ -459,7 +459,7 @@ export default function StateHome({ initialFilters }: Props) {
           <nav className="lsd-paged-breadcrumb" aria-label="Breadcrumb">
             <Link href="/">Home</Link>
             <svg width="10" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-            <Link href="/listings/">Caravans for Sale</Link>
+            <Link href="/listings/">SUVs for Sale</Link>
             {buildFilterBreadcrumbs(filters).map((crumb) => (
               <span key={crumb.href}>
                 <svg width="10" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
@@ -467,7 +467,7 @@ export default function StateHome({ initialFilters }: Props) {
               </span>
             ))}
           </nav>
-          <h1 className="lsd-paged-title">{seo?.h1 || "Caravans for Sale in Victoria"}</h1>
+          <h1 className="lsd-paged-title">{seo?.h1 || "SUVs for Sale in Victoria"}</h1>
         </div>
       </div>
 
@@ -478,7 +478,7 @@ export default function StateHome({ initialFilters }: Props) {
       />
 
       <StateListingGrid
-        title="Caravans for Sale in Victoria"
+        title="SUVs for Sale in Victoria"
         viewAllHref="/listings/?state=victoria"
         apiUrl={allUrl}
         showSpotlight

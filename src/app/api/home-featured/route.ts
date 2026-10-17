@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 export const preferredRegion = "syd1";
 
 const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
-const API_KEY = process.env.CFS_API_KEY;
+const API_KEY = process.env.MPN_API_KEY;
 
 // Normalize each product so components always get the fields they expect
 // (WP home-featured returns title/category/r2_thumbnails instead of name/categories/image_format)
@@ -33,7 +33,8 @@ export async function GET(request: NextRequest) {
   const type     = request.nextUrl.searchParams.get("type") ?? "all";
   const seed     = request.nextUrl.searchParams.get("seed");
   const category = request.nextUrl.searchParams.get("category");
-  const url = `${API_BASE}/home-featured?type=${encodeURIComponent(type)}${seed ? `&seed=${encodeURIComponent(seed)}` : ""}${category ? `&category=${encodeURIComponent(category)}` : ""}`;
+  const limit    = request.nextUrl.searchParams.get("limit") ?? "10";
+  const url = `${API_BASE}/home-featured?type=${encodeURIComponent(type)}&limit=${encodeURIComponent(limit)}${seed ? `&seed=${encodeURIComponent(seed)}` : ""}${category ? `&category=${encodeURIComponent(category)}` : ""}`;
 
   const visitorIp =
     request.headers.get("cf-connecting-ip") ||

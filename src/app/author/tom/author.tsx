@@ -83,35 +83,35 @@ const loading = !data || !blogPosts || blogPosts.length === 0 && data.totalPages
                 <div>
                   <h1 className="author-name">Tom</h1>
                   <h5 className="author-tagline">
-                    Author at Caravans For Sale
+                    Author at SUVs For Sale
                   </h5>
                 </div>
               </div>
 
               <div className="author-info">
                 <p>
-                  Tom is a passionate caravan enthusiast and content writer at{" "}
+                  Tom is a passionate SUV enthusiast and content writer at{" "}
                   <Link href="https://www.caravansforsale.com.au/">
-                    CaravansForSale.com.au
+                    SuvForSale.com.au
                   </Link>{" "}
                   — Australia’s trusted destination for buying, selling, and
-                  researching caravans.
+                  researching SUVs.
                 </p>
                 <p>
                   He helps Australians make informed decisions across every
-                  stage of the caravan journey, from choosing the right model to
+                  stage of the SUV journey, from choosing the right model to
                   comparing prices and discovering hidden gems from regional
                   manufacturers.
                 </p>
                 <p>
-                  Tom’s articles focus on off-road caravans, touring models,
+                  Tom’s articles focus on off-road SUVs, touring models,
                   hybrids, and family-friendly designs, offering practical
                   insights tailored to Australian conditions, travel habits, and
                   market trends.
                 </p>
                 <p>
                   With a genuine love for the outdoors, Tom’s writing reflects
-                  Australia’s caravan lifestyle — adventure, community, and
+                  Australia’s SUV lifestyle — adventure, community, and
                   freedom on the open road.
                 </p>
               </div>

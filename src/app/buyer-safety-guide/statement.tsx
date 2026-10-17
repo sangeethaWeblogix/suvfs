@@ -14,12 +14,12 @@ export default function CaravanBuyingSafetyGuide() {
               </h1>
 
               <p>
-                Buying a caravan is an exciting investment, whether you’re planning weekend trips or long-term travel.
+                Buying an SUV is an exciting investment, whether you’re planning weekend trips or long-term travel.
                 While most sellers are genuine, it is important to take precautions to ensure your purchase is safe and legitimate.
               </p>
 
               <p>
-                CaravansForSale.com.au connects buyers and sellers, but transactions take place directly between those parties.
+                SuvForSale.com.au connects buyers and sellers, but transactions take place directly between those parties.
                 The following safety guidelines will help you make informed decisions and reduce the risk of scams.
               </p>
 
@@ -34,24 +34,24 @@ export default function CaravanBuyingSafetyGuide() {
               <ul>
                 <li>confirm the seller’s name and contact details</li>
                 <li>speak directly with the seller via phone where possible</li>
-                <li>ask additional questions about the caravan</li>
+                <li>ask additional questions about the SUV</li>
                 <li>be cautious if the seller refuses to provide basic information</li>
               </ul>
 
               <p>
-                Legitimate sellers should have no issue answering reasonable questions about the caravan.
+                Legitimate sellers should have no issue answering reasonable questions about the SUV.
               </p>
 
-              <h3>2. Inspect the Caravan Before Payment</h3>
+              <h3>2. Inspect the SUV Before Payment</h3>
 
               <p>
-                Whenever possible, inspect the caravan in person before making any payment.
+                Whenever possible, inspect the SUV in person before making any payment.
               </p>
 
               <p>During an inspection, check:</p>
 
               <ul>
-                <li>structural condition of the caravan</li>
+                <li>structural condition of the SUV</li>
                 <li>signs of water damage or leaks</li>
                 <li>chassis condition</li>
                 <li>tyres and suspension</li>
@@ -60,35 +60,35 @@ export default function CaravanBuyingSafetyGuide() {
               </ul>
 
               <p>
-                If you are unable to inspect the caravan yourself, consider hiring an independent caravan inspector.
+                If you are unable to inspect the SUV yourself, consider hiring an independent SUV inspector.
               </p>
 
               <p>
-                Never send payment for a caravan that you have not verified.
+                Never send payment for an SUV that you have not verified.
               </p>
 
               <h3>3. Check the VIN or Chassis Number</h3>
 
               <p>
-                Every caravan should have a Vehicle Identification Number (VIN) or chassis number.
+                Every SUV should have a Vehicle Identification Number (VIN) or chassis number.
               </p>
 
               <p>Before buying:</p>
 
               <ul>
-                <li>confirm the VIN on the caravan matches the documentation</li>
+                <li>confirm the VIN on the SUV matches the documentation</li>
                 <li>ensure the VIN has not been altered or tampered with</li>
-                <li>verify the caravan registration details where applicable</li>
+                <li>verify the SUV registration details where applicable</li>
               </ul>
 
               <p>
-                Matching VIN numbers help confirm the caravan’s identity and ownership history.
+                Matching VIN numbers help confirm the SUV’s identity and ownership history.
               </p>
 
               <h3>4. Check for Finance Owing</h3>
 
               <p>
-                Before purchasing a caravan, check whether finance is still owing.
+                Before purchasing an SUV, check whether finance is still owing.
               </p>
 
               <p>
@@ -98,13 +98,13 @@ export default function CaravanBuyingSafetyGuide() {
               <p>A PPSR search can reveal whether:</p>
 
               <ul>
-                <li>finance is still owing on the caravan</li>
-                <li>another party has a financial interest in the caravan</li>
-                <li>the caravan has been reported stolen</li>
+                <li>finance is still owing on the SUV</li>
+                <li>another party has a financial interest in the SUV</li>
+                <li>the SUV has been reported stolen</li>
               </ul>
 
               <p>
-                Purchasing a caravan with outstanding finance could affect your ownership rights.
+                Purchasing an SUV with outstanding finance could affect your ownership rights.
               </p>
 
               <p>
@@ -114,7 +114,7 @@ export default function CaravanBuyingSafetyGuide() {
               <h3>5. Be Cautious of Prices That Are Too Good to Be True</h3>
 
               <p>
-                Scammers often advertise caravans at prices significantly below market value.
+                Scammers often advertise SUVs at prices significantly below market value.
               </p>
 
               <p>Be cautious if:</p>
@@ -122,7 +122,7 @@ export default function CaravanBuyingSafetyGuide() {
               <ul>
                 <li>the price seems unusually low</li>
                 <li>the seller claims urgent circumstances for selling</li>
-                <li>the seller says the caravan is located overseas</li>
+                <li>the seller says the SUV is located overseas</li>
                 <li>the seller asks for immediate payment</li>
               </ul>
 
@@ -138,7 +138,7 @@ export default function CaravanBuyingSafetyGuide() {
 
               <ul>
                 <li>verified the seller</li>
-                <li>inspected the caravan</li>
+                <li>inspected the SUV</li>
                 <li>confirmed ownership documentation</li>
               </ul>
 
@@ -226,13 +226,13 @@ export default function CaravanBuyingSafetyGuide() {
               <h3>Important Disclaimer</h3>
 
               <p>
-                CaravansForSale.com.au is an online marketplace operated by Marketplace Network Pty Ltd.
+                SuvForSale.com.au is an online marketplace operated by Marketplace Network Pty Ltd.
                 We connect buyers and sellers but do not participate in transactions between users.
               </p>
 
               <p>
                 Buyers are responsible for conducting their own inspections,
-                verification checks, and due diligence before purchasing any caravan.
+                verification checks, and due diligence before purchasing any SUV.
               </p>
 
             </div>

@@ -79,7 +79,7 @@ interface Props {
 }
 
 const PROMO_BANNERS = [
-  { src: "/images/sell-my-caravan.jpg?=11", href: "/sell-my-caravan/", alt: "Sell My Caravan" },
+  { src: "/images/sell-my-caravan.jpg?=11", href: "/sell-my-suv/", alt: "Sell My SUV" },
   // { src: "/images/home.jpg?=3",            href: "https://www.aussiefivestarcaravans.com.au/", alt: "Aussie Five Star Caravans" },
   { src: "/images/dealer-advertising.jpg?=7", href: "/dealer-advertising/", alt: "Dealer Advertising" },
 ];

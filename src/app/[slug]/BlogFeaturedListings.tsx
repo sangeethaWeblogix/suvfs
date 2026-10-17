@@ -20,7 +20,7 @@ type Listing = {
 export default function BlogFeaturedListings({ products, category }: { products: Listing[]; category?: string }) {
   if (!products?.length) return null;
 
-  const heading = category ? `Featured ${category} Caravans for Sale` : "Featured Caravans for Sale";
+  const heading = category ? `Featured ${category} SUVs for Sale` : "Featured SUVs for Sale";
 
   return (
     <section className="bfl-section">

@@ -6,16 +6,16 @@ import React, { useState } from "react";
 import { RegionInfo } from "./regions-data";
 
 const CARAVAN_TYPES = [
-  { label: "Off Road Caravans", img: "/images/off-road.webp", href: "/listings/off-road-category/" },
-  { label: "Family Caravans", img: "/images/family.webp", href: "/listings/family-caravans-category/" },
-  { label: "Pop Top Caravans", img: "/images/pop-top.webp", href: "/listings/pop-top-category/" },
-  { label: "Hybrid Caravans", img: "/images/hybrid.webp", href: "/listings/hybrid-caravans-category/" },
-  { label: "Luxury Caravans", img: "/images/luxury.webp", href: "/listings/luxury-caravans-category/" },
-  { label: "Couples Caravans", img: "/images/touring.webp", href: "/listings/couples-caravans-category/" },
-  { label: "Touring Caravans", img: "/images/touring.webp", href: "/listings/touring-caravans-category/" },
-  { label: "Bunk Caravans", img: "/images/family.webp", href: "/listings/bunk-caravans-category/" },
-  { label: "Small Caravans", img: "/images/pop-top.webp", href: "/listings/small-caravans-category/" },
-  { label: "Used Caravans", img: "/images/off-road.webp", href: "/listings/used-condition/" },
+  { label: "Off Road SUVs", img: "/images/off-road.webp", href: "/listings/off-road-category/" },
+  { label: "Family SUVs", img: "/images/family.webp", href: "/listings/family-caravans-category/" },
+  { label: "Pop Top SUVs", img: "/images/pop-top.webp", href: "/listings/pop-top-category/" },
+  { label: "Hybrid SUVs", img: "/images/hybrid.webp", href: "/listings/hybrid-caravans-category/" },
+  { label: "Luxury SUVs", img: "/images/luxury.webp", href: "/listings/luxury-caravans-category/" },
+  { label: "Couples SUVs", img: "/images/touring.webp", href: "/listings/couples-caravans-category/" },
+  { label: "Touring SUVs", img: "/images/touring.webp", href: "/listings/touring-caravans-category/" },
+  { label: "Bunk SUVs", img: "/images/family.webp", href: "/listings/bunk-caravans-category/" },
+  { label: "Small SUVs", img: "/images/pop-top.webp", href: "/listings/small-caravans-category/" },
+  { label: "Used SUVs", img: "/images/off-road.webp", href: "/listings/used-condition/" },
 ];
 
 interface RegionSellerProps {
@@ -29,8 +29,8 @@ export default function RegionSeller({ region }: RegionSellerProps) {
   const stateSlug = region.state.slug;
 
   const HOW_TO_STEPS = [
-    { num: 1, iconSet: "fa-regular", icon: "fa-file-lines",    title: "Create Your Listing",    desc: "Add your caravan details, description, price and location in minutes." },
-    { num: 2, iconSet: "fa-regular", icon: "fa-image",         title: "Upload Photos",          desc: "Add clear photos of the inside, outside and features of your caravan." },
+    { num: 1, iconSet: "fa-regular", icon: "fa-file-lines",    title: "Create Your Listing",    desc: "Add your SUV details, description, price and location in minutes." },
+    { num: 2, iconSet: "fa-regular", icon: "fa-image",         title: "Upload Photos",          desc: "Add clear photos of the inside, outside and features of your SUV." },
     { num: 3, iconSet: "fa-regular", icon: "fa-comment-dots",  title: "Reach Buyers",           desc: `Your listing is live across ${regionLabel} and ${stateLabel}. Buyers contact you directly.` },
     { num: 4, iconSet: "fa-regular", icon: "fa-handshake",     title: "Negotiate Directly",     desc: "Arrange inspections and negotiate price with buyers." },
     { num: 5, iconSet: "fa-regular", icon: "fa-circle-check",  title: "Complete The Sale",      desc: "Once sold, remove your listing or mark as sold. It's that simple." },
@@ -38,44 +38,44 @@ export default function RegionSeller({ region }: RegionSellerProps) {
 
   const MAIN_FAQS = [
     {
-      q: `How do I sell my caravan in ${regionLabel}?`,
-      a: <p>You can sell your caravan online by creating a private seller listing on CaravansForSale.com.au. Simply add your caravan details, upload clear photos, set your asking price, and publish your ad so active buyers in {regionLabel} and across {stateLabel} can contact you directly.</p>,
+      q: `How do I sell my SUV in ${regionLabel}?`,
+      a: <p>You can sell your SUV online by creating a private seller listing on SuvForSale.com.au. Simply add your SUV details, upload clear photos, set your asking price, and publish your ad so active buyers in {regionLabel} and across {stateLabel} can contact you directly.</p>,
     },
     {
-      q: `How much does it cost to sell my caravan in ${regionLabel}?`,
+      q: `How much does it cost to sell my SUV in ${regionLabel}?`,
       a: <p>We charge a simple, flat one-time fee of just $49 (inc. GST). There are absolutely no commissions, no hidden upfront fees, and no recurring monthly subscriptions. You keep 100% of your sale price.</p>,
     },
     {
-      q: "How long does my caravan listing stay live?",
-      a: <p>Your caravan listing stays live until sold. You do not need to keep paying monthly fees to keep your ad active. Once your caravan is sold, you can remove the listing from the website.</p>,
+      q: "How long does my SUV listing stay live?",
+      a: <p>Your SUV listing stays live until sold. You do not need to keep paying monthly fees to keep your ad active. Once your SUV is sold, you can remove the listing from the website.</p>,
     },
     {
-      q: "Can I edit my caravan listing after publishing?",
-      a: <p>Yes. After your listing is published, you can update your caravan details, change the asking price, add or replace photos and improve your description if needed.</p>,
+      q: "Can I edit my SUV listing after publishing?",
+      a: <p>Yes. After your listing is published, you can update your SUV details, change the asking price, add or replace photos and improve your description if needed.</p>,
     },
     {
       q: "How do buyers contact me?",
-      a: <p>Interested buyers can contact you directly through your caravan listing. This allows you to answer questions, arrange inspections, negotiate the price and manage the sale privately.</p>,
+      a: <p>Interested buyers can contact you directly through your SUV listing. This allows you to answer questions, arrange inspections, negotiate the price and manage the sale privately.</p>,
     },
     {
-      q: "What photos should I upload when selling my caravan?",
-      a: <p>Upload clear photos of the outside, inside, kitchen, beds, seating area, bathroom, tyres, drawbar and any included accessories. Good photos help buyers understand the condition of your caravan and can increase enquiries.</p>,
+      q: "What photos should I upload when selling my SUV?",
+      a: <p>Upload clear photos of the outside, inside, kitchen, beds, seating area, bathroom, tyres, drawbar and any included accessories. Good photos help buyers understand the condition of your SUV and can increase enquiries.</p>,
     },
     {
-      q: "How should I price my caravan?",
-      a: <p>Check similar caravans for sale in {regionLabel} before setting your price. Compare by make, model, year, condition, length, ATM, tare weight, sleeping capacity, features and location. A realistic asking price can help attract more genuine buyers.</p>,
+      q: "How should I price my SUV?",
+      a: <p>Check similar SUVs for sale in {regionLabel} before setting your price. Compare by make, model, year, condition, length, ATM, tare weight, sleeping capacity, features and location. A realistic asking price can help attract more genuine buyers.</p>,
     },
     {
-      q: "Is it safe to sell my caravan privately online?",
+      q: "Is it safe to sell my SUV privately online?",
       a: <p>Yes, but you should take normal precautions. Speak with buyers directly, meet in a safe location, confirm payment has cleared before handover and complete any required transfer paperwork for {stateLabel}.</p>,
     },
     {
-      q: "Do I pay commission when my caravan sells?",
-      a: <p>No. CaravansForSale.com.au does not charge commission when your caravan sells. You pay the one-time listing fee and keep 100% of the agreed sale price.</p>,
+      q: "Do I pay commission when my SUV sells?",
+      a: <p>No. SuvForSale.com.au does not charge commission when your SUV sells. You pay the one-time listing fee and keep 100% of the agreed sale price.</p>,
     },
     {
-      q: "Can I remove my listing after my caravan is sold?",
-      a: <p>Yes. Once your caravan has sold, you can remove your listing so buyers know it is no longer available.</p>,
+      q: "Can I remove my listing after my SUV is sold?",
+      a: <p>Yes. Once your SUV has sold, you can remove your listing so buyers know it is no longer available.</p>,
     },
   ];
 
@@ -86,10 +86,10 @@ export default function RegionSeller({ region }: RegionSellerProps) {
       <section className="demo-hero">
         <div className="container">
           <h1 className="demo-hero__title">
-            Sell My Caravan in {regionLabel}
+            Sell My SUV in {regionLabel}
           </h1>
           <p className="demo-hero__subtitle">
-            The fastest, safest way to reach active caravan buyers in {regionLabel}, {stateLabel}.
+            The fastest, safest way to reach active SUV buyers in {regionLabel}, {stateLabel}.
           </p>
 
           {/* Pricing card + CTA wrapper — one seamless unit */}
@@ -102,10 +102,10 @@ export default function RegionSeller({ region }: RegionSellerProps) {
                 <img src="/images/vic_map.svg" alt={regionLabel} />
               </div>
               <div className="demo-price-card__header">
-              <h3>Looking to sell your caravan?</h3>
+              <h3>Looking to sell your SUV?</h3>
             </div>
               <p className="demo-price-card__desc">
-                List your caravan on Australia's #1 caravan marketplace and connect with thousands of buyers in {regionLabel}, {stateLabel}.
+                List your SUV on Australia's #1 SUV marketplace and connect with thousands of buyers in {regionLabel}, {stateLabel}.
               </p>
 
             </div>
@@ -141,7 +141,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
 
           {/* CTA — inside wrapper so it attaches seamlessly to card bottom */}
           <a href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" className="demo-hero__cta">
-            List Your Caravan Now <i className="fa-solid fa-arrow-right" />
+            List Your SUV Now <i className="fa-solid fa-arrow-right" />
           </a>
           </div>{/* end demo-price-wrapper */}
 
@@ -154,8 +154,8 @@ export default function RegionSeller({ region }: RegionSellerProps) {
           <div className="demo-features-grid">
             {[
               { img: "/images/chat2.png", title: "Direct Buyer Contact", desc: "Communicate directly with buyers, no middleman." },
-              { img: "/images/calendar.png", title: "Live Until Sold", desc: "Your listing stays live until your caravan is sold." },
-              { img: "/images/caravan.png", title: "Caravan-Only Marketplace", desc: "Reach engaged caravan buyers actively looking to buy caravans." },
+              { img: "/images/calendar.png", title: "Live Until Sold", desc: "Your listing stays live until your SUV is sold." },
+              { img: "/images/caravan.png", title: "SUV-Only Marketplace", desc: "Reach engaged SUV buyers actively looking to buy SUVs." },
               { img: "/images/dollar.png", title: "Keep 100% of Your Sale", desc: "Pay only a one-time fee for maximum value. No hidden costs." },
             ].map((item, i) => (
               <div className="demo-feature-card" key={i}>
@@ -176,14 +176,14 @@ export default function RegionSeller({ region }: RegionSellerProps) {
 
           {/* Heading */}
           <div className="demo-reach-heading">
-            <h3>Reach Caravan Buyers in {regionLabel}, {stateLabel}</h3>
+            <h3>Reach SUV Buyers in {regionLabel}, {stateLabel}</h3>
           </div>
 
           <div className="demo-reach-row">
           {/* Device image */}
           <div className="demo-reach-device">
-            <img src="/images/your-caravan-desktop-seller-2.jpg" className="img-fluid d-none d-lg-block" alt="Caravan For Sale Desktop" />
-            <img src="/images/your-caravan-mobile-2.jpg" className="img-fluid d-block d-lg-none" alt="Caravan For Sale Mobile" />
+            <img src="/images/your-caravan-desktop-seller-2.jpg" className="img-fluid d-none d-lg-block" alt="SUV For Sale Desktop" />
+            <img src="/images/your-caravan-mobile-2.jpg" className="img-fluid d-block d-lg-none" alt="SUV For Sale Mobile" />
           </div>
 
           {/* Pricing + FAQ card */}
@@ -199,7 +199,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
               <p className="demo-reach-card__fee-label">One-Time Listing Fee</p>
               <ul className="demo-reach-card__list">
                 {[
-                  "1 Caravan listed until sold",
+                  "1 SUV listed until sold",
                   "Edit your listing anytime",
                   "No expiration or monthly fees",
                 ].map((item) => (
@@ -210,7 +210,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
                 ))}
               </ul>
               <a href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" className="demo-reach-card__cta">
-                List Your Caravan Now <i className="fa-solid fa-arrow-right" />
+                List Your SUV Now <i className="fa-solid fa-arrow-right" />
               </a>
             </div>
 
@@ -257,13 +257,13 @@ export default function RegionSeller({ region }: RegionSellerProps) {
             <div className="demo-guide-card">
               <div className="demo-guide-card__header">
                 <span className="demo-guide-card__num">1</span>
-                <h3>Why sell on CaravansForSale.com.au?</h3>
+                <h3>Why sell on SuvForSale.com.au?</h3>
               </div>
               <ul className="demo-guide-card__list">
-                <li>Australia's #1 marketplace for buying and selling caravans.</li>
-                <li>Targeted caravan buyers across {regionLabel} and regional {stateLabel}.</li>
+                <li>Australia's #1 marketplace for buying and selling SUVs.</li>
+                <li>Targeted SUV buyers across {regionLabel} and regional {stateLabel}.</li>
                 <li>Your listing stays live until sold with no hidden fees.</li>
-                <li>Fast, simple and secure way to sell your caravan.</li>
+                <li>Fast, simple and secure way to sell your SUV.</li>
               </ul>
             </div>
 
@@ -282,10 +282,10 @@ export default function RegionSeller({ region }: RegionSellerProps) {
             <div className="demo-guide-card">
               <div className="demo-guide-card__header">
                 <span className="demo-guide-card__num">3</span>
-                <h3>How to price your caravan</h3>
+                <h3>How to price your SUV</h3>
               </div>
               <ul className="demo-guide-card__list">
-                <li>Check similar caravans for sale in {regionLabel}.</li>
+                <li>Check similar SUVs for sale in {regionLabel}.</li>
                 <li>Compare make, model, year, condition and inclusions.</li>
                 <li>List at a realistic price to attract more buyers.</li>
               </ul>
@@ -299,7 +299,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
               <ul className="demo-guide-card__list">
                 <li>Private sale: you keep 100% of the sale price.</li>
                 <li>Dealers/consignment: may charge fees or commission.</li>
-                <li>CaravansForSale.com.au: one-time fee, no commission.</li>
+                <li>SuvForSale.com.au: one-time fee, no commission.</li>
               </ul>
             </div>
 
@@ -313,7 +313,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
           <div className="demo-faq-head">
             <span className="demo-faq-head__tag">FAQ</span>
             <h2>Frequently Asked Questions</h2>
-            <p>Everything you need to know about selling your caravan in {regionLabel} on CaravansForSale.com.au</p>
+            <p>Everything you need to know about selling your SUV in {regionLabel} on SuvForSale.com.au</p>
           </div>
           <div className="demo-faq-list">
             {MAIN_FAQS.map((faq, i) => (
@@ -342,7 +342,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
       {/* ── Caravan types ── */}
       <section className="demo-types-section">
         <div className="container">
-          <h2 className="demo-section-title">Sell Any Type of Caravan</h2>
+          <h2 className="demo-section-title">Sell Any Type of SUV</h2>
           <div className="demo-types-grid">
             {CARAVAN_TYPES.map((t) => (
               <div key={t.label} className="demo-type-item">
@@ -361,19 +361,19 @@ export default function RegionSeller({ region }: RegionSellerProps) {
         <div className="container">
           <div className="row align-items-center g-4">
             <div className="col-md-6">
-              <img src="/images/your-caravan-desktop-seller-2.jpg" className="img-fluid demo-why-img" alt={`${regionLabel} caravan buyers`} />
+              <img src="/images/your-caravan-desktop-seller-2.jpg" className="img-fluid demo-why-img" alt={`${regionLabel} SUV buyers`} />
             </div>
             <div className="col-md-6">
-              <h2>Why {regionLabel} Caravan Buyers Visit CaravansForSale Every Month</h2>
+              <h2>Why {regionLabel} SUV Buyers Visit SuvForSale Every Month</h2>
               <p>
-                CaravansForSale.com.au helps caravan sellers in {regionLabel} reach buyers searching for
-                used caravans, off road caravans, family caravans, pop tops, hybrids and touring
-                caravans across {regionLabel} and regional {stateLabel}.
+                SuvForSale.com.au helps SUV sellers in {regionLabel} reach buyers searching for
+                used SUVs, off road SUVs, family SUVs, pop tops, hybrids and touring
+                SUVs across {regionLabel} and regional {stateLabel}.
               </p>
               <div className="demo-check-grid demo-check-grid--2col mt-3">
                 {[
                   "Thousands of active buyers", `Local reach across ${regionLabel}`,
-                  "Caravan-only marketplace", "Simple listing process",
+                  "SUV-only marketplace", "Simple listing process",
                   "High quality enquiries", "No commissions",
                   "Live until sold – no extra fees", "Friendly local support team",
                 ].map((t) => (
@@ -391,8 +391,8 @@ export default function RegionSeller({ region }: RegionSellerProps) {
       <section className="demo-steps-section">
         <div className="container">
 
-          <h2 className="demo-steps-title">How To Sell Your Caravan Online</h2>
-          <p className="demo-steps-subtitle">List in minutes and reach thousands of active caravan buyers in {regionLabel}.</p>
+          <h2 className="demo-steps-title">How To Sell Your SUV Online</h2>
+          <p className="demo-steps-subtitle">List in minutes and reach thousands of active SUV buyers in {regionLabel}.</p>
 
           {/* Steps: each column has number circle + icon + content; connectors between columns */}
           <div className="demo-steps-wrapper">
@@ -420,14 +420,14 @@ export default function RegionSeller({ region }: RegionSellerProps) {
       <section className="demo-cta-strip">
         <div className="container text-center">
           <p>
-            Start selling your caravan in {regionLabel} today for just{" "}
+            Start selling your SUV in {regionLabel} today for just{" "}
             <strong>$49 (Inc. GST)</strong> — live until sold.
           </p>
           <a href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" className="btn white_btn">
-            List Your Caravan Now
+            List Your SUV Now
           </a>
           <p className="demo-cta-strip__alt-link">
-            Not in {regionLabel}? Sell your caravan across {stateLabel} <a href={`/sell-my-caravan-${stateSlug}/`}>here</a>.
+            Not in {regionLabel}? Sell your SUV across {stateLabel} <a href={`/sell-my-suv/${stateSlug}/`}>here</a>.
           </p>
         </div>
       </section>
@@ -435,7 +435,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
       {/* ── Have something other than a caravan to sell? ── */}
       <section className="demo-sell-explore">
         <div className="container text-center">
-          <h2 className="demo-sell-explore__title">Have something other than a caravan to sell in {regionLabel}?</h2>
+          <h2 className="demo-sell-explore__title">Have something other than an SUV to sell in {regionLabel}?</h2>
           <p className="demo-sell-explore__body">
             You can{" "}
             <a href={`https://www.motorhomesforsale.com.au/sell-my-motorhome/${stateSlug}/${region.pageSlug}/`} target="_blank" rel="noopener noreferrer">sell your motorhome</a>,{" "}

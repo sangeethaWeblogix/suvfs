@@ -39,7 +39,10 @@ interface Props {
 }
 
 export default function HomeLatestBlogs({ posts: rawPosts }: Props) {
-  const posts = rawPosts.filter((p) => !!p?.id && !!p?.title && !!p?.slug);
+  const posts = (rawPosts ?? []).filter((p) => !!p?.id && !!p?.title && !!p?.slug);
+
+  // Hide the whole section (title + slider) when the blog API returns no posts
+  if (posts.length === 0) return null;
 
   const getHref = (p: BlogPost) => {
     const slug = p.slug?.trim() || toSlug(p.title || "post");
@@ -52,7 +55,7 @@ export default function HomeLatestBlogs({ posts: rawPosts }: Props) {
       <div className="container">
         <div className="title">
           <div className="tpof_tab">
-            <h2 className="hd-section-title">Latest Caravan Buying Guides & Advice</h2>
+            <h2 className="hd-section-title">Latest SUV Buying Guides & Advice</h2>
             <div className="viewall_bttn">
               <a href="/blog/">
                 <i className="bi bi-chevron-right" />
@@ -60,7 +63,7 @@ export default function HomeLatestBlogs({ posts: rawPosts }: Props) {
             </div>
           </div>
           <p className="hd-section-subtitle">
-            Research new and used caravans with practical guides covering prices, models, features, inspections and buying considerations.
+            Research new and used SUVs with practical guides covering prices, models, features, inspections and buying considerations.
           </p>
         </div>
       

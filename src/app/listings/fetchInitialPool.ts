@@ -21,7 +21,7 @@ const CF_API_TOKEN    = process.env.CF_API_TOKEN;
 const APP_URL         = process.env.NEXT_PUBLIC_APP_URL || "https://www.caravansforsale.com.au";
 // Direct WP API — used when seed > 0 to bypass Cloudflare's pool cache (which strips seed).
 const WP_API_BASE     = process.env.NEXT_PUBLIC_CFS_API_BASE;
-const WP_API_KEY      = process.env.CFS_API_KEY;
+const WP_API_KEY      = process.env.MPN_API_KEY;
 
 /**
  * Build the canonical KV key for pool data — must match worker.js buildPoolCacheKey().

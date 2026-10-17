@@ -52,7 +52,7 @@
   height: 18px;
   border-radius: 50%;
   background: #fff;
-  border: 2px solid #f37920;
+  border: 2px solid #4736fe;
   box-shadow: 0 1px 4px rgba(0,0,0,0.2);
   cursor: pointer;
 }
@@ -61,7 +61,7 @@
   height: 18px;
   border-radius: 50%;
   background: #fff;
-  border: 2px solid #f37920;
+  border: 2px solid #4736fe;
   box-shadow: 0 1px 4px rgba(0,0,0,0.2);
   cursor: pointer;
 }
@@ -84,8 +84,8 @@
     transform: translate(-50%, -50%);
 }
 .cfs-radius-tick.active {
-    border-color: #f37920;
-    background: #f37920;
+    border-color: #4736fe;
+    background: #4736fe;
 }
 .cfs-radius-tick.current {
     opacity: 0;
@@ -128,7 +128,7 @@
 .filter-modal .location-suggestions .suggestion-item:hover,
 .filter-modal .location-suggestions .suggestion-item.selected {
   background: #fff7f2;
-  color: #ec7200;
+  color: #4736fe;
 }
 .filter-modal .location-suggestions .suggestion-skeleton {
   padding: 11px 16px;
@@ -146,7 +146,7 @@
 }
 .filter-modal .location-suggestions li:hover {
   background: #fff7f2;
-  color: #ec7200;
+  color: #4736fe;
 }
 /* For selected filter chip */
 /* Selected filter pill */
@@ -219,13 +219,13 @@
 
 .suggestion-item:hover {
   background-color: #ffffff;
-  color: #ec7200; /* hover color */
+  color: #4736fe; /* hover color */
 }
 
 .suggestion-item.selected {
   background-color: #ffffff; /* your selected bg color */
   font-weight: 500;
-  color: #ec7200;
+  color: #4736fe;
 }
 
 
@@ -304,8 +304,8 @@ input.loc-search-input:focus {
   background: #fff;
 }
 .loc-checkbox.checked {
-  border-color: #ec7200;
-  background: #ec7200;
+  border-color: #4736fe;
+  background: #4736fe;
 }
 
 .loc-state-name {
@@ -338,12 +338,12 @@ input.loc-search-input:focus {
   padding: 0;
   color: #555;
 }
-.loc-arrow-btn:hover { border-color: #ec7200; color: #ec7200; }
+.loc-arrow-btn:hover { border-color: #4736fe; color: #4736fe; }
 .loc-arrow-btn svg { display: block; }
 
 .search-bar button.loc-region-pill,
 .loc-region-pill {
-  background: #ec7200;
+  background: #4736fe;
   color: #fff;
   border: none;
   border-radius: 20px;
@@ -358,12 +358,12 @@ input.loc-search-input:focus {
   align-items: center;
   gap: 4px;
 }
-.loc-region-pill:hover { background: #cf6503; }
+.loc-region-pill:hover { background: #3825fb; }
 
 .search-bar button.loc-back-btn {
   background: none;
   border: none;
-  color: #ec7200;
+  color: #4736fe;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -372,7 +372,7 @@ input.loc-search-input:focus {
   align-items: center;
   gap: 4px;
 }
-.search-bar button.loc-back-btn:hover { color: #cf6503; }
+.search-bar button.loc-back-btn:hover { color: #3825fb; }
 
 .loc-region-heading {
   font-size: 15px;
@@ -423,9 +423,9 @@ input.loc-search-input:focus {
   transition: all 0.2s ease;
 }
 .cfs-links-link:hover {
-  background: #f37920;
+  background: #4736fe;
   color: #fff;
-  border-color: #f37920;
+  border-color: #4736fe;
 }
 .cfs-links-loading {
   text-align: center;

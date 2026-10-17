@@ -22,9 +22,9 @@ import { ReactNode } from "react";
    
    openGraph: {
       url: "https://www.caravansforsale.com.au/privacy-policy/",
-     title: "Privacy Policy - caravansforsale.com.au - Caravan Marketplace",
+     title: "Privacy Policy - suvforsale.com.au - SUV Marketplace",
        description:
-     "Learn about Caravan Marketplace's privacy policy on data collection, usage, security measures, and your rights regarding your information.",
+     "Learn about SUV Marketplace's privacy policy on data collection, usage, security measures, and your rights regarding your information.",
      
    },
  };

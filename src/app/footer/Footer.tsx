@@ -1,4 +1,5 @@
 import "./footer.css?=20";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by the hidden network section below
 import Image from "next/image";
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import BackToTopButton from "./BackToTopButton";
@@ -6,6 +7,7 @@ import FooterNav from "./FooterNav";
 import FooterPopularLocations from "./FooterPopularLocations";
 import SellByLocationLink from "./SellByLocationLink";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- social links temporarily hidden
 const SOCIAL_LINKS = [
   { label: "Facebook", href: "https://www.facebook.com/caravansforsale.com.au/", Icon: FaFacebookF, className: "cfs-footer__social-link--facebook" },
   { label: "Instagram", href: "https://www.instagram.com/caravansforsale.com.au/", Icon: FaInstagram, className: "cfs-footer__social-link--instagram" },
@@ -13,14 +15,14 @@ const SOCIAL_LINKS = [
 ];
 
 const BROWSE_LINKS = [
-  { label: "All Caravans for Sale", href: "/listings/" },
-  { label: "New Caravans", href: "/listings/new-condition/" },
-  { label: "Used Caravans", href: "/listings/used-condition/" },
-  { label: "Off Road Caravans", href: "/listings/off-road-category/" },
-  { label: "Hybrid Caravans", href: "/listings/hybrid-category/" },
-  { label: "Pop Top Caravans", href: "/listings/pop-top-category/" },
-  { label: "Touring Caravans", href: "/listings/touring-category/" },
-  { label: "Luxury Caravans", href: "/listings/luxury-category/" },
+  { label: "All SUVs for Sale", href: "/listings/" },
+  { label: "New SUVs", href: "/listings/new-condition/" },
+  { label: "Used SUVs", href: "/listings/used-condition/" },
+  { label: "Off Road SUVs", href: "/listings/off-road-category/" },
+  { label: "Hybrid SUVs", href: "/listings/hybrid-category/" },
+  { label: "Pop Top SUVs", href: "/listings/pop-top-category/" },
+  { label: "Touring SUVs", href: "/listings/touring-category/" },
+  { label: "Luxury SUVs", href: "/listings/luxury-category/" },
 ];
 
 const LOCATION_LINKS = [
@@ -54,7 +56,7 @@ const POPULAR_LOCATIONS = [
 ];
 
 const SELLER_LINKS = [
-  { label: "Sell My Caravan", href: "/sell-my-caravan/" },
+  { label: "Sell My SUV", href: "/sell-my-suv/" },
   { label: "Sell by Location", href: "#footer-sell-by-location" },
   { label: "Seller Login", href: "https://seller.marketplacenetwork.com.au/seller-login/" },
 ];
@@ -66,15 +68,16 @@ const DEALER_LINKS = [
 ];
 
 const GUIDE_LINKS = [
-  { label: "Off Road Caravan Hub", href: "/off-road-caravans/", accent: true },
+  { label: "Off Road SUV Hub", href: "/off-road-caravans/", accent: true },
   { label: "Blog", href: "/blog/" },
   { label: "Buyer Safety Guide", href: "/buyer-safety-guide/", nofollow: true },
   { label: "About Us", href: "/about-us/" },
   { label: "Contact Us", href: "/contact/" },
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- network section temporarily hidden
 const NETWORK_SITES = [
-  { logo: "/images/our_sites/cfs-logo-black.svg", w: 556, h: 60, href: "", label: "Caravans" },
+  { logo: "/images/our_sites/cfs-logo-black.svg", w: 556, h: 60, href: "", label: "SUVs" },
   { logo: "/images/our_sites/mfs-logo.svg", w: 633, h: 63, href: "https://www.motorhomesforsale.com.au/", label: "Motorhomes" },
   { logo: "/images/our_sites/camper_logo.svg", w: 1159, h: 141, href: "https://www.campervansforsale.au/", label: "Campervans" },
   { logo: "/images/our_sites/cts-logo.svg", w: 688, h: 64, href: "https://www.campingtrailersforsale.com.au/", label: "Camper Trailers" },
@@ -97,7 +100,7 @@ const Footer = () => {
           {/* ── Link columns ── */}
           <div className="cfs-footer__columns">
             <div className="cfs-footer__col">
-              <h4 className="cfs-footer__col-title">Browse Caravans</h4>
+              <h4 className="cfs-footer__col-title">Browse SUVs</h4>
               <ul>
                 {BROWSE_LINKS.map((l) => (
                   <li key={l.label}><a href={l.href}>{l.label}</a></li>
@@ -163,7 +166,7 @@ const Footer = () => {
 
           <hr className="cfs-footer__hr" />
 
-          {/* ── Marketplace network ── */}
+          {/* ── Marketplace network ── (temporarily hidden)
           <div className="cfs-footer__network">
             <h4 className="cfs-footer__network-title">Our Marketplace Network</h4>
             <div className="cfs-footer__network-grid">
@@ -180,6 +183,7 @@ const Footer = () => {
               )}
             </div>
           </div>
+          */}
 
           {/* ── Sell my caravan by location (accordion) ── */}
           <div id="footer-sell-by-location">
@@ -197,6 +201,7 @@ const Footer = () => {
               <p className="cfs-footer__copyright">
                 © {currentYear ?? "----"} Marketplace Network Pty Ltd&nbsp;&nbsp;·&nbsp;&nbsp;ABN 70 694 987 052
               </p>
+              {/* Social links — temporarily hidden
               <div className="cfs-footer__socials">
                 {SOCIAL_LINKS.map(({ label, href, Icon, className }) => (
                   <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className={`cfs-footer__social-link ${className}`}>
@@ -204,6 +209,7 @@ const Footer = () => {
                   </a>
                 ))}
               </div>
+              */}
             </div>
           </div>
         </div>

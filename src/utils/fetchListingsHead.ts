@@ -38,7 +38,7 @@ type ApiResponse = {
 
 const BASE_URL = "https://www.caravansforsale.com.au";
 const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
-const API_KEY = process.env.CFS_API_KEY;
+const API_KEY = process.env.MPN_API_KEY;
 
 /** Manual TTL cache (mirrors seoCache/productCache in middleware.ts) instead of
  * Next's `next: { revalidate }` fetch Data Cache — that internal stream-teeing
@@ -191,7 +191,7 @@ function buildProductListItem(item: Item, position: number) {
     "@type": "ListItem",
     position,
     item: {
-      "@type": "Caravan",
+      "@type": "Car",
       bodyType: item.category && item.category.length > 0
         ? item.category.join(", ")
         : "",
@@ -225,7 +225,7 @@ export function buildListingsJsonLd(
   const pageTitle =
     response?.seo_v2?.h1 ||
     response?.seo_v2?.meta_title ||
-    "Caravans for Sale in Australia";
+    "SUVs for Sale in Australia";
   const totalProducts = response?.pagination?.total_products ?? 0;
 
   const allProducts = [
@@ -284,7 +284,7 @@ const weburl = "https://www.caravansforsale.com.au"
   const searchResultsLd = {
     "@context": "https://schema.org/",
     "@type": "SearchResultsPage",
-    audience: { "@type": "Audience", audienceType: "caravan buyers" },
+    audience: { "@type": "Audience", audienceType: "SUV buyers" },
     potentialAction: {
       "@type": "SearchAction",
       target: { "@type": "EntryPoint", urlTemplate: weburl },
@@ -325,7 +325,7 @@ const fetchListingsForHead = cache(
 export function buildBreadcrumbs(pathname: string): { name: string; url: string }[] {
   const crumbs: { name: string; url: string }[] = [
     { name: "Home", url: `${BASE_URL}/` },
-    { name: "Caravans for Sale", url: `${BASE_URL}/listings/` },
+    { name: "SUVs for Sale", url: `${BASE_URL}/listings/` },
   ];
   if (pathname === "/listings/" || pathname === "/listings") return crumbs;
 

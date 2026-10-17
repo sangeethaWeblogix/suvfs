@@ -34,11 +34,11 @@ export async function generateMetadata({
   const seo = data?.seo ?? {};
   const post = data?.data?.blog_detail || {};
 
-  const title = seo.metatitle || post.title || "Caravans for Sale Blog";
+  const title = seo.metatitle || post.title || "SUVs for Sale Blog";
   const description =
     seo.metadescription ||
     post.short_description ||
-    "Read more on Caravans for Sale.";
+    "Read more on SUVs for Sale.";
   const canonical = `https://www.caravansforsale.com.au/${slug}/`;
 
   return {
@@ -78,11 +78,11 @@ export default async function Layout({
   const seo = data?.seo || {};
 
   const canonical = `https://www.caravansforsale.com.au/${slug}/`;
-  const title = seo.metatitle || post.title || "Caravans for Sale Blog";
+  const title = seo.metatitle || post.title || "SUVs for Sale Blog";
   const description =
     seo.metadescription ||
     post.short_description ||
-    "Read more on Caravans for Sale.";
+    "Read more on SUVs for Sale.";
 
   const bannerImage =
     post.banner_image ||
@@ -112,7 +112,7 @@ export default async function Layout({
     },
     publisher: {
       "@type": "Organization",
-      name: "Caravans for Sale",
+      name: "SUVs for Sale",
       logo: {
         "@type": "ImageObject",
         url: "https://www.caravansforsale.com.au/images/cfs-logo-black.svg",

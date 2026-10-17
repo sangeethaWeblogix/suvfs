@@ -28,7 +28,7 @@ export default function LoginPage() {
               <div className="login-body">
                 <div className="login-title">Private Seller Login</div>
                 <div className="login-sub">
-                  Manage or list your caravan for sale
+                  Manage or list your SUV for sale
                 </div>
               </div>
             </a>
@@ -46,7 +46,7 @@ export default function LoginPage() {
               <div className="login-body">
                 <div className="login-title">Dealer Login</div>
                 <div className="login-sub">
-                  Access dealer tools and manage caravan listings
+                  Access dealer tools and manage SUV listings
                 </div>
               </div>
             </a>

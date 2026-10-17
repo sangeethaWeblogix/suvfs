@@ -4,23 +4,23 @@ import { sanitizeRichText } from "@/utils/sanitizeRichText";
 const TRUST_ITEMS = [
   {
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ec7200" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4736fe" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
       </svg>
     ),
-    label: "2,652 caravans listed in Victoria",
+    label: "2,652 SUVs listed in Victoria",
   },
   {
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ec7200" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4736fe" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
       </svg>
     ),
-    label: "New & used caravans",
+    label: "New & used SUVs",
   },
   {
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ec7200" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4736fe" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
       </svg>
     ),
@@ -28,7 +28,7 @@ const TRUST_ITEMS = [
   },
   {
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ec7200" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4736fe" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
       </svg>
     ),
@@ -55,7 +55,7 @@ export default function StateHero({ title, description, loading, breadcrumbs }: 
         <nav className="lsd-breadcrumb" aria-label="breadcrumb">
           <a href="/">Home</a>
           <svg width="12" height="20" viewBox="0 0 24 24" fill="none" stroke="#3e3e3e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0,display:"block"}} aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-          <a href="/listings/">Caravans for Sale</a>
+          <a href="/listings/">SUVs for Sale</a>
           {breadcrumbs?.map((crumb, i) => (
             <span key={crumb.href}>
               <svg width="12" height="20" viewBox="0 0 24 24" fill="none" stroke="#3e3e3e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0,display:"block"}} aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
@@ -79,7 +79,7 @@ export default function StateHero({ title, description, loading, breadcrumbs }: 
           ) : (
             <>
               <h1 className="lsd-hero__title">
-                {title || "Caravans for Sale"}
+                {title || "SUVs for Sale"}
               </h1>
 
               <div
@@ -87,9 +87,9 @@ export default function StateHero({ title, description, loading, breadcrumbs }: 
                 dangerouslySetInnerHTML={{
                   __html: description
                     ? sanitizeRichText(description)
-                    : "<p>Browse new and used caravans for sale from dealers and private sellers. " +
-                      "Find off road caravans, family caravans, luxury caravans, pop tops, hybrids and " +
-                      "touring caravans, and filter local inventory by price, condition, layout, berths, and travel dimensions.</p>",
+                    : "<p>Browse new and used SUVs for sale from dealers and private sellers. " +
+                      "Find off road SUVs, family SUVs, luxury SUVs, pop tops, hybrids and " +
+                      "touring SUVs, and filter local inventory by price, condition, layout, berths, and travel dimensions.</p>",
                 }}
               />
             </>

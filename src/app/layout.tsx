@@ -34,7 +34,7 @@ import { fetchProductDetail } from "@/utils/fetchProductDetail";
 // Top-level route segments that are NOT handled by the [slug] blog-details
 // catch-all — used to avoid firing a wasted fetchBlogDetail() call for them.
 const RESERVED_TOP_LEVEL_SLUGS = new Set([
-  "about-us", "api", "author", "blog", "buyer-safety-guide", "caravan-enquiry-form",
+  "about-us", "api", "author", "blog", "buyer-safety-guide", "suv-enquiry-form",
   "caravan-homepage-takeover", "caravan-manufacturers", "caravan-sales", "contact",
   "cookie-policy", "dealer-advertising", "family-caravan-category-sponsorship",
   "hybrid-caravan-category-sponsorship", "listings", "login",
@@ -42,7 +42,7 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
   "off-road-caravan-market-report", "off-road-caravan-types", "off-road-caravans",
   "off-road-caravans-manufacturers", "pop-top-caravan-category-sponsorship",
   "privacy-collection-statement", "privacy-policy", "product", "product-detail-demo",
-  "sell-my-caravan", "store", "terms-conditions", "touring-caravan-category-sponsorship",
+  "sell-my-suv", "store", "terms-conditions", "touring-caravan-category-sponsorship",
   "404", "410", "sitemap.xml", "robots.txt", "favicon.ico",
 ]);
 
@@ -99,7 +99,7 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
     const isOffRoadCaravansPage = pathname === "/off-road-caravans/" || pathname === "/off-road-caravans";
     const isOffRoadCaravanTypesPage = pathname === "/off-road-caravan-types/" || pathname === "/off-road-caravan-types";
     const isOffRoadMarketReportPage = pathname === "/off-road-caravan-market-report/" || pathname === "/off-road-caravan-market-report";
-    const isSellMyCaravanPage = pathname === "/sell-my-caravan/" || pathname === "/sell-my-caravan";
+    const isSellMyCaravanPage = pathname === "/sell-my-suv/" || pathname === "/sell-my-suv";
     const isDealerAdvertisingPage = pathname === "/dealer-advertising/" || pathname === "/dealer-advertising";
     const isBlogPage = pathname === "/blog/" || pathname === "/blog";
 
@@ -110,13 +110,13 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
         {
           "@context": "https://schema.org",
           "@type": "Blog",
-          name: "Caravans for Sale Blog",
+          name: "SUVs for Sale Blog",
           description:
-            "Latest news, in-depth reviews, and expert advice on the latest in the caravan market.",
+            "Latest news, in-depth reviews, and expert advice on the latest in the SUV market.",
           url: "https://www.caravansforsale.com.au/blog/",
           publisher: {
             "@type": "Organization",
-            name: "Caravans for Sale",
+            name: "SUVs for Sale",
             url: "https://www.caravansforsale.com.au",
           },
         },
@@ -166,9 +166,9 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
 
       if (post?.title) {
         const canonical = `https://www.caravansforsale.com.au/${slug}/`;
-        const blogTitle = seo.metatitle || post.title || "Caravans for Sale Blog";
+        const blogTitle = seo.metatitle || post.title || "SUVs for Sale Blog";
         const blogDescription =
-          seo.metadescription || post.short_description || "Read more on Caravans for Sale.";
+          seo.metadescription || post.short_description || "Read more on SUVs for Sale.";
         const bannerImage =
           post.banner_image || post.image || "https://www.caravansforsale.com.au/load.svg";
         const safeIso = (dateStr?: string) => {
@@ -186,7 +186,7 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
             description: blogDescription,
             image: bannerImage,
             author: { "@type": "Person", name: "Tom" },
-            publisher: { "@type": "Organization", name: "Caravans for Sale" },
+            publisher: { "@type": "Organization", name: "SUVs for Sale" },
             datePublished: safeIso(post.date),
             dateModified: safeIso(post.date),
           },
@@ -219,12 +219,12 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
       }
     }
 
-    // /sell-my-caravan/{state}/ and /sell-my-caravan/{state}/{region}/ — JSON-LD is
+    // /sell-my-suv/{state}/ and /sell-my-suv/{state}/{region}/ — JSON-LD is
     // data-driven per slug, so look it up here instead of hardcoding like the other pages.
     let sellMyCaravanStateJsonLd: object | null = null;
     let sellMyCaravanRegionJsonLd: object | null = null;
-    if (pathname.startsWith("/sell-my-caravan/") && !isSellMyCaravanPage) {
-      const segments = pathname.replace(/^\/sell-my-caravan\//, "").replace(/\/$/, "").split("/").filter(Boolean);
+    if (pathname.startsWith("/sell-my-suv/") && !isSellMyCaravanPage) {
+      const segments = pathname.replace(/^\/sell-my-suv\//, "").replace(/\/$/, "").split("/").filter(Boolean);
       if (segments.length === 1) {
         const state = getStateBySlug(segments[0]);
         if (state) sellMyCaravanStateJsonLd = buildStateJsonLd(state);
@@ -237,13 +237,13 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
     // Static pages whose metadata ends up after </head> due to streaming — inject directly
     const STATIC_META: Record<string, { title: string; description: string; canonical: string }> = {
       "/caravan-manufacturers/": {
-        title: "Top 10 Caravan Manufacturers in Australia: Best Brands of 2024",
-        description: "See how top Australian caravan manufacturers excel with the best in innovative designs, quality construction, cost efficiency, and expert craftsmanship.",
+        title: "Top 10 SUV Manufacturers in Australia: Best Brands of 2024",
+        description: "See how top Australian SUV manufacturers excel with the best in innovative designs, quality construction, cost efficiency, and expert craftsmanship.",
         canonical: "https://www.caravansforsale.com.au/caravan-manufacturers/",
       },
       "/off-road-caravans-manufacturers/": {
-        title: "Top Off-Road Caravan Manufacturers in Australia: Best Brands 2024",
-        description: "Discover Australia's leading off-road caravan manufacturers. Compare top brands known for rugged build quality, innovative design, and outback-ready performance.",
+        title: "Top Off-Road SUV Manufacturers in Australia: Best Brands 2024",
+        description: "Discover Australia's leading off-road SUV manufacturers. Compare top brands known for rugged build quality, innovative design, and outback-ready performance.",
         canonical: "https://www.caravansforsale.com.au/off-road-caravans-manufacturers/",
       },
     };
@@ -291,7 +291,7 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
             ...(priceStr && { price: priceStr }),
             availability: "https://schema.org/InStock",
             url: canonicalUrl,
-            seller: { "@type": "Organization", name: "Caravans For Sale" },
+            seller: { "@type": "Organization", name: "SUVs For Sale" },
           },
         };
       }
@@ -330,7 +330,7 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
       if (isListingSlug && xRobots === "noindex") {
         slugRobots = "noindex";
         slugCanonical = `https://www.caravansforsale.com.au/listings/${slugParts.join("/")}/`;
-        slugDescription = "Browse caravans for sale across Australia. Compare prices on off-road, hybrid, pop top, touring, luxury models with size, weight & sleeping capacity.";
+        slugDescription = "Browse SUVs for sale across Australia. Compare prices on off-road, hybrid, pop top, touring, luxury models with size, weight & sleeping capacity.";
       } else {
         // try {
           // All SEO from metaFromSlug — pure computation, no API call
@@ -344,7 +344,7 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
           if (meta.title && typeof meta.title === "object" && "absolute" in meta.title) {
             slugTitle = (meta.title as { absolute: string }).absolute;
           }
-          slugDescription = "Browse caravans for sale across Australia. Compare prices on off-road, hybrid, pop top, touring, luxury models with size, weight & sleeping capacity.";
+          slugDescription = "Browse SUVs for sale across Australia. Compare prices on off-road, hybrid, pop top, touring, luxury models with size, weight & sleeping capacity.";
         // } catch {
         //   const parts = slugParts
         //     .map((p: string) =>
@@ -409,8 +409,8 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                       "@type": "WebSite",
                       "@id": "https://www.caravansforsale.com.au/#website",
                       "url": "https://www.caravansforsale.com.au",
-                      "name": "Caravans For Sale",
-                      "description": "Australia's Marketplace for New & Used Caravans",
+                      "name": "SUVs For Sale",
+                      "description": "Australia's Marketplace for New & Used SUVs",
                       "inLanguage": "en-AU",
                       "potentialAction": {
                         "@type": "SearchAction",
@@ -424,7 +424,7 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                     {
                       "@type": "Organization",
                       "@id": "https://www.caravansforsale.com.au/#organization",
-                      "name": "Caravans For Sale",
+                      "name": "SUVs For Sale",
                       "url": "https://www.caravansforsale.com.au",
                       "logo": {
                         "@type": "ImageObject",
@@ -454,8 +454,8 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                       "@type": "CollectionPage",
                       "@id": "https://www.caravansforsale.com.au/off-road-caravans/",
                       "url": "https://www.caravansforsale.com.au/off-road-caravans/",
-                      "name": "Off Road Caravans Australia | New & Used Off Road Caravans for Sale",
-                      "description": "Discover Australia's largest collection of off road caravans. Compare full off road, semi off road and hybrid caravans, browse live listings, read expert reviews and explore detailed buying guides.",
+                      "name": "Off Road SUVs Australia | New & Used Off Road SUVs for Sale",
+                      "description": "Discover Australia's largest collection of off road SUVs. Compare full off road, semi off road and hybrid SUVs, browse live listings, read expert reviews and explore detailed buying guides.",
                       "inLanguage": "en-AU",
                       "breadcrumb": { "@id": "https://www.caravansforsale.com.au/off-road-caravans/#breadcrumb" },
                       "isPartOf": { "@type": "WebSite", "url": "https://www.caravansforsale.com.au/" },
@@ -465,7 +465,7 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                       "@id": "https://www.caravansforsale.com.au/off-road-caravans/#breadcrumb",
                       "itemListElement": [
                         { "@type": "ListItem", "position": 1, "name": "Home",             "item": "https://www.caravansforsale.com.au/" },
-                        { "@type": "ListItem", "position": 2, "name": "Off Road Caravans", "item": "https://www.caravansforsale.com.au/off-road-caravans/" },
+                        { "@type": "ListItem", "position": 2, "name": "Off Road SUVs", "item": "https://www.caravansforsale.com.au/off-road-caravans/" },
                       ],
                     },
                     {
@@ -473,33 +473,33 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                       "mainEntity": [
                         {
                           "@type": "Question",
-                          "name": "What is an off road caravan?",
-                          "acceptedAnswer": { "@type": "Answer", "text": "An off road caravan is a caravan built to handle rough, unsealed tracks and remote terrain. They typically feature heavy-duty chassis, independent suspension, reinforced bodywork, larger water and battery capacity, and off-road tyres to handle Australia's outback and bush conditions." },
+                          "name": "What is an off road SUV?",
+                          "acceptedAnswer": { "@type": "Answer", "text": "An off road SUV is an SUV built to handle rough, unsealed tracks and remote terrain. They typically feature heavy-duty chassis, independent suspension, reinforced bodywork, larger water and battery capacity, and off-road tyres to handle Australia's outback and bush conditions." },
                         },
                         {
                           "@type": "Question",
-                          "name": "What is the difference between semi off road and full off road caravans?",
-                          "acceptedAnswer": { "@type": "Answer", "text": "Semi off road caravans are built for light unsealed roads and easy bush tracks, with upgraded suspension and stronger construction. Full off road caravans are engineered for extreme terrain — think river crossings, rocky tracks and remote touring — with independent suspension, heavy-duty chassis and full off-grid capability." },
+                          "name": "What is the difference between semi off road and full off road SUVs?",
+                          "acceptedAnswer": { "@type": "Answer", "text": "Semi off road SUVs are built for light unsealed roads and easy bush tracks, with upgraded suspension and stronger construction. Full off road SUVs are engineered for extreme terrain — think river crossings, rocky tracks and remote touring — with independent suspension, heavy-duty chassis and full off-grid capability." },
                         },
                         {
                           "@type": "Question",
-                          "name": "Can off road caravans go off grid?",
-                          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Most off road caravans come with or can be fitted with solar panels, lithium batteries, large fresh water tanks and composting or cassette toilets, allowing extended stays in remote areas without external power or water hookups." },
+                          "name": "Can off road SUVs go off grid?",
+                          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Most off road SUVs come with or can be fitted with solar panels, lithium batteries, large fresh water tanks and composting or cassette toilets, allowing extended stays in remote areas without external power or water hookups." },
                         },
                         {
                           "@type": "Question",
-                          "name": "Do I need a special vehicle to tow an off road caravan?",
-                          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Off road caravans are heavier and wider than standard caravans. You'll need a high-capacity 4WD with a tow bar rated to the caravan's ATM. Always check the caravan's ATM and the tow vehicle's GVM and tow rating before purchasing." },
+                          "name": "Do I need a special vehicle to tow an off road SUV?",
+                          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Off road SUVs are heavier and wider than standard SUVs. You'll need a high-capacity 4WD with a tow bar rated to the SUV's ATM. Always check the SUV's ATM and the tow vehicle's GVM and tow rating before purchasing." },
                         },
                         {
                           "@type": "Question",
-                          "name": "Are off road caravans suitable for families?",
+                          "name": "Are off road SUVs suitable for families?",
                           "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. Many off road models come in family-friendly layouts with bunk beds, multiple sleeping berths, full kitchens and ensuites. Brands like Jayco, New Age and Trakmaster offer popular family off road models across a range of budgets." },
                         },
                         {
                           "@type": "Question",
-                          "name": "What is the average price of an off road caravan in Australia?",
-                          "acceptedAnswer": { "@type": "Answer", "text": "Off road caravan prices in Australia typically range from around $40,000 for entry-level semi off road models to over $150,000 for premium full off road expedition caravans. The most popular mid-range models sit between $60,000 and $100,000." },
+                          "name": "What is the average price of an off road SUV in Australia?",
+                          "acceptedAnswer": { "@type": "Answer", "text": "Off road SUV prices in Australia typically range from around $40,000 for entry-level semi off road models to over $150,000 for premium full off road expedition SUVs. The most popular mid-range models sit between $60,000 and $100,000." },
                         },
                       ],
                     },
@@ -520,8 +520,8 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                       "@type": "CollectionPage",
                       "@id": "https://www.caravansforsale.com.au/off-road-caravan-types/",
                       "url": "https://www.caravansforsale.com.au/off-road-caravan-types/",
-                      "name": "Off Road Caravan Types Compared | Semi, Full, Hybrid & Extreme",
-                      "description": "Compare semi, full, extreme and hybrid off road caravans in Australia. Understand terrain capability, towing, weight, construction and off-grid features.",
+                      "name": "Off Road SUV Types Compared | Semi, Full, Hybrid & Extreme",
+                      "description": "Compare semi, full, extreme and hybrid off road SUVs in Australia. Understand terrain capability, towing, weight, construction and off-grid features.",
                       "inLanguage": "en-AU",
                       "breadcrumb": { "@id": "https://www.caravansforsale.com.au/off-road-caravan-types/#breadcrumb" },
                       "isPartOf": { "@type": "WebSite", "url": "https://www.caravansforsale.com.au/" },
@@ -531,23 +531,23 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                       "@id": "https://www.caravansforsale.com.au/off-road-caravan-types/#breadcrumb",
                       "itemListElement": [
                         { "@type": "ListItem", "position": 1, "name": "Home",              "item": "https://www.caravansforsale.com.au/" },
-                        { "@type": "ListItem", "position": 2, "name": "Off Road Caravans", "item": "https://www.caravansforsale.com.au/off-road-caravans/" },
-                        { "@type": "ListItem", "position": 3, "name": "Off Road Caravan Types", "item": "https://www.caravansforsale.com.au/off-road-caravan-types/" },
+                        { "@type": "ListItem", "position": 2, "name": "Off Road SUVs", "item": "https://www.caravansforsale.com.au/off-road-caravans/" },
+                        { "@type": "ListItem", "position": 3, "name": "Off Road SUV Types", "item": "https://www.caravansforsale.com.au/off-road-caravan-types/" },
                       ],
                     },
                     {
                       "@type": "FAQPage",
                       "mainEntity": [
-                        { "@type": "Question", "name": "What are the main types of off road caravans?",                          "acceptedAnswer": { "@type": "Answer", "text": "The most commonly used categories in Australia are semi off road, full off road, extreme off road and hybrid off road caravans. These are commonly used market descriptions rather than one nationally standardised classification system, so specifications should always be compared between individual models." } },
-                        { "@type": "Question", "name": "What is the difference between semi off road and full off road caravans?","acceptedAnswer": { "@type": "Answer", "text": "Semi off road caravans are generally intended for sealed roads, gravel and maintained unsealed roads. Full off road caravans typically add more substantial suspension, chassis, ground clearance, protection and off-grid equipment for more demanding remote-road travel." } },
-                        { "@type": "Question", "name": "What is an extreme off road caravan?",                                   "acceptedAnswer": { "@type": "Answer", "text": "Extreme off road is generally a marketing term used for highly specified caravans designed around serious remote travel. They often include heavy-duty suspension, increased payload, extensive protection and larger water, battery and solar systems." } },
-                        { "@type": "Question", "name": "What is a hybrid off road caravan?",                                     "acceptedAnswer": { "@type": "Answer", "text": "A hybrid off road caravan combines features of an off-road camper trailer and a caravan. Hybrids are commonly more compact than conventional caravans while retaining hard-sided sleeping accommodation and many caravan-style amenities." } },
-                        { "@type": "Question", "name": "Is a hybrid caravan better than a full off road caravan?",               "acceptedAnswer": { "@type": "Answer", "text": "Neither type is automatically better. A hybrid generally offers more compact dimensions and manoeuvrability, while a full-size off road caravan usually offers greater internal living space and storage. The right choice depends on your travel plans." } },
-                        { "@type": "Question", "name": "Do I need a 4WD to tow an off road caravan?",                            "acceptedAnswer": { "@type": "Answer", "text": "Not every off road caravan automatically requires a 4WD, but the tow vehicle must be suitable for the caravan's loaded weight and intended terrain. Remote or demanding off-road travel will generally favour appropriately rated four-wheel-drive tow vehicles." } },
-                        { "@type": "Question", "name": "Does full off road mean a caravan can go anywhere?",                      "acceptedAnswer": { "@type": "Answer", "text": "No. A caravan marketed as full off road still has limits. Always check the manufacturer's intended-use statement, specifications and warranty conditions before travelling on difficult terrain." } },
-                        { "@type": "Question", "name": "Are off road caravans heavier than touring caravans?",                    "acceptedAnswer": { "@type": "Answer", "text": "They often can be because stronger chassis components, suspension, larger tyres, additional batteries, water tanks and protection systems add weight. However, weight varies significantly between models." } },
-                        { "@type": "Question", "name": "Is independent suspension essential for an off road caravan?",            "acceptedAnswer": { "@type": "Answer", "text": "Independent suspension is common on full off-road caravans because it can improve wheel movement over uneven terrain, but it is only one part of the overall design. Chassis, tyres, brakes, clearance, body construction and payload are also important." } },
-                        { "@type": "Question", "name": "How do I know which off road caravan is right for me?",                   "acceptedAnswer": { "@type": "Answer", "text": "Start with the roads you genuinely intend to travel, then consider your tow vehicle, caravan ATM, payload requirements, desired layout, number of travellers, off-grid duration and budget. Choose the level of off-road capability that matches those needs rather than simply buying the most heavily specified caravan available." } },
+                        { "@type": "Question", "name": "What are the main types of off road SUVs?",                          "acceptedAnswer": { "@type": "Answer", "text": "The most commonly used categories in Australia are semi off road, full off road, extreme off road and hybrid off road SUVs. These are commonly used market descriptions rather than one nationally standardised classification system, so specifications should always be compared between individual models." } },
+                        { "@type": "Question", "name": "What is the difference between semi off road and full off road SUVs?","acceptedAnswer": { "@type": "Answer", "text": "Semi off road SUVs are generally intended for sealed roads, gravel and maintained unsealed roads. Full off road SUVs typically add more substantial suspension, chassis, ground clearance, protection and off-grid equipment for more demanding remote-road travel." } },
+                        { "@type": "Question", "name": "What is an extreme off road SUV?",                                   "acceptedAnswer": { "@type": "Answer", "text": "Extreme off road is generally a marketing term used for highly specified SUVs designed around serious remote travel. They often include heavy-duty suspension, increased payload, extensive protection and larger water, battery and solar systems." } },
+                        { "@type": "Question", "name": "What is a hybrid off road SUV?",                                     "acceptedAnswer": { "@type": "Answer", "text": "A hybrid off road SUV combines features of an off-road camper trailer and an SUV. Hybrids are commonly more compact than conventional SUVs while retaining hard-sided sleeping accommodation and many SUV-style amenities." } },
+                        { "@type": "Question", "name": "Is a hybrid SUV better than a full off road SUV?",               "acceptedAnswer": { "@type": "Answer", "text": "Neither type is automatically better. A hybrid generally offers more compact dimensions and manoeuvrability, while a full-size off road SUV usually offers greater internal living space and storage. The right choice depends on your travel plans." } },
+                        { "@type": "Question", "name": "Do I need a 4WD to tow an off road SUV?",                            "acceptedAnswer": { "@type": "Answer", "text": "Not every off road SUV automatically requires a 4WD, but the tow vehicle must be suitable for the SUV's loaded weight and intended terrain. Remote or demanding off-road travel will generally favour appropriately rated four-wheel-drive tow vehicles." } },
+                        { "@type": "Question", "name": "Does full off road mean an SUV can go anywhere?",                      "acceptedAnswer": { "@type": "Answer", "text": "No. An SUV marketed as full off road still has limits. Always check the manufacturer's intended-use statement, specifications and warranty conditions before travelling on difficult terrain." } },
+                        { "@type": "Question", "name": "Are off road SUVs heavier than touring SUVs?",                    "acceptedAnswer": { "@type": "Answer", "text": "They often can be because stronger chassis components, suspension, larger tyres, additional batteries, water tanks and protection systems add weight. However, weight varies significantly between models." } },
+                        { "@type": "Question", "name": "Is independent suspension essential for an off road SUV?",            "acceptedAnswer": { "@type": "Answer", "text": "Independent suspension is common on full off-road SUVs because it can improve wheel movement over uneven terrain, but it is only one part of the overall design. Chassis, tyres, brakes, clearance, body construction and payload are also important." } },
+                        { "@type": "Question", "name": "How do I know which off road SUV is right for me?",                   "acceptedAnswer": { "@type": "Answer", "text": "Start with the roads you genuinely intend to travel, then consider your tow vehicle, SUV ATM, payload requirements, desired layout, number of travellers, off-grid duration and budget. Choose the level of off-road capability that matches those needs rather than simply buying the most heavily specified SUV available." } },
                       ],
                     },
                   ],
@@ -567,10 +567,10 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                       "@type": "Article",
                       "@id": "https://www.caravansforsale.com.au/off-road-caravan-market-report/",
                       "url": "https://www.caravansforsale.com.au/off-road-caravan-market-report/",
-                      "headline": "Australian Off Road Caravan Market Report 2026",
-                      "description": "Analysis of active off road caravan advertisements on CaravansForSale.com.au covering prices, supply, sizes, weights, brands and location data across Australia.",
+                      "headline": "Australian Off Road SUV Market Report 2026",
+                      "description": "Analysis of active off road SUV advertisements on SuvForSale.com.au covering prices, supply, sizes, weights, brands and location data across Australia.",
                       "inLanguage": "en-AU",
-                      "publisher": { "@type": "Organization", "name": "CaravansForSale.com.au", "url": "https://www.caravansforsale.com.au/" },
+                      "publisher": { "@type": "Organization", "name": "SuvForSale.com.au", "url": "https://www.caravansforsale.com.au/" },
                       "breadcrumb": { "@id": "https://www.caravansforsale.com.au/off-road-caravan-market-report/#breadcrumb" },
                     },
                     {
@@ -578,18 +578,18 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                       "@id": "https://www.caravansforsale.com.au/off-road-caravan-market-report/#breadcrumb",
                       "itemListElement": [
                         { "@type": "ListItem", "position": 1, "name": "Home",              "item": "https://www.caravansforsale.com.au/" },
-                        { "@type": "ListItem", "position": 2, "name": "Off Road Caravans", "item": "https://www.caravansforsale.com.au/off-road-caravans/" },
+                        { "@type": "ListItem", "position": 2, "name": "Off Road SUVs", "item": "https://www.caravansforsale.com.au/off-road-caravans/" },
                         { "@type": "ListItem", "position": 3, "name": "Market Report",     "item": "https://www.caravansforsale.com.au/off-road-caravan-market-report/" },
                       ],
                     },
                     {
                       "@type": "FAQPage",
                       "mainEntity": [
-                        { "@type": "Question", "name": "How much does an off road caravan cost in Australia?",         "acceptedAnswer": { "@type": "Answer", "text": "The current median advertised asking price for off road caravans on CaravansForSale.com.au varies by condition. New caravans typically carry a higher median than used caravans. Check the live market data on this page for current figures." } },
-                        { "@type": "Question", "name": "Which state has the most off road caravans for sale?",         "acceptedAnswer": { "@type": "Answer", "text": "Victoria typically has the largest number of off road caravans advertised on CaravansForSale.com.au, followed by New South Wales and Queensland." } },
-                        { "@type": "Question", "name": "What is the most common off road caravan size?",               "acceptedAnswer": { "@type": "Answer", "text": "The 18–20ft range is consistently one of the most common size categories advertised across Australian off road caravan listings." } },
+                        { "@type": "Question", "name": "How much does an off road SUV cost in Australia?",         "acceptedAnswer": { "@type": "Answer", "text": "The current median advertised asking price for off road SUVs on SuvForSale.com.au varies by condition. New SUVs typically carry a higher median than used SUVs. Check the live market data on this page for current figures." } },
+                        { "@type": "Question", "name": "Which state has the most off road SUVs for sale?",         "acceptedAnswer": { "@type": "Answer", "text": "Victoria typically has the largest number of off road SUVs advertised on SuvForSale.com.au, followed by New South Wales and Queensland." } },
+                        { "@type": "Question", "name": "What is the most common off road SUV size?",               "acceptedAnswer": { "@type": "Answer", "text": "The 18–20ft range is consistently one of the most common size categories advertised across Australian off road SUV listings." } },
                         { "@type": "Question", "name": "Are the prices in this report actual sale prices?",             "acceptedAnswer": { "@type": "Answer", "text": "No. All prices shown are advertised asking prices from active marketplace listings. The final amount paid may differ from the advertised price." } },
-                        { "@type": "Question", "name": "What is ATM and why does it matter for off road caravans?",    "acceptedAnswer": { "@type": "Answer", "text": "ATM means Aggregate Trailer Mass — the maximum allowable laden weight of the caravan as specified by the manufacturer. It is a key figure when determining whether a tow vehicle is rated to tow a specific caravan." } },
+                        { "@type": "Question", "name": "What is ATM and why does it matter for off road SUVs?",    "acceptedAnswer": { "@type": "Answer", "text": "ATM means Aggregate Trailer Mass — the maximum allowable laden weight of the SUV as specified by the manufacturer. It is a key figure when determining whether a tow vehicle is rated to tow a specific SUV." } },
                       ],
                     },
                   ],
@@ -607,24 +607,24 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                   "@graph": [
                     {
                       "@type": "WebPage",
-                      "@id": "https://www.caravansforsale.com.au/sell-my-caravan/#webpage",
-                      "url": "https://www.caravansforsale.com.au/sell-my-caravan/",
-                      "name": "Sell My Caravan Online Australia | List Until Sold for $49",
+                      "@id": "https://www.caravansforsale.com.au/sell-my-suv/#webpage",
+                      "url": "https://www.caravansforsale.com.au/sell-my-suv/",
+                      "name": "Sell My SUV Online Australia | List Until Sold for $49",
                       "description":
-                        "Sell your caravan online across Australia for just $49. List until sold, edit anytime, pay no commission and connect directly with genuine caravan buyers.",
+                        "Sell your SUV online across Australia for just $49. List until sold, edit anytime, pay no commission and connect directly with genuine SUV buyers.",
                       "inLanguage": "en-AU",
                       "isPartOf": { "@id": "https://www.caravansforsale.com.au/#website" },
                     },
                     {
                       "@type": "Service",
-                      "@id": "https://www.caravansforsale.com.au/sell-my-caravan/#service",
-                      "name": "Private Caravan Listing Service",
-                      "url": "https://www.caravansforsale.com.au/sell-my-caravan/",
+                      "@id": "https://www.caravansforsale.com.au/sell-my-suv/#service",
+                      "name": "Private SUV Listing Service",
+                      "url": "https://www.caravansforsale.com.au/sell-my-suv/",
                       "description":
-                        "List your caravan for sale on CaravansForSale.com.au for a one-time $49 fee. No commissions, no subscriptions, live until sold.",
+                        "List your SUV for sale on SuvForSale.com.au for a one-time $49 fee. No commissions, no subscriptions, live until sold.",
                       "provider": {
                         "@type": "Organization",
-                        "name": "Caravans For Sale",
+                        "name": "SUVs For Sale",
                         "url": "https://www.caravansforsale.com.au",
                       },
                       "areaServed": {
@@ -640,38 +640,38 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                     },
                     {
                       "@type": "FAQPage",
-                      "@id": "https://www.caravansforsale.com.au/sell-my-caravan/#faqpage",
+                      "@id": "https://www.caravansforsale.com.au/sell-my-suv/#faqpage",
                       "mainEntity": [
                         {
                           "@type": "Question",
-                          "name": "How do I sell my caravan online in Australia?",
+                          "name": "How do I sell my SUV online in Australia?",
                           "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "You can sell your caravan online by creating a private seller listing on CaravansForSale.com.au. Add your caravan details, upload clear photos, set your asking price and publish your ad so buyers across Australia can contact you directly.",
+                            "text": "You can sell your SUV online by creating a private seller listing on SuvForSale.com.au. Add your SUV details, upload clear photos, set your asking price and publish your ad so buyers across Australia can contact you directly.",
                           },
                         },
                         {
                           "@type": "Question",
-                          "name": "How much does it cost to list my caravan?",
+                          "name": "How much does it cost to list my SUV?",
                           "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "It costs $49 inc. GST to list your caravan on CaravansForSale.com.au. This is a one-time listing fee with no monthly subscription, no hidden charges and no commission when your caravan sells.",
+                            "text": "It costs $49 inc. GST to list your SUV on SuvForSale.com.au. This is a one-time listing fee with no monthly subscription, no hidden charges and no commission when your SUV sells.",
                           },
                         },
                         {
                           "@type": "Question",
-                          "name": "How long does my caravan listing stay live?",
+                          "name": "How long does my SUV listing stay live?",
                           "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Your caravan listing stays live until sold. You do not need to keep paying monthly fees to keep your ad active. Once your caravan is sold, you can remove the listing from the website.",
+                            "text": "Your SUV listing stays live until sold. You do not need to keep paying monthly fees to keep your ad active. Once your SUV is sold, you can remove the listing from the website.",
                           },
                         },
                         {
                           "@type": "Question",
-                          "name": "Can I edit my caravan listing after publishing?",
+                          "name": "Can I edit my SUV listing after publishing?",
                           "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Yes. After your listing is published, you can update your caravan details, change the asking price, add or replace photos and improve your description if needed.",
+                            "text": "Yes. After your listing is published, you can update your SUV details, change the asking price, add or replace photos and improve your description if needed.",
                           },
                         },
                         {
@@ -679,28 +679,28 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                           "name": "How do buyers contact me?",
                           "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Interested buyers can contact you directly through your caravan listing. This allows you to answer questions, arrange inspections, negotiate the price and manage the sale privately.",
+                            "text": "Interested buyers can contact you directly through your SUV listing. This allows you to answer questions, arrange inspections, negotiate the price and manage the sale privately.",
                           },
                         },
                         {
                           "@type": "Question",
-                          "name": "Do I pay commission when my caravan sells?",
+                          "name": "Do I pay commission when my SUV sells?",
                           "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "No. CaravansForSale.com.au does not charge commission when your caravan sells. You pay the one-time listing fee and keep 100% of the agreed sale price.",
+                            "text": "No. SuvForSale.com.au does not charge commission when your SUV sells. You pay the one-time listing fee and keep 100% of the agreed sale price.",
                           },
                         },
                         {
                           "@type": "Question",
-                          "name": "How should I price my caravan?",
+                          "name": "How should I price my SUV?",
                           "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Check similar caravans for sale before setting your price. Compare by make, model, year, condition, length, ATM, tare weight, sleeping capacity, features and location. A realistic asking price can help attract more genuine buyers.",
+                            "text": "Check similar SUVs for sale before setting your price. Compare by make, model, year, condition, length, ATM, tare weight, sleeping capacity, features and location. A realistic asking price can help attract more genuine buyers.",
                           },
                         },
                         {
                           "@type": "Question",
-                          "name": "Is it safe to sell my caravan privately online?",
+                          "name": "Is it safe to sell my SUV privately online?",
                           "acceptedAnswer": {
                             "@type": "Answer",
                             "text": "Yes, but you should take normal precautions. Speak with buyers directly, meet in a safe location, confirm payment has cleared before handover and complete any required transfer paperwork for your state or territory.",
@@ -738,8 +738,8 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                       "@type": "WebPage",
                       "@id": "https://www.caravansforsale.com.au/dealer-advertising/#webpage",
                       "url": "https://www.caravansforsale.com.au/dealer-advertising/",
-                      "name": "Caravan Dealer Advertising | Unlimited Listings $299/Month | CaravansForSale",
-                      "description": "Advertise your caravan dealership on CaravansForSale.com.au. Unlimited listings, zero lead fees, $299/month (inc. GST). Cancel anytime.",
+                      "name": "SUV Dealer Advertising | Unlimited Listings $299/Month | SuvForSale",
+                      "description": "Advertise your SUV dealership on SuvForSale.com.au. Unlimited listings, zero lead fees, $299/month (inc. GST). Cancel anytime.",
                       "isPartOf": { "@id": "https://www.caravansforsale.com.au/#website" },
                       "breadcrumb": { "@id": "https://www.caravansforsale.com.au/dealer-advertising/#breadcrumb" },
                     },
@@ -755,13 +755,13 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                     {
                       "@context": "https://schema.org",
                       "@type": "Service",
-                      "name": "Caravan Dealer Advertising",
+                      "name": "SUV Dealer Advertising",
                       "provider": {
                         "@type": "Organization",
-                        "name": "Caravans For Sale",
+                        "name": "SUVs For Sale",
                         "url": "https://www.caravansforsale.com.au/",
                       },
-                      "description": "Unlimited caravan listings on CaravansForSale.com.au for $299/month (inc. GST). Zero lead fees, no lock-in contracts, automatic inventory sync.",
+                      "description": "Unlimited SUV listings on SuvForSale.com.au for $299/month (inc. GST). Zero lead fees, no lock-in contracts, automatic inventory sync.",
                       "url": "https://www.caravansforsale.com.au/dealer-advertising/",
                       "areaServed": { "@type": "Country", "name": "Australia" },
                       "offers": {
@@ -785,12 +785,12 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                           "name": "How much does the dealer subscription cost, and what's included?",
                           "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "The dealer subscription is $299 per month (including GST). This flat monthly fee allows your dealership to list unlimited caravans on CaravansForSale.com.au. There are no per-listing charges, and we never charge per lead or take success commissions – no matter how many inquiries or sales you get, $299/month covers it all.",
+                            "text": "The dealer subscription is $299 per month (including GST). This flat monthly fee allows your dealership to list unlimited SUVs on SuvForSale.com.au. There are no per-listing charges, and we never charge per lead or take success commissions – no matter how many inquiries or sales you get, $299/month covers it all.",
                           },
                         },
                         {
                           "@type": "Question",
-                          "name": "How are my caravan listings added and kept up-to-date automatically?",
+                          "name": "How are my SUV listings added and kept up-to-date automatically?",
                           "acceptedAnswer": {
                             "@type": "Answer",
                             "text": "We sync directly with your dealership's website. Your listings are pulled automatically and refreshed weekly to match your current inventory.",
@@ -798,10 +798,10 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                         },
                         {
                           "@type": "Question",
-                          "name": "What kind of audience will my caravans reach?",
+                          "name": "What kind of audience will my SUVs reach?",
                           "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "CaravansForSale.com.au is a caravan-only marketplace with a focused, nationwide audience of serious buyers.",
+                            "text": "SuvForSale.com.au is an SUV-only marketplace with a focused, nationwide audience of serious buyers.",
                           },
                         },
                         {
@@ -862,8 +862,8 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                       "@type": "WebSite",
                       "@id": "https://www.caravansforsale.com.au/#website",
                       "url": "https://www.caravansforsale.com.au/",
-                      "name": "Caravans For Sale",
-                      "alternateName": "Caravans For Sale by Marketplace Network",
+                      "name": "SUVs For Sale",
+                      "alternateName": "SUVs For Sale by Marketplace Network",
                     },
                     {
                       "@type": "Organization",
@@ -875,7 +875,7 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                       "logo": {
                         "@type": "ImageObject",
                         "url": "https://www.caravansforsale.com.au/images/cfs-logo-black.svg",
-                        "caption": "Caravans For Sale by Marketplace Network",
+                        "caption": "SUVs For Sale by Marketplace Network",
                       },
                       "contactPoint": {
                         "@type": "ContactPoint",
@@ -889,10 +889,10 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
                       "@type": "ContactPage",
                       "@id": "https://www.caravansforsale.com.au/contact/#webpage",
                       "url": "https://www.caravansforsale.com.au/contact/",
-                      "name": "Contact Us | Get in Touch with Caravans For Sale",
+                      "name": "Contact Us | Get in Touch with SUVs For Sale",
                       "isPartOf": { "@id": "https://www.caravansforsale.com.au/#website" },
                       "about": { "@id": "https://www.caravansforsale.com.au/#organization" },
-                      "description": "Have a question about buying, selling, or dealer advertising solutions? Fill out our online contact form to get in touch with the Caravans For Sale customer support team.",
+                      "description": "Have a question about buying, selling, or dealer advertising solutions? Fill out our online contact form to get in touch with the SUVs For Sale customer support team.",
                       "breadcrumb": { "@id": "https://www.caravansforsale.com.au/contact/#breadcrumb" },
                     },
                     {
@@ -990,7 +990,7 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
           </Suspense>
           <main className="product-page style-5 flex-1">
             {/* <NextTopLoader
-          color="#ff6600"
+          color="#4736fe"
           height={3}
           showSpinner={false}
         /> */}

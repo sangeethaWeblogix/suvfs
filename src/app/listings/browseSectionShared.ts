@@ -31,12 +31,12 @@ export const STATES = [
 ];
 
 export const TYPES_NO_STATE = [
-  { label: "Off Road Caravans", href: "/listings/off-road-category/" },
-  { label: "Luxury Caravans",   href: "/listings/luxury-category/" },
-  { label: "Hybrid Caravans",   href: "/listings/hybrid-category/" },
-  { label: "Pop Top Caravans",  href: "/listings/pop-top-category/" },
-  { label: "Touring Caravans",  href: "/listings/touring-category/" },
-  { label: "Family Caravans",   href: "/listings/family-category/" },
+  { label: "Off Road SUVs", href: "/listings/off-road-category/" },
+  { label: "Luxury SUVs",   href: "/listings/luxury-category/" },
+  { label: "Hybrid SUVs",   href: "/listings/hybrid-category/" },
+  { label: "Pop Top SUVs",  href: "/listings/pop-top-category/" },
+  { label: "Touring SUVs",  href: "/listings/touring-category/" },
+  { label: "Family SUVs",   href: "/listings/family-category/" },
 ];
 
 export const FILTERS_NO_STATE = [

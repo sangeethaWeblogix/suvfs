@@ -315,7 +315,7 @@ export function generateTitleFromFilters(
   // Keyword search: treat search term as the primary noun
   if (parsed.search) {
     const kw = titleCase(parsed.search);
-    const noun = /caravans?$/i.test(kw) ? kw : `${kw} Caravans`;
+    const noun = /caravans?$/i.test(kw) ? kw : `${kw} SUVs`;
     return `${noun} for Sale${locationSuffix}`;
   }
 
@@ -331,7 +331,7 @@ export function generateTitleFromFilters(
   if (parsed.model) parts.push(titleCase(parsed.model));
   if (parsed.category) parts.push(titleCase(parsed.category));
 
-  const baseNoun = parts.length > 0 ? `${parts.join(" ")} Caravans` : "Caravans";
+  const baseNoun = parts.length > 0 ? `${parts.join(" ")} SUVs` : "SUVs";
   const band = getBandText(parsed);
   const bandPart = band ? ` ${band}` : "";
 
@@ -387,7 +387,7 @@ export async function metaFromSlug(
 
   const title = generateTitleFromFilters(parsed);
   const description =
-    "Browse caravans for sale across Australia. Compare prices on off-road, hybrid, pop top, touring, luxury models with size, weight & sleeping capacity.";
+    "Browse SUVs for sale across Australia. Compare prices on off-road, hybrid, pop top, touring, luxury models with size, weight & sleeping capacity.";
 
   return {
     title: { absolute: title },
@@ -406,7 +406,7 @@ export async function metaFromSlug(
           url: "https://www.caravansforsale.com.au/images/cfs-logo.png",
           width: 800,
           height: 600,
-          alt: "Caravans for Sale Australia",
+          alt: "SUVs for Sale Australia",
         },
       ],
     },

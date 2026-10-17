@@ -1,6 +1,6 @@
 
 :root {
-  --primary-color: #ec7200;
+  --primary-color: #4736fe;
   --secondary-color: #000000;
   --success-color: #22c55e;
   --error-color: #ef4444;
@@ -183,7 +183,7 @@
 .submit-btn {
   width: 100%;
   padding: 14px;
-  background: #ec7200;
+  background: #4736fe;
   color: white;
   border: none;
   border-radius: 8px;
@@ -522,10 +522,10 @@
 
 /* two distinct colors */
 .private .login-icon {
-  background: #f58333;
+  background: #4736fe;
 }
 .dealer .login-icon {
-  background: #f58333;
+  background: #4736fe;
 }
 
 /* small arrow on the right */

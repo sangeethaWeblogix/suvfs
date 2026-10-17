@@ -9,15 +9,15 @@ const DEALER_FAQS = [
     a: (
       <p>
         The dealer subscription is $299 per month (including GST). This flat
-        monthly fee allows your dealership to list unlimited caravans on
-        CaravansForSale.com.au. There are no per-listing charges, and we never
+        monthly fee allows your dealership to list unlimited SUVs on
+        SuvForSale.com.au. There are no per-listing charges, and we never
         charge per lead or take success commissions – no matter how many
         inquiries or sales you get, $299/month covers it all.
       </p>
     ),
   },
   {
-    q: "How are my caravan listings added and kept up-to-date automatically?",
+    q: "How are my SUV listings added and kept up-to-date automatically?",
     a: (
       <p>
         We sync directly with your dealership's website. Your listings are
@@ -27,10 +27,10 @@ const DEALER_FAQS = [
     ),
   },
   {
-    q: "What kind of audience will my caravans reach?",
+    q: "What kind of audience will my SUVs reach?",
     a: (
       <p>
-        CaravansForSale.com.au is a caravan-only marketplace with a focused,
+        SuvForSale.com.au is an SUV-only marketplace with a focused,
         nationwide audience of serious buyers.
       </p>
     ),
@@ -82,7 +82,7 @@ const DealerLandingPage = () => {
 
                 <p>
                   A dealer-first marketplace built to generate consistent
-                  enquiries from high-intent caravan buyers.
+                  enquiries from high-intent SUV buyers.
                 </p>
 
                 <a
@@ -107,13 +107,13 @@ const DealerLandingPage = () => {
                   <div className="feel_cfs">
                     <h2>
                       Lead Generation Machine{" "}
-                      <span>Built for Your Caravan Dealership</span>
+                      <span>Built for Your SUV Dealership</span>
                     </h2>
 
                     <p className="mb-3">
                       Your stock deserves visibility without per-lead fees, Marketplace Network
                       connects your dealership with buyers actively searching
-                      for their next caravan—so your inventory gets seen by the
+                      for their next SUV—so your inventory gets seen by the
                       right audience.
                     </p>
 
@@ -129,12 +129,12 @@ const DealerLandingPage = () => {
                             {
                               img: "/images/seo_keyword.svg",
                               title: "Ranking for 300+ High-Intent Keywords",
-                              desc: "Get discovered by buyers actively searching for caravans.",
+                              desc: "Get discovered by buyers actively searching for SUVs.",
                             },
                             {
                               img: "/images/visiter.svg",
                               title: "1000's of Daily Visitors & Growing",
-                              desc: "Reach a highly engaged, caravan-buyer-specific audience every day",
+                              desc: "Reach a highly engaged, SUV-buyer-specific audience every day",
                             },
                             {
                               img: "/images/inbox.svg",
@@ -204,7 +204,7 @@ const DealerLandingPage = () => {
             <div className="col-12">
               <div className="comparison">
                 <h2 className="text-center">
-                  <span>Why Caravan Dealers </span> Choose Marketplace Network
+                  <span>Why SUV Dealers </span> Choose Marketplace Network
                 </h2>
 
                 <div className="table-responsive">
@@ -213,7 +213,7 @@ const DealerLandingPage = () => {
                       <tr>
                         <th className="text-start">Comparison Table</th>
                         <th className="brand-col">
-                          Caravansforsale<wbr />.com.au
+                          SuvForSale<wbr />.com.au
                         </th>
                         <th>Other Marketplaces</th>
                       </tr>
@@ -222,9 +222,9 @@ const DealerLandingPage = () => {
                       {[
                         "We list your entire stock automatically",
                         "Listings are updated automatically based on your website stock data",
-                        "Caravan buyer/seller-only audience",
-                        "Built for caravan dealers—not classified clutter",
-                        "Unlimited caravan listings",
+                        "SUV buyer/seller-only audience",
+                        "Built for SUV dealers—not classified clutter",
+                        "Unlimited SUV listings",
                         "No per-lead fees",
                         "Best-value monthly subscription fees by a country mile",
                       ].map((text, i) => (
@@ -268,7 +268,7 @@ const DealerLandingPage = () => {
           {/* Reach Caravan Buyers Section */}
           <div className="col-lg-12">
             <div className="heading-box">
-              <h2>Reach caravan buyers across Australia</h2>
+              <h2>Reach SUV buyers across Australia</h2>
             </div>
           </div>
 
@@ -277,12 +277,12 @@ const DealerLandingPage = () => {
               <img
                 src="/images/your-caravan-desktop.jpg"
                 className="img-fluid d-none d-lg-block desktop-img"
-                alt="Caravan For Sale Desktop"
+                alt="SUV For Sale Desktop"
               />
               <img
                 src="/images/your-caravan-mobile.png"
                 className="img-fluid d-block d-lg-none mobile-img"
-                alt="Caravan For Sale Mobile"
+                alt="SUV For Sale Mobile"
               />
             </div>
 
@@ -316,13 +316,13 @@ const DealerLandingPage = () => {
         </div>
       </section>
 
-      {/* ── FAQ accordion — matches /sell-my-caravan/ design ── */}
+      {/* ── FAQ accordion — matches /sell-my-suv/ design ── */}
       <section className="demo-faq-section">
         <div className="container">
           <div className="demo-faq-head">
             <span className="demo-faq-head__tag">FAQ</span>
             <h2>Frequently Asked Questions</h2>
-            <p>Everything you need to know about advertising your dealership on CaravansForSale.com.au</p>
+            <p>Everything you need to know about advertising your dealership on SuvForSale.com.au</p>
           </div>
           <div className="demo-faq-list">
             {DEALER_FAQS.map((faq, i) => (

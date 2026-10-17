@@ -9,7 +9,7 @@ import {
 } from "./browseSectionShared";
 
 const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
-const API_KEY = process.env.CFS_API_KEY;
+const API_KEY = process.env.MPN_API_KEY;
 
 const wpHeaders = (): Record<string, string> => ({
   Accept: "application/json",
@@ -18,7 +18,7 @@ const wpHeaders = (): Record<string, string> => ({
 
 // params-count (make/category/state/region counts) uses the MPN key/base.
 const MPN_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
-const MPN_KEY = process.env.CFS_API_KEY;
+const MPN_KEY = process.env.MPN_API_KEY;
 
 const mpnHeaders = (): Record<string, string> => ({
   Accept: "application/json",

@@ -86,9 +86,9 @@ export default function HomeLocationSection() {
 
         <div className="hloc-header">
           <h2 className="hloc-title">
-            Find Caravans for Sale by <span className="hloc-title-accent">Popular Location</span>
+            Find SUVs for Sale by <span className="hloc-title-accent">Popular Location</span>
           </h2>
-          <p className="hloc-subtitle">Browse new and used caravans for sale near you across major Australian cities and regions.</p>
+          <p className="hloc-subtitle">Browse new and used SUVs for sale near you across major Australian cities and regions.</p>
           
         </div>
 
@@ -126,9 +126,9 @@ export default function HomeLocationSection() {
         </div>
 <div className="hloc-header">
   <h2 className="hloc-title">
-           Search Caravans for Sale <span className="hloc-title-accent">Your Way</span>
+           Search SUVs for Sale <span className="hloc-title-accent">Your Way</span>
           </h2>
-          <p className="hloc-subtitle">Browse new and used caravans for sale by price, weight, length and sleeping capacity.</p>
+          <p className="hloc-subtitle">Browse new and used SUVs for sale by price, weight, length and sleeping capacity.</p>
         </div>
         <div className="hloc-filters">
           

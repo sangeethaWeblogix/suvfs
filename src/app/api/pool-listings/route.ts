@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export const preferredRegion = "syd1";
 
 const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
-const API_KEY = process.env.CFS_API_KEY;
+const API_KEY = process.env.MPN_API_KEY;
 
 async function fetchPoolTest(url: string, signal: AbortSignal) {
   const res = await fetch(url, {

@@ -1,7 +1,7 @@
 // src/api/enquiry/api.ts
 const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
 // e.g. "https://www.dev.caravansforsale.com.au/wp-json/cfs/v1"
-const API_KEY = process.env.CFS_API_KEY;
+const API_KEY = process.env.MPN_API_KEY;
 
 export type ProductEnquiryPayload = {
   product_id: number | string;

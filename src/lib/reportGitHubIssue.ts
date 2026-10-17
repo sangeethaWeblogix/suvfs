@@ -37,7 +37,7 @@ function classifyError(errorType: string, errorSource: "FRONTEND" | "BACKEND"): 
     return {
       emoji: "🔑",
       category: "Missing / Invalid API Key",
-      diagnosis: "The request was rejected due to a missing or invalid API key (HTTP 401/403). Check that CFS_API_KEY is correctly set in Vercel environment variables.",
+      diagnosis: "The request was rejected due to a missing or invalid API key (HTTP 401/403). Check that MPN_API_KEY is correctly set in Vercel environment variables.",
       severity: "critical",
     };
   }
@@ -153,13 +153,13 @@ ${payload.message}
 \`\`\`
 
 ### Checklist
-- [ ] Verify backend API is reachable: \`https://admin.marketplacenetwork.com.au/wp-json/mpn/v1/new_optimize_code\`
-- [ ] Check \`CFS_API_KEY\` in Vercel environment variables
+- [ ] Verify backend API is reachable: \`${process.env.NEXT_PUBLIC_CFS_API_BASE}/new_optimize_code\`
+- [ ] Check \`MPN_API_KEY\` in Vercel environment variables
 - [ ] Check Vercel function logs for this timeframe
 - [ ] Confirm API response time is under 30s
 
 ---
-*Auto-reported by production error handler — caravansforsale.com.au*`;
+*Auto-reported by production error handler — suvforsale.com.au*`;
 
     await fetch(`${GITHUB_API}/repos/${GITHUB_OWNER}/${GITHUB_REPO}/issues`, {
       method: "POST",

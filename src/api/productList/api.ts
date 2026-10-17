@@ -1,7 +1,7 @@
 import { fetchParamsCountFromKV, normalizeCountItems } from "@/lib/paramsCountKv";
 
 const MPN_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
-const API_KEY  = process.env.CFS_API_KEY;
+const API_KEY  = process.env.MPN_API_KEY;
 
 // params-count calls (make/model/category counts) use the MPN key/base;
 // every other endpoint in this file keeps the CFS one.

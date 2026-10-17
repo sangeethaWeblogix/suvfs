@@ -7,7 +7,7 @@ const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://www.caravansforsale.com.au";
 
 const MPN_API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
-const MPN_API_KEY = process.env.CFS_API_KEY;
+const MPN_API_KEY = process.env.MPN_API_KEY;
 
 export async function GET() {
   try {

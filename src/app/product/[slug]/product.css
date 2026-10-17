@@ -180,7 +180,7 @@
   border: 0;
 }
 .contactSeller__container .price_section .price-shape span {
-  color: #ec7200 !important;
+  color: #4736fe !important;
   font-size: 30px;
   font-weight: 700;
 }
@@ -195,8 +195,8 @@
 .contact_dealer button {
   border-radius: 30px;
   display: inline-block;
-  background-color: #ec7200;
-  border: 1px solid #ec7200;
+  background-color: #4736fe;
+  border: 1px solid #4736fe;
   color: #fff;
   text-align: center;
   padding: 15px 50px;
@@ -271,8 +271,8 @@
 }
 
 .product-page .product-details .nav-pills .nav-link.active {
-  color: #ec7200;
-  border-color: #ec7200;
+  color: #4736fe;
+  border-color: #4736fe;
 }
 .product-page .product-details .additional-info ul {
   border: 1px solid #0002;
@@ -419,7 +419,7 @@
 .price-card__sale {
   font-size: 28px;
   font-weight: 800;
-  color: #f28c1a; /* orange like screenshot */
+  color: #4736fe; /* orange like screenshot */
   line-height: 1.1;
 }
 
@@ -461,7 +461,7 @@
   padding: 14px 18px;
   border: none;
   border-radius: 9999px;
-  background: #f28c1a;
+  background: #4736fe;
   color: #fff;
   font-weight: 700;
   cursor: pointer;
@@ -510,8 +510,8 @@
     color: #fff;
     text-transform: capitalize;
     letter-spacing: 0;
-    background: #ec7200;
-    border: 1px solid #ec7200;
+    background: #4736fe;
+    border: 1px solid #4736fe;
     border-radius: 20px;
     width: 100%;
     margin-top: 0;
@@ -527,7 +527,7 @@
 }
 
 .terms_text a {
-  color: #ec7200;
+  color: #4736fe;
 }
 
 .related-products h3 {
@@ -611,8 +611,8 @@
 }
 
 .checklist li .btn-secondary {
-    color: #f47b00;
-    background: #fff3e8;
+    color: #4736fe;
+    background: #e9e7ff;
     border-radius: 20px;
     padding: 5px 15px;
     font-weight: 500;
@@ -640,8 +640,8 @@
 }
 
 .num{
-  background:#ffe7d0;
-  color:#f47b00;
+  background:#d2ceff;
+  color:#4736fe;
   width:34px;
   height:34px;
   border-radius:50%;
@@ -698,8 +698,8 @@
 /* BUTTONS */
 
 .btn-secondary{
-  background:#fff3e8;
-  color:#f47b00;
+  background:#e9e7ff;
+  color:#4736fe;
   padding:8px 14px;
   border-radius:20px;
   text-decoration:none;
@@ -720,8 +720,8 @@
 }
 
 .btn-primary{
-  background:#ec7200;
-  border-color: #ec7200;
+  background:#4736fe;
+  border-color: #4736fe;
   color:#fff;
   padding:14px 65px;
   border-radius:30px;
@@ -851,7 +851,7 @@
   }
 
   .current-price {
-    color: #f60;
+    color: #4736fe;
     font-size: 25px;
     font-weight: bold;
   }
@@ -1048,7 +1048,7 @@
   }
 
   .current-price {
-    color: #ec7200;
+    color: #4736fe;
     font-size: 25px;
     font-weight: bold;
   }

@@ -12,7 +12,7 @@ const DEMO_SLUG = "2025-retreat-caravans-daydream-29ft6-off-road";
 
 const fetchProduct = cache(async () => {
   const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE!;
-  const API_KEY  = process.env.CFS_API_KEY;
+  const API_KEY  = process.env.MPN_API_KEY;
   try {
     const res = await fetch(
       `${API_BASE}/${encodeURIComponent(DEMO_SLUG)}`,
@@ -34,10 +34,10 @@ const fetchProduct = cache(async () => {
 });
 
 async function fetchSimilarProducts(slug: string) {
-  const API_KEY = process.env.CFS_API_KEY;
+  const API_KEY = process.env.MPN_API_KEY;
   try {
     const res = await fetch(
-      `https://admin.marketplacenetwork.com.au/wp-json/mpn/v1/caravans/${encodeURIComponent(slug)}/similar`,
+      `${process.env.NEXT_PUBLIC_CFS_API_BASE}/${encodeURIComponent(slug)}/similar`,
       {
         cache: "no-store",
         headers: {

@@ -301,7 +301,7 @@ footer.style-8 .content .logo-social .socials a:hover {
   transition: color 0.2s;
 }
 .sell-panel__main-link:hover {
-  color: #ec7200 !important;
+  color: #4736fe !important;
 }
 .sell-panel__close {
   background: none;
@@ -354,11 +354,11 @@ footer.style-8 .content .logo-social .socials a:hover {
   text-decoration: none;
   padding-bottom: 8px;
   margin-bottom: 10px;
-  border-bottom: 2px solid #ec7200;
+  border-bottom: 2px solid #4736fe;
   transition: color 0.2s;
 }
 .sell-panel__state-title:hover {
-  color: #ec7200 !important;
+  color: #4736fe !important;
 }
 
 /* ── Region list ─────────────────────────────────────── */
@@ -379,7 +379,7 @@ footer.style-8 .content .logo-social .socials a:hover {
   line-height: 1.6;
 }
 .sell-panel__region-list li a:hover {
-  color: #ec7200;
+  color: #4736fe;
 }
 
 /* ══════════════════════════════════════════════════════
@@ -412,7 +412,7 @@ footer.style-8 .content .logo-social .socials a:hover {
   height: 38px;
   width: auto;
 }
-.cfs-footer__accent { color: #ec7200; }
+.cfs-footer__accent { color: #4736fe; }
 .cfs-footer__brand-divider {
   width: 1px;
   height: 36px;
@@ -450,7 +450,7 @@ footer.style-8 .content .logo-social .socials a:hover {
   bottom: 0;
   width: 28px;
   height: 2px;
-  background: #ec7200;
+  background: #4736fe;
 }
 .cfs-footer__col-title--sub { margin-top: 26px; }
 .cfs-footer__col ul {
@@ -468,8 +468,8 @@ footer.style-8 .content .logo-social .socials a:hover {
   transition: color 0.2s;
 }
 .cfs-footer__col ul a:hover { color: #000000; }
-.cfs-footer__link--accent { color: #ec7200 !important; font-weight: 600; }
-.cfs-footer__link--accent:hover { color: #c75f00 !important; }
+.cfs-footer__link--accent { color: #4736fe !important; font-weight: 600; }
+.cfs-footer__link--accent:hover { color: #2713fe !important; }
 
 .cfs-footer__view-all {
   display: inline-flex;
@@ -479,14 +479,14 @@ footer.style-8 .content .logo-social .socials a:hover {
   border: none;
   padding: 0;
   margin-top: 2px;
-  color: #ec7200;
+  color: #4736fe;
   font-size: 14px;
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
   transition: color 0.2s;
 }
-.cfs-footer__view-all:hover { color: #c75f00; }
+.cfs-footer__view-all:hover { color: #2713fe; }
 
 @media (max-width: 991px) {
   .cfs-footer__columns { grid-template-columns: repeat(3, 1fr); row-gap: 32px; }
@@ -520,7 +520,7 @@ footer.style-8 .content .logo-social .socials a:hover {
   bottom: 0;
   width: 28px;
   height: 2px;
-  background: #ec7200;
+  background: #4736fe;
 }
 .cfs-footer__network-grid {
   display: grid;
@@ -540,8 +540,8 @@ footer.style-8 .content .logo-social .socials a:hover {
   transition: border-color 0.2s, background 0.2s;
 }
 .cfs-footer__network-card:hover {
-  border-color: #ec7200;
-  background: #fff6ee;
+  border-color: #4736fe;
+  background: #efedff;
 }
 .cfs-footer__network-card--current {
   cursor: default;
@@ -575,12 +575,12 @@ footer.style-8 .content .logo-social .socials a:hover {
   border-radius: 10px;
   padding: 12px 20px;
   cursor: pointer;
-  color: #ec7200;
+  color: #4736fe;
   font-family: inherit;
   text-align: left;
   transition: border-color 0.2s;
 }
-.footer-sell-by-location__bar:hover { border-color: #ec7200; }
+.footer-sell-by-location__bar:hover { border-color: #4736fe; }
 .footer-sell-by-location__text {
   display: flex;
   flex-direction: column;

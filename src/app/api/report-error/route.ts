@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
       payload.errorType?.toLowerCase().includes("5") ? "🔴" : "🟠";
 
     const tgText =
-      `${severity} <b>${payload.errorSource} Error — caravansforsale.com.au</b>\n\n` +
+      `${severity} <b>${payload.errorSource} Error — suvforsale.com.au</b>\n\n` +
       `<b>Type:</b> ${payload.errorType}\n` +
       `<b>Message:</b> ${payload.message?.substring(0, 300)}\n` +
       (payload.pageUrl ? `<b>Page:</b> ${payload.pageUrl}` : "");

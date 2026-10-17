@@ -418,7 +418,7 @@ export default function StateFilterBar({
   const toTitleCase = (s: string) => s.replace(/\b\w/g, c => c.toUpperCase());
 
   const withCaravanSuffix = (name: string) =>
-    /caravan/i.test(name) ? name : `${name} Caravan`;
+    /caravan/i.test(name) ? name : `${name} SUV`;
 
   // WP's model list has no separate display name — `value`/`name` is just the
   // raw slug ("altea-402-ph-sport"). toTitleCase alone only capitalizes each
@@ -713,7 +713,7 @@ export default function StateFilterBar({
               <div className="slider-wrapper">
                 <div className="filter-swiper">
                   <button className={`tag${currentFilters.category ? " active" : ""}`} onClick={handleTypeOpen}>
-                    Caravan Type
+                    SUV Type
                     {currentFilters.category && <span className="active_filter"><i className="bi bi-circle-fill" /></span>}
                   </button>
 
@@ -906,7 +906,7 @@ export default function StateFilterBar({
 
               {/* Caravan Type */}
               <div className="filter-item pt-0">
-                <h4>Caravan Type</h4>
+                <h4>SUV Type</h4>
                 <ul className="loc-state-list">
                   {catLoading && categories.length === 0 ? (
                     <CategorySkeleton />
@@ -1033,7 +1033,7 @@ export default function StateFilterBar({
                               <div className="cfs-radius-tooltip" style={{ left:`calc(${pct}% + ${18 - 0.36*pct}px)` }}>{tempSuburbRadius}km</div>
                               <div className="cfs-radius-track-wrap">
                                 <input type="range" className="cfs-radius-slider" min={0} max={RADIUS_OPTIONS.length-1} step={1} value={idx}
-                                  style={{ background:`linear-gradient(to right,#f37920 0%,#f37920 ${pct}%,#ddd ${pct}%,#ddd 100%)` }}
+                                  style={{ background:`linear-gradient(to right,#4736fe 0%,#4736fe ${pct}%,#ddd ${pct}%,#ddd 100%)` }}
                                   onChange={e => setTempSuburbRadius(RADIUS_OPTIONS[parseInt(e.target.value,10)])} aria-label="Search radius" />
                                 {RADIUS_OPTIONS.map((km,i) => {
                                   const tp = (i/(RADIUS_OPTIONS.length-1))*100;
@@ -1292,7 +1292,7 @@ export default function StateFilterBar({
       {openModal === "type" && (
         <div className="filter-overlay">
           <div className="filter-modal">
-            <div className="filter-header"><h3>Caravan Type</h3>{closeBtn}</div>
+            <div className="filter-header"><h3>SUV Type</h3>{closeBtn}</div>
             <div className="filter-body">
               <div className="filter-item pt-0">
                 <ul className="loc-state-list">
@@ -1419,7 +1419,7 @@ export default function StateFilterBar({
                                   <div className="cfs-radius-tooltip" style={{ left:`calc(${pct}% + ${18 - 0.36*pct}px)` }}>{tempSuburbRadius}km</div>
                                   <div className="cfs-radius-track-wrap">
                                     <input type="range" className="cfs-radius-slider" min={0} max={RADIUS_OPTIONS.length-1} step={1} value={idx}
-                                      style={{ background:`linear-gradient(to right,#f37920 0%,#f37920 ${pct}%,#ddd ${pct}%,#ddd 100%)` }}
+                                      style={{ background:`linear-gradient(to right,#4736fe 0%,#4736fe ${pct}%,#ddd ${pct}%,#ddd 100%)` }}
                                       onChange={e => setTempSuburbRadius(RADIUS_OPTIONS[parseInt(e.target.value,10)])} aria-label="Search radius" />
                                     {RADIUS_OPTIONS.map((km,i) => {
                                       const tp = (i/(RADIUS_OPTIONS.length-1))*100;

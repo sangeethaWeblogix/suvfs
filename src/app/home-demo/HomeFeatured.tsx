@@ -38,7 +38,7 @@ export default function HomeFeatured({ items }: Props) {
     <section className="hf-section">
       <div className="container">
         <div className="hf-header">
-          <h2 className="hf-title">Featured Caravans for Sale</h2>
+          <h2 className="hf-title">Featured SUVs for Sale</h2>
           {/* <Link href="/listings/" className="hf-view-all">
             View all caravans <span aria-hidden>→</span>
           </Link> */}

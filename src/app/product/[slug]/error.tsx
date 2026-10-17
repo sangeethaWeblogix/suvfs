@@ -63,7 +63,7 @@ export default function ProductError({ error, reset }: ErrorProps) {
         </div>
 
         <h2 style={{ fontSize: "22px", fontWeight: 700, color: "#212529", margin: "0 0 10px" }}>
-          Unable to load this caravan
+          Unable to load this SUV
         </h2>
         <p style={{ fontSize: "15px", color: "#6c757d", margin: "0 0 24px", lineHeight: 1.6 }}>
           We couldn&apos;t load this listing. It may have been removed or there was a temporary error.
@@ -98,7 +98,7 @@ export default function ProductError({ error, reset }: ErrorProps) {
               textDecoration: "none",
             }}
           >
-            Browse All Caravans
+            Browse All SUVs
           </a>
         </div>
       </div>

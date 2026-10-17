@@ -64,7 +64,7 @@
 }
 .link_list_s a:hover {
   background: #fff8f4 !important;
-  border-color: #ffd3b4 !important;
+  border-color: #b8b1ff !important;
   color: #000 !important;
 }
 h1.page-title {
@@ -277,7 +277,7 @@ h1.page-title {
   display: block;
   font-weight: 700;
   font-size: 24px;
-  color: #f58333;
+  color: #4736fe;
   margin-bottom: 0;
 }
 .vehicleSearch__column-poster
@@ -472,13 +472,13 @@ h1.page-title {
 }
 
 .pagination-icons button {
-  color: #f58333;
+  color: #4736fe;
   font-weight: 500;
 }
 
 .pagination-icons button:hover {
   background: #fff9f4;
-  color: #f58333;
+  color: #4736fe;
 }
 
 .filter .filter-card {
@@ -588,7 +588,7 @@ h1.page-title {
 }
 .cs-full_width_section .filter-accordion-item.marked {
   text-decoration: none !important;
-  color: #f58333;
+  color: #4736fe;
 }
 .cfs-filter-label-sub {
   font-size: 13px;
@@ -616,7 +616,7 @@ h1.page-title {
   height: 50px;
 }
 .cfs-btn:hover {
-  background: #f58333;
+  background: #4736fe;
   color: #000;
 }
 .cfs-btn.fullwidth_btn {
@@ -685,15 +685,15 @@ h1.page-title {
   padding-bottom: 25px;
 }
 .cfs-modal-content .cfs-modal-footer .cfs-btn {
-  background: #ec7200;
+  background: #4736fe;
   width: 300px;
-  border-color: #ec7200;
+  border-color: #4736fe;
   color: #fff;
 }
 
 .cfs-modal-content .cfs-modal-footer .cfs-btn:hover,
 .cfs-modal-content .cfs-modal-footer .cfs-btn:focus {
-  background: #ef7a0d;
+  background: #4736fe;
   color: #ffffff;
 }
 /* The Close Button */
@@ -860,7 +860,7 @@ input[type="number"]::-webkit-outer-spin-button {
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  background: #f58333;
+  background: #4736fe;
   cursor: ew-resize;
   box-shadow: 0 0 2px 0 #555;
   transition: background 0.3s ease-in-out;
@@ -1153,7 +1153,7 @@ input[type="number"]::-webkit-outer-spin-button {
   left: 0;
   width: 36px;
   height: 3px;
-  background: #e07b39;
+  background: #4736fe;
   border-radius: 2px;
 }
 
@@ -1168,7 +1168,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .listing-bottom .custom-card:hover h4 {
-  color: #e07b39;
+  color: #4736fe;
   border-bottom: none;
 }
 
@@ -1211,7 +1211,7 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 .lsd-sell-cta__link {
-  color: #e8650a;
+  color: #4736fe;
   font-weight: 600;
   text-decoration: none;
 }

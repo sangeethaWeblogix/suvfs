@@ -64,8 +64,8 @@ function buildEmail(level: "warning" | "limit", used: number, limit: number, dat
   const pct = Math.round((used / limit) * 100);
   const n = (x: number) => x.toLocaleString("en-AU");
   const subject = level === "limit"
-    ? `[caravansforsale.com.au] Redis limit REACHED — ${pct}% of monthly commands used`
-    : `[caravansforsale.com.au] Redis usage warning — ${pct}% of monthly commands used`;
+    ? `[suvforsale.com.au] Redis limit REACHED — ${pct}% of monthly commands used`
+    : `[suvforsale.com.au] Redis usage warning — ${pct}% of monthly commands used`;
   const impact = level === "limit"
     ? "The limit has been reached. Visitor screening keeps running but cannot save results: every new visitor now costs a paid MaxMind lookup, visitors show as \"unscreened\", qualifications are not saved (the ps remarketing audience stops filling) and the visitor log is empty."
     : `If usage reaches 100% before the month resets, visitor screening stops saving results: MaxMind costs rise, the ps remarketing audience stops filling and the visitor log goes empty.`;
@@ -74,14 +74,14 @@ function buildEmail(level: "warning" | "limit", used: number, limit: number, dat
     `Upstash Redis usage for database "${database}":`,
     `${n(used)} of ${n(limit)} commands this month (${pct}%).`,
     "", impact, "", `What to do: ${action}`, "",
-    "Sent automatically by the daily check at /api/cron/redis-usage/ on caravansforsale.com.au.",
+    "Sent automatically by the daily check at /api/cron/redis-usage/ on suvforsale.com.au.",
   ].join("\n");
   const html = `
     <p>Upstash Redis usage for database <b>${database}</b>:</p>
     <p style="font-size:18px"><b>${n(used)}</b> of ${n(limit)} commands this month (<b>${pct}%</b>)</p>
     <p>${impact}</p>
     <p><b>What to do:</b> ${action}</p>
-    <p style="color:#6b7280;font-size:12px">Sent automatically by the daily check at /api/cron/redis-usage/ on caravansforsale.com.au.</p>`;
+    <p style="color:#6b7280;font-size:12px">Sent automatically by the daily check at /api/cron/redis-usage/ on suvforsale.com.au.</p>`;
   return { subject, text, html };
 }
 
@@ -93,7 +93,7 @@ export async function GET(request: NextRequest) {
   if (params.get("test") === "1") {
     try {
       await sendAdminEmail(
-        "[caravansforsale.com.au] Test — Redis usage alert email",
+        "[suvforsale.com.au] Test — Redis usage alert email",
         "This is a test of the Redis usage alert email. If you received it, the SMTP settings work.",
         "<p>This is a test of the Redis usage alert email. If you received it, the SMTP settings work.</p>",
       );
@@ -183,8 +183,8 @@ function buildMaxmindEmail(level: "low" | "out", remaining: number, readingTime:
   const n = remaining.toLocaleString("en-AU");
   const dollars = (remaining * MAXMIND_COST_PER_QUERY_USD).toFixed(2);
   const subject = level === "out"
-    ? "[caravansforsale.com.au] MaxMind credit USED UP — visitor screening has stopped"
-    : `[caravansforsale.com.au] MaxMind credit low — ${n} lookups left (≈ US$${dollars})`;
+    ? "[suvforsale.com.au] MaxMind credit USED UP — visitor screening has stopped"
+    : `[suvforsale.com.au] MaxMind credit low — ${n} lookups left (≈ US$${dollars})`;
   const impact = level === "out"
     ? "MaxMind has no credit left. New visitors cannot be screened: they stay \"uk\" and can never become \"ps\", so the remarketing audience stops filling and VPN / bot traffic is no longer flagged."
     : "When the credit runs out, new visitors can no longer be screened: the ps remarketing audience stops filling and VPN / bot traffic is no longer flagged.";
@@ -192,14 +192,14 @@ function buildMaxmindEmail(level: "low" | "out", remaining: number, readingTime:
   const text = [
     level === "out" ? "MaxMind credit is used up." : `MaxMind credit is low: ${n} GeoIP Insights lookups left (about US$${dollars}).`,
     `Last reading: ${readingTime}.`, "", impact, "", `What to do: ${action}`, "",
-    "Sent automatically by the daily check at /api/cron/redis-usage/ on caravansforsale.com.au.",
+    "Sent automatically by the daily check at /api/cron/redis-usage/ on suvforsale.com.au.",
   ].join("\n");
   const html = `
     <p>${level === "out" ? "<b>MaxMind credit is used up.</b>" : `MaxMind credit is low: <b>${n}</b> GeoIP Insights lookups left (about <b>US$${dollars}</b>).`}</p>
     <p style="color:#6b7280">Last reading: ${readingTime}</p>
     <p>${impact}</p>
     <p><b>What to do:</b> ${action}</p>
-    <p style="color:#6b7280;font-size:12px">Sent automatically by the daily check at /api/cron/redis-usage/ on caravansforsale.com.au.</p>`;
+    <p style="color:#6b7280;font-size:12px">Sent automatically by the daily check at /api/cron/redis-usage/ on suvforsale.com.au.</p>`;
   return { subject, text, html };
 }
 

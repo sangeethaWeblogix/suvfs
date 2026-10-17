@@ -22,7 +22,7 @@
   gap: 0;
 }
 .pdd-breadcrumb a { color: #666; text-decoration: none; }
-.pdd-breadcrumb a:hover { color: #ec7200; text-decoration: underline; }
+.pdd-breadcrumb a:hover { color: #4736fe; text-decoration: underline; }
 .pdd-breadcrumb__sep { margin: 0 5px; color: #aaa; }
 
 /* ── Title ── */
@@ -221,14 +221,14 @@
   cursor: pointer;
   transition: border-color 0.15s;
 }
-.pdd-tour-btn:hover { border-color: #ec7200; color: #ec7200; }
+.pdd-tour-btn:hover { border-color: #4736fe; color: #4736fe; }
 .pdd-tour-btn svg { flex-shrink: 0; }
 
 /* ── Sections ── */
 .pdd-section { margin-bottom: 40px; }
 .pdd-section__title {
     color: #000000;
-    /* border-bottom: 2px solid #ec7200; */
+    /* border-bottom: 2px solid #4736fe; */
     margin: 0 0 14px;
     padding-bottom: 0px;
     font-size: 18px;
@@ -281,7 +281,7 @@
 }
 .pdd-btn-contact-inline {
   display: inline-block;
-  background: #ec7200;
+  background: #4736fe;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -293,7 +293,7 @@
   margin-bottom: 28px;
   transition: background 0.15s;
 }
-.pdd-btn-contact-inline:hover { background: #d46500; }
+.pdd-btn-contact-inline:hover { background: #3725fe; }
 
 /* ── Details Table ── */
 .pdd-details-grid {
@@ -441,7 +441,7 @@
 .pdd-enquire-heading {
   display: block;
   width: 100%;
-  background: #ec7200;
+  background: #4736fe;
   color: #fff;
   border-radius: 6px;
   padding: 14px 20px;
@@ -465,7 +465,7 @@
   outline: none;
   transition: border-color 0.15s;
 }
-.pdd-form input:focus { border-color: #ec7200; }
+.pdd-form input:focus { border-color: #4736fe; }
 .pdd-form__err { font-size: 12px; color: #bc0505; margin-top: 2px; }
 .pdd-form__msg {
   border: 1px solid #d0d5dd;
@@ -477,9 +477,9 @@
   font-family: inherit;
   transition: border-color 0.15s;
 }
-.pdd-form__msg:focus { border-color: #ec7200; }
+.pdd-form__msg:focus { border-color: #4736fe; }
 .pdd-btn-send {
-  background: #ec7200;
+  background: #4736fe;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -491,14 +491,14 @@
   transition: background 0.15s;
 }
 .pdd-btn-send:disabled { opacity: 0.65; cursor: not-allowed; }
-.pdd-btn-send:hover:not(:disabled) { background: #d46500; }
+.pdd-btn-send:hover:not(:disabled) { background: #3725fe; }
 .pdd-form__legal {
   font-size: 11px;
   color: #999;
   line-height: 1.5;
   margin: 0;
 }
-.pdd-form__legal a { color: #ec7200; text-decoration: none; }
+.pdd-form__legal a { color: #4736fe; text-decoration: none; }
 
 /* Checklist button */
 .pdd-sidebar__checklist-row { padding: 0 16px 14px; }
@@ -605,7 +605,7 @@
   margin: 0 0 18px;
   display: inline-block;
   padding-bottom: 6px;
-  border-bottom: 2.5px solid #ec7200;
+  border-bottom: 2.5px solid #4736fe;
 }
 
 /* Item row: icon-circle + num-circle + text */
@@ -621,7 +621,7 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: #fff3e8;
+  background: #e9e7ff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -632,8 +632,8 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #fff3e8;
-  color: #ec7200;
+  background: #e9e7ff;
+  color: #4736fe;
   font-size: 15px;
   font-weight: 700;
   display: flex;
@@ -655,7 +655,7 @@
 
 /* Footer tip strip */
 .pdd-checklist-footer {
-  background: #fff3e8;
+  background: #e9e7ff;
   border-radius: 0 0 16px 16px;
   padding: 14px 24px;
   display: flex;
@@ -672,7 +672,7 @@
 .pdd-btn-enquire {
   display: block;
   width: 100%;
-  background: #ec7200;
+  background: #4736fe;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -684,7 +684,7 @@
   cursor: pointer;
   transition: background 0.15s;
 }
-.pdd-btn-enquire:hover { background: #d46500; }
+.pdd-btn-enquire:hover { background: #3725fe; }
 
 /* Thinking of selling — below the sidebar card */
 .pdd-sidebar__sell {
@@ -707,7 +707,7 @@
 }
 .pdd-btn-sell {
     color: #fff;
-    background: #ec7200;
+    background: #4736fe;
     border-radius: 6px;
     padding: 10px 20px;
     font-size: 14px;
@@ -717,7 +717,7 @@
     display: inline-block;
     margin-top: 130px;
 }
-.pdd-btn-sell:hover { background: #d46500; color: #fff; }
+.pdd-btn-sell:hover { background: #3725fe; color: #fff; }
 
 /* ── Full-width Banner ── */
 .pdd-banner {
@@ -771,7 +771,7 @@
 .pdd-banner__main {
   font-size: 22px;
   font-weight: 800;
-  color: #ec7200;
+  color: #4736fe;
   letter-spacing: 0.5px;
   text-transform: uppercase;
   margin: 0 0 14px;
@@ -799,7 +799,7 @@
   flex-shrink: 0;
 }
 .pdd-banner__cta {
-  background: #ec7200;
+  background: #4736fe;
   color: #fff;
   text-decoration: none;
   border-radius: 6px;
@@ -811,7 +811,7 @@
   flex-shrink: 0;
   transition: background 0.15s;
 }
-.pdd-banner__cta:hover { background: #d46500; color: #fff; }
+.pdd-banner__cta:hover { background: #3725fe; color: #fff; }
 
 /* ── Similar Caravans ── */
 .pdd-similar {
@@ -1000,11 +1000,11 @@
 }
 .pdd-search-link:hover { background: #fafafa; border-color: #ddd; }
 .pdd-search-link--active {
-  background: #fff3e8;
-  color: #ec7200;
-  border-color: #ffd9b3;
+  background: #e9e7ff;
+  color: #4736fe;
+  border-color: #b7b0ff;
 }
-.pdd-search-link--active:hover { background: #ffe5cc; }
+.pdd-search-link--active:hover { background: #cfcaff; }
 
 /* ── Browse More ── */
 .pdd-browse { margin-bottom: 10px; }
@@ -1073,7 +1073,7 @@
     box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
   }
   .pdd-mobile-bottom-bar__cta {
-    background: #ec7200;
+    background: #4736fe;
     color: #fff;
     border: none;
     border-radius: 10px;
@@ -1107,7 +1107,7 @@
     margin: 0;
   }
   .pdd-mobile-bottom-bar__terms a {
-    color: #ec7200;
+    color: #4736fe;
     text-decoration: none;
   }
   .pdd-page { padding-bottom: 40px; }

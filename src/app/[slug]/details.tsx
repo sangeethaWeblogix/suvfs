@@ -1,5 +1,6 @@
  "use client";
  import Image from "next/image";
+ import { WP_ORIGIN } from "@/lib/apiBase";
  import { redirect } from "next/navigation";
  import FaqSection from "./FaqSection";
  import RelatedNews from "./RelatedNews";
@@ -64,14 +65,14 @@
      viewAll: { text: "View all locations", href: "/listings/" },
      links: [],
      states: [
-       { text: "Caravans for Sale in Victoria",          href: "/listings/victoria-state/" },
-       { text: "Caravans for Sale in New South Wales",   href: "/listings/new-south-wales-state/" },
-       { text: "Caravans for Sale in Queensland",        href: "/listings/queensland-state/" },
-       { text: "Caravans for Sale in South Australia",   href: "/listings/south-australia-state/" },
-       { text: "Caravans for Sale in Western Australia", href: "/listings/western-australia-state/" },
-       { text: "Caravans for Sale in Tasmania",          href: "/listings/tasmania-state/" },
-       { text: "Caravans for Sale in ACT",               href: "/listings/australian-capital-territory-state/" },
-       { text: "Caravans for Sale in Northern Territory",href: "/listings/northern-territory-state/" },
+       { text: "SUVs for Sale in Victoria",          href: "/listings/victoria-state/" },
+       { text: "SUVs for Sale in New South Wales",   href: "/listings/new-south-wales-state/" },
+       { text: "SUVs for Sale in Queensland",        href: "/listings/queensland-state/" },
+       { text: "SUVs for Sale in South Australia",   href: "/listings/south-australia-state/" },
+       { text: "SUVs for Sale in Western Australia", href: "/listings/western-australia-state/" },
+       { text: "SUVs for Sale in Tasmania",          href: "/listings/tasmania-state/" },
+       { text: "SUVs for Sale in ACT",               href: "/listings/australian-capital-territory-state/" },
+       { text: "SUVs for Sale in Northern Territory",href: "/listings/northern-territory-state/" },
      ],
      regions: [
        { text: "Melbourne",     href: "/listings/victoria-state/melbourne-region/" },
@@ -97,34 +98,34 @@
      icon: "bi-buildings",
      viewAll: { text: "View all manufacturers", href: "/caravan-manufacturers/" },
      links: [
-       { text: "Jayco Caravans for Sale",       href: "/listings/jayco/" },
-       { text: "Snowy River Caravans for Sale", href: "/listings/snowy-river/" },
-       { text: "Evernew Caravans for Sale",     href: "/listings/evernew/" },
-       { text: "Crusader Caravans for Sale",    href: "/listings/crusader/" },
-       { text: "New Age Caravans for Sale",     href: "/listings/new-age/" },
-       { text: "MDC Caravans for Sale",         href: "/listings/mdc/" },
-       { text: "Essential Caravans for Sale",   href: "/listings/essential/" },
-       { text: "Design RV Caravans for Sale",   href: "/listings/design-rv/" },
-       { text: "JB Caravans for Sale",          href: "/listings/jb/" },
-       { text: "Supreme Caravans for Sale",     href: "/listings/supreme/" },
-       { text: "Avan Caravans for Sale",        href: "/listings/avan/" },
-       { text: "Lotus Caravans for Sale",       href: "/listings/lotus/" },
-       { text: "Royal Flair Caravans for Sale", href: "/listings/royal-flair/" },
-       { text: "Windsor Caravans for Sale",     href: "/listings/windsor/" },
-       { text: "Golf Caravans for Sale",        href: "/listings/golf/" },
-       { text: "Nova Caravans for Sale",        href: "/listings/nova/" },
-       { text: "Retreat Caravans for Sale",     href: "/listings/retreat/" },
-       { text: "Adria Caravans for Sale",       href: "/listings/adria/" },
-       { text: "Coromal Caravans for Sale",     href: "/listings/coromal/" },
+       { text: "Jayco SUVs for Sale",       href: "/listings/jayco/" },
+       { text: "Snowy River SUVs for Sale", href: "/listings/snowy-river/" },
+       { text: "Evernew SUVs for Sale",     href: "/listings/evernew/" },
+       { text: "Crusader SUVs for Sale",    href: "/listings/crusader/" },
+       { text: "New Age SUVs for Sale",     href: "/listings/new-age/" },
+       { text: "MDC SUVs for Sale",         href: "/listings/mdc/" },
+       { text: "Essential SUVs for Sale",   href: "/listings/essential/" },
+       { text: "Design RV SUVs for Sale",   href: "/listings/design-rv/" },
+       { text: "JB SUVs for Sale",          href: "/listings/jb/" },
+       { text: "Supreme SUVs for Sale",     href: "/listings/supreme/" },
+       { text: "Avan SUVs for Sale",        href: "/listings/avan/" },
+       { text: "Lotus SUVs for Sale",       href: "/listings/lotus/" },
+       { text: "Royal Flair SUVs for Sale", href: "/listings/royal-flair/" },
+       { text: "Windsor SUVs for Sale",     href: "/listings/windsor/" },
+       { text: "Golf SUVs for Sale",        href: "/listings/golf/" },
+       { text: "Nova SUVs for Sale",        href: "/listings/nova/" },
+       { text: "Retreat SUVs for Sale",     href: "/listings/retreat/" },
+       { text: "Adria SUVs for Sale",       href: "/listings/adria/" },
+       { text: "Coromal SUVs for Sale",     href: "/listings/coromal/" },
      ],
    },
    {
      label: "Condition",
      icon: "bi-patch-check",
-     viewAll: { text: "Browse all caravans", href: "/listings/" },
+     viewAll: { text: "Browse all SUVs", href: "/listings/" },
      links: [
-       { text: "New Caravans for Sale", href: "/listings/new-condition/" },
-       { text: "Used Caravans for Sale", href: "/listings/used-condition/" },
+       { text: "New SUVs for Sale", href: "/listings/new-condition/" },
+       { text: "Used SUVs for Sale", href: "/listings/used-condition/" },
      ],
    },
    {
@@ -381,7 +382,7 @@
  
        try {
          await fetch(
-           `${process.env.NEXT_PUBLIC_CF7_BASE}/wp-json/ads-manager/v1/blog-links/track`,
+           `${WP_ORIGIN}/wp-json/ads-manager/v1/blog-links/track`,
            {
              method: "POST",
              headers: { "Content-Type": "application/json" },
@@ -547,15 +548,15 @@
                    <img src="/images/category.svg" alt="" width={32} height={32} className="blog-browse-cta__icon-img" />
                    <div>
                      <h3 className="blog-browse-cta__heading">
-                       {catLabel ? `Ready to Browse ${catLabel} Caravans?` : "Ready to Browse Caravans?"}
+                       {catLabel ? `Ready to Browse ${catLabel} SUVs?` : "Ready to Browse SUVs?"}
                      </h3>
                      <p className="blog-browse-cta__desc">
-                       {catLabel ? `Explore hundreds of ${catLabel.toLowerCase()} caravans for sale across Australia.` : "Explore thousands of caravans for sale across Australia."}
+                       {catLabel ? `Explore hundreds of ${catLabel.toLowerCase()} SUVs for sale across Australia.` : "Explore thousands of SUVs for sale across Australia."}
                      </p>
                    </div>
                  </div>
                  <a href={catLink} className="blog-browse-cta__btn">
-                   {catLabel ? `Browse ${catLabel} Caravans` : "Browse Caravans"} <i className="bi bi-arrow-right" />
+                   {catLabel ? `Browse ${catLabel} SUVs` : "Browse SUVs"} <i className="bi bi-arrow-right" />
                  </a>
                </div>
  
@@ -663,16 +664,16 @@
                )}
                <div className="blog-sidebar-sticky">
                  <div className="blog-sidebar-cta">
-                   <h3 className="blog-sidebar-cta__heading">Ready to Find Your Next Caravan?</h3>
-                   <p className="blog-sidebar-cta__desc">Browse thousands of new and used caravans from trusted dealers and private sellers across Australia.</p>
+                   <h3 className="blog-sidebar-cta__heading">Ready to Find Your Next SUV?</h3>
+                   <p className="blog-sidebar-cta__desc">Browse thousands of new and used SUVs from trusted dealers and private sellers across Australia.</p>
                    <a href="/listings/" className="blog-sidebar-cta__btn">
-                     Search Caravans Now <i className="bi bi-arrow-right" />
+                     Search SUVs Now <i className="bi bi-arrow-right" />
                    </a>
                  </div>
                  <div className="blog-sidebar-cta blog-sidebar-cta--sell">
-                   <h3 className="blog-sidebar-cta__heading">Sell Your Caravan Faster with Australia's Growing Caravan Marketplace</h3>
-                   <a href="/sell-my-caravan/" className="blog-sidebar-cta__btn">
-                     List Your Caravan Now <i className="bi bi-arrow-right" />
+                   <h3 className="blog-sidebar-cta__heading">Sell Your SUV Faster with Australia's Growing SUV Marketplace</h3>
+                   <a href="/sell-my-suv/" className="blog-sidebar-cta__btn">
+                     List Your SUV Now <i className="bi bi-arrow-right" />
                    </a>
                  </div>
                </div>
@@ -687,21 +688,21 @@
        {cats.length > 0 && (
          <section className="bds-cat-loc">
            <div className="container">
-             <h2 className="bds-cat-title">Find {catLabel} Caravans by Popular Location</h2>
+             <h2 className="bds-cat-title">Find {catLabel} SUVs by Popular Location</h2>
              <div className="bds-cat-loc__major">
                {CAT_MAJOR_CITIES.map((city) => (
                  <a key={city.name} href={`${catLink}${city.state}/${city.region}/`} className="bds-cat-city-card">
                    <div className="bds-cat-city-img-wrap">
                      <img src={city.img} alt={city.name} className="bds-cat-city-img" loading="lazy" />
                    </div>
-                   <span className="bds-cat-city-name">{catLabel} Caravans in {city.name} <i className="bi bi-chevron-right bds-cat-city-arrow" /></span>
+                   <span className="bds-cat-city-name">{catLabel} SUVs in {city.name} <i className="bi bi-chevron-right bds-cat-city-arrow" /></span>
                  </a>
                ))}
              </div>
              <div className="bds-cat-loc__minor">
                {CAT_MINOR_CITIES.map((city) => (
                  <a key={city.name} href={`${catLink}${city.state}/${city.region ? city.region + "/" : ""}`} className="bds-cat-minor-pill">
-                   {catLabel} Caravans in {city.name}
+                   {catLabel} SUVs in {city.name}
                  </a>
                ))}
              </div>
@@ -713,12 +714,12 @@
        {cats.length > 0 && (
          <section className="bds-cat-state">
            <div className="container">
-             <h2 className="bds-cat-title">Find {catLabel} Caravans by State</h2>
+             <h2 className="bds-cat-title">Find {catLabel} SUVs by State</h2>
              <div className="bds-cat-state__grid">
                {CAT_STATES.map((s) => (
                  <a key={s.name} href={`${catLink}${s.slug}/`} className="bds-cat-state-card">
                    <img src={s.img} alt={s.name} className="bds-cat-state-img" loading="lazy" />
-                   <span className="bds-cat-state-name">{catLabel} Caravans in {s.name}</span>
+                   <span className="bds-cat-state-name">{catLabel} SUVs in {s.name}</span>
                  </a>
                ))}
              </div>
@@ -732,16 +733,16 @@
        {/* ── Buy or Sell CTA ── */}
        <section className="bds-cta-section">
          <div className="bds-cta-card">
-           <h2 className="bds-cta-title">Ready to Buy or Sell a Caravan?</h2>
+           <h2 className="bds-cta-title">Ready to Buy or Sell an SUV?</h2>
            <p className="bds-cta-body">
              <strong>Looking to buy?</strong> Browse{" "}
-             <a href="/" className="bds-cta-link">caravans for sale</a>{" "}
-             from dealers and private sellers across Australia, with listings available by make, model, price, location and caravan type.
+             <a href="/" className="bds-cta-link">SUVs for sale</a>{" "}
+             from dealers and private sellers across Australia, with listings available by make, model, price, location and SUV type.
            </p>
            <p className="bds-cta-body">
-             <strong>Looking to sell?</strong> If you&apos;re upgrading to a newer caravan or no longer need your current one,{" "}
-             <a href="/sell-my-caravan/" className="bds-cta-link">sell your caravan</a>{" "}
-             by creating a listing on CaravansForSale.com.au. Your advertisement stays online until it&apos;s sold for a one-time fee of $49.
+             <strong>Looking to sell?</strong> If you&apos;re upgrading to a newer SUV or no longer need your current one,{" "}
+             <a href="/sell-my-suv/" className="bds-cta-link">sell your SUV</a>{" "}
+             by creating a listing on SuvForSale.com.au. Your advertisement stays online until it&apos;s sold for a one-time fee of $49.
            </p>
          </div>
        </section>

@@ -1,5 +1,5 @@
     import { NextResponse } from "next/server";
-      const API_KEY = process.env.CFS_API_KEY; // ✅ Added
+      const API_KEY = process.env.MPN_API_KEY; // ✅ Added
       const MPN_API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
 
 

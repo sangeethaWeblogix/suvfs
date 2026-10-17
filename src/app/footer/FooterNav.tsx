@@ -118,7 +118,7 @@ export default function FooterNav() {
         aria-controls="sell-links-panel"
       >
         <span className="footer-sell-by-location__text">
-          <span className="footer-sell-by-location__title">Sell My Caravan by Location</span>
+          <span className="footer-sell-by-location__title">Sell My SUV by Location</span>
           <span className="footer-sell-by-location__sub">Browse selling pages by state, city and region</span>
         </span>
         <svg
@@ -144,16 +144,16 @@ export default function FooterNav() {
             {SELL_DATA.map((s) => (
               <div key={s.stateSlug} className="sell-panel__col">
                 <a
-                  href={`/sell-my-caravan/${s.stateSlug}/`}
+                  href={`/sell-my-suv/${s.stateSlug}/`}
                   className="sell-panel__state-title"
                 >
-                  Sell My Caravan in {s.state}
+                  Sell My SUV in {s.state}
                 </a>
                 <ul className="sell-panel__region-list">
                   {s.regions.map((r) => (
                     <li key={r.pageSlug}>
-                      <a href={`/sell-my-caravan/${s.stateSlug}/${r.pageSlug}/`}>
-                        Sell My Caravan in {r.label}
+                      <a href={`/sell-my-suv/${s.stateSlug}/${r.pageSlug}/`}>
+                        Sell My SUV in {r.label}
                       </a>
                     </li>
                   ))}

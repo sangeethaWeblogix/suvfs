@@ -20,9 +20,6 @@ export default function Navbar() {
   const sidenavRef = useRef<HTMLDivElement | null>(null);
   const [hamOpen, setHamOpen] = useState(false);
   const hamRef = useRef<HTMLDivElement | null>(null);
-  const [exploreOpen, setExploreOpen] = useState(false);
-  const exploreRef = useRef<HTMLLIElement | null>(null);
-  const [mobileExploreOpen, setMobileExploreOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -36,9 +33,6 @@ export default function Navbar() {
       }
       if (hamRef.current && !hamRef.current.contains(e.target as Node)) {
         setHamOpen(false);
-      }
-      if (exploreRef.current && !exploreRef.current.contains(e.target as Node)) {
-        setExploreOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -73,10 +67,10 @@ export default function Navbar() {
           <div className="logo_left">
             <a className="navbar-brand" href="/">
               <Image
-                src="/images/cfs-logo-black.svg"
-                alt="Caravans For Sale"
+                src="/images/sfs_logo.svg"
+                alt="SUVs For Sale"
                 width={150}
-                height={50}
+                height={22}
                 priority
               />
             </a>
@@ -105,26 +99,8 @@ export default function Navbar() {
                   <a className="nav-link" href="/listings/">Buy</a>
                 </li>
 
-                {/* ── Explore dropdown ── */}
-                <li className="nav-item explore-nav-item" ref={exploreRef}>
-                  <button
-                    className="nav-link explore-nav-btn"
-                    onClick={() => setExploreOpen(prev => !prev)}
-                    aria-expanded={exploreOpen}
-                  >
-                    Explore <i className={`bi ${exploreOpen ? "bi-chevron-up" : "bi-chevron-down"} explore-chevron`} />
-                  </button>
-                  {exploreOpen && (
-                    <div className="explore-dropdown">
-                      <a href="/off-road-caravans/" className="explore-item" onClick={() => setExploreOpen(false)}>
-                        Off Road Caravans
-                      </a>
-                    </div>
-                  )}
-                </li>
-
                 <li className="nav-item">
-                  <a className="nav-link" href="/sell-my-caravan/">Sell My Caravan</a>
+                  <a className="nav-link" href="/sell-my-suv/">Sell My SUV</a>
                 </li>
                 <li className="nav-item">
                   <a className="nav-link" href="/dealer-advertising/">Dealer Advertising</a>
@@ -143,8 +119,8 @@ export default function Navbar() {
                 </button>
                 {hamOpen && (
                   <div className="ham-dropdown">
-                    <a href="/listings/" className="ham-item">Caravan Listings</a>
-                    <a href="/sell-my-caravan/" className="ham-item">Sell My Caravan</a>
+                    <a href="/listings/" className="ham-item">SUV Listings</a>
+                    <a href="/sell-my-suv/" className="ham-item">Sell My SUV</a>
                     <a href="/dealer-advertising/" className="ham-item">Dealer Advertising</a>
                     <a href="/blog/" className="ham-item">Blog</a>
                     <a href="/about-us/" className="ham-item">About</a>
@@ -198,7 +174,7 @@ export default function Navbar() {
           <div className="sidenav-panel sidenav-panel-main">
             <div className="sidenav-header">
               <a href="/" onClick={closeNav} className="sidenav-logo-link">
-                <Image src="/images/cfs-logo-black.svg" alt="Caravans For Sale" width={120} height={40} className="sidenav-logo-img" />
+                <Image src="/images/sfs_logo.svg" alt="SUVs For Sale" width={168} height={25} className="sidenav-logo-img" />
               </a>
               <button className="sidenav-close" onClick={closeNav} aria-label="Close menu">
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -211,26 +187,13 @@ export default function Navbar() {
                 <ul>
                   <li><a href="/" onClick={closeNav}>Home</a></li>
                   <li><a href="/listings/" onClick={closeNav}>Buy</a></li>
-                  <li className="sidenav-explore-item">
-                    <button
-                      className="sidenav-explore-btn"
-                      onClick={() => setMobileExploreOpen(prev => !prev)}
-                    >
-                      Explore <i className={`bi ${mobileExploreOpen ? "bi-chevron-up" : "bi-chevron-down"}`} />
-                    </button>
-                    {mobileExploreOpen && (
-                      <div className="sidenav-explore-sub">
-                        <a href="/off-road-caravans/" onClick={closeNav}>Off Road Caravans</a>
-                      </div>
-                    )}
-                  </li>
                   <li><a href="/blog/" onClick={closeNav}>Blog</a></li>
                   <li><a href="/about-us/" onClick={closeNav}>About</a></li>
                   <li><a href="/contact/" onClick={closeNav}>Contact</a></li>
                 </ul>
               </div>
               <div className="sidenav-cta">
-                <a href="/sell-my-caravan/" className="sidenav-cta-link" onClick={closeNav}>Sell My Caravan</a>
+                <a href="/sell-my-suv/" className="sidenav-cta-link" onClick={closeNav}>Sell My SUV</a>
                 <a href="/dealer-advertising/" className="sidenav-cta-link" onClick={closeNav}>Dealer Advertising</a>
                 <a href="https://seller.marketplacenetwork.com.au/seller-login/" className="sidenav-cta-login" onClick={closeNav}>
                   <i className="bi bi-person-fill"></i> Login

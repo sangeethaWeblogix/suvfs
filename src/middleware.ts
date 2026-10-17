@@ -8,7 +8,7 @@ import { buildSlugFromFilters } from "@/app/components/slugBuilter";
 import regionPathsData from "../cfs-paths/regions.json";
 import makesData from "../cfs-paths/makes.json";
 import indexableUrlsData from "../cfs-paths/indexable-urls.json";
-const API_KEY = process.env.CFS_API_KEY;
+const API_KEY = process.env.MPN_API_KEY;
 const SERVER_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36';
 
 /* Valid region slugs built from cfs-paths/regions.json (sitemap source of truth) */
@@ -45,7 +45,7 @@ const VALID_AU_STATES = new Set([
   'nsw', 'vic', 'qld', 'sa', 'wa', 'tas', 'nt', 'act',
 ]);
 
-const API_WP = 'https://admin.marketplacenetwork.com.au/wp-json/mpn/v1/caravans';
+const API_WP = process.env.NEXT_PUBLIC_CFS_API_BASE;
 
 
 
@@ -371,7 +371,7 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
     'listings', 'listings-demo', 'product', 'api', '_next', 'blog', 'author', 'caravan-manufacturers',
     '410', '404', '410-new', 'images', 'fonts', 'icons',
     'demo', 'product-detail-demo',
-    'sell-my-caravan',
+    'sell-my-suv',
   ]);
   const pathSegments = url.pathname.split('/').filter(Boolean);
   if (pathSegments.length >= 2 && !KNOWN_MULTI_SEGMENT.has(pathSegments[0])) {
@@ -405,7 +405,7 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
         if (!cached.exists) return render410(request);
       } else {
         try {
-          const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE || 'https://admin.marketplacenetwork.com.au/wp-json/mpn/v1';
+          const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 5000);
           const apiRes = await fetch(

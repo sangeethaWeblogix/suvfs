@@ -24,7 +24,7 @@ export default function CookiePolicy() {
               </p>
 
               <ul>
-                <li>caravansforsale.com.au</li>
+                <li>suvforsale.com.au</li>
                 
               </ul>
 

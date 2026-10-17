@@ -3,7 +3,6 @@ import "../globals.css";
  import { fetchStateBasedCaravans } from "@/api/homeApi/state/api";
 import { fetchRequirements } from "@/api/postRquirements/api";
 import { fetchHomePage } from "@/api/home/api";
-import { fetchTypeCounts } from "@/api/homeApi/typeCounts/api";
 import { fetchHomeFeatured } from "@/api/homeApi/featured/api";
 import { fetchBlogs } from "@/api/blog/api";
 
@@ -18,7 +17,6 @@ export default async function HomeDemoPage() {
     stateBands,
     requirements,
     homeblog,
-    typeCounts,
     featuredAll,
     featuredNew,
     featuredUsed,
@@ -27,7 +25,6 @@ export default async function HomeDemoPage() {
     fetchStateBasedCaravans(),
     fetchRequirements(),
     fetchHomePage(),
-    fetchTypeCounts(),
     fetchHomeFeatured({ type: "all", seed: featuredSeed }),
     fetchHomeFeatured({ type: "new", seed: featuredSeed }),
     fetchHomeFeatured({ type: "used", seed: featuredSeed }),
@@ -39,7 +36,6 @@ export default async function HomeDemoPage() {
       stateBands={stateBands}
       requirements={requirements}
       homeblog={homeblog?.latest_posts ?? []}
-      typeCounts={typeCounts}
       featuredAll={featuredAll}
       featuredNew={featuredNew}
       featuredUsed={featuredUsed}

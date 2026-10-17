@@ -6,7 +6,6 @@ import { headers } from "next/headers";
 import { fetchStateBasedCaravans } from "@/api/homeApi/state/api";
 import { fetchRequirements } from "@/api/postRquirements/api";
 import { fetchHomePage } from "@/api/home/api";
-import { fetchTypeCounts } from "@/api/homeApi/typeCounts/api";
 import { fetchHomeFeatured } from "@/api/homeApi/featured/api";
 import { fetchBlogs } from "@/api/blog/api";
 
@@ -16,11 +15,11 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: {
-    default: "Caravans For Sale – New & Used Caravan Marketplace in Australia",
+    default: "SUVs For Sale – New & Used SUV Marketplace in Australia",
     template: "%s ",
   },
   description:
-    "Browse caravans for sale across Australia. Compare prices on off-road, hybrid, pop top, touring, luxury models with size, weight & sleeping capacity.",
+    "Browse SUVs for sale across Australia. Compare prices on off-road, hybrid, pop top, touring, luxury models with size, weight & sleeping capacity.",
   icons: { icon: "/favicon.ico" },
   robots: "index, follow",
   verification: {
@@ -30,24 +29,24 @@ export const metadata: Metadata = {
     canonical: "https://www.caravansforsale.com.au",
   },
   openGraph: {
-    title: "Caravans For Sale – New & Used Caravan Marketplace in Australia",
-    description: "Browse caravans for sale across Australia. Compare prices on off-road, hybrid, pop top, touring, luxury models with size, weight & sleeping capacity.",
+    title: "SUVs For Sale – New & Used SUV Marketplace in Australia",
+    description: "Browse SUVs for sale across Australia. Compare prices on off-road, hybrid, pop top, touring, luxury models with size, weight & sleeping capacity.",
     url: "https://www.caravansforsale.com.au",
-    siteName: "Caravans for Sale",
+    siteName: "SUVs for Sale",
     images: [
       {
         url: "https://www.caravansforsale.com.au/images/cfs-logo.png",
         width: 800,
         height: 600,
-        alt: "Caravans for Sale Australia",
+        alt: "SUVs for Sale Australia",
       },
     ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Caravans For Sale – New & Used Caravan Marketplace in Australia",
-    description: "Browse caravans for sale across Australia. Compare prices on off-road, hybrid, pop top, touring, luxury models with size, weight & sleeping capacity.",
+    title: "SUVs For Sale – New & Used SUV Marketplace in Australia",
+    description: "Browse SUVs for sale across Australia. Compare prices on off-road, hybrid, pop top, touring, luxury models with size, weight & sleeping capacity.",
   },
 };
 
@@ -64,7 +63,6 @@ export default async function Page() {
     stateBands,
     requirements,
     homeblog,
-    typeCounts,
     featuredAll,
     featuredNew,
     featuredUsed,
@@ -73,7 +71,6 @@ export default async function Page() {
     fetchStateBasedCaravans(),
     fetchRequirements(),
     fetchHomePage(),
-    fetchTypeCounts(),
     fetchHomeFeatured({ type: "all", seed: featuredSeed, visitorIp }),
     fetchHomeFeatured({ type: "new", seed: featuredSeed, visitorIp }),
     fetchHomeFeatured({ type: "used", seed: featuredSeed, visitorIp }),
@@ -85,7 +82,6 @@ export default async function Page() {
       stateBands={stateBands}
       requirements={requirements}
       homeblog={homeblog?.latest_posts ?? []}
-      typeCounts={typeCounts}
       featuredAll={featuredAll}
       featuredNew={featuredNew}
       featuredUsed={featuredUsed}

@@ -235,7 +235,7 @@
   box-shadow: none !important;
   transition: border-color 0.2s, background 0.2s;
 }
-.cfs-field:focus { border-color: #f58333; background: #fff; }
+.cfs-field:focus { border-color: #4736fe; background: #fff; }
 .cfs-field.is-invalid { border-color: #bc0505; }
 .cfs-field[rows] {
   height: auto;
@@ -287,7 +287,7 @@
 .cfs-checkbox-wrap input[type="checkbox"] {
   margin-top: 3px;
   flex-shrink: 0;
-  accent-color: #f58333;
+  accent-color: #4736fe;
 }
 .cfs-checkbox-wrap label {
   font-size: 13px;
@@ -301,13 +301,13 @@
   margin-bottom: 16px;
   line-height: 1.5;
 }
-.terms_text a { color: #f58333; }
+.terms_text a { color: #4736fe; }
 
 .cfs-modal-submit {
   display: block;
   width: 100%;
   padding: 13px;
-  background: #f58333;
+  background: #4736fe;
   border: none;
   border-radius: 24px;
   color: #fff;
@@ -318,7 +318,7 @@
   cursor: pointer;
   transition: background 0.2s;
 }
-.cfs-modal-submit:hover { background: #d96d1e; }
+.cfs-modal-submit:hover { background: #4736fe; }
 .cfs-modal-submit:disabled { background: #ccc; cursor: not-allowed; }
 
 /* ── Mobile expand button (hidden on desktop) ───────────────────────── */

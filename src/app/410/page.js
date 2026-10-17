@@ -9,7 +9,7 @@ import { fetchBrowseSectionData } from "@/app/listings/fetchBrowseSectionData";
 import { fetchInitialPool } from "@/app/listings/fetchInitialPool";
 
 export const metadata = {
-  title: "410 - Page Permanently Removed | Caravans For Sale",
+  title: "410 - Page Permanently Removed | SUVs For Sale",
   description:
     "This page has been permanently removed and is no longer available.",
   robots: { index: false, follow: false },

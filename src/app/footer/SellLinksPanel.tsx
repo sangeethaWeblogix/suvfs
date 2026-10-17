@@ -125,8 +125,8 @@ export default function SellLinksPanel() {
           <div className="sell-panel">
             {/* Header row */}
             <div className="sell-panel__header">
-              <a href="/sell-my-caravan/" className="sell-panel__main-link">
-                Sell My Caravan
+              <a href="/sell-my-suv/" className="sell-panel__main-link">
+                Sell My SUV
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: 5, verticalAlign: "middle" }}>
                   <line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" />
                 </svg>
@@ -142,14 +142,14 @@ export default function SellLinksPanel() {
             <div className="sell-panel__grid">
               {SELL_DATA.map((s) => (
                 <div key={s.stateSlug} className="sell-panel__col">
-                  <a href={`/sell-my-caravan/${s.stateSlug}/`} className="sell-panel__state-title">
-                    Sell My Caravan in {s.state}
+                  <a href={`/sell-my-suv/${s.stateSlug}/`} className="sell-panel__state-title">
+                    Sell My SUV in {s.state}
                   </a>
                   <ul className="sell-panel__region-list">
                     {s.regions.map((r) => (
                       <li key={r.pageSlug}>
-                        <a href={`/sell-my-caravan/${s.stateSlug}/${r.pageSlug}/`}>
-                          Sell My Caravan in {r.label}
+                        <a href={`/sell-my-suv/${s.stateSlug}/${r.pageSlug}/`}>
+                          Sell My SUV in {r.label}
                         </a>
                       </li>
                     ))}

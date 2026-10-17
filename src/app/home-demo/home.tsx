@@ -7,14 +7,13 @@ import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 const sanitizeImageUrl = (url: string): string =>
   url.replace(/^(https?:\/\/)+(?=https?:\/\/)/i, "");
 import dynamic from "next/dynamic";
+import { WP_ORIGIN } from "@/lib/apiBase";
 
 import { type HomeBlogPost } from "@/api/home/api";
-import { type TypeCounts } from "@/api/homeApi/typeCounts/api";
 import { type FeaturedListing } from "@/api/homeApi/featured/api";
 import { type BlogPost } from "@/api/blog/api";
 import HomeFeatured from "./HomeFeatured";
 import HomeStateSection from "./HomeStateSection";
-import HomeTypeSection from "./HomeTypeSection";
 import HomeLocationSection from "./HomeLocationSection";
 import HomeBuyerGuide from "./HomeBuyerGuide";
 import HomeListingSlider from "./HomeListingSlider";
@@ -43,7 +42,6 @@ interface Props {
   stateBands: Item[];
   requirements: any;
   homeblog: HomeBlogPost[];
-  typeCounts?: TypeCounts;
   featuredAll: FeaturedListing[];
   featuredNew: FeaturedListing[];
   featuredUsed: FeaturedListing[];
@@ -56,7 +54,6 @@ export default function HomePage({
   stateBands,
   requirements,
     homeblog,
-  typeCounts,
   featuredAll,
   featuredNew,
   featuredUsed,
@@ -97,7 +94,7 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
     ip_address: visitorIp,
     site: "cfs",
   });
-  const trackUrl = `${process.env.NEXT_PUBLIC_CF7_BASE || "https://admin.marketplacenetwork.com.au"}/wp-json/ads-manager/v1/banners/track`;
+  const trackUrl = `${WP_ORIGIN}/wp-json/ads-manager/v1/banners/track`;
   fetch(trackUrl, { method: "POST", headers: { "Content-Type": "application/json" }, body, keepalive: true })
     .catch((err) => console.error("[home] banner click tracking failed:", err));
 
@@ -140,7 +137,7 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
       <section className="hd-banner">
         <div className="container">
           <h1 className="hd-banner__title">
-            Caravans for Sale <span className="hd-banner__title--orange">Across Australia</span>
+            SUVs for Sale <span className="hd-banner__title--orange">Across Australia</span>
           </h1>
           <div className="hd-banner__divider">
             <span className="hd-banner__divider-line" />
@@ -148,7 +145,7 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
             <span className="hd-banner__divider-line" />
           </div>
           <p className="hd-banner__subtitle">
-            Browse thousands of new and used caravans for sale across Australia from trusted dealers and private sellers. Compare off-road, family, touring, luxury and pop-top caravans to find the right van for your next adventure.
+            Browse thousands of new and used SUVs for sale across Australia from trusted dealers and private sellers. Compare off-road, family, touring, luxury and pop-top SUVs to find the right van for your next adventure.
           </p>
           <div className="hd-banner__trust">
             <div className="hd-banner__trust-item">
@@ -157,7 +154,7 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
               </div>
               <div className="hd-banner__trust-text">
                 <strong>Thousands of Listings</strong>
-                <span>New and used caravans across Australia</span>
+                <span>New and used SUVs across Australia</span>
               </div>
             </div>
             <div className="hd-banner__trust-item">
@@ -166,7 +163,7 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
               </div>
               <div className="hd-banner__trust-text">
                 <strong>Australia-Wide Coverage</strong>
-                <span>Find caravan listings across every state and territory</span>
+                <span>Find SUV listings across every state and territory</span>
               </div>
             </div>
             <div className="hd-banner__trust-item">
@@ -183,7 +180,7 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
-            Browse Caravans for Sale
+            Browse SUVs for Sale
           </a>
           <div className="hd-banner__bottom">
             <div className="hd-banner__bottom-item">
@@ -192,7 +189,7 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
             </div>
             <div className="hd-banner__bottom-item">
               <img src="/images/icon2.png" alt="" className="hd-banner__bottom-icon" />
-              <div><strong>Compare Prices</strong><span>Find the best value caravans</span></div>
+              <div><strong>Compare Prices</strong><span>Find the best value SUVs</span></div>
             </div>
             <div className="hd-banner__bottom-item">
               <img src="/images/icon3.png" alt="" className="hd-banner__bottom-icon" />
@@ -200,7 +197,7 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
             </div>
             <div className="hd-banner__bottom-item">
               <img src="/images/icon4.png" alt="" className="hd-banner__bottom-icon" />
-              <div><strong>Coast to Country</strong><span>Caravans Australia-wide</span></div>
+              <div><strong>Coast to Country</strong><span>SUVs Australia-wide</span></div>
             </div>
           </div>
         </div>
@@ -240,8 +237,8 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
             <a href="/listings/" target="_blank" rel="noopener noreferrer" className="hd-banner-ad__inner">
               <span className="hd-banner-ad__label">Advertisement</span>
               <picture>
-                <source media="(max-width: 767px)" srcSet="/images/1157x598-cfs.jpg" />
-                <img src="/images/2000x517-cfs.jpg" alt="Caravans For Sale" className="hd-banner-ad__img" />
+                <source media="(max-width: 767px)" srcSet="/images/1157x598-sfs.jpg" />
+                <img src="/images/2000x517-sfs.jpg" alt="SUVs For Sale" className="hd-banner-ad__img" />
               </picture>
             </a>
           )}
@@ -250,8 +247,8 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
 
       {/* ── New Caravans for Sale ── */}
       <HomeListingSlider
-        title="New Caravans for Sale"
-        subtitle="Explore the latest new caravans from dealers and manufacturers across Australia."
+        title="New SUVs for Sale"
+        subtitle="Explore the latest new SUVs from dealers and manufacturers across Australia."
         viewAllHref="/listings/new-condition/"
         items={featuredNew}
         badgeVariant="new"
@@ -262,12 +259,12 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
         <div className="container">
           <div className="sell-banner">
             <div className="sell-content">
-              <h3>List Your Caravan for Sale Today</h3>
-              <p className="subtitle">Reach thousands of buyers looking for new and used caravans every day.</p>
-              <p className="desc">List your caravan on Australia&apos;s trusted caravan marketplace and connect with interested buyers nationwide.</p>
+              <h3>List Your SUV for Sale Today</h3>
+              <p className="subtitle">Reach thousands of buyers looking for new and used SUVs every day.</p>
+              <p className="desc">List your SUV on Australia&apos;s trusted SUV marketplace and connect with interested buyers nationwide.</p>
               <div className="btns_two">
                 <a href="/dealer-advertising/" className="btn primary-btn">Dealer Sign Up</a>
-                <a href="/sell-my-caravan/" className="btn secondary-btn">Private Seller - Click Here</a>
+                <a href="/sell-my-suv/" className="btn secondary-btn">Private Seller - Click Here</a>
               </div>
             </div>
           </div>
@@ -276,8 +273,8 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
 
       {/* ── Used Caravans for Sale ── */}
       <HomeListingSlider
-        title="Used Caravans for Sale"
-        subtitle="Browse used caravans across Australia from trusted dealers and private sellers. Compare prices, models and locations to find the right pre-owned caravan for your budget."
+        title="Used SUVs for Sale"
+        subtitle="Browse used SUVs across Australia from trusted dealers and private sellers. Compare prices, models and locations to find the right pre-owned SUV for your budget."
         viewAllHref="/listings/used-condition/"
         items={featuredUsed}
         badgeVariant="used"
@@ -292,9 +289,6 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
           <PostRequirement requirements={requirements} />
         </div>
       </div>
-
-      {/* ── Browse by Type ── */}
-      <HomeTypeSection typeCounts={typeCounts} />
 
       {/* ── Find by Location ── */}
       <HomeLocationSection />

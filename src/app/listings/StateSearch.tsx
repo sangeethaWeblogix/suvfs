@@ -22,12 +22,12 @@ interface Props {
 }
 
 const CARAVAN_TYPES = [
-  { name: "Family Caravan",   slug: "family-category" },
-  { name: "Hybrid Caravan",   slug: "hybrid-category" },
-  { name: "Luxury Caravan",   slug: "luxury-category" },
-  { name: "Off Road Caravan", slug: "off-road-category" },
-  { name: "Pop Top Caravan",  slug: "pop-top-category" },
-  { name: "Touring Caravan",  slug: "touring-category" },
+  { name: "Family SUV",   slug: "family-category" },
+  { name: "Hybrid SUV",   slug: "hybrid-category" },
+  { name: "Luxury SUV",   slug: "luxury-category" },
+  { name: "Off Road SUV", slug: "off-road-category" },
+  { name: "Pop Top SUV",  slug: "pop-top-category" },
+  { name: "Touring SUV",  slug: "touring-category" },
   { name: "Camper Trailer",   slug: "camper-trailer" },
   { name: "Fifth Wheeler",    slug: "fifth-wheeler" },
 ];
@@ -145,7 +145,7 @@ export default function StateSearch({ filters, onChange, onSearch, onClear }: Pr
   // ── Section components (reusable inside modal) ──
   const TypeSection = (
     <div className="filter-item">
-      <h4 className="filter-section-title">Caravan Type</h4>
+      <h4 className="filter-section-title">SUV Type</h4>
       <ul className="loc-state-list">
         {CARAVAN_TYPES.map((cat) => (
           <li key={cat.slug} className="loc-state-item"
@@ -329,7 +329,7 @@ export default function StateSearch({ filters, onChange, onSearch, onClear }: Pr
                 Filters
                 {totalActive > 0 && (
                   <span style={{
-                    background: "#ec7200", color: "#fff", borderRadius: "50%",
+                    background: "#4736fe", color: "#fff", borderRadius: "50%",
                     width: 18, height: 18, fontSize: 11, fontWeight: 700,
                     display: "inline-flex", alignItems: "center", justifyContent: "center",
                   }}>{totalActive}</span>
@@ -342,7 +342,7 @@ export default function StateSearch({ filters, onChange, onSearch, onClear }: Pr
               <div className="slider-wrapper">
                 <div className="filter-swiper">
                   <button className={`tag${activeType ? " active" : ""}`} onClick={() => openSection("type")}>
-                    {activeType ? CARAVAN_TYPES.find((t) => t.slug === filters.type)?.name ?? "Caravan Type" : "Caravan Type"}
+                    {activeType ? CARAVAN_TYPES.find((t) => t.slug === filters.type)?.name ?? "SUV Type" : "SUV Type"}
                     {activeType && <span className="active_filter"><i className="bi bi-circle-fill" /></span>}
                   </button>
                   <button className={`tag${activeRegion ? " active" : ""}`} onClick={() => openSection("region")}>
@@ -466,7 +466,7 @@ export default function StateSearch({ filters, onChange, onSearch, onClear }: Pr
         </Modal>
       )}
 
-      {openModal === "type"      && <Modal title="Caravan Type" onClear={() => setTempType("All Types")}        onApply={applyType}    clearDisabled={tempType === "All Types"}>{TypeSection}</Modal>}
+      {openModal === "type"      && <Modal title="SUV Type" onClear={() => setTempType("All Types")}        onApply={applyType}    clearDisabled={tempType === "All Types"}>{TypeSection}</Modal>}
       {openModal === "condition" && <Modal title="Condition"    onClear={() => setTempCond("All Conditions")}   onApply={applyCond}    clearDisabled={tempCond === "All Conditions"}>{CondSection}</Modal>}
       {openModal === "make"      && <Modal title="Make"         onClear={() => setTempMake("")}                 onApply={applyMake}    clearDisabled={!tempMake}>{MakeSection}</Modal>}
       {openModal === "price"     && <Modal title="Price"        onClear={() => { setTempMinPrice(""); setTempMaxPrice(""); }} onApply={applyPrice} clearDisabled={!tempMinPrice && !tempMaxPrice}>{PriceSection}</Modal>}

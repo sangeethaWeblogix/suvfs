@@ -4,7 +4,7 @@ export const preferredRegion = "syd1";
 import { fetchParamsCountFromKV } from "@/lib/paramsCountKv";
 
 const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
-const API_KEY = process.env.CFS_API_KEY;
+const API_KEY = process.env.MPN_API_KEY;
 
 /**
  * Band-count lookup for the browse-section filter links (Price/ATM/Length/Sleep).

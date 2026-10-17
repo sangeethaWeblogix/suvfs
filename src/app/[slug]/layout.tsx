@@ -28,11 +28,11 @@ export async function generateMetadata({
   const seo = data?.seo ?? {};
   const post = data?.data?.blog_detail || {};
 
-  const title = seo.metatitle || post.title || "Caravans for Sale Blog";
+  const title = seo.metatitle || post.title || "SUVs for Sale Blog";
   const description =
     seo.metadescription ||
     post.short_description ||
-    "Read more on Caravans for Sale.";
+    "Read more on SUVs for Sale.";
   const canonical = `https://www.caravansforsale.com.au/${slug}/`;
 
   return {

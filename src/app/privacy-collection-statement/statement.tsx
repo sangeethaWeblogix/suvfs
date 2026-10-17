@@ -32,7 +32,7 @@ export default function PrivacyCollectionStatement() {
               <p>These platforms may include, but are not limited to:</p>
 
               <ul>
-                <li>caravansforsale.com.au</li>
+                <li>suvforsale.com.au</li>
                 
               </ul>
 

@@ -171,11 +171,11 @@ const getPriceRangeLinks = (price: number): { label: string; href: string }[] =>
   const links: { label: string; href: string }[] = [];
   const hi1 = PRICE_STEPS[upperIdx];
   const lo1 = PRICE_STEPS[upperIdx - 1];
-  links.push({ label: `Caravans for Sale near $${lo1.toLocaleString("en-AU")} to $${hi1.toLocaleString("en-AU")}`, href: `/listings/?from_price=${lo1}&to_price=${hi1}` });
+  links.push({ label: `SUVs for Sale near $${lo1.toLocaleString("en-AU")} to $${hi1.toLocaleString("en-AU")}`, href: `/listings/?from_price=${lo1}&to_price=${hi1}` });
   if (upperIdx >= 2) {
     const hi2 = PRICE_STEPS[upperIdx - 1];
     const lo2 = PRICE_STEPS[upperIdx - 2];
-    links.push({ label: `Caravans for Sale near $${lo2.toLocaleString("en-AU")} to $${hi2.toLocaleString("en-AU")}`, href: `/listings/?from_price=${lo2}&to_price=${hi2}` });
+    links.push({ label: `SUVs for Sale near $${lo2.toLocaleString("en-AU")} to $${hi2.toLocaleString("en-AU")}`, href: `/listings/?from_price=${lo2}&to_price=${hi2}` });
   }
   return links;
 };
@@ -205,7 +205,7 @@ const Gallery = memo(function Gallery({ images, onOpen }: { images: string[]; on
       <div className="pdd-gallery__mosaic">
         <div className="pdd-gallery__mosaic-main" onClick={() => onOpen(0)}>
           {images[0]
-            ? <Image src={images[0]} alt="Caravan" fill style={{ objectFit: "cover" }} unoptimized />
+            ? <Image src={images[0]} alt="SUV" fill style={{ objectFit: "cover" }} unoptimized />
             : <div className="pdd-gallery__placeholder" />}
         </div>
         {images.length > 1 && (
@@ -396,24 +396,11 @@ export default function ProductDetailDemo({ data, similarData }: Props) {
     makeRow("Model",              "Model"),
     makeRow("Year",               "Years"),
     makeRow("Condition",          "Conditions"),
-    makeRow("Length",             "Length"),
-    makeRow("Sleeping Capacity",  "sleeps", "Sleeping Capacity"),
-    makeRow("ATM",                "ATM"),
-    makeRow("Tare Mass",          "Tare Mass", "Tare"),
-    makeRow("Axle Configuration", "Axle Configuration", "Axle"),
-    makeRow("Ball Weight",        "Ball Weight"),
-    makeRow("Payload",            "Payload"),
-    makeRow("Brakes",             "Brakes"),
-    makeRow("Suspension",         "Suspension"),
-    makeRow("Stock Number",       "Stock Number", "Stock"),
-    makeRow("VIN",                "VIN"),
-    makeRow("Registration",       "Registration"),
-    makeRow("Colour",             "Colour", "Color"),
-    makeRow("Solar",              "Solar"),
-    makeRow("Battery",            "Battery"),
-    makeRow("Air Conditioner",    "Air Conditioner", "Air Con"),
-    makeRow("Water (Fresh)",      "Water (Fresh)", "Fresh Water"),
-    makeRow("Water (Grey)",       "Water (Grey)", "Grey Water"),
+    // every other spec the API sent, in API order (Location is added separately below)
+    ...attributes
+      .map(a => String(a?.label ?? ""))
+      .filter(l => l && !["make", "model", "years", "conditions", "location"].includes(l.toLowerCase()))
+      .map(l => makeRow(l, l)),
   ].filter(r => r.value);
 
   const locationCity  = product.region?.value?.replace(/-/g, " ") ?? "";
@@ -463,12 +450,12 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
 
   const relatedSearches: { label: string; href: string }[] = [
     make ? { label: make, href: `/listings/${slugify(makeLabel)}/` } : null,
-    state ? { label: `Caravans for Sale in ${state}`, href: `/listings/${slugify(state)}-state/` } : null,
-    locationCity ? { label: `Caravans for Sale in ${locationCity.replace(/\b\w/g, c => c.toUpperCase())}`, href: `/listings/${slugify(state)}-state/${slugify(locationCity)}-region/` } : null,
-    shortCategory ? { label: `${shortCategory} Caravans for Sale`, href: `/listings/${slugify(shortCategory)}-category/` } : null,
-    priceHi ? { label: `Caravans Under $${priceHi.toLocaleString("en-AU")}`, href: `/listings/under-${priceHi}/` } : null,
-    (priceHi && priceLo) ? { label: `Caravans Between $${priceLo.toLocaleString("en-AU")} to $${priceHi.toLocaleString("en-AU")}`, href: `/listings/between-${priceLo}-${priceHi}/` } : null,
-    { label: `All Caravans for Sale`, href: `/listings/` },
+    state ? { label: `SUVs for Sale in ${state}`, href: `/listings/${slugify(state)}-state/` } : null,
+    locationCity ? { label: `SUVs for Sale in ${locationCity.replace(/\b\w/g, c => c.toUpperCase())}`, href: `/listings/${slugify(state)}-state/${slugify(locationCity)}-region/` } : null,
+    shortCategory ? { label: `${shortCategory} SUVs for Sale`, href: `/listings/${slugify(shortCategory)}-category/` } : null,
+    priceHi ? { label: `SUVs Under $${priceHi.toLocaleString("en-AU")}`, href: `/listings/under-${priceHi}/` } : null,
+    (priceHi && priceLo) ? { label: `SUVs Between $${priceLo.toLocaleString("en-AU")} to $${priceHi.toLocaleString("en-AU")}`, href: `/listings/between-${priceLo}-${priceHi}/` } : null,
+    { label: `All SUVs for Sale`, href: `/listings/` },
   ].filter(Boolean) as { label: string; href: string }[];
 
   const [safeHtml, setSafeHtml] = useState("");
@@ -509,7 +496,7 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
 
   const breadcrumb = [
     { label: "Home",            href: "/" },
-    { label: "Caravans for Sale", href: "/listings/" },
+    { label: "SUVs for Sale", href: "/listings/" },
     ...(state ? [{ label: state, href: `/listings/${slugify(state)}-state/` }] : []),
     ...(product.region?.value ? [{ label: product.region.value.replace(/-/g, " "), href: `/listings/${slugify(state)}-state/${(product.region.slug ?? slugify(product.region.value)).replace(/(?:-region)?$/, "-region")}/` }] : []),
     ...(categoryNames[0] ? [{ label: categoryNames[0], href: `/listings/${slugify(categoryNames[0].replace(/\s*caravan\s*/gi, " ").trim())}-category/` }] : []),
@@ -525,8 +512,8 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
 
         {/* Subtitle */}
         <div className="pdd-subtitle">
-          <span>Have a similar caravan to sell?</span>
-          <a href="/sell-my-caravan/" className="pdd-subtitle__link">List Your Caravan</a>
+          <span>Have a similar SUV to sell?</span>
+          <a href="/sell-my-suv/" className="pdd-subtitle__link">List Your SUV</a>
           <span className="pdd-subtitle__badge">$49 Until Sold</span>
         </div>
 
@@ -544,7 +531,7 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
                   <img src="/images/category.svg" width="20" height="20" alt="" />
                   <div className="pdd-specs-bar__text">
                     <span className="pdd-specs-bar__val">{shortCategory}</span>
-                    <span className="pdd-specs-bar__lbl">Caravan Type</span>
+                    <span className="pdd-specs-bar__lbl">SUV Type</span>
                   </div>
                 </div>
               )}
@@ -609,14 +596,14 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
                 </div>
               )}
               <button className="pdd-mobile-price__checklist" onClick={() => setChecklistOpen(true)}>
-                Caravan Buyer Safety Checklist
+                SUV Buyer Safety Checklist
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
               </button>
             </div>
 
             {/* Caravan Details */}
             <section className="pdd-section">
-              <h2 className="pdd-section__title">Caravan Details</h2>
+              <h2 className="pdd-section__title">SUV Details</h2>
               <div className="pdd-details-grid">
                 <table className="pdd-details-table">
                   <tbody>
@@ -693,7 +680,7 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
 
               <div className="pdd-sidebar__checklist-row">
                 <button className="pdd-btn-checklist" onClick={() => setChecklistOpen(true)}>
-                  Caravan Buyer Safety Checklist
+                  SUV Buyer Safety Checklist
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
                 </button>
               </div>
@@ -710,8 +697,8 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
 
             <div className="pdd-sidebar__sell">
               <strong>Thinking of selling?</strong>
-              <p>Get more eyes on your caravan today.</p>
-              <a href="/sell-my-caravan/" className="pdd-btn-sell">Sell My Caravan</a>
+              <p>Get more eyes on your SUV today.</p>
+              <a href="/sell-my-suv/" className="pdd-btn-sell">Sell My SUV</a>
             </div>
           </aside>
         </div>
@@ -720,11 +707,11 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
         {isOffRoad && (
           <section className="lsd-offroad-extra">
             
-              <h2 className="lsd-offroad-extra__title">Find Your Ideal Off Road Caravan</h2>
+              <h2 className="lsd-offroad-extra__title">Find Your Ideal Off Road SUV</h2>
               <p className="lsd-offroad-extra__body">
-                Need help choosing the right off road caravan? Visit our{" "}
-                <a href="https://www.caravansforsale.com.au/off-road-caravans/">Off Road Caravans</a>{" "}
-                hub to compare caravan types, current prices, brands, models, market data, reviews and buying guides.
+                Need help choosing the right off road SUV? Visit our{" "}
+                <a href="https://www.caravansforsale.com.au/off-road-caravans/">Off Road SUVs</a>{" "}
+                hub to compare SUV types, current prices, brands, models, market data, reviews and buying guides.
               </p>
             
           </section>
@@ -741,11 +728,11 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
                 </div>
                 <span className="hbg-sell-line" />
               </div>
-              <h2 className="hbg-sell-title">Looking for More Caravans?</h2>
+              <h2 className="hbg-sell-title">Looking for More SUVs?</h2>
               <p className="hbg-sell-body">
-                This caravan is just one of thousands of listings available on Australia&apos;s caravan marketplace. Browse our complete range of{" "}
-                <a href="/" className="hbg-sell-link">caravans for sale</a>{" "}
-                across Australia, including new caravans, used caravans, off-road caravans, hybrid caravans and family caravans from trusted dealers and private sellers.
+                This SUV is just one of thousands of listings available on Australia&apos;s SUV marketplace. Browse our complete range of{" "}
+                <a href="/" className="hbg-sell-link">SUVs for sale</a>{" "}
+                across Australia, including new SUVs, used SUVs, off-road SUVs, hybrid SUVs and family SUVs from trusted dealers and private sellers.
               </p>
             </div>
           
@@ -754,7 +741,7 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
         {/* ── Similar Caravans ── */}
         {makeSimilar.length > 0 && (
           <section className="pdd-section pdd-similar">
-            <h2 className="pdd-section__title">Similar Caravans in the {makeLabel} Range</h2>
+            <h2 className="pdd-section__title">Similar SUVs in the {makeLabel} Range</h2>
             <div className="pdd-similar__grid">
                 {makeSimilar.filter(r => r.slug !== product.slug).slice(0, 5).map((r, i) => {
                   const rName     = r.name ?? r.title ?? "";
@@ -807,7 +794,7 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
         {/* ── Similar Caravans Around the Same Price ── */}
         {priceSimilar.length > 0 && (
           <section className="pdd-section pdd-similar">
-            <h2 className="pdd-section__title">Similar Caravans Around the Same Price</h2>
+            <h2 className="pdd-section__title">Similar SUVs Around the Same Price</h2>
             <div className="pdd-similar__grid">
               {priceSimilar.slice(0, 5).map((r, i) => {
                 const rName    = r.name ?? r.title ?? "";
@@ -878,7 +865,7 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
                       
                       {b.date && (
                         <span className="pdd-blog__date">
-                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ec7200" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4736fe" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                           {fmtDate(b.date)}
                         </span>
                       )}
@@ -914,7 +901,7 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
         <div className="pdd-banner">
           <div className="pdd-banner__text">
             <p className="pdd-banner__sub">DEDICATED TO REVOLUTIONISING</p>
-            <p className="pdd-banner__main">YOUR CARAVAN BUYING EXPERIENCE</p>
+            <p className="pdd-banner__main">YOUR SUV BUYING EXPERIENCE</p>
             <div className="pdd-banner__features">
               <span>
                 <span className="pdd-banner__icon-circle">
@@ -983,8 +970,8 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
           {/* Header */}
           <div className="pdd-checklist-header">
             <div>
-              <h2 className="pdd-checklist-title">Caravan Buyer Safety Checklist</h2>
-              <p className="pdd-checklist-sub">Follow these steps to reduce the risk of scams when buying a caravan.</p>
+              <h2 className="pdd-checklist-title">SUV Buyer Safety Checklist</h2>
+              <p className="pdd-checklist-sub">Follow these steps to reduce the risk of scams when buying an SUV.</p>
             </div>
           </div>
 
@@ -994,7 +981,7 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
             {[
               { n: 1, title: "Check for finance owing",    desc: "Run a PPSR search before paying." },
               { n: 2, title: "Verify the seller",          desc: "Confirm identity and speak directly with them." },
-              { n: 3, title: "Inspect the caravan first",  desc: "Inspect in person or arrange an inspection." },
+              { n: 3, title: "Inspect the SUV first",  desc: "Inspect in person or arrange an inspection." },
               { n: 4, title: "Use safe payment methods",   desc: "Avoid cryptocurrency or overseas transfers." },
               { n: 5, title: "Report suspicious listings", desc: "Report listings that appear suspicious." },
             ].map(item => (
