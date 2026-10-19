@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build && node scripts/update-kv-build-id.js",
     "start": "next start",
+    "site": "node scripts/dev-site.mjs",
     "lint": "next lint",
     "warm": "node scripts/warm-cache.mjs https://www.caravansforsale.com.au",
     "warm:staging": "node scripts/warm-cache.mjs"

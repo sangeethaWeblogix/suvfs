@@ -23,6 +23,7 @@ kv-preview.html
 
 # next.js
 /.next/
+/.next-*/
 /out/
 
 # production

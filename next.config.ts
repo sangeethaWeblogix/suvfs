@@ -24,6 +24,8 @@ const siteSlugRedirects =
 const farFuture = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString();
 
 const nextConfig: NextConfig = {
+  // scripts/dev-site.mjs gives each locally-run site its own build folder.
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   trailingSlash: true,
   reactStrictMode: false,
   //  productionBrowserSourceMaps: false,
