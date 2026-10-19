@@ -61,6 +61,8 @@ export const SITES: Record<string, SiteConfig> = Object.fromEntries(
     s.key,
     {
       ...s,
+      // Canonical host is www (the API's site.url is the bare domain; Vercel
+      // redirects bare → www).
       url: `https://www.${s.domain}`,
       title: `${s.plural} For Sale`,
       color: s.color ?? PLACEHOLDER_COLOR,

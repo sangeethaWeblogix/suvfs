@@ -1,6 +1,7 @@
 import { parseSlugToFilters } from "@/app/components/urlBuilder";
 import { buildSlugFromFilters } from "@/app/components/slugBuilter";
 import { toSlug } from "@/utils/seo/slug";
+import { appendFilterParams } from "@/config/filterDefs";
 import type { FilterState } from "./StateFilterBar";
 
 const ORDERBY = "default";
@@ -39,6 +40,7 @@ export function buildApiUrl(base: string, filters: FilterState, seed: number, lo
   }
   if (!lockCondition && filters.condition) params.set("condition", filters.condition);
   if (lockCondition) params.set("condition", lockCondition);
+  appendFilterParams(params, filters);
   return `${base}&${params.toString()}`;
 }
 

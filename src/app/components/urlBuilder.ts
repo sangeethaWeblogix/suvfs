@@ -1,4 +1,5 @@
   // utils/parseFilters.ts
+import { parseFilterSegment } from "@/config/filterDefs";
 
 export interface Filters {
   category?: string;
@@ -27,6 +28,8 @@ export interface Filters {
   clickid?: string | null;
   keyword?: string; // parsed -> canonicalized to `search`
   shuffle_seed?: string | number; // NEW: For Cloudflare cache variants
+  /** Car-site filters from config/filterDefs.ts (fuel_type, from_odometer, …). */
+  [key: string]: unknown;
 }
 
 /**
@@ -58,6 +61,13 @@ export function parseSlugToFilters(
     const part = decoded.split("?")[0];
     if (!part) return;
 
+    // --- Car-site filters (fuel-type, odometer, seats, …) ---
+    const siteFilter = parseFilterSegment(part);
+    if (siteFilter) {
+      Object.assign(filters, siteFilter);
+      return;
+    }
+
     // --- Typed segments ---
     if (part.endsWith("-category")) {
       filters.category = part.replace("-category", "");
@@ -65,8 +75,13 @@ export function parseSlugToFilters(
     }
 
     if (part.endsWith("-condition")) {
-      const slug = part.replace("-condition", "").toLowerCase();
-      filters.condition = conditionMap[slug] || slug;
+      // Multi-select: new-or-demo-condition → "New,demo"
+      filters.condition = part
+        .replace("-condition", "")
+        .toLowerCase()
+        .split("-or-")
+        .map((slug) => conditionMap[slug] || slug)
+        .join(",");
       return;
     }
 

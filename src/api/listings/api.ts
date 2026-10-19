@@ -1,3 +1,5 @@
+import { appendFilterParams } from "@/config/filterDefs";
+
 const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
 
 interface Filters {
@@ -190,6 +192,7 @@ export const fetchListings = async (
 
   const s = normalizeQuery(search);
   if (s) params.append("search", s);
+  appendFilterParams(params, filters);
 
   // Client-side: use internal proxy to avoid CORS. Server-side: call admin API directly.
   const isClient = typeof window !== "undefined";

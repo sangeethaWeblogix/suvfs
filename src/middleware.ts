@@ -7,6 +7,7 @@ import { parseSlugToFilters, type Filters } from "@/app/components/urlBuilder";
 import { buildSlugFromFilters } from "@/app/components/slugBuilter";
 import indexableUrlsData from "../cfs-paths/indexable-urls.json";
 import { site } from "@/config/sites";
+import { appendFilterParams, FILTER_PARAM_KEYS } from "@/config/filterDefs";
 const API_KEY = process.env.MPN_API_KEY;
 const SERVER_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36';
 
@@ -132,6 +133,7 @@ function buildApiParams(filters: Filters): URLSearchParams {
   if (filters.to_sleep) p.set('to_sleep', `${filters.to_sleep}`);
   if (filters.from_year) p.set('from_year', `${filters.from_year}`);
   if (filters.to_year) p.set('to_year', `${filters.to_year}`);
+  appendFilterParams(p, filters);
   return p;
 }
 
@@ -307,7 +309,8 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
             filters.minKg || filters.maxKg ||
             filters.from_length || filters.to_length ||
             filters.from_sleep || filters.to_sleep ||
-            filters.from_year || filters.to_year
+            filters.from_year || filters.to_year ||
+            FILTER_PARAM_KEYS.some((k) => filters[k])
           );
           if (hasOtherFilter) {
             const rewriteUrl = new URL(`/api/listings-410/${slugParts.join('/')}`, request.url);

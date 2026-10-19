@@ -15,6 +15,7 @@ import { site } from "@/config/sites";
 import { Listing, SeoV2, bucketPoolResponse, bucketPoolResponseCombined } from "./listingShared";
 import type { InitialPool } from "./home";
 import type { FilterState } from "./StateFilterBar";
+import { appendFilterParams, FILTER_PARAM_KEYS } from "@/config/filterDefs";
 
 const CF_ACCOUNT_ID   = process.env.CF_ACCOUNT_ID;
 const CF_NAMESPACE_ID = process.env.CF_KV_NAMESPACE_ID;
@@ -47,7 +48,8 @@ function buildPoolKvKey(filters: FilterState): string {
     filters.make || filters.model ||
     filters.suburb || filters.pincode ||
     filters.from_year || filters.to_year ||
-    filters.keyword
+    filters.keyword ||
+    FILTER_PARAM_KEYS.some((k) => filters[k])
   );
   if (hasNonCacheable) return "";   // empty string = skip KV lookup
 
@@ -84,6 +86,7 @@ function buildApiParams(filters: FilterState, seed: number): URLSearchParams {
     const kw = String(filters.keyword).replace(/\+/g, " ").trim().replace(/\s+/g, " ");
     if (kw) params.set("search", kw);
   }
+  appendFilterParams(params, filters);
   return params;
 }
 

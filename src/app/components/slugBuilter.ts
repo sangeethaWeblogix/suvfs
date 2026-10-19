@@ -1,5 +1,6 @@
  // utils/slugBuilter.ts
 import { toSlug } from "../../utils/seo/slug";
+import { buildFilterSegments, splitMulti } from "@/config/filterDefs";
 import type { FilterState as Filters } from "@/app/listings/StateFilterBar";
 
 const conditionToSlug: Record<string, string> = {
@@ -31,11 +32,11 @@ export function buildSlugFromFilters(f: Filters): string {
   if (f.model) segments.push(modelSlug(f.model));
 
   // 2) Condition (display -> slug)
-  if (f.condition) {
-    const slug =
-      conditionToSlug[f.condition.toLowerCase()] || toSlug(f.condition);
-    segments.push(`${slug}-condition`);
-  }
+  // Multi-select: "new,demo" → new-or-demo-condition
+  const conditions = splitMulti(f.condition)
+    .map((c) => conditionToSlug[c.toLowerCase()] || toSlug(c))
+    .sort();
+  if (conditions.length) segments.push(`${conditions.join("-or-")}-condition`);
 
   // 3) Category
   if (f.category) segments.push(`${toSlug(f.category)}-category`);
@@ -110,20 +111,9 @@ export function buildSlugFromFilters(f: Filters): string {
   }
 
 
-  const fromYear = asNum(f.from_year);
-const toYear = asNum(f.to_year);
+  // 9) Car-site filters: year, odometer, fuel type, seats, towing, … (config/filterDefs.ts)
+  segments.push(...buildFilterSegments(f));
 
-if (fromYear !== undefined && toYear !== undefined) {
-  if (fromYear === toYear) {
-    segments.push(`${fromYear}-caravans-range`);
-  } else {
-    segments.push(`${fromYear}-${toYear}-caravans-range`);
-  }
-} else if (fromYear !== undefined) {
-  segments.push(`year-from-${fromYear}-caravans-range`);
-} else if (toYear !== undefined) {
-  segments.push(`year-to-${toYear}-caravans-range`);
-}
   const query = new URLSearchParams();
 
   // Radius search only makes sense relative to a suburb center point.

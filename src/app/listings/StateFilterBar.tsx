@@ -7,6 +7,7 @@ import SearchSuggestionSkeleton from "../components/Searchsuggestionskeleton ";
 import { fetchLocations } from "@/api/location/api";
 import { fetchHomeSearchList, fetchKeywordSuggestions } from "@/api/homeSearch/api";
 import { buildCategoryCountScope, buildMakeCountScope } from "./paramsCountScope";
+import { appendFilterParams, FILTER_PARAM_KEYS } from "@/config/filterDefs";
 
 type KeywordItem = { label: string; url?: string };
 
@@ -84,6 +85,9 @@ export default function StateFilterBar({
   initialCategories, initialStates, initialMakes,
   initialCategoryCounts, initialMakeCounts,
 }: Props) {
+  // One string for every car-site filter value, for effect dependency lists.
+  const siteFilterKey = FILTER_PARAM_KEYS.map((k) => String(currentFilters[k] ?? "")).join("|");
+
   /* ── Data ── */
   const [categories, setCategories] = useState<{name: string; slug: string}[]>(initialCategories ?? []);
   const [states,     setStates]     = useState<StateOption[]>(initialStates ?? []);
@@ -154,7 +158,7 @@ export default function StateFilterBar({
     currentFilters.suburb, currentFilters.pincode, currentFilters.from_price, currentFilters.to_price,
     currentFilters.minKg, currentFilters.maxKg, currentFilters.from_year, currentFilters.to_year,
     currentFilters.from_length, currentFilters.to_length, currentFilters.from_sleep, currentFilters.to_sleep,
-    currentFilters.keyword,
+    currentFilters.keyword, siteFilterKey,
   ]);
 
   // Cache the last non-empty result so a transient 0-count response (or one
@@ -231,7 +235,7 @@ export default function StateFilterBar({
     currentFilters.suburb, currentFilters.pincode, currentFilters.from_price, currentFilters.to_price,
     currentFilters.minKg, currentFilters.maxKg, currentFilters.from_year, currentFilters.to_year,
     currentFilters.from_length, currentFilters.to_length, currentFilters.from_sleep, currentFilters.to_sleep,
-    currentFilters.keyword,
+    currentFilters.keyword, siteFilterKey,
   ]);
 
   // Live state counts — only used when a make filter is active (e.g. /listings/jayco/).
@@ -256,6 +260,7 @@ export default function StateFilterBar({
     if (currentFilters.from_sleep)        params.set("from_sleep", String(currentFilters.from_sleep));
     if (currentFilters.to_sleep)          params.set("to_sleep", String(currentFilters.to_sleep));
     if (currentFilters.keyword)           params.set("keyword", currentFilters.keyword);
+    appendFilterParams(params, currentFilters);
     params.set("group_by", "state");
     fetch(`/api/params-count/?${params.toString()}`, { signal: controller.signal })
       .then(r => r.json())
@@ -267,7 +272,7 @@ export default function StateFilterBar({
     currentFilters.from_price, currentFilters.to_price, currentFilters.minKg, currentFilters.maxKg,
     currentFilters.from_year, currentFilters.to_year,
     currentFilters.from_length, currentFilters.to_length, currentFilters.from_sleep, currentFilters.to_sleep,
-    currentFilters.keyword,
+    currentFilters.keyword, siteFilterKey,
   ]);
 
   // After state counts arrive, pre-fetch region counts for every state returned.
@@ -299,6 +304,7 @@ export default function StateFilterBar({
       if (currentFilters.from_sleep)        params.set("from_sleep", String(currentFilters.from_sleep));
       if (currentFilters.to_sleep)          params.set("to_sleep", String(currentFilters.to_sleep));
       if (currentFilters.keyword)           params.set("keyword", currentFilters.keyword);
+      appendFilterParams(params, currentFilters);
       fetch(`/api/params-count/?${params}`, { signal: ctrl.signal })
         .then(r => r.json())
         .then(json => {

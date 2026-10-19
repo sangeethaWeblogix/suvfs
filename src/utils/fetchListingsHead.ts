@@ -1,6 +1,7 @@
  import { cache } from "react";
 import { site } from "@/config/sites";
 import { parseSlugToFilters } from "@/app/components/urlBuilder";
+import { appendFilterParams } from "@/config/filterDefs";
 
 /** Local shapes for the /pool response fields this file actually reads —
  * kept here instead of importing from the (removed) old listings API module. */
@@ -84,6 +85,7 @@ async function fetchPoolListingsForHead(
   if (filters.to_length) params.set("to_length", String(filters.to_length));
   if (filters.condition) params.set("condition", String(filters.condition));
   if (filters.search || filters.keyword) params.set("search", String(filters.search ?? filters.keyword));
+  appendFilterParams(params, filters);
 
   const url = `${API_BASE}/pool?${params.toString()}`;
 

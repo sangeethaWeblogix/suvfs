@@ -1,4 +1,5 @@
 import type { FilterState } from "./StateFilterBar";
+import { appendFilterParams } from "@/config/filterDefs";
 
 /**
  * Shared scope-param builders for /api/params-count/ queries — used by both
@@ -28,6 +29,7 @@ export function buildCategoryCountScope(filters: FilterState): URLSearchParams {
   if (filters.from_sleep)         params.set("from_sleep", String(filters.from_sleep));
   if (filters.to_sleep)           params.set("to_sleep", String(filters.to_sleep));
   if (filters.keyword)            params.set("keyword", filters.keyword);
+  appendFilterParams(params, filters);
   return params;
 }
 
@@ -52,5 +54,6 @@ export function buildMakeCountScope(filters: FilterState): URLSearchParams {
   if (filters.from_sleep)        params.set("from_sleep", String(filters.from_sleep));
   if (filters.to_sleep)          params.set("to_sleep", String(filters.to_sleep));
   if (filters.keyword)           params.set("keyword", filters.keyword);
+  appendFilterParams(params, filters);
   return params;
 }
