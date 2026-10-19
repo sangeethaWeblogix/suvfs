@@ -27,19 +27,28 @@ export type SiteConfig = {
   article: "a" | "an";
   /** URL slug for per-site pages: /sell-my-<slug>/, /<slug>-enquiry-form/. */
   slug: string;
-  /** Brand colour (placeholder until real branding lands). */
+  /** Brand colour as "#RRGGBB" (placeholder until real branding lands). */
   color: string;
-  /** Same colour as "r, g, b" for rgba() usages. */
+  /** Same colour as "r, g, b" for rgba() usages — derived from `color`. */
   colorRgb: string;
   /** Logo path under /public. */
   logo: string;
+  /** Favicon path under /public. */
+  favicon: string;
 };
 
 const PLACEHOLDER_COLOR = "#4736FE";
-const PLACEHOLDER_RGB = "71, 54, 254";
 
+/** "#4736FE" → "71, 54, 254" */
+function hexToRgb(hex: string): string {
+  const n = parseInt(hex.replace("#", ""), 16);
+  return `${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}`;
+}
+
+// Branding per site: set `color`, and point `logo` / `favicon` at files in
+// public/sites/<key>/ once they exist (see public/sites/README.md).
 type SiteSeed = Pick<SiteConfig, "key" | "domain" | "brand" | "singular" | "plural" | "noun" | "nounPlural" | "article" | "slug"> &
-  Partial<Pick<SiteConfig, "color" | "colorRgb" | "logo">>;
+  Partial<Pick<SiteConfig, "color" | "logo" | "favicon">>;
 
 const SEEDS: SiteSeed[] = [
   { key: "suv",          domain: "suvforsale.com.au",          brand: "SuvForSale.com.au",          singular: "SUV",          plural: "SUVs",          noun: "SUV",          nounPlural: "SUVs",          article: "an", slug: "suv", logo: "/images/sfs_logo.svg" },
@@ -66,9 +75,10 @@ export const SITES: Record<string, SiteConfig> = Object.fromEntries(
       url: `https://www.${s.domain}`,
       title: `${s.plural} For Sale`,
       color: s.color ?? PLACEHOLDER_COLOR,
-      colorRgb: s.colorRgb ?? PLACEHOLDER_RGB,
+      colorRgb: hexToRgb(s.color ?? PLACEHOLDER_COLOR),
       // Placeholder text logos until real branding lands (public/sites/<key>/logo.svg).
       logo: s.logo ?? `/sites/${s.key}/logo.svg`,
+      favicon: s.favicon ?? "/favicon.ico",
     } satisfies SiteConfig,
   ]),
 );

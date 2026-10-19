@@ -344,7 +344,7 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
   /* 🚫 Unknown multi-segment paths → 410 (e.g. /queensland-state/stoney-creek/ without /listings/ prefix) */
   const KNOWN_MULTI_SEGMENT = new Set([
     'listings', 'listings-demo', 'product', 'api', '_next', 'blog', 'author', 'caravan-manufacturers',
-    '410', '404', '410-new', 'images', 'fonts', 'icons',
+    '410', '404', '410-new', 'images', 'fonts', 'icons', 'sites',
     'demo', 'product-detail-demo',
     'sell-my-suv', `sell-my-${site.slug}`,
   ]);

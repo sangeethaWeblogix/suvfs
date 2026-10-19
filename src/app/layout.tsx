@@ -60,7 +60,7 @@ const Article = site.article === "an" ? "An" : "A";
 
   
   export const metadata: Metadata = {
-    icons: { icon: "/favicon.ico" },
+    icons: { icon: site.favicon },
     // robots: "index, follow",
     verification: {
       google: "6tT6MT6AJgGromLaqvdnyyDQouJXq0VHS-7HC194xEo", // ✅ this auto generates <meta name="google-site-verification" />
