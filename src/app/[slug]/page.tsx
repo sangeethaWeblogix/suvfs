@@ -151,7 +151,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 variant="contained"
                 sx={{
                   mt: 3,
-                  backgroundColor: "#4736FE",
+                  backgroundColor: "var(--brand)",
                   color: "white", // Make text white
                   "&:hover": {
                     backgroundColor: "#3725FE", // darker on hover

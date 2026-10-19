@@ -1,6 +1,5 @@
  import { parseSlugToFilters } from "@/app/components/urlBuilder";
 import type { Metadata } from "next";
-import extraIndexedData from "../../../cfs-paths/extra-indexed.json";
 import { INDEXABLE_URLS } from "./indexable-urls";
 import {
   PRICE_BANDS_ORDERED,
@@ -13,8 +12,6 @@ import {
   ALLOWED_LENGTH_BANDS,
 } from "./band-utils";
 export { isAllowedSingleBand } from "./band-utils";
-
-const EXTRA_INDEXED_PATHS = new Set<string>(extraIndexedData.paths);
 
 // ─── Extract all numbers from a slug ───
 function allNumbers(slug: string): number[] {
@@ -194,10 +191,6 @@ function getRobotsFromFilters(
     );
     return hasOtherFilters ? noindex : index;
   }
-
-  // ── Static whitelist: 406 extra indexed paths ──
-  const slugPath = slugSegments.join("/") + (slugSegments.length > 0 ? "/" : "");
-  if (EXTRA_INDEXED_PATHS.has(slugPath)) return index;
 
   // ── Band pages (weight / price / sleep / length) ──
   const band = resolveBand(slugSegments, BASE_URL);

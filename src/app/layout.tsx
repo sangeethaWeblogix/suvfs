@@ -20,6 +20,7 @@ import VisitorStatus from "@/components/VisitorStatus";
 import { BannerProvider } from "@/components/BannerHandler";
 import GlobalErrorTracker from "@/components/GlobalErrorTracker";
 import { headers } from "next/headers";
+import { site } from "@/config/sites";
 import { metaFromSlug } from "@/utils/seo/meta";
 import { fetchProductMeta } from "@/utils/fetchProductMeta";
 import fetchListingsForHead, { buildListingsJsonLd, buildBreadcrumbs } from "@/utils/fetchListingsHead";
@@ -364,7 +365,7 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
     }
 
     return (
-      <html lang="en">
+      <html lang="en" style={{ "--brand": site.color, "--brand-rgb": site.colorRgb } as React.CSSProperties}>
         <head>
           {/* Static pages SEO — injected here to avoid metadata-in-body streaming issue */}
           {staticMeta && <title>{staticMeta.title}</title>}
@@ -990,7 +991,7 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
           </Suspense>
           <main className="product-page style-5 flex-1">
             {/* <NextTopLoader
-          color="#4736fe"
+          color="var(--brand)"
           height={3}
           showSpinner={false}
         /> */}

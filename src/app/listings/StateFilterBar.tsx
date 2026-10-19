@@ -1040,7 +1040,7 @@ export default function StateFilterBar({
                               <div className="cfs-radius-tooltip" style={{ left:`calc(${pct}% + ${18 - 0.36*pct}px)` }}>{tempSuburbRadius}km</div>
                               <div className="cfs-radius-track-wrap">
                                 <input type="range" className="cfs-radius-slider" min={0} max={RADIUS_OPTIONS.length-1} step={1} value={idx}
-                                  style={{ background:`linear-gradient(to right,#4736fe 0%,#4736fe ${pct}%,#ddd ${pct}%,#ddd 100%)` }}
+                                  style={{ background:`linear-gradient(to right,var(--brand) 0%,var(--brand) ${pct}%,#ddd ${pct}%,#ddd 100%)` }}
                                   onChange={e => setTempSuburbRadius(RADIUS_OPTIONS[parseInt(e.target.value,10)])} aria-label="Search radius" />
                                 {RADIUS_OPTIONS.map((km,i) => {
                                   const tp = (i/(RADIUS_OPTIONS.length-1))*100;
@@ -1426,7 +1426,7 @@ export default function StateFilterBar({
                                   <div className="cfs-radius-tooltip" style={{ left:`calc(${pct}% + ${18 - 0.36*pct}px)` }}>{tempSuburbRadius}km</div>
                                   <div className="cfs-radius-track-wrap">
                                     <input type="range" className="cfs-radius-slider" min={0} max={RADIUS_OPTIONS.length-1} step={1} value={idx}
-                                      style={{ background:`linear-gradient(to right,#4736fe 0%,#4736fe ${pct}%,#ddd ${pct}%,#ddd 100%)` }}
+                                      style={{ background:`linear-gradient(to right,var(--brand) 0%,var(--brand) ${pct}%,#ddd ${pct}%,#ddd 100%)` }}
                                       onChange={e => setTempSuburbRadius(RADIUS_OPTIONS[parseInt(e.target.value,10)])} aria-label="Search radius" />
                                     {RADIUS_OPTIONS.map((km,i) => {
                                       const tp = (i/(RADIUS_OPTIONS.length-1))*100;

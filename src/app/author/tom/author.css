@@ -137,7 +137,7 @@
 }
 
 .all-news.blog-listing .btn:hover {
-  background: #4736fe;
+  background: var(--brand);
 }
 .card {
   margin-bottom: 30px;

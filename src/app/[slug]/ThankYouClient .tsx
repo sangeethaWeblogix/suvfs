@@ -29,7 +29,7 @@ export default function ThankYouClient() {
               height: 80,
               margin: "0 auto 20px",
               borderRadius: "50%",
-              backgroundColor: "#4736fe",
+              backgroundColor: "var(--brand)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -54,9 +54,9 @@ export default function ThankYouClient() {
               variant="contained"
               sx={{
                 mt: 3,
-                backgroundColor: "#4736FE",
+                backgroundColor: "var(--brand)",
                 color: "white",
-                "&:hover": { backgroundColor: "#4736fe" },
+                "&:hover": { backgroundColor: "var(--brand)" },
               }}
             >
               Go Back

@@ -238,8 +238,8 @@ h1.page-title {
 }
 
 .product-page .other_items .product-card .btn.btn-primary {
-  background-color: #4736fe;
-  border-color: #4736fe;
+  background-color: var(--brand);
+  border-color: var(--brand);
   color: #ffffff;
       border-radius: 6px;
 }
@@ -454,7 +454,7 @@ height: auto;
 }
 
 .close-popup:hover {
-  color: #4736fe;
+  color: var(--brand);
 }
 
 .popup-content {
@@ -566,13 +566,13 @@ height: auto;
   letter-spacing: -0.2px;
 }
 .terms_text a {
-  color: #4736fe;
+  color: var(--brand);
 }
 .submit-btn button {
   display: inline-block;
   margin-top: 0;
-  background: #4736fe;
-  border: 1px solid #4736fe;
+  background: var(--brand);
+  border: 1px solid var(--brand);
   color: #fff;
   padding: 15px 20px;
   text-transform: uppercase;
@@ -709,7 +709,7 @@ height: auto;
 }
 
 .filter_sticky .clear_btn {
-  color: #4736fe;
+  color: var(--brand);
   cursor: pointer;
   font-size: 13px;
   font-weight: 500;

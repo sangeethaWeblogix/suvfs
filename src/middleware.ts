@@ -5,24 +5,10 @@ import {
 } from "@/lib/visitorCheck";
 import { parseSlugToFilters, type Filters } from "@/app/components/urlBuilder";
 import { buildSlugFromFilters } from "@/app/components/slugBuilter";
-import regionPathsData from "../cfs-paths/regions.json";
-import makesData from "../cfs-paths/makes.json";
 import indexableUrlsData from "../cfs-paths/indexable-urls.json";
+import { site } from "@/config/sites";
 const API_KEY = process.env.MPN_API_KEY;
 const SERVER_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36';
-
-/* Valid region slugs built from cfs-paths/regions.json (sitemap source of truth) */
-const VALID_REGION_SLUGS = new Set<string>(
-  (regionPathsData.paths as string[]).map(p => {
-    const part = p.split('/').find(s => s.endsWith('-region'));
-    return part ? part.replace(/-region$/, '') : '';
-  }).filter(Boolean)
-);
-
-/* Valid make slugs built from cfs-paths/makes.json — zero API dependency */
-const VALID_MAKE_SLUGS = new Set<string>(
-  (makesData.paths as string[]).map(p => p.replace(/\/$/, ''))
-);
 
 /* Curated indexable paths from url.csv (cfs-paths/indexable-urls.json snapshot —
  * same source the <meta name="robots"> tag uses, see src/utils/seo/indexable-urls.ts).
@@ -339,20 +325,6 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
           }
         }
 
-        // Make value validation — check against cfs-paths/makes.json (sitemap source of truth)
-        if (filters.make && !VALID_MAKE_SLUGS.has(filters.make)) {
-          return render410(request);
-        }
-
-        // Region value validation — check against cfs-paths/regions.json (sitemap source of truth)
-        const regionSegment = slugParts.find(s => s.endsWith('-region'));
-        if (regionSegment) {
-          const regionSlug = regionSegment.replace(/-region$/, '');
-          if (!VALID_REGION_SLUGS.has(regionSlug)) {
-            return render410(request);
-          }
-        }
-
         // Suburb value validation — check against location-search API (cached per suburb)
         if (filters.suburb) {
           const suburbOk = await isValidSuburb(filters.suburb, filters.pincode, API_KEY);
@@ -371,7 +343,7 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
     'listings', 'listings-demo', 'product', 'api', '_next', 'blog', 'author', 'caravan-manufacturers',
     '410', '404', '410-new', 'images', 'fonts', 'icons',
     'demo', 'product-detail-demo',
-    'sell-my-suv',
+    'sell-my-suv', `sell-my-${site.slug}`,
   ]);
   const pathSegments = url.pathname.split('/').filter(Boolean);
   if (pathSegments.length >= 2 && !KNOWN_MULTI_SEGMENT.has(pathSegments[0])) {

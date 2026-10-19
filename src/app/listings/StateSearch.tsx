@@ -329,7 +329,7 @@ export default function StateSearch({ filters, onChange, onSearch, onClear }: Pr
                 Filters
                 {totalActive > 0 && (
                   <span style={{
-                    background: "#4736fe", color: "#fff", borderRadius: "50%",
+                    background: "var(--brand)", color: "#fff", borderRadius: "50%",
                     width: 18, height: 18, fontSize: 11, fontWeight: 700,
                     display: "inline-flex", alignItems: "center", justifyContent: "center",
                   }}>{totalActive}</span>

@@ -7,6 +7,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  /* Brand colour — overridden per site on <html> from src/config/sites.ts */
+  --brand: #4736FE;
+  --brand-rgb: 71, 54, 254;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -98,7 +101,7 @@ img {
 
 .btn:hover,
 .btn:focus {
-  background: #4736fe !important;
+  background: var(--brand) !important;
   border-color: transparent !important;
   color: #fff;
 }
@@ -445,7 +448,7 @@ small {
   margin-top: 0px;
   font-size: 20px;
   font-weight: bold;
-  color: #4736fe;
+  color: var(--brand);
 }
 
 .product-page .product-card .price ins {
@@ -538,8 +541,8 @@ small {
 }
 
 .checkbox-wrapper input[type="checkbox"]:checked {
-  background-color: #4736fe;
-  border-color: #4736fe;
+  background-color: var(--brand);
+  border-color: var(--brand);
 }
 
 .checkbox-wrapper input[type="checkbox"]:checked::after {

@@ -1,4 +1,25 @@
 import type { NextConfig } from "next";
+import { site } from "./src/config/sites";
+
+// The sell / enquiry page folders are named after the SUV site (/sell-my-suv/,
+// /suv-enquiry-form/). Other sites serve them under their own slug
+// (/sell-my-ute/, /ute-enquiry-form/) and 301 the SUV URLs to it.
+const siteSlugRewrites =
+  site.slug === "suv"
+    ? []
+    : [
+        { source: `/sell-my-${site.slug}/`, destination: "/sell-my-suv/" },
+        { source: `/sell-my-${site.slug}/:path*/`, destination: "/sell-my-suv/:path*/" },
+        { source: `/${site.slug}-enquiry-form/`, destination: "/suv-enquiry-form/" },
+      ];
+const siteSlugRedirects =
+  site.slug === "suv"
+    ? []
+    : [
+        { source: "/sell-my-suv/", destination: `/sell-my-${site.slug}/`, permanent: true },
+        { source: "/sell-my-suv/:path*/", destination: `/sell-my-${site.slug}/:path*/`, permanent: true },
+        { source: "/suv-enquiry-form/", destination: `/${site.slug}-enquiry-form/`, permanent: true },
+      ];
 
 const farFuture = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString();
 
@@ -34,6 +55,7 @@ const nextConfig: NextConfig = {
           "https://wb79vudhmjvv4ng6.public.blob.vercel-storage.com/:path*",
       },
       // NOTE: old /sell-my-caravan-:slug rewrite removed — replaced by 301 redirects below.
+      ...siteSlugRewrites,
     ];
   },
   experimental: {
@@ -55,6 +77,8 @@ const nextConfig: NextConfig = {
   // ✅ Redirects: malformed URLs + old sell-my-suv URL structure → new nested URLs
   async redirects() {
     return [
+      ...siteSlugRedirects,
+
       // ── Malformed feed URLs ──────────────────────────────────────────────
       {
         source: "/:path*/feed/:rest*",

@@ -52,7 +52,7 @@
   height: 18px;
   border-radius: 50%;
   background: #fff;
-  border: 2px solid #4736fe;
+  border: 2px solid var(--brand);
   box-shadow: 0 1px 4px rgba(0,0,0,0.2);
   cursor: pointer;
 }
@@ -61,7 +61,7 @@
   height: 18px;
   border-radius: 50%;
   background: #fff;
-  border: 2px solid #4736fe;
+  border: 2px solid var(--brand);
   box-shadow: 0 1px 4px rgba(0,0,0,0.2);
   cursor: pointer;
 }
@@ -84,8 +84,8 @@
     transform: translate(-50%, -50%);
 }
 .cfs-radius-tick.active {
-    border-color: #4736fe;
-    background: #4736fe;
+    border-color: var(--brand);
+    background: var(--brand);
 }
 .cfs-radius-tick.current {
     opacity: 0;
@@ -128,7 +128,7 @@
 .filter-modal .location-suggestions .suggestion-item:hover,
 .filter-modal .location-suggestions .suggestion-item.selected {
   background: #fff7f2;
-  color: #4736fe;
+  color: var(--brand);
 }
 .filter-modal .location-suggestions .suggestion-skeleton {
   padding: 11px 16px;
@@ -146,7 +146,7 @@
 }
 .filter-modal .location-suggestions li:hover {
   background: #fff7f2;
-  color: #4736fe;
+  color: var(--brand);
 }
 /* For selected filter chip */
 /* Selected filter pill */
@@ -219,13 +219,13 @@
 
 .suggestion-item:hover {
   background-color: #ffffff;
-  color: #4736fe; /* hover color */
+  color: var(--brand); /* hover color */
 }
 
 .suggestion-item.selected {
   background-color: #ffffff; /* your selected bg color */
   font-weight: 500;
-  color: #4736fe;
+  color: var(--brand);
 }
 
 
@@ -304,8 +304,8 @@ input.loc-search-input:focus {
   background: #fff;
 }
 .loc-checkbox.checked {
-  border-color: #4736fe;
-  background: #4736fe;
+  border-color: var(--brand);
+  background: var(--brand);
 }
 
 .loc-state-name {
@@ -338,12 +338,12 @@ input.loc-search-input:focus {
   padding: 0;
   color: #555;
 }
-.loc-arrow-btn:hover { border-color: #4736fe; color: #4736fe; }
+.loc-arrow-btn:hover { border-color: var(--brand); color: var(--brand); }
 .loc-arrow-btn svg { display: block; }
 
 .search-bar button.loc-region-pill,
 .loc-region-pill {
-  background: #4736fe;
+  background: var(--brand);
   color: #fff;
   border: none;
   border-radius: 20px;
@@ -363,7 +363,7 @@ input.loc-search-input:focus {
 .search-bar button.loc-back-btn {
   background: none;
   border: none;
-  color: #4736fe;
+  color: var(--brand);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -423,9 +423,9 @@ input.loc-search-input:focus {
   transition: all 0.2s ease;
 }
 .cfs-links-link:hover {
-  background: #4736fe;
+  background: var(--brand);
   color: #fff;
-  border-color: #4736fe;
+  border-color: var(--brand);
 }
 .cfs-links-loading {
   text-align: center;
