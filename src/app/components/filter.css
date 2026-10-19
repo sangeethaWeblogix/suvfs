@@ -434,6 +434,68 @@ input.loc-search-input:focus {
   font-size: 13px;
 }
 
+/* Dual-thumb range slider (SiteFilters RangeSlider) — two overlaid range
+   inputs; only the thumbs take pointer events. */
+.cfs-range { padding: 4px 0 8px; }
+.cfs-range-values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 14px;
+}
+.cfs-range-track-wrap { position: relative; height: 18px; }
+.cfs-range-track {
+  position: absolute;
+  left: 9px;
+  right: 9px;
+  top: 50%;
+  height: 4px;
+  border-radius: 2px;
+  transform: translateY(-50%);
+}
+.cfs-range-input, .search-bar input.cfs-range-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  background: none;
+  border: 0;
+  outline: none;
+  pointer-events: none;
+  z-index: 3;
+}
+.cfs-range-input::-webkit-slider-runnable-track { background: none; height: 18px; }
+.cfs-range-input::-moz-range-track { background: none; }
+.cfs-range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: auto;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--brand);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+.cfs-range-input::-moz-range-thumb {
+  pointer-events: auto;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--brand);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+.cfs-range-input:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--brand); outline-offset: 2px; }
+
 @media (max-width: 767px) { 
   .loc-state-name, .search-bar input.loc-search-input,  
 .filter-modal .location-suggestions .suggestion-item  {

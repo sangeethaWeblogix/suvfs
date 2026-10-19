@@ -1,4 +1,4 @@
-import { fetchParamsCountFromKV, normalizeCountItems } from "@/lib/paramsCountKv";
+import { normalizeCountItems } from "@/lib/countItems";
 import {
   PRICE_BANDS,
   ATM_BANDS,
@@ -25,14 +25,11 @@ const mpnHeaders = (): Record<string, string> => ({
   ...(MPN_KEY ? { "X-Secret-Key": MPN_KEY } : {}),
 });
 
-/** KV first (shared pre-warmed cache), WP params-count fallback. */
+/** WP params-count, grouped by `groupBy` within `scope`. */
 export async function fetchGroupCountsServer(
   groupBy: string,
   scope: Record<string, string>
 ): Promise<CountItem[]> {
-  const kv = await fetchParamsCountFromKV({ group_by: groupBy, ...scope });
-  if (kv) return kv.data as CountItem[];
-
   try {
     const qs = new URLSearchParams({ group_by: groupBy, ...scope });
     const res = await fetch(`${MPN_BASE}/params-count?${qs.toString()}`, {
@@ -48,21 +45,14 @@ export async function fetchGroupCountsServer(
 }
 
 /**
- * Band count for all pages — KV first (total_products if warmer stores it),
- * then product_exists_check live fallback which returns { count, exists }.
+ * Band count for all pages — product_exists_check returns { success, exists, count }.
  * Replaces both the old pool_test (indexed) and exists-only (noindex) paths.
  */
 async function fetchBandCountServer(scope: Record<string, string>, query: string): Promise<number> {
-  // 1. Try KV cache (warmer may store total_products for non-group_by combos)
   const bandParams: Record<string, string> = { ...scope };
   new URLSearchParams(query).forEach((v, k) => { bandParams[k] = v; });
-  const kv = await fetchParamsCountFromKV(bandParams);
-  if (kv?.total_products != null) return kv.total_products;
-
-  // 2. Live fallback — product_exists_check returns { success, exists, count }
   try {
     const qs = new URLSearchParams(bandParams);
-    console.warn(`[band] KV miss — calling product_exists_check | params="${qs.toString()}"`);
     const res = await fetch(`${API_BASE}/product_exists_check?${qs.toString()}`, {
       headers: wpHeaders(),
       next: { revalidate: 3600 },
@@ -89,8 +79,8 @@ async function fetchAllBandCountsServer(scope: Record<string, string>) {
  * during SSR/ISR so the section's links land in the initial HTML instead of
  * only appearing after the client's useEffect fetches finish.
  *
- * Band counts use KV cache first, falling back to product_exists_check live API
- * (returns { count, exists }) — same path for both indexed and noindex pages.
+ * Band counts use the product_exists_check live API (returns { count, exists })
+ * — same path for both indexed and noindex pages.
  */
 export async function fetchBrowseSectionData(
   filters: { state?: string; region?: string; category?: string },

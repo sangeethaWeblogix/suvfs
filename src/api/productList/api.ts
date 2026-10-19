@@ -1,4 +1,4 @@
-import { fetchParamsCountFromKV, normalizeCountItems } from "@/lib/paramsCountKv";
+import { normalizeCountItems } from "@/lib/countItems";
 
 const MPN_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
 const API_KEY  = process.env.MPN_API_KEY;
@@ -20,7 +20,7 @@ const mpnHeaders = (): Record<string, string> => ({
 
 // ---------------------------------------------------------------------------
 // fetchMakeDetails
-// make_details is not pre-warmed in KV — rely on Next.js 24h fetch cache.
+// Next.js 24h fetch cache.
 // ---------------------------------------------------------------------------
 export const fetchMakeDetails = async () => {
   try {
@@ -38,17 +38,11 @@ export const fetchMakeDetails = async () => {
 };
 
 // ---------------------------------------------------------------------------
-// fetchModelCounts — KV first (params-count:group_by=model&make={slug})
-// Pre-warmed for every indexed make by cfs-params-cache-warmer.php.
+// fetchModelCounts — WP params-count with a 1h Next.js fetch cache.
 // ---------------------------------------------------------------------------
 export const fetchModelCounts = async (
   make: string
 ): Promise<{ name: string; slug: string; count: number }[]> => {
-  // 1. KV lookup (pre-warmed key: params-count:group_by=model&make={slug})
-  const kvResult = await fetchParamsCountFromKV({ group_by: "model", make });
-  if (kvResult) return kvResult.data as { name: string; slug: string; count: number }[];
-
-  // 2. KV miss — fall back to WP with a 1h Next.js fetch cache
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 8000);
   try {
@@ -81,18 +75,11 @@ function dedupBySlug<T extends { slug: string }>(arr: T[]): T[] {
 }
 
 // ---------------------------------------------------------------------------
-// fetchMakeCounts — KV first (params-count:group_by=make)
-// Pre-warmed as a global combo by cfs-params-cache-warmer.php.
+// fetchMakeCounts — WP params-count with a 1h Next.js fetch cache.
 // ---------------------------------------------------------------------------
 export const fetchMakeCounts = async (): Promise<
   { name: string; slug: string; count: number }[]
 > => {
-  // 1. KV lookup
-  const kvResult = await fetchParamsCountFromKV({ group_by: "make" });
-  if (kvResult)
-    return dedupBySlug(kvResult.data as { name: string; slug: string; count: number }[]);
-
-  // 2. KV miss — WP fallback
   try {
     const res = await fetch(`${MPN_BASE}/params-count?group_by=make`, {
       headers: mpnHeaders(),
@@ -107,21 +94,11 @@ export const fetchMakeCounts = async (): Promise<
 };
 
 // ---------------------------------------------------------------------------
-// fetchCategoryCounts — KV first (params-count:group_by=category)
-// Pre-warmed as a global combo by cfs-params-cache-warmer.php.
+// fetchCategoryCounts — WP params-count with a 1h Next.js fetch cache.
 // ---------------------------------------------------------------------------
 export const fetchCategoryCounts = async (): Promise<
   { name: string; slug: string; count: number }[]
 > => {
-  // 1. KV lookup
-  const kvResult = await fetchParamsCountFromKV({ group_by: "category" });
-  if (kvResult) {
-    return (kvResult.data as { name: string; slug: string; count: number }[]).map(
-      (c) => ({ ...c, slug: c.slug.replace(/-category$/, "") })
-    );
-  }
-
-  // 2. KV miss — WP fallback
   try {
     const res = await fetch(`${MPN_BASE}/params-count?group_by=category`, {
       headers: mpnHeaders(),
@@ -141,7 +118,7 @@ export const fetchCategoryCounts = async (): Promise<
 };
 
 // ---------------------------------------------------------------------------
-// fetchProductList — not pre-warmed in KV; Next.js 1h fetch cache.
+// fetchProductList — Next.js 1h fetch cache.
 // ---------------------------------------------------------------------------
 export const fetchProductList = async () => {
   try {

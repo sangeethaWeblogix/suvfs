@@ -67,12 +67,6 @@ export default async function LocationStateDemoPage({
   const canonicalPath = buildListingsSlug(initialFilters);
   const isIndexed = isPathIndexed(canonicalPath);
 
-  // shuffle_seed is injected by the HTML cache warmer (e.g. ?shuffle_seed=3) so
-  // each KV HTML variant gets a genuinely different product pool from WordPress.
-  const shuffleSeed = typeof query.shuffle_seed === "string"
-    ? (parseInt(query.shuffle_seed, 10) || 0)
-    : 0;
-
   // Category/make counts, scoped to initialFilters via the exact same
   // buildCategoryCountScope/buildMakeCountScope StateFilterBar uses client-side
   // — so whatever filters this URL landed on, the server fetches the identical
@@ -84,7 +78,7 @@ export default async function LocationStateDemoPage({
   // const [browseData, initialPool, productList, makeOptions, categoryCounts, makeCounts] = await Promise.all([
   const [browseData, initialPool, productList, makeOptions, categoryCounts, makeCounts] = await Promise.all([
     fetchBrowseSectionData(initialFilters),
-    fetchInitialPool(initialFilters, isIndexed, shuffleSeed),
+    fetchInitialPool(initialFilters, isIndexed),
     fetchProductList(),
     fetchMakeDetails(),
     fetchGroupCountsServer("category", categoryCountScope),

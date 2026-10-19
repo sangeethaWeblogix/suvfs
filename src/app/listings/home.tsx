@@ -36,7 +36,7 @@ const SEED_MAX = 15;
 
 
 /** Full pool data fetched server-side in page.tsx and passed as a prop so the
- *  SSR / KV-cached HTML contains real product listings from the first byte. */
+ *  SSR HTML contains real product listings from the first byte. */
 export type InitialPool = {
   seo: SeoV2 | null;
   /** Condition-locked seo_v2 for the New/Used grid headings — indexed pages only. */
@@ -109,10 +109,6 @@ export default function StateHome({
   // three sections, non-indexed pages get one combined grid.
   const [isIndexed, setIsIndexed] = useState(initialPool?.isIndexed ?? serverIsIndexed ?? true);
 
-  // Tracks whether we already consumed window.__INITIAL_POOL__ (injected by
-  // the cache generator into pre-rendered HTML). Once consumed we let the
-  // normal fetch path take over so filter-changes and page-turns fetch live.
-  const initialPoolConsumed = useRef(false);
   // Tracks whether the server-fetched initialPool prop has been "consumed"
   // (i.e., the first pool useEffect run has been skipped). After that, normal
   // live fetches run on filter/seed changes.
@@ -122,22 +118,6 @@ export default function StateHome({
   // Only a missing initialPool (SSR fetch failed/empty) forces a live fetch,
   // so the page still has something to render.
   const initialPropConsumed = useRef(initialPool == null);
-  // Snapshot of the most-recently-consumed preload data, keyed by poolApiUrl.
-  // Used to re-bucket without a live fetch when only `isIndexed` changes (e.g.
-  // the async /api/indexed-url/ check resolves to a different value than the
-  // preload's is_indexed). Cleared whenever poolApiUrl changes (filter change).
-  const preloadSnapshotRef = useRef<{
-    poolApiUrl: string;
-    rawJson: any;
-    isIndexed: boolean;  // is_indexed value from the preload — authoritative source
-  } | null>(null);
-  // Set to true synchronously in the mount effect when window.__INITIAL_POOL__
-  // is detected. This lets the /api/indexed-url/ callback (which can fire as a
-  // microtask from browser-cached responses, BEFORE the pool effect macro task
-  // runs and saves the snapshot) suppress setIsIndexed calls that would corrupt
-  // the layout before the preload is even consumed. Cleared when the pool effect
-  // first runs (at which point preloadSnapshotRef takes over as the guard).
-  const preloadReadRef = useRef(false);
   // Skip the very first /api/indexed-url/ check when the server already
   // determined isIndexed (serverIsIndexed prop) — re-fetching the identical
   // url.csv lookup client-side on mount is redundant. Later filter changes
@@ -208,22 +188,6 @@ export default function StateHome({
   // Restore page from ?clickid= on mount (hard refresh / shared link) before
   // the grids below fetch anything, so they fetch the right page just once.
   useEffect(() => {
-    // Stale-build self-heal: the Cloudflare Worker injects window.__STALE_BUILD_ID__=true
-    // into KV HTML served on a buildId mismatch, along with a script that sets a
-    // 'CFS-Stale-Bypass=1' cookie and calls location.reload() after 2 s if the flag
-    // is still set (React never mounted — hydration failed). The reload goes to the same
-    // URL; the worker detects the cookie, bypasses KV, and serves fresh Vercel HTML.
-    // Deleting the flag HERE is the signal that hydration succeeded — this effect only
-    // runs after React has mounted all components and attached all event handlers.
-    // Clearing the cookie client-side is a belt-and-suspenders guard; the worker's
-    // Set-Cookie response header already clears it server-side.
-    try {
-      delete (window as unknown as Record<string, unknown>)["__STALE_BUILD_ID__"];
-      document.cookie = "CFS-Stale-Bypass=; path=/; max-age=0; SameSite=Lax";
-    } catch {
-      // ignore — non-critical cleanup
-    }
-
     const cid = new URLSearchParams(window.location.search).get("clickid");
     if (cid) {
       const saved = readPage(cid);
@@ -233,62 +197,10 @@ export default function StateHome({
       }
     }
 
-    // Seed priority (highest → lowest):
-    //   1. window.__SHUFFLE_SEED__  — injected by Cloudflare Worker into pre-rendered HTML
-    //   2. ?shuffle_seed=N URL param — used by generate-priority-pages.js to produce variants
-    //   3. random — fresh seed on every page mount so non-indexed (live API) pages
-    //      show different products on each refresh. sessionStorage is intentionally
-    //      NOT used here: persisting the seed across reloads caused the same variant
-    //      slot to be hit every time, making products appear frozen.
-    try {
-      const workerSeed = (window as unknown as Record<string, unknown>)["__SHUFFLE_SEED__"];
-      const urlSeed = new URLSearchParams(window.location.search).get("shuffle_seed");
-      if (typeof workerSeed === "number" && workerSeed >= 1) {
-        setSeed(workerSeed);
-      } else if (urlSeed && /^\d+$/.test(urlSeed)) {
-        const n = parseInt(urlSeed, 10);
-        if (n >= 1) setSeed(n);
-      } else {
-        setSeed(Math.floor(Math.random() * SEED_MAX) + 1);
-      }
-    } catch {
-      setSeed(Math.floor(Math.random() * SEED_MAX) + 1);
-    }
-
-    // For KV-cached pages (no SSR initialPool prop), read is_indexed from the
-    // preload object embedded by the cache generator. Batching setIsIndexed here
-    // with setReady means the pool effect fires once with the correct isIndexed
-    // value, preventing the secondary pool re-fetch that occurs when the async
-    // /api/indexed-url/ check resolves to a different value than the default.
-
-    try {
-      const win = window as unknown as Record<string, unknown>;
-      const preload = win.__INITIAL_POOL__ as { url?: string; is_indexed?: boolean; json?: unknown } | undefined;
-      if (preload?.url) {
-        // Raise the sentinel SYNCHRONOUSLY whenever __INITIAL_POOL__ exists —
-        // regardless of whether is_indexed is present (pool_test doesn't return
-        // is_indexed at the top level, so that check was always false before).
-        // The pool effect will either consume the preload (URL match) or fall
-        // through to a live fetch. Either way, /api/indexed-url/ must not fire
-        // setIsIndexed until after that first pool-effect run completes.
-        preloadReadRef.current = true;
-        if (typeof preload.is_indexed === "boolean") {
-          setIsIndexed(preload.is_indexed);
-        }
-        // The cache warmer fetches fresh pool data at warm-time and embeds it as
-        // __INITIAL_POOL__, but the pool effect's URL-match check (which includes
-        // the shuffle seed) never fires for KV-cached pages because the client
-        // always generates a new random seed. As a result, the stale seo_v2 baked
-        // into the SSR HTML (from when the KV cache was generated) was used
-        // permanently — showing an out-of-date listing count on every page load.
-        // seo_v2 (heading, count, description) is seed-agnostic, so update it here
-        // unconditionally from the fresh preload data without needing a URL match.
-        const freshSeo = (preload.json as any)?.data?.seo_v2 ?? (preload.json as any)?.seo_v2;
-        if (freshSeo) setSeo(freshSeo);
-      }
-    } catch {
-      // ignore — isIndexed will be corrected by the async /api/indexed-url/ check
-    }
+    // Fresh random seed on every page mount so pages show different products
+    // on each refresh. sessionStorage is intentionally NOT used here:
+    // persisting the seed across reloads made products appear frozen.
+    setSeed(Math.floor(Math.random() * SEED_MAX) + 1);
 
     setReady(true);
   }, []);
@@ -360,19 +272,8 @@ export default function StateHome({
     const canonicalPath = buildListingsSlug(filters);
     fetch(`/api/indexed-url/?path=${encodeURIComponent(canonicalPath)}`)
       .then((r) => (r.ok ? r.json() : null))
-      .then((json) => {
-        // Suppress if either:
-        //  (a) preloadSnapshotRef is set — snapshot already consumed, authoritative
-        //  (b) preloadReadRef is set — preload detected on mount but pool effect
-        //      macro task hasn't run yet; this covers cached-response microtasks
-        //      that fire before the pool effect saves the snapshot
-        if (preloadSnapshotRef.current !== null || preloadReadRef.current) return;
-        setIsIndexed(json?.indexed ?? false);
-      })
-      .catch(() => {
-        if (preloadSnapshotRef.current !== null || preloadReadRef.current) return;
-        setIsIndexed(false);
-      });
+      .then((json) => setIsIndexed(json?.indexed ?? false))
+      .catch(() => setIsIndexed(false));
   }, [filters, page]);
 
   // Page 1 uses ONE shared pool call, split by slot_bucket into
@@ -404,78 +305,6 @@ export default function StateHome({
     // one's result instead of letting it win the race.
     const requestUrl = `${poolApiUrl}&page=${page}`;
     const absoluteUrl = new URL(requestUrl, window.location.origin).toString();
-
-    // ── Pre-loaded pool data (injected by cache generator into HTML) ──────────
-    // Check preload FIRST — before setSeo(null) — so we never produce an
-    // intermediate render with seo=null when data is already in memory.
-    // Processing synchronously means React batches all setState calls into a
-    // single render: seo, pool, and poolLoading all update together, so the
-    // "Featured Caravans…" heading is present from the very first client paint.
-    const win = window as unknown as Record<string, unknown>;
-    const preload = win.__INITIAL_POOL__ as { url: string; json: unknown } | undefined;
-    if (preload && !initialPoolConsumed.current && preload.url === requestUrl) {
-      initialPoolConsumed.current = true;
-      win.__INITIAL_POOL__ = undefined;
-      console.log("[StateHome] using pre-loaded pool data:", requestUrl);
-
-      const json = preload.json as any;
-      const seoData = json?.seo ?? json?.data?.seo_v2 ?? json?.seo_v2;
-      if (seoData) setSeo(seoData);
-
-      if (isIndexed) {
-        const { featured, new: newItems, used: usedItems, totalPages } = bucketPoolResponse(json);
-        setPool({ featured, new: newItems, used: usedItems });
-        handleTotalPages(totalPages);
-      } else {
-        const { combined, totalPages } = bucketPoolResponseCombined(json);
-        setPool({ featured: combined, new: [], used: [] });
-        handleTotalPages(totalPages);
-      }
-      setPoolLoading(false);
-
-      // Save a snapshot so that if isIndexed changes later (e.g. /api/indexed-url/
-      // returns a different value than the embedded is_indexed), the pool effect
-      // can re-bucket from this data instead of making a live fetch that would
-      // overwrite the correct preload content.
-      preloadSnapshotRef.current = { poolApiUrl, rawJson: json, isIndexed };
-
-      return;  // no async work, no cleanup needed
-    }
-    // ─────────────────────────────────────────────────────────────────────────
-
-    // If only isIndexed changed (same filter context / poolApiUrl) and we have
-    // a preload snapshot, re-bucket from it instead of making a live request.
-    // This prevents the async /api/indexed-url/ check from overwriting correct
-    // preload data when it disagrees with the embedded is_indexed value.
-    if (preloadSnapshotRef.current && preloadSnapshotRef.current.poolApiUrl === poolApiUrl) {
-      const snap = preloadSnapshotRef.current;
-      const seoData = snap.rawJson?.seo ?? snap.rawJson?.data?.seo_v2 ?? snap.rawJson?.seo_v2;
-      if (seoData) setSeo(seoData);
-      // Use snap.isIndexed (the is_indexed embedded in the preload), NOT the
-      // current isIndexed state — which may have been overridden by the async
-      // /api/indexed-url/ check. The preload value is authoritative.
-      const snapIsIndexed = snap.isIndexed;
-      if (snapIsIndexed) {
-        const { featured, new: newItems, used: usedItems, totalPages } = bucketPoolResponse(snap.rawJson);
-        setPool({ featured, new: newItems, used: usedItems });
-        handleTotalPages(totalPages);
-      } else {
-        const { combined, totalPages } = bucketPoolResponseCombined(snap.rawJson);
-        setPool({ featured: combined, new: [], used: [] });
-        handleTotalPages(totalPages);
-      }
-      // Also restore isIndexed state to the preload's value in case the async
-      // check overrode it. This prevents the isIndexed state from drifting and
-      // causing further re-renders with the wrong layout.
-      if (isIndexed !== snapIsIndexed) setIsIndexed(snapIsIndexed);
-      return;
-    }
-
-    // Filter changed (or no snapshot) — clear the snapshot and do a live fetch.
-    // Also clear preloadReadRef so subsequent /api/indexed-url/ callbacks (for
-    // the new filter context) can update isIndexed normally.
-    preloadSnapshotRef.current = null;
-    preloadReadRef.current = false;
 
     let cancelled = false;
     setPoolLoading(true);
@@ -631,8 +460,8 @@ export default function StateHome({
   );
 
   if (!ready) {
-    // Full server-fetched pool: render real products so KV-cached HTML is
-    // fully populated. This is the primary path for cache-generated variants.
+    // Full server-fetched pool: render real products so the SSR HTML is
+    // fully populated.
     if (initialPool) {
       const ip = initialPool;
       return (
@@ -809,7 +638,7 @@ export default function StateHome({
     );
     // No server data at all — minimal white overlay (mobile flash prevention).
     // IMPORTANT: must return a <div> (not a Fragment) so the root element matches
-    // the server-rendered HTML root on KV-cached pages. A Fragment root here causes
+    // the server-rendered HTML root. A Fragment root here causes
     // React to abandon hydration, leaving the DOM without event listeners attached.
     return (
       <div className="lsd-page">

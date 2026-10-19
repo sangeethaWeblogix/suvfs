@@ -27,7 +27,6 @@ export interface Filters {
   to_sleep?: string | number;
   clickid?: string | null;
   keyword?: string; // parsed -> canonicalized to `search`
-  shuffle_seed?: string | number; // NEW: For Cloudflare cache variants
   /** Car-site filters from config/filterDefs.ts (fuel_type, from_odometer, …). */
   [key: string]: unknown;
 }
@@ -296,9 +295,6 @@ export function parseSlugToFilters(
     if (query.search) filters.search = getScalar(query.search);
     if (query.keyword && !filters.search)
       filters.search = getScalar(query.keyword); // fallback
-
-    // NEW: Parse shuffle_seed from query params (added by Cloudflare Worker)
-    if (query.shuffle_seed) filters.shuffle_seed = getScalar(query.shuffle_seed);
   }
 
   return filters;

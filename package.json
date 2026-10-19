@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && node scripts/update-kv-build-id.js",
+    "build": "next build",
     "start": "next start",
     "site": "node scripts/dev-site.mjs",
     "lint": "next lint",
