@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { site, sitePaths } from "@/config/sites";
 
 const SELL_DATA = [
   {
@@ -118,7 +119,7 @@ export default function FooterNav() {
         aria-controls="sell-links-panel"
       >
         <span className="footer-sell-by-location__text">
-          <span className="footer-sell-by-location__title">Sell My SUV by Location</span>
+          <span className="footer-sell-by-location__title">Sell My {site.singular} by Location</span>
           <span className="footer-sell-by-location__sub">Browse selling pages by state, city and region</span>
         </span>
         <svg
@@ -144,16 +145,16 @@ export default function FooterNav() {
             {SELL_DATA.map((s) => (
               <div key={s.stateSlug} className="sell-panel__col">
                 <a
-                  href={`/sell-my-suv/${s.stateSlug}/`}
+                  href={`${sitePaths.sell}${s.stateSlug}/`}
                   className="sell-panel__state-title"
                 >
-                  Sell My SUV in {s.state}
+                  Sell My {site.singular} in {s.state}
                 </a>
                 <ul className="sell-panel__region-list">
                   {s.regions.map((r) => (
                     <li key={r.pageSlug}>
-                      <a href={`/sell-my-suv/${s.stateSlug}/${r.pageSlug}/`}>
-                        Sell My SUV in {r.label}
+                      <a href={`${sitePaths.sell}${s.stateSlug}/${r.pageSlug}/`}>
+                        Sell My {site.singular} in {r.label}
                       </a>
                     </li>
                   ))}

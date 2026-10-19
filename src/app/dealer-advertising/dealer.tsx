@@ -1,4 +1,5 @@
 "use client";
+import { site } from "@/config/sites";
 import "@fortawesome/fontawesome-free/css/fontawesome.min.css";
 import "@fortawesome/fontawesome-free/css/solid.min.css";
 import { useState } from "react";
@@ -9,15 +10,15 @@ const DEALER_FAQS = [
     a: (
       <p>
         The dealer subscription is $299 per month (including GST). This flat
-        monthly fee allows your dealership to list unlimited SUVs on
-        SuvForSale.com.au. There are no per-listing charges, and we never
+        monthly fee allows your dealership to list unlimited {site.nounPlural} on {site.brand}.
+        There are no per-listing charges, and we never
         charge per lead or take success commissions – no matter how many
         inquiries or sales you get, $299/month covers it all.
       </p>
     ),
   },
   {
-    q: "How are my SUV listings added and kept up-to-date automatically?",
+    q: `How are my ${site.noun} listings added and kept up-to-date automatically?`,
     a: (
       <p>
         We sync directly with your dealership's website. Your listings are
@@ -27,10 +28,10 @@ const DEALER_FAQS = [
     ),
   },
   {
-    q: "What kind of audience will my SUVs reach?",
+    q: `What kind of audience will my ${site.nounPlural} reach?`,
     a: (
       <p>
-        SuvForSale.com.au is an SUV-only marketplace with a focused,
+        {site.brand} is {site.article} {site.noun}-only marketplace with a focused,
         nationwide audience of serious buyers.
       </p>
     ),
@@ -82,7 +83,7 @@ const DealerLandingPage = () => {
 
                 <p>
                   A dealer-first marketplace built to generate consistent
-                  enquiries from high-intent SUV buyers.
+                  enquiries from high-intent {site.noun} buyers.
                 </p>
 
                 <a
@@ -107,13 +108,13 @@ const DealerLandingPage = () => {
                   <div className="feel_cfs">
                     <h2>
                       Lead Generation Machine{" "}
-                      <span>Built for Your SUV Dealership</span>
+                      <span>Built for Your {site.singular} Dealership</span>
                     </h2>
 
                     <p className="mb-3">
                       Your stock deserves visibility without per-lead fees, Marketplace Network
                       connects your dealership with buyers actively searching
-                      for their next SUV—so your inventory gets seen by the
+                      for their next {site.noun}—so your inventory gets seen by the
                       right audience.
                     </p>
 
@@ -129,12 +130,12 @@ const DealerLandingPage = () => {
                             {
                               img: "/images/seo_keyword.svg",
                               title: "Ranking for 300+ High-Intent Keywords",
-                              desc: "Get discovered by buyers actively searching for SUVs.",
+                              desc: `Get discovered by buyers actively searching for ${site.nounPlural}.`,
                             },
                             {
                               img: "/images/visiter.svg",
                               title: "1000's of Daily Visitors & Growing",
-                              desc: "Reach a highly engaged, SUV-buyer-specific audience every day",
+                              desc: `Reach a highly engaged, ${site.noun}-buyer-specific audience every day`,
                             },
                             {
                               img: "/images/inbox.svg",
@@ -204,7 +205,7 @@ const DealerLandingPage = () => {
             <div className="col-12">
               <div className="comparison">
                 <h2 className="text-center">
-                  <span>Why SUV Dealers </span> Choose Marketplace Network
+                  <span>Why {site.singular} Dealers </span> Choose Marketplace Network
                 </h2>
 
                 <div className="table-responsive">
@@ -213,7 +214,7 @@ const DealerLandingPage = () => {
                       <tr>
                         <th className="text-start">Comparison Table</th>
                         <th className="brand-col">
-                          SuvForSale<wbr />.com.au
+                          {site.brand.replace(/\.com\.au$/, "")}<wbr />.com.au
                         </th>
                         <th>Other Marketplaces</th>
                       </tr>
@@ -222,9 +223,9 @@ const DealerLandingPage = () => {
                       {[
                         "We list your entire stock automatically",
                         "Listings are updated automatically based on your website stock data",
-                        "SUV buyer/seller-only audience",
-                        "Built for SUV dealers—not classified clutter",
-                        "Unlimited SUV listings",
+                        `${site.singular} buyer/seller-only audience`,
+                        `Built for ${site.noun} dealers—not classified clutter`,
+                        `Unlimited ${site.noun} listings`,
                         "No per-lead fees",
                         "Best-value monthly subscription fees by a country mile",
                       ].map((text, i) => (
@@ -268,7 +269,7 @@ const DealerLandingPage = () => {
           {/* Reach Caravan Buyers Section */}
           <div className="col-lg-12">
             <div className="heading-box">
-              <h2>Reach SUV buyers across Australia</h2>
+              <h2>Reach {site.singular} buyers across Australia</h2>
             </div>
           </div>
 
@@ -277,12 +278,12 @@ const DealerLandingPage = () => {
               <img
                 src="/images/your-caravan-desktop.jpg"
                 className="img-fluid d-none d-lg-block desktop-img"
-                alt="SUV For Sale Desktop"
+                alt={`${site.title} Desktop`}
               />
               <img
                 src="/images/your-caravan-mobile.png"
                 className="img-fluid d-block d-lg-none mobile-img"
-                alt="SUV For Sale Mobile"
+                alt={`${site.title} Mobile`}
               />
             </div>
 
@@ -322,7 +323,7 @@ const DealerLandingPage = () => {
           <div className="demo-faq-head">
             <span className="demo-faq-head__tag">FAQ</span>
             <h2>Frequently Asked Questions</h2>
-            <p>Everything you need to know about advertising your dealership on SuvForSale.com.au</p>
+            <p>Everything you need to know about advertising your dealership on {site.brand}</p>
           </div>
           <div className="demo-faq-list">
             {DEALER_FAQS.map((faq, i) => (

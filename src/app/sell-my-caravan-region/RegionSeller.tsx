@@ -4,18 +4,19 @@ import "@fortawesome/fontawesome-free/css/solid.min.css";
 import "@fortawesome/fontawesome-free/css/regular.min.css";
 import React, { useState } from "react";
 import { RegionInfo } from "./regions-data";
+import { site, sitePaths } from "@/config/sites";
 
 const CARAVAN_TYPES = [
-  { label: "Off Road SUVs", img: "/images/off-road.webp", href: "/listings/off-road-category/" },
-  { label: "Family SUVs", img: "/images/family.webp", href: "/listings/family-caravans-category/" },
-  { label: "Pop Top SUVs", img: "/images/pop-top.webp", href: "/listings/pop-top-category/" },
-  { label: "Hybrid SUVs", img: "/images/hybrid.webp", href: "/listings/hybrid-caravans-category/" },
-  { label: "Luxury SUVs", img: "/images/luxury.webp", href: "/listings/luxury-caravans-category/" },
-  { label: "Couples SUVs", img: "/images/touring.webp", href: "/listings/couples-caravans-category/" },
-  { label: "Touring SUVs", img: "/images/touring.webp", href: "/listings/touring-caravans-category/" },
-  { label: "Bunk SUVs", img: "/images/family.webp", href: "/listings/bunk-caravans-category/" },
-  { label: "Small SUVs", img: "/images/pop-top.webp", href: "/listings/small-caravans-category/" },
-  { label: "Used SUVs", img: "/images/off-road.webp", href: "/listings/used-condition/" },
+  { label: `Off Road ${site.plural}`, img: "/images/off-road.webp", href: "/listings/off-road-category/" },
+  { label: `Family ${site.plural}`, img: "/images/family.webp", href: "/listings/family-caravans-category/" },
+  { label: `Pop Top ${site.plural}`, img: "/images/pop-top.webp", href: "/listings/pop-top-category/" },
+  { label: `Hybrid ${site.plural}`, img: "/images/hybrid.webp", href: "/listings/hybrid-caravans-category/" },
+  { label: `Luxury ${site.plural}`, img: "/images/luxury.webp", href: "/listings/luxury-caravans-category/" },
+  { label: `Couples ${site.plural}`, img: "/images/touring.webp", href: "/listings/couples-caravans-category/" },
+  { label: `Touring ${site.plural}`, img: "/images/touring.webp", href: "/listings/touring-caravans-category/" },
+  { label: `Bunk ${site.plural}`, img: "/images/family.webp", href: "/listings/bunk-caravans-category/" },
+  { label: `Small ${site.plural}`, img: "/images/pop-top.webp", href: "/listings/small-caravans-category/" },
+  { label: `Used ${site.plural}`, img: "/images/off-road.webp", href: "/listings/used-condition/" },
 ];
 
 interface RegionSellerProps {
@@ -29,8 +30,8 @@ export default function RegionSeller({ region }: RegionSellerProps) {
   const stateSlug = region.state.slug;
 
   const HOW_TO_STEPS = [
-    { num: 1, iconSet: "fa-regular", icon: "fa-file-lines",    title: "Create Your Listing",    desc: "Add your SUV details, description, price and location in minutes." },
-    { num: 2, iconSet: "fa-regular", icon: "fa-image",         title: "Upload Photos",          desc: "Add clear photos of the inside, outside and features of your SUV." },
+    { num: 1, iconSet: "fa-regular", icon: "fa-file-lines",    title: "Create Your Listing",    desc: `Add your ${site.noun} details, description, price and location in minutes.` },
+    { num: 2, iconSet: "fa-regular", icon: "fa-image",         title: "Upload Photos",          desc: `Add clear photos of the inside, outside and features of your ${site.noun}.` },
     { num: 3, iconSet: "fa-regular", icon: "fa-comment-dots",  title: "Reach Buyers",           desc: `Your listing is live across ${regionLabel} and ${stateLabel}. Buyers contact you directly.` },
     { num: 4, iconSet: "fa-regular", icon: "fa-handshake",     title: "Negotiate Directly",     desc: "Arrange inspections and negotiate price with buyers." },
     { num: 5, iconSet: "fa-regular", icon: "fa-circle-check",  title: "Complete The Sale",      desc: "Once sold, remove your listing or mark as sold. It's that simple." },
@@ -38,44 +39,44 @@ export default function RegionSeller({ region }: RegionSellerProps) {
 
   const MAIN_FAQS = [
     {
-      q: `How do I sell my SUV in ${regionLabel}?`,
-      a: <p>You can sell your SUV online by creating a private seller listing on SuvForSale.com.au. Simply add your SUV details, upload clear photos, set your asking price, and publish your ad so active buyers in {regionLabel} and across {stateLabel} can contact you directly.</p>,
+      q: `How do I sell my ${site.noun} in ${regionLabel}?`,
+      a: <p>You can sell your {site.noun} online by creating a private seller listing on {site.brand}. Simply add your {site.noun} details, upload clear photos, set your asking price, and publish your ad so active buyers in {regionLabel} and across {stateLabel} can contact you directly.</p>,
     },
     {
-      q: `How much does it cost to sell my SUV in ${regionLabel}?`,
+      q: `How much does it cost to sell my ${site.noun} in ${regionLabel}?`,
       a: <p>We charge a simple, flat one-time fee of just $49 (inc. GST). There are absolutely no commissions, no hidden upfront fees, and no recurring monthly subscriptions. You keep 100% of your sale price.</p>,
     },
     {
-      q: "How long does my SUV listing stay live?",
-      a: <p>Your SUV listing stays live until sold. You do not need to keep paying monthly fees to keep your ad active. Once your SUV is sold, you can remove the listing from the website.</p>,
+      q: `How long does my ${site.noun} listing stay live?`,
+      a: <p>Your {site.noun} listing stays live until sold. You do not need to keep paying monthly fees to keep your ad active. Once your {site.noun} is sold, you can remove the listing from the website.</p>,
     },
     {
-      q: "Can I edit my SUV listing after publishing?",
-      a: <p>Yes. After your listing is published, you can update your SUV details, change the asking price, add or replace photos and improve your description if needed.</p>,
+      q: `Can I edit my ${site.noun} listing after publishing?`,
+      a: <p>Yes. After your listing is published, you can update your {site.noun} details, change the asking price, add or replace photos and improve your description if needed.</p>,
     },
     {
       q: "How do buyers contact me?",
-      a: <p>Interested buyers can contact you directly through your SUV listing. This allows you to answer questions, arrange inspections, negotiate the price and manage the sale privately.</p>,
+      a: <p>Interested buyers can contact you directly through your {site.noun} listing. This allows you to answer questions, arrange inspections, negotiate the price and manage the sale privately.</p>,
     },
     {
-      q: "What photos should I upload when selling my SUV?",
-      a: <p>Upload clear photos of the outside, inside, kitchen, beds, seating area, bathroom, tyres, drawbar and any included accessories. Good photos help buyers understand the condition of your SUV and can increase enquiries.</p>,
+      q: `What photos should I upload when selling my ${site.noun}?`,
+      a: <p>Upload clear photos of the outside, inside, kitchen, beds, seating area, bathroom, tyres, drawbar and any included accessories. Good photos help buyers understand the condition of your {site.noun} and can increase enquiries.</p>,
     },
     {
-      q: "How should I price my SUV?",
-      a: <p>Check similar SUVs for sale in {regionLabel} before setting your price. Compare by make, model, year, condition, length, ATM, tare weight, sleeping capacity, features and location. A realistic asking price can help attract more genuine buyers.</p>,
+      q: `How should I price my ${site.noun}?`,
+      a: <p>Check similar {site.nounPlural} for sale in {regionLabel} before setting your price. Compare by make, model, year, condition, length, ATM, tare weight, sleeping capacity, features and location. A realistic asking price can help attract more genuine buyers.</p>,
     },
     {
-      q: "Is it safe to sell my SUV privately online?",
+      q: `Is it safe to sell my ${site.noun} privately online?`,
       a: <p>Yes, but you should take normal precautions. Speak with buyers directly, meet in a safe location, confirm payment has cleared before handover and complete any required transfer paperwork for {stateLabel}.</p>,
     },
     {
-      q: "Do I pay commission when my SUV sells?",
-      a: <p>No. SuvForSale.com.au does not charge commission when your SUV sells. You pay the one-time listing fee and keep 100% of the agreed sale price.</p>,
+      q: `Do I pay commission when my ${site.noun} sells?`,
+      a: <p>No. {site.brand} does not charge commission when your {site.noun} sells. You pay the one-time listing fee and keep 100% of the agreed sale price.</p>,
     },
     {
-      q: "Can I remove my listing after my SUV is sold?",
-      a: <p>Yes. Once your SUV has sold, you can remove your listing so buyers know it is no longer available.</p>,
+      q: `Can I remove my listing after my ${site.noun} is sold?`,
+      a: <p>Yes. Once your {site.noun} has sold, you can remove your listing so buyers know it is no longer available.</p>,
     },
   ];
 
@@ -86,10 +87,10 @@ export default function RegionSeller({ region }: RegionSellerProps) {
       <section className="demo-hero">
         <div className="container">
           <h1 className="demo-hero__title">
-            Sell My SUV in {regionLabel}
+            Sell My {site.singular} in {regionLabel}
           </h1>
           <p className="demo-hero__subtitle">
-            The fastest, safest way to reach active SUV buyers in {regionLabel}, {stateLabel}.
+            The fastest, safest way to reach active {site.noun} buyers in {regionLabel}, {stateLabel}.
           </p>
 
           {/* Pricing card + CTA wrapper — one seamless unit */}
@@ -102,10 +103,10 @@ export default function RegionSeller({ region }: RegionSellerProps) {
                 <img src="/images/vic_map.svg" alt={regionLabel} />
               </div>
               <div className="demo-price-card__header">
-              <h3>Looking to sell your SUV?</h3>
+              <h3>Looking to sell your {site.noun}?</h3>
             </div>
               <p className="demo-price-card__desc">
-                List your SUV on Australia's #1 SUV marketplace and connect with thousands of buyers in {regionLabel}, {stateLabel}.
+                List your {site.noun} on Australia's #1 {site.noun} marketplace and connect with thousands of buyers in {regionLabel}, {stateLabel}.
               </p>
 
             </div>
@@ -141,7 +142,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
 
           {/* CTA — inside wrapper so it attaches seamlessly to card bottom */}
           <a href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" className="demo-hero__cta">
-            List Your SUV Now <i className="fa-solid fa-arrow-right" />
+            List Your {site.singular} Now <i className="fa-solid fa-arrow-right" />
           </a>
           </div>{/* end demo-price-wrapper */}
 
@@ -154,8 +155,8 @@ export default function RegionSeller({ region }: RegionSellerProps) {
           <div className="demo-features-grid">
             {[
               { img: "/images/chat2.png", title: "Direct Buyer Contact", desc: "Communicate directly with buyers, no middleman." },
-              { img: "/images/calendar.png", title: "Live Until Sold", desc: "Your listing stays live until your SUV is sold." },
-              { img: "/images/caravan.png", title: "SUV-Only Marketplace", desc: "Reach engaged SUV buyers actively looking to buy SUVs." },
+              { img: "/images/calendar.png", title: "Live Until Sold", desc: `Your listing stays live until your ${site.noun} is sold.` },
+              { img: "/images/caravan.png", title: `${site.singular}-Only Marketplace`, desc: `Reach engaged ${site.noun} buyers actively looking to buy ${site.nounPlural}.` },
               { img: "/images/dollar.png", title: "Keep 100% of Your Sale", desc: "Pay only a one-time fee for maximum value. No hidden costs." },
             ].map((item, i) => (
               <div className="demo-feature-card" key={i}>
@@ -176,14 +177,14 @@ export default function RegionSeller({ region }: RegionSellerProps) {
 
           {/* Heading */}
           <div className="demo-reach-heading">
-            <h3>Reach SUV Buyers in {regionLabel}, {stateLabel}</h3>
+            <h3>Reach {site.singular} Buyers in {regionLabel}, {stateLabel}</h3>
           </div>
 
           <div className="demo-reach-row">
           {/* Device image */}
           <div className="demo-reach-device">
-            <img src="/images/your-caravan-desktop-seller-2.jpg" className="img-fluid d-none d-lg-block" alt="SUV For Sale Desktop" />
-            <img src="/images/your-caravan-mobile-2.jpg" className="img-fluid d-block d-lg-none" alt="SUV For Sale Mobile" />
+            <img src="/images/your-caravan-desktop-seller-2.jpg" className="img-fluid d-none d-lg-block" alt={`${site.singular} For Sale Desktop`} />
+            <img src="/images/your-caravan-mobile-2.jpg" className="img-fluid d-block d-lg-none" alt={`${site.singular} For Sale Mobile`} />
           </div>
 
           {/* Pricing + FAQ card */}
@@ -199,7 +200,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
               <p className="demo-reach-card__fee-label">One-Time Listing Fee</p>
               <ul className="demo-reach-card__list">
                 {[
-                  "1 SUV listed until sold",
+                  `1 ${site.noun} listed until sold`,
                   "Edit your listing anytime",
                   "No expiration or monthly fees",
                 ].map((item) => (
@@ -210,7 +211,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
                 ))}
               </ul>
               <a href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" className="demo-reach-card__cta">
-                List Your SUV Now <i className="fa-solid fa-arrow-right" />
+                List Your {site.singular} Now <i className="fa-solid fa-arrow-right" />
               </a>
             </div>
 
@@ -257,13 +258,13 @@ export default function RegionSeller({ region }: RegionSellerProps) {
             <div className="demo-guide-card">
               <div className="demo-guide-card__header">
                 <span className="demo-guide-card__num">1</span>
-                <h3>Why sell on SuvForSale.com.au?</h3>
+                <h3>Why sell on {site.brand}?</h3>
               </div>
               <ul className="demo-guide-card__list">
-                <li>Australia's #1 marketplace for buying and selling SUVs.</li>
-                <li>Targeted SUV buyers across {regionLabel} and regional {stateLabel}.</li>
+                <li>Australia's #1 marketplace for buying and selling {site.nounPlural}.</li>
+                <li>Targeted {site.noun} buyers across {regionLabel} and regional {stateLabel}.</li>
                 <li>Your listing stays live until sold with no hidden fees.</li>
-                <li>Fast, simple and secure way to sell your SUV.</li>
+                <li>Fast, simple and secure way to sell your {site.noun}.</li>
               </ul>
             </div>
 
@@ -282,10 +283,10 @@ export default function RegionSeller({ region }: RegionSellerProps) {
             <div className="demo-guide-card">
               <div className="demo-guide-card__header">
                 <span className="demo-guide-card__num">3</span>
-                <h3>How to price your SUV</h3>
+                <h3>How to price your {site.noun}</h3>
               </div>
               <ul className="demo-guide-card__list">
-                <li>Check similar SUVs for sale in {regionLabel}.</li>
+                <li>Check similar {site.nounPlural} for sale in {regionLabel}.</li>
                 <li>Compare make, model, year, condition and inclusions.</li>
                 <li>List at a realistic price to attract more buyers.</li>
               </ul>
@@ -299,7 +300,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
               <ul className="demo-guide-card__list">
                 <li>Private sale: you keep 100% of the sale price.</li>
                 <li>Dealers/consignment: may charge fees or commission.</li>
-                <li>SuvForSale.com.au: one-time fee, no commission.</li>
+                <li>{site.brand}: one-time fee, no commission.</li>
               </ul>
             </div>
 
@@ -313,7 +314,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
           <div className="demo-faq-head">
             <span className="demo-faq-head__tag">FAQ</span>
             <h2>Frequently Asked Questions</h2>
-            <p>Everything you need to know about selling your SUV in {regionLabel} on SuvForSale.com.au</p>
+            <p>Everything you need to know about selling your {site.noun} in {regionLabel} on {site.brand}</p>
           </div>
           <div className="demo-faq-list">
             {MAIN_FAQS.map((faq, i) => (
@@ -342,7 +343,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
       {/* ── Caravan types ── */}
       <section className="demo-types-section">
         <div className="container">
-          <h2 className="demo-section-title">Sell Any Type of SUV</h2>
+          <h2 className="demo-section-title">Sell Any Type of {site.singular}</h2>
           <div className="demo-types-grid">
             {CARAVAN_TYPES.map((t) => (
               <div key={t.label} className="demo-type-item">
@@ -361,19 +362,19 @@ export default function RegionSeller({ region }: RegionSellerProps) {
         <div className="container">
           <div className="row align-items-center g-4">
             <div className="col-md-6">
-              <img src="/images/your-caravan-desktop-seller-2.jpg" className="img-fluid demo-why-img" alt={`${regionLabel} SUV buyers`} />
+              <img src="/images/your-caravan-desktop-seller-2.jpg" className="img-fluid demo-why-img" alt={`${regionLabel} ${site.noun} buyers`} />
             </div>
             <div className="col-md-6">
-              <h2>Why {regionLabel} SUV Buyers Visit SuvForSale Every Month</h2>
+              <h2>Why {regionLabel} {site.singular} Buyers Visit {site.brand} Every Month</h2>
               <p>
-                SuvForSale.com.au helps SUV sellers in {regionLabel} reach buyers searching for
-                used SUVs, off road SUVs, family SUVs, pop tops, hybrids and touring
-                SUVs across {regionLabel} and regional {stateLabel}.
+                {site.brand} helps {site.noun} sellers in {regionLabel} reach buyers searching for
+                used {site.nounPlural}, off road {site.nounPlural}, family {site.nounPlural}, pop tops, hybrids and touring
+                {" "}{site.nounPlural} across {regionLabel} and regional {stateLabel}.
               </p>
               <div className="demo-check-grid demo-check-grid--2col mt-3">
                 {[
                   "Thousands of active buyers", `Local reach across ${regionLabel}`,
-                  "SUV-only marketplace", "Simple listing process",
+                  `${site.singular}-only marketplace`, "Simple listing process",
                   "High quality enquiries", "No commissions",
                   "Live until sold – no extra fees", "Friendly local support team",
                 ].map((t) => (
@@ -391,8 +392,8 @@ export default function RegionSeller({ region }: RegionSellerProps) {
       <section className="demo-steps-section">
         <div className="container">
 
-          <h2 className="demo-steps-title">How To Sell Your SUV Online</h2>
-          <p className="demo-steps-subtitle">List in minutes and reach thousands of active SUV buyers in {regionLabel}.</p>
+          <h2 className="demo-steps-title">How To Sell Your {site.singular} Online</h2>
+          <p className="demo-steps-subtitle">List in minutes and reach thousands of active {site.noun} buyers in {regionLabel}.</p>
 
           {/* Steps: each column has number circle + icon + content; connectors between columns */}
           <div className="demo-steps-wrapper">
@@ -420,14 +421,14 @@ export default function RegionSeller({ region }: RegionSellerProps) {
       <section className="demo-cta-strip">
         <div className="container text-center">
           <p>
-            Start selling your SUV in {regionLabel} today for just{" "}
+            Start selling your {site.noun} in {regionLabel} today for just{" "}
             <strong>$49 (Inc. GST)</strong> — live until sold.
           </p>
           <a href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" className="btn white_btn">
-            List Your SUV Now
+            List Your {site.singular} Now
           </a>
           <p className="demo-cta-strip__alt-link">
-            Not in {regionLabel}? Sell your SUV across {stateLabel} <a href={`/sell-my-suv/${stateSlug}/`}>here</a>.
+            Not in {regionLabel}? Sell your {site.noun} across {stateLabel} <a href={`${sitePaths.sell}${stateSlug}/`}>here</a>.
           </p>
         </div>
       </section>
@@ -435,7 +436,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
       {/* ── Have something other than a caravan to sell? ── */}
       <section className="demo-sell-explore">
         <div className="container text-center">
-          <h2 className="demo-sell-explore__title">Have something other than an SUV to sell in {regionLabel}?</h2>
+          <h2 className="demo-sell-explore__title">Have something other than {site.article} {site.noun} to sell in {regionLabel}?</h2>
           <p className="demo-sell-explore__body">
             You can{" "}
             <a href={`https://www.motorhomesforsale.com.au/sell-my-motorhome/${stateSlug}/${region.pageSlug}/`} target="_blank" rel="noopener noreferrer">sell your motorhome</a>,{" "}

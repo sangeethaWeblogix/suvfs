@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import "./details.css";
+import { site } from "@/config/sites";
 
 type FaqItem = {
   heading: string;
@@ -80,24 +81,24 @@ export default function FaqSection({
           <div className="blog-faq-cta">
             <div className="blog-faq-cta__icon"><img src="/images/category.svg" alt="" width={36} height={36} /></div>
             <h3 className="blog-faq-cta__heading">
-              {combinedLabel ? `Ready to Find Your Dream ${combinedLabel} SUV?` : "Ready to Find Your Dream SUV?"}
+              {combinedLabel ? `Ready to Find Your Dream ${combinedLabel} ${site.singular}?` : `Ready to Find Your Dream ${site.singular}?`}
             </h3>
             <p className="blog-faq-cta__desc">
               {combinedLabel
-                ? `Explore thousands of ${combinedLabel.toLowerCase()} SUVs for sale across Australia and start your journey in style.`
-                : "Explore thousands of SUVs for sale across Australia and start your journey in style."}
+                ? `Explore thousands of ${combinedLabel.toLowerCase()} ${site.nounPlural} for sale across Australia and start your journey in style.`
+                : `Explore thousands of ${site.nounPlural} for sale across Australia and start your journey in style.`}
             </p>
             {resolvedCats.length > 0 ? (
               <div className="blog-faq-cta__btns">
                 {resolvedCats.map(cat => (
                   <a key={cat.link} href={cat.link} className="blog-faq-cta__btn">
-                    Browse {cat.label} SUVs
+                    Browse {cat.label} {site.plural}
                   </a>
                 ))}
               </div>
             ) : (
               <a href="/listings/" className="blog-faq-cta__btn">
-                Browse SUVs
+                Browse {site.plural}
               </a>
             )}
           </div>

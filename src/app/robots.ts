@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
+import { site } from "@/config/sites";
 
-const BASE_URL = "https://www.caravansforsale.com.au";
+const BASE_URL = site.url;
 
 export default function robots(): MetadataRoute.Robots {
   return {

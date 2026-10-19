@@ -1,3 +1,4 @@
+import { site } from "@/config/sites";
 import { NextRequest, NextResponse } from "next/server";
 import { reportGitHubIssue, GitHubErrorPayload } from "@/lib/reportGitHubIssue";
 import { sendTelegramAlert } from "@/lib/telegramAlert";
@@ -10,7 +11,7 @@ export async function POST(request: NextRequest) {
       payload.errorType?.toLowerCase().includes("5") ? "🔴" : "🟠";
 
     const tgText =
-      `${severity} <b>${payload.errorSource} Error — suvforsale.com.au</b>\n\n` +
+      `${severity} <b>${payload.errorSource} Error — ${site.domain}</b>\n\n` +
       `<b>Type:</b> ${payload.errorType}\n` +
       `<b>Message:</b> ${payload.message?.substring(0, 300)}\n` +
       (payload.pageUrl ? `<b>Page:</b> ${payload.pageUrl}` : "");

@@ -1,3 +1,4 @@
+import { site, sitePaths } from "@/config/sites";
 export default function NavbarSkeleton() {
   return (
     <nav className="navbar navbar-expand-lg navbar-light style-4 header-white">
@@ -6,8 +7,8 @@ export default function NavbarSkeleton() {
           <a className="navbar-brand" href="/">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/sfs_logo.svg"
-              alt="SUVs For Sale"
+              src={site.logo}
+              alt={site.title}
               width={150}
               height={22}
             />
@@ -24,7 +25,7 @@ export default function NavbarSkeleton() {
           <div className="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
             <ul className="navbar-nav mb-2 mb-lg-0">
               <li className="nav-item">
-                <a className="nav-link" href="/sell-my-suv/">Sell My SUV</a>
+                <a className="nav-link" href={sitePaths.sell}>Sell My {site.singular}</a>
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="/dealer-advertising/">Dealer Advertising</a>

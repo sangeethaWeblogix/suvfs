@@ -1,5 +1,7 @@
 'use client'
 
+import { site } from "@/config/sites";
+
 import Link from 'next/link'
 
 export default function PrivacyCollectionStatement() {
@@ -32,7 +34,7 @@ export default function PrivacyCollectionStatement() {
               <p>These platforms may include, but are not limited to:</p>
 
               <ul>
-                <li>suvforsale.com.au</li>
+                <li>{site.domain}</li>
                 
               </ul>
 

@@ -1,9 +1,10 @@
 // src/app/listings-sitemap.xml/route.ts
 import { NextResponse } from "next/server";
+import { site } from "@/config/sites";
  const API_KEY = process.env.MPN_API_KEY; // ✅ Add at top of file
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://www.caravansforsale.com.au";
+  process.env.NEXT_PUBLIC_SITE_URL || site.url;
 
  export async function GET() {
   try {

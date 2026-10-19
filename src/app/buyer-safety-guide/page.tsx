@@ -1,11 +1,12 @@
 import { Metadata } from "next";
+import { site } from "@/config/sites";
 import Statement from "./statement";
 import "./statement.css?=123";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const metaTitle = "Buyer Safety Guide - SuvForSale";
+  const metaTitle = `Buyer Safety Guide - ${site.brand}`;
   const metaDescription =
-    "Learn how to buy an SUV safely on SuvForSale.com.au. Follow our buyer safety checklist including VIN checks, PPSR searches, secure payments, and scam prevention tips.";
+    `Learn how to buy ${site.article} ${site.noun} safely on ${site.brand}. Follow our buyer safety checklist including VIN checks, PPSR searches, secure payments, and scam prevention tips.`;
 
   const robots = "index";
 
@@ -15,13 +16,13 @@ export async function generateMetadata(): Promise<Metadata> {
     robots: robots,
 
     alternates: {
-      canonical: "https://www.caravansforsale.com.au/buyer-safety-guide/",
+      canonical: `${site.url}/buyer-safety-guide/`,
     },
 
     openGraph: {
       title: metaTitle,
       description: metaDescription,
-      url: "https://www.caravansforsale.com.au/buyer-safety-guide/",
+      url: `${site.url}/buyer-safety-guide/`,
       type: "article",
     },
 

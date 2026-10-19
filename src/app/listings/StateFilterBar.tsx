@@ -1,4 +1,5 @@
 "use client";
+import { site } from "@/config/sites";
 import "../components/filter.css";
 import { useState, useEffect, useRef } from "react";
 import CategorySkeleton from "../components/CategorySkeleton";
@@ -418,7 +419,7 @@ export default function StateFilterBar({
   const toTitleCase = (s: string) => s.replace(/\b\w/g, c => c.toUpperCase());
 
   const withCaravanSuffix = (name: string) =>
-    /caravan/i.test(name) ? name : `${name} SUV`;
+    /caravan/i.test(name) ? name : `${name} ${site.singular}`;
 
   // WP's model list has no separate display name — `value`/`name` is just the
   // raw slug ("altea-402-ph-sport"). toTitleCase alone only capitalizes each
@@ -720,7 +721,7 @@ export default function StateFilterBar({
               <div className="slider-wrapper">
                 <div className="filter-swiper">
                   <button className={`tag${currentFilters.category ? " active" : ""}`} onClick={handleTypeOpen}>
-                    SUV Type
+                    {site.singular} Type
                     {currentFilters.category && <span className="active_filter"><i className="bi bi-circle-fill" /></span>}
                   </button>
 
@@ -913,7 +914,7 @@ export default function StateFilterBar({
 
               {/* Caravan Type */}
               <div className="filter-item pt-0">
-                <h4>SUV Type</h4>
+                <h4>{site.singular} Type</h4>
                 <ul className="loc-state-list">
                   {catLoading && categories.length === 0 ? (
                     <CategorySkeleton />
@@ -1299,7 +1300,7 @@ export default function StateFilterBar({
       {openModal === "type" && (
         <div className="filter-overlay">
           <div className="filter-modal">
-            <div className="filter-header"><h3>SUV Type</h3>{closeBtn}</div>
+            <div className="filter-header"><h3>{site.singular} Type</h3>{closeBtn}</div>
             <div className="filter-body">
               <div className="filter-item pt-0">
                 <ul className="loc-state-list">

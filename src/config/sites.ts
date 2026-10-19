@@ -65,7 +65,8 @@ export const SITES: Record<string, SiteConfig> = Object.fromEntries(
       title: `${s.plural} For Sale`,
       color: s.color ?? PLACEHOLDER_COLOR,
       colorRgb: s.colorRgb ?? PLACEHOLDER_RGB,
-      logo: s.logo ?? "/images/sfs_logo.svg",
+      // Placeholder text logos until real branding lands (public/sites/<key>/logo.svg).
+      logo: s.logo ?? `/sites/${s.key}/logo.svg`,
     } satisfies SiteConfig,
   ]),
 );

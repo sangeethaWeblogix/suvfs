@@ -9,6 +9,7 @@ import { useParams, useRouter } from "next/navigation";
 import {  type BlogPost, type BlogPageResult } from "@/api/blog/api";
 import { formatPostDate } from "@/utils/date";
 import { toSlug } from "@/utils/seo/slug";
+import { site } from "@/config/sites";
 import BlogCardSkelton from "../../components/blogCardSkeleton";
 
 // Build compact page list like [1, '…', 8, 9, 10, 11, 12, '…', 35]
@@ -83,35 +84,35 @@ const loading = !data || !blogPosts || blogPosts.length === 0 && data.totalPages
                 <div>
                   <h1 className="author-name">Tom</h1>
                   <h5 className="author-tagline">
-                    Author at SUVs For Sale
+                    Author at {site.title}
                   </h5>
                 </div>
               </div>
 
               <div className="author-info">
                 <p>
-                  Tom is a passionate SUV enthusiast and content writer at{" "}
-                  <Link href="https://www.caravansforsale.com.au/">
-                    SuvForSale.com.au
+                  Tom is a passionate {site.noun} enthusiast and content writer at{" "}
+                  <Link href={`${site.url}/`}>
+                    {site.brand}
                   </Link>{" "}
                   — Australia’s trusted destination for buying, selling, and
-                  researching SUVs.
+                  researching {site.nounPlural}.
                 </p>
                 <p>
                   He helps Australians make informed decisions across every
-                  stage of the SUV journey, from choosing the right model to
+                  stage of the {site.noun} journey, from choosing the right model to
                   comparing prices and discovering hidden gems from regional
                   manufacturers.
                 </p>
                 <p>
-                  Tom’s articles focus on off-road SUVs, touring models,
+                  Tom’s articles focus on off-road {site.nounPlural}, touring models,
                   hybrids, and family-friendly designs, offering practical
                   insights tailored to Australian conditions, travel habits, and
                   market trends.
                 </p>
                 <p>
                   With a genuine love for the outdoors, Tom’s writing reflects
-                  Australia’s SUV lifestyle — adventure, community, and
+                  Australia’s {site.noun} lifestyle — adventure, community, and
                   freedom on the open road.
                 </p>
               </div>

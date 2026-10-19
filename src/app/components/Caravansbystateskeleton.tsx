@@ -9,6 +9,7 @@
 //   • View All link → centered blue link
 // ─────────────────────────────────────────────────────────────
 
+import { site } from "@/config/sites";
 import React from "react";
 
 const STYLES = `
@@ -146,7 +147,7 @@ const CaravansByStateSkeleton: React.FC<{ count?: number }> = ({
     <div
       className="caravans_by_state related-products services section-padding style-1 pt-0"
       aria-busy="true"
-      aria-label="Loading SUVs by state…"
+      aria-label={`Loading ${site.plural} by state…`}
     >
       <div className="container">
         {/* Section heading */}

@@ -1,4 +1,5 @@
  import { parseSlugToFilters } from "@/app/components/urlBuilder";
+import { site } from "@/config/sites";
 import type { Metadata } from "next";
 import { INDEXABLE_URLS } from "./indexable-urls";
 import {
@@ -308,7 +309,7 @@ export function generateTitleFromFilters(
   // Keyword search: treat search term as the primary noun
   if (parsed.search) {
     const kw = titleCase(parsed.search);
-    const noun = /caravans?$/i.test(kw) ? kw : `${kw} SUVs`;
+    const noun = /caravans?$/i.test(kw) ? kw : `${kw} ${site.plural}`;
     return `${noun} for Sale${locationSuffix}`;
   }
 
@@ -324,7 +325,7 @@ export function generateTitleFromFilters(
   if (parsed.model) parts.push(titleCase(parsed.model));
   if (parsed.category) parts.push(titleCase(parsed.category));
 
-  const baseNoun = parts.length > 0 ? `${parts.join(" ")} SUVs` : "SUVs";
+  const baseNoun = parts.length > 0 ? `${parts.join(" ")} ${site.plural}` : site.plural;
   const band = getBandText(parsed);
   const bandPart = band ? ` ${band}` : "";
 
@@ -335,7 +336,7 @@ export async function metaFromSlug(
   filters: string[] = [],
   searchParams: Record<string, string | string[] | undefined> = {}
 ): Promise<Metadata> {
-  const BASE_URL = "https://www.caravansforsale.com.au";
+  const BASE_URL = site.url;
 
   const parsed = parseSlugToFilters(filters, searchParams);
 
@@ -380,7 +381,7 @@ export async function metaFromSlug(
 
   const title = generateTitleFromFilters(parsed);
   const description =
-    "Browse SUVs for sale across Australia. Compare prices on off-road, hybrid, pop top, touring, luxury models with size, weight & sleeping capacity.";
+    `Browse ${site.nounPlural} for sale across Australia. Compare prices on off-road, hybrid, pop top, touring, luxury models with size, weight & sleeping capacity.`;
 
   return {
     title: { absolute: title },
@@ -399,7 +400,7 @@ export async function metaFromSlug(
           url: "https://www.caravansforsale.com.au/images/cfs-logo.png",
           width: 800,
           height: 600,
-          alt: "SUVs for Sale Australia",
+          alt: `${site.plural} for Sale Australia`,
         },
       ],
     },

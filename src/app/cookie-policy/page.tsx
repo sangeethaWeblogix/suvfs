@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { site } from "@/config/sites";
 import Statement from "./statement";
 import "./statement.css?=123";
 
@@ -15,13 +16,13 @@ export async function generateMetadata(): Promise<Metadata> {
     robots: robots,
 
     alternates: {
-      canonical: "https://www.caravansforsale.com.au/cookie-policy/",
+      canonical: `${site.url}/cookie-policy/`,
     },
 
     openGraph: {
       title: metaTitle,
       description: metaDescription,
-      url: "https://www.caravansforsale.com.au/cookie-policy/",
+      url: `${site.url}/cookie-policy/`,
       type: "article",
     },
 

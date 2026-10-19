@@ -2,6 +2,7 @@
 
 import { Card, CardContent, Typography, Button } from "@mui/material";
 import Link from "next/link";
+import { site } from "@/config/sites";
 
 export default function ThankYouClient() {
   return (
@@ -42,11 +43,11 @@ export default function ThankYouClient() {
 
           <Typography variant="h5" fontWeight="bold" gutterBottom>
             Thank you for submitting your information with{" "}
-            <span style={{ color: "#000" }}>suvforsale.com.au</span>.
+            <span style={{ color: "#000" }}>{site.domain}</span>.
           </Typography>
 
           <Typography variant="body1" color="text.secondary" gutterBottom>
-            Your SUV dealer will contact you as soon as possible.
+            Your {site.noun} dealer will contact you as soon as possible.
           </Typography>
 
           <Link href="/" style={{ textDecoration: "none" }}>

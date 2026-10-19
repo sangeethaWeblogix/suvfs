@@ -6,6 +6,7 @@ import BackToTopButton from "./BackToTopButton";
 import FooterNav from "./FooterNav";
 import FooterPopularLocations from "./FooterPopularLocations";
 import SellByLocationLink from "./SellByLocationLink";
+import { site, sitePaths } from "@/config/sites";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- social links temporarily hidden
 const SOCIAL_LINKS = [
@@ -15,14 +16,14 @@ const SOCIAL_LINKS = [
 ];
 
 const BROWSE_LINKS = [
-  { label: "All SUVs for Sale", href: "/listings/" },
-  { label: "New SUVs", href: "/listings/new-condition/" },
-  { label: "Used SUVs", href: "/listings/used-condition/" },
-  { label: "Off Road SUVs", href: "/listings/off-road-category/" },
-  { label: "Hybrid SUVs", href: "/listings/hybrid-category/" },
-  { label: "Pop Top SUVs", href: "/listings/pop-top-category/" },
-  { label: "Touring SUVs", href: "/listings/touring-category/" },
-  { label: "Luxury SUVs", href: "/listings/luxury-category/" },
+  { label: `All ${site.plural} for Sale`, href: "/listings/" },
+  { label: `New ${site.plural}`, href: "/listings/new-condition/" },
+  { label: `Used ${site.plural}`, href: "/listings/used-condition/" },
+  { label: `Off Road ${site.plural}`, href: "/listings/off-road-category/" },
+  { label: `Hybrid ${site.plural}`, href: "/listings/hybrid-category/" },
+  { label: `Pop Top ${site.plural}`, href: "/listings/pop-top-category/" },
+  { label: `Touring ${site.plural}`, href: "/listings/touring-category/" },
+  { label: `Luxury ${site.plural}`, href: "/listings/luxury-category/" },
 ];
 
 const LOCATION_LINKS = [
@@ -56,7 +57,7 @@ const POPULAR_LOCATIONS = [
 ];
 
 const SELLER_LINKS = [
-  { label: "Sell My SUV", href: "/sell-my-suv/" },
+  { label: `Sell My ${site.singular}`, href: sitePaths.sell },
   { label: "Sell by Location", href: "#footer-sell-by-location" },
   { label: "Seller Login", href: "https://seller.marketplacenetwork.com.au/seller-login/" },
 ];
@@ -68,7 +69,7 @@ const DEALER_LINKS = [
 ];
 
 const GUIDE_LINKS = [
-  { label: "Off Road SUV Hub", href: "/off-road-caravans/", accent: true },
+  { label: `Off Road ${site.singular} Hub`, href: "/off-road-caravans/", accent: true },
   { label: "Blog", href: "/blog/" },
   { label: "Buyer Safety Guide", href: "/buyer-safety-guide/", nofollow: true },
   { label: "About Us", href: "/about-us/" },
@@ -77,7 +78,7 @@ const GUIDE_LINKS = [
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- network section temporarily hidden
 const NETWORK_SITES = [
-  { logo: "/images/our_sites/cfs-logo-black.svg", w: 556, h: 60, href: "", label: "SUVs" },
+  { logo: "/images/our_sites/cfs-logo-black.svg", w: 556, h: 60, href: "", label: site.plural },
   { logo: "/images/our_sites/mfs-logo.svg", w: 633, h: 63, href: "https://www.motorhomesforsale.com.au/", label: "Motorhomes" },
   { logo: "/images/our_sites/camper_logo.svg", w: 1159, h: 141, href: "https://www.campervansforsale.au/", label: "Campervans" },
   { logo: "/images/our_sites/cts-logo.svg", w: 688, h: 64, href: "https://www.campingtrailersforsale.com.au/", label: "Camper Trailers" },
@@ -100,7 +101,7 @@ const Footer = () => {
           {/* ── Link columns ── */}
           <div className="cfs-footer__columns">
             <div className="cfs-footer__col">
-              <h4 className="cfs-footer__col-title">Browse SUVs</h4>
+              <h4 className="cfs-footer__col-title">Browse {site.plural}</h4>
               <ul>
                 {BROWSE_LINKS.map((l) => (
                   <li key={l.label}><a href={l.href}>{l.label}</a></li>

@@ -1,21 +1,22 @@
 import Link from "next/link";
 import "./not-found.css";
 import Notfound from "./searchError";
+import { site } from "@/config/sites";
 
 export const metadata = {
-  title: "404 - Page Not Found | SUVs For Sale",
-  description: "The page you're looking for doesn't exist or has been moved. Browse our range of SUVs for sale across Australia.",
+  title: `404 - Page Not Found | ${site.title}`,
+  description: `The page you're looking for doesn't exist or has been moved. Browse our range of ${site.nounPlural} for sale across Australia.`,
   robots: "noindex, nofollow",
 };
 
 export default function NotFoundPage() {
   const categories = [
-    { name: "Off Road SUVs", slug: "off-road-category" },
-    { name: "Hybrid SUVs", slug: "hybrid-category" },
-    { name: "Pop Top SUVs", slug: "pop-top-category" },
-    { name: "Luxury SUVs", slug: "luxury-category" },
-    { name: "Family SUVs", slug: "family-category" },
-    { name: "Touring SUVs", slug: "touring-category" },
+    { name: `Off Road ${site.plural}`, slug: "off-road-category" },
+    { name: `Hybrid ${site.plural}`, slug: "hybrid-category" },
+    { name: `Pop Top ${site.plural}`, slug: "pop-top-category" },
+    { name: `Luxury ${site.plural}`, slug: "luxury-category" },
+    { name: `Family ${site.plural}`, slug: "family-category" },
+    { name: `Touring ${site.plural}`, slug: "touring-category" },
   ];
 
   const states = [
@@ -39,7 +40,7 @@ export default function NotFoundPage() {
           404
         </h1>
         <p className="err-sub">
-          Oops! The SUV or page you’re looking for isn’t available.
+          Oops! The {site.noun} or page you’re looking for isn’t available.
         </p>
 
         <div className="search-wrap">
@@ -53,7 +54,7 @@ export default function NotFoundPage() {
             Go to Homepage
           </Link>
           <a className="btn btn-outline" href="/listings/">
-            Browse SUVs
+            Browse {site.plural}
           </a>
         </div>
 

@@ -1,3 +1,4 @@
+import { site } from "@/config/sites";
 import { getRegionsByState } from "../sell-my-caravan-region/regions-data";
 
 export function toStateSlug(state: string): string {
@@ -31,12 +32,12 @@ export const STATES = [
 ];
 
 export const TYPES_NO_STATE = [
-  { label: "Off Road SUVs", href: "/listings/off-road-category/" },
-  { label: "Luxury SUVs",   href: "/listings/luxury-category/" },
-  { label: "Hybrid SUVs",   href: "/listings/hybrid-category/" },
-  { label: "Pop Top SUVs",  href: "/listings/pop-top-category/" },
-  { label: "Touring SUVs",  href: "/listings/touring-category/" },
-  { label: "Family SUVs",   href: "/listings/family-category/" },
+  { label: `Off Road ${site.plural}`, href: "/listings/off-road-category/" },
+  { label: `Luxury ${site.plural}`,   href: "/listings/luxury-category/" },
+  { label: `Hybrid ${site.plural}`,   href: "/listings/hybrid-category/" },
+  { label: `Pop Top ${site.plural}`,  href: "/listings/pop-top-category/" },
+  { label: `Touring ${site.plural}`,  href: "/listings/touring-category/" },
+  { label: `Family ${site.plural}`,   href: "/listings/family-category/" },
 ];
 
 export const FILTERS_NO_STATE = [

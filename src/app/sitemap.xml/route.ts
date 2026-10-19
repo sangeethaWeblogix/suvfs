@@ -1,9 +1,10 @@
 // src/app/sitemap.xml/route.ts
 import { NextResponse } from "next/server";
+import { site } from "@/config/sites";
 
 export async function GET() {
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://www.caravansforsale.com.au";
+    process.env.NEXT_PUBLIC_SITE_URL || site.url;
 
   const sitemaps = [
     "general-sitemap.xml",

@@ -1,3 +1,4 @@
+import { site } from "@/config/sites";
 /* Visitor status (as | uk | ps) + entry source for the GTM dataLayer.
    Kept internally (storage + dataLayer) — the page URL is never changed.
    Read by <VisitorStatus /> (every page view) and <VisitorQualifier /> (on qualification). */
@@ -46,7 +47,7 @@ function detectFromLanding(): EntrySource | null {
 
   let host = "";
   try { host = document.referrer ? new URL(document.referrer).hostname.toLowerCase() : ""; } catch {}
-  if (!host || host === window.location.hostname || host.endsWith(".caravansforsale.com.au")) return null;
+  if (!host || host === window.location.hostname || host.endsWith(`.${site.domain}`)) return null;
 
   const engine = SEARCH_ENGINES.find(([re]) => re.test(host));
   if (engine) return { source: engine[1], medium: "organic" };

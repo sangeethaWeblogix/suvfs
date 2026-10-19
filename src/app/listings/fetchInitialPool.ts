@@ -11,6 +11,7 @@
  * contains real product listings from the first byte.
  */
 
+import { site } from "@/config/sites";
 import { Listing, SeoV2, bucketPoolResponse, bucketPoolResponseCombined } from "./listingShared";
 import type { InitialPool } from "./home";
 import type { FilterState } from "./StateFilterBar";
@@ -18,7 +19,7 @@ import type { FilterState } from "./StateFilterBar";
 const CF_ACCOUNT_ID   = process.env.CF_ACCOUNT_ID;
 const CF_NAMESPACE_ID = process.env.CF_KV_NAMESPACE_ID;
 const CF_API_TOKEN    = process.env.CF_API_TOKEN;
-const APP_URL         = process.env.NEXT_PUBLIC_APP_URL || "https://www.caravansforsale.com.au";
+const APP_URL         = process.env.NEXT_PUBLIC_APP_URL || site.url;
 // Direct WP API — used when seed > 0 to bypass Cloudflare's pool cache (which strips seed).
 const WP_API_BASE     = process.env.NEXT_PUBLIC_CFS_API_BASE;
 const WP_API_KEY      = process.env.MPN_API_KEY;

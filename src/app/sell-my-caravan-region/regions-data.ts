@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { site, sitePaths } from "@/config/sites";
 
 export interface StateInfo {
   slug: string;
@@ -8,7 +9,7 @@ export interface StateInfo {
 export interface RegionInfo {
   /** Internal slug (legacy, used by old /sell-my-caravan-region/[slug] route) */
   slug: string;
-  /** Clean URL slug for new nested route: /sell-my-suv/{state}/{pageSlug}/ */
+  /** Clean URL slug for new nested route: /sell-my-<slug>/{state}/{pageSlug}/ (sitePaths.sell) */
   pageSlug: string;
   label: string;
   state: StateInfo;
@@ -115,21 +116,21 @@ export function getRegionsByState(stateSlug: string): RegionInfo[] {
   return ALL_REGIONS.filter((r) => r.state.slug === stateSlug);
 }
 
-const BASE_URL = "https://www.caravansforsale.com.au";
+const BASE_URL = site.url;
 
 export function buildRegionMetadata(region: RegionInfo): Metadata {
   return {
-    title: `Sell My SUV in ${region.label} | List Until Sold for $49`,
-    description: `Sell your SUV in ${region.label} for just $49. List until sold, pay no commission and connect directly with SUV buyers across ${region.label} and ${region.state.label}.`,
+    title: `Sell My ${site.singular} in ${region.label} | List Until Sold for $49`,
+    description: `Sell your ${site.noun} in ${region.label} for just $49. List until sold, pay no commission and connect directly with ${site.noun} buyers across ${region.label} and ${region.state.label}.`,
     robots: "index, follow",
     alternates: {
-      canonical: `${BASE_URL}/sell-my-suv/${region.state.slug}/${region.pageSlug}/`,
+      canonical: `${BASE_URL}${sitePaths.sell}${region.state.slug}/${region.pageSlug}/`,
     },
   };
 }
 
 export function buildRegionJsonLd(region: RegionInfo) {
-  const pageUrl = `${BASE_URL}/sell-my-suv/${region.state.slug}/${region.pageSlug}/`;
+  const pageUrl = `${BASE_URL}${sitePaths.sell}${region.state.slug}/${region.pageSlug}/`;
 
   return {
     "@context": "https://schema.org",
@@ -138,20 +139,20 @@ export function buildRegionJsonLd(region: RegionInfo) {
         "@type": "WebPage",
         "@id": `${pageUrl}#webpage`,
         url: pageUrl,
-        name: `Sell My SUV in ${region.label} | List Until Sold for $49`,
-        description: `Sell your SUV in ${region.label}, ${region.state.label} with SuvForSale.com.au. List your SUV for a one-time $49 fee, keep 100% of the sale price, and stay live until sold.`,
+        name: `Sell My ${site.singular} in ${region.label} | List Until Sold for $49`,
+        description: `Sell your ${site.noun} in ${region.label}, ${region.state.label} with ${site.brand}. List your ${site.noun} for a one-time $49 fee, keep 100% of the sale price, and stay live until sold.`,
         inLanguage: "en-AU",
         isPartOf: { "@id": `${BASE_URL}/#website` },
       },
       {
         "@type": "Service",
         "@id": `${pageUrl}#service`,
-        name: "Private SUV Listing Service",
+        name: `Private ${site.singular} Listing Service`,
         url: pageUrl,
-        description: `List your SUV for sale on SuvForSale.com.au for a one-time $49 fee. No commissions, no subscriptions, live until sold.`,
+        description: `List your ${site.noun} for sale on ${site.brand} for a one-time $49 fee. No commissions, no subscriptions, live until sold.`,
         provider: {
           "@type": "Organization",
-          name: "SUVs For Sale",
+          name: site.title,
           url: BASE_URL,
         },
         areaServed: {
@@ -171,34 +172,34 @@ export function buildRegionJsonLd(region: RegionInfo) {
         mainEntity: [
           {
             "@type": "Question",
-            name: `How do I sell my SUV in ${region.label}?`,
+            name: `How do I sell my ${site.noun} in ${region.label}?`,
             acceptedAnswer: {
               "@type": "Answer",
-              text: `You can sell your SUV in ${region.label} by creating a private seller listing on SuvForSale.com.au. Add your SUV details, upload clear photos, set your asking price and publish your ad so buyers in ${region.label} and across ${region.state.label} can contact you directly.`,
+              text: `You can sell your ${site.noun} in ${region.label} by creating a private seller listing on ${site.brand}. Add your ${site.noun} details, upload clear photos, set your asking price and publish your ad so buyers in ${region.label} and across ${region.state.label} can contact you directly.`,
             },
           },
           {
             "@type": "Question",
-            name: `How much does it cost to sell my SUV in ${region.label}?`,
+            name: `How much does it cost to sell my ${site.noun} in ${region.label}?`,
             acceptedAnswer: {
               "@type": "Answer",
-              text: "It costs $49 inc. GST to list your SUV on SuvForSale.com.au. This is a one-time listing fee with no monthly subscription, no hidden charges and no commission when your SUV sells.",
+              text: `It costs $49 inc. GST to list your ${site.noun} on ${site.brand}. This is a one-time listing fee with no monthly subscription, no hidden charges and no commission when your ${site.noun} sells.`,
             },
           },
           {
             "@type": "Question",
-            name: "How long does my SUV listing stay live?",
+            name: `How long does my ${site.noun} listing stay live?`,
             acceptedAnswer: {
               "@type": "Answer",
-              text: "Your SUV listing stays live until sold. You do not need to keep paying monthly fees to keep your ad active. Once your SUV is sold, you can remove the listing from the website.",
+              text: `Your ${site.noun} listing stays live until sold. You do not need to keep paying monthly fees to keep your ad active. Once your ${site.noun} is sold, you can remove the listing from the website.`,
             },
           },
           {
             "@type": "Question",
-            name: "Can I edit my SUV listing after publishing?",
+            name: `Can I edit my ${site.noun} listing after publishing?`,
             acceptedAnswer: {
               "@type": "Answer",
-              text: "Yes. After your listing is published, you can update your SUV details, change the asking price, add or replace photos and improve your description if needed.",
+              text: `Yes. After your listing is published, you can update your ${site.noun} details, change the asking price, add or replace photos and improve your description if needed.`,
             },
           },
           {
@@ -206,28 +207,28 @@ export function buildRegionJsonLd(region: RegionInfo) {
             name: "How do buyers contact me?",
             acceptedAnswer: {
               "@type": "Answer",
-              text: "Interested buyers can contact you directly through your SUV listing. This allows you to answer questions, arrange inspections, negotiate the price and manage the sale privately.",
+              text: `Interested buyers can contact you directly through your ${site.noun} listing. This allows you to answer questions, arrange inspections, negotiate the price and manage the sale privately.`,
             },
           },
           {
             "@type": "Question",
-            name: "Do I pay commission when my SUV sells?",
+            name: `Do I pay commission when my ${site.noun} sells?`,
             acceptedAnswer: {
               "@type": "Answer",
-              text: "No. SuvForSale.com.au does not charge commission when your SUV sells. You pay the one-time listing fee and keep 100% of the agreed sale price.",
+              text: `No. ${site.brand} does not charge commission when your ${site.noun} sells. You pay the one-time listing fee and keep 100% of the agreed sale price.`,
             },
           },
           {
             "@type": "Question",
-            name: "How should I price my SUV?",
+            name: `How should I price my ${site.noun}?`,
             acceptedAnswer: {
               "@type": "Answer",
-              text: `Check similar SUVs for sale in ${region.label} before setting your price. Compare by make, model, year, condition, length, ATM, tare weight, sleeping capacity, features and location. A realistic asking price can help attract more genuine buyers.`,
+              text: `Check similar ${site.nounPlural} for sale in ${region.label} before setting your price. Compare by make, model, year, condition, length, ATM, tare weight, sleeping capacity, features and location. A realistic asking price can help attract more genuine buyers.`,
             },
           },
           {
             "@type": "Question",
-            name: "Is it safe to sell my SUV privately online?",
+            name: `Is it safe to sell my ${site.noun} privately online?`,
             acceptedAnswer: {
               "@type": "Answer",
               text: `Yes, but you should take normal precautions. Speak with buyers directly, meet in a safe location, confirm payment has cleared before handover and complete any required transfer paperwork for ${region.state.label}`,
@@ -235,10 +236,10 @@ export function buildRegionJsonLd(region: RegionInfo) {
           },
           {
             "@type": "Question",
-            name: "Can I remove my listing after my SUV is sold?",
+            name: `Can I remove my listing after my ${site.noun} is sold?`,
             acceptedAnswer: {
               "@type": "Answer",
-              text: "Yes. Once your SUV has sold, you can remove your listing so buyers know it is no longer available.",
+              text: `Yes. Once your ${site.noun} has sold, you can remove your listing so buyers know it is no longer available.`,
             },
           },
         ],

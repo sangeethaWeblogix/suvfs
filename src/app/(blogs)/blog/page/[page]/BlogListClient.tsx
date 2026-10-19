@@ -12,6 +12,7 @@ import { toSlug } from "@/utils/seo/slug";
 import BlogCardSkelton from "../../../../components/blogCardSkeleton";
 import { useBanners } from "@/components/BannerHandler";
 import { useBannerTracking } from "@/hooks/useBannerTracking";
+import { site, sitePaths } from "@/config/sites";
 
 // Build compact page list like [1, '…', 8, 9, 10, 11, 12, '…', 35]
 function buildPageList(current: number, total: number, delta = 2) {
@@ -239,16 +240,16 @@ const loading = !data || !blogPosts || blogPosts.length === 0 && data.totalPages
             <div className="col-lg-3">
               <div className="display_ad listing_sticky">
                 <div className="blog-sidebar-cta">
-                  <h3 className="blog-sidebar-cta__heading">Ready to Find Your Next SUV?</h3>
-                  <p className="blog-sidebar-cta__desc">Browse thousands of new and used SUVs from trusted dealers and private sellers across Australia.</p>
+                  <h3 className="blog-sidebar-cta__heading">Ready to Find Your Next {site.singular}?</h3>
+                  <p className="blog-sidebar-cta__desc">Browse thousands of new and used {site.nounPlural} from trusted dealers and private sellers across Australia.</p>
                   <a href="/listings/" className="blog-sidebar-cta__btn">
-                    Search SUVs Now <i className="bi bi-arrow-right" />
+                    Search {site.plural} Now <i className="bi bi-arrow-right" />
                   </a>
                 </div>
                 <div className="blog-sidebar-cta blog-sidebar-cta--sell">
-                  <h3 className="blog-sidebar-cta__heading">Sell Your SUV Faster with Australia&apos;s Growing SUV Marketplace</h3>
-                  <a href="/sell-my-suv/" className="blog-sidebar-cta__btn">
-                    List Your SUV Now <i className="bi bi-arrow-right" />
+                  <h3 className="blog-sidebar-cta__heading">Sell Your {site.singular} Faster with Australia&apos;s Growing {site.singular} Marketplace</h3>
+                  <a href={sitePaths.sell} className="blog-sidebar-cta__btn">
+                    List Your {site.singular} Now <i className="bi bi-arrow-right" />
                   </a>
                 </div>
                 {false &&

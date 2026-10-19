@@ -1,4 +1,5 @@
  import { Metadata } from "next";
+import { site } from "@/config/sites";
 import { ReactNode } from "react";
 
 
@@ -16,15 +17,15 @@ import { ReactNode } from "react";
      google: "6tT6MT6AJgGromLaqvdnyyDQouJXq0VHS-7HC194xEo", // ✅ this auto generates <meta name="google-site-verification" />
    },
    alternates: {
-    canonical: "https://www.caravansforsale.com.au/privacy-policy/",
+    canonical: `${site.url}/privacy-policy/`,
 
    },
    
    openGraph: {
-      url: "https://www.caravansforsale.com.au/privacy-policy/",
-     title: "Privacy Policy - suvforsale.com.au - SUV Marketplace",
+      url: `${site.url}/privacy-policy/`,
+     title: `Privacy Policy - ${site.domain} - ${site.singular} Marketplace`,
        description:
-     "Learn about SUV Marketplace's privacy policy on data collection, usage, security measures, and your rights regarding your information.",
+     `Learn about ${site.singular} Marketplace's privacy policy on data collection, usage, security measures, and your rights regarding your information.`,
      
    },
  };

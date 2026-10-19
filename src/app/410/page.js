@@ -7,9 +7,10 @@ import StateHome from "@/app/listings/home";
 import { parseDemoFilters, buildListingsSlug } from "@/app/listings/urlUtils";
 import { fetchBrowseSectionData } from "@/app/listings/fetchBrowseSectionData";
 import { fetchInitialPool } from "@/app/listings/fetchInitialPool";
+import { site } from "@/config/sites";
 
 export const metadata = {
-  title: "410 - Page Permanently Removed | SUVs For Sale",
+  title: `410 - Page Permanently Removed | ${site.title}`,
   description:
     "This page has been permanently removed and is no longer available.",
   robots: { index: false, follow: false },

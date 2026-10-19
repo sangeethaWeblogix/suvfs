@@ -3,6 +3,7 @@
  import { redirect } from "next/navigation";
  import { Metadata } from "next";
  import { fetchProductDetail } from "@/utils/fetchProductDetail";
+ import { site } from "@/config/sites";
  import './product.css?=30006'
  
  export const dynamic = "force-dynamic";
@@ -70,9 +71,9 @@
    const seo = data?.seo ?? data?.product?.seo ?? {};
    const slugTitle = slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
  
-   const title = seo.metatitle || seo.meta_title || pd.name || data?.name || slugTitle || "SUV for Sale";
-   const description = seo.metadescription || seo.meta_description || pd.short_description || "View SUV details on SUVs For Sale Australia.";
-   const canonicalUrl = `https://www.caravansforsale.com.au/product/${slug}/`;
+   const title = seo.metatitle || seo.meta_title || pd.name || data?.name || slugTitle || `${site.singular} for Sale`;
+   const description = seo.metadescription || seo.meta_description || pd.short_description || `View ${site.noun} details on ${site.title} Australia.`;
+   const canonicalUrl = `${site.url}/product/${slug}/`;
    const rawImages = pd.image_url ?? pd.images ?? [];
    const images: string[] = (Array.isArray(rawImages) ? rawImages : [rawImages]).filter(Boolean);
  
@@ -86,7 +87,7 @@
        title,
        description,
        url: canonicalUrl,
-       siteName: "SUVs for Sale",
+       siteName: `${site.plural} for Sale`,
        ...(images.length > 0 && { images: [{ url: images[0], alt: title }] }),
        type: "website",
      },

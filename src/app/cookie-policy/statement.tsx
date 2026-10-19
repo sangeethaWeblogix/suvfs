@@ -1,5 +1,7 @@
 'use client'
 
+import { site } from "@/config/sites";
+
 export default function CookiePolicy() {
   return (
     <section className="services static_page section-padding pt-30 pb-30 style-1">
@@ -24,7 +26,7 @@ export default function CookiePolicy() {
               </p>
 
               <ul>
-                <li>suvforsale.com.au</li>
+                <li>{site.domain}</li>
                 
               </ul>
 

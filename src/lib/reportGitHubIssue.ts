@@ -1,3 +1,4 @@
+import { site } from "@/config/sites";
 const GITHUB_OWNER = "sangeethaWeblogix";
 const GITHUB_REPO = "caravansforsale-main-LIVE";
 const GITHUB_API = "https://api.github.com";
@@ -159,7 +160,7 @@ ${payload.message}
 - [ ] Confirm API response time is under 30s
 
 ---
-*Auto-reported by production error handler — suvforsale.com.au*`;
+*Auto-reported by production error handler — ${site.domain}*`;
 
     await fetch(`${GITHUB_API}/repos/${GITHUB_OWNER}/${GITHUB_REPO}/issues`, {
       method: "POST",

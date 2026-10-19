@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { getLocationLabel } from "../home-demo/locationUtils";
+import { site } from "@/config/sites";
 
 type Listing = {
   id: number;
@@ -20,7 +21,7 @@ type Listing = {
 export default function BlogFeaturedListings({ products, category }: { products: Listing[]; category?: string }) {
   if (!products?.length) return null;
 
-  const heading = category ? `Featured ${category} SUVs for Sale` : "Featured SUVs for Sale";
+  const heading = category ? `Featured ${category} ${site.plural} for Sale` : `Featured ${site.plural} for Sale`;
 
   return (
     <section className="bfl-section">

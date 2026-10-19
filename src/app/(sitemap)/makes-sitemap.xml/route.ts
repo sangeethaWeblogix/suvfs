@@ -1,8 +1,9 @@
    import { NextResponse } from "next/server";
+import { site } from "@/config/sites";
  
  const SITE_URL =
    process.env.NEXT_PUBLIC_SITE_URL ||
-   "https://www.caravansforsale.com.au/listings/";
+   `${site.url}/listings/`;
      const MPN_API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
      const API_KEY = process.env.MPN_API_KEY; // ✅ Added
 

@@ -1,20 +1,21 @@
   import { Metadata } from "next";
 import { ReactNode } from "react";
+import { site } from "@/config/sites";
 
 
 
 
  export const metadata: Metadata = {
-   title: "Login | SUVs For Sale – Dealer & Private Seller Access",
+   title: `Login | ${site.title} – Dealer & Private Seller Access`,
   description:
-     "Access your SuvForSale.com.au account. Private sellers and dealers can log in to manage listings, post SUVs for sale, and connect with thousands of buyers across Australia.",
+     `Access your ${site.brand} account. Private sellers and dealers can log in to manage listings, post ${site.nounPlural} for sale, and connect with thousands of buyers across Australia.`,
    icons: { icon: "/favicon.ico" },
    robots: "index, follow",
    verification: {
      google: "6tT6MT6AJgGromLaqvdnyyDQouJXq0VHS-7HC194xEo", // ✅ this auto generates <meta name="google-site-verification" />
    },
    alternates: {
-    canonical: "https://www.caravansforsale.com.au/login/",
+    canonical: `${site.url}/login/`,
    },
    
  

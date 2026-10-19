@@ -1,4 +1,5 @@
  import { cache } from "react";
+import { site } from "@/config/sites";
 import { parseSlugToFilters } from "@/app/components/urlBuilder";
 
 /** Local shapes for the /pool response fields this file actually reads —
@@ -36,7 +37,7 @@ type ApiResponse = {
   emp_exclusive_products?: Item[];
 };
 
-const BASE_URL = "https://www.caravansforsale.com.au";
+const BASE_URL = site.url;
 const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
 const API_KEY = process.env.MPN_API_KEY;
 
@@ -225,14 +226,14 @@ export function buildListingsJsonLd(
   const pageTitle =
     response?.seo_v2?.h1 ||
     response?.seo_v2?.meta_title ||
-    "SUVs for Sale in Australia";
+    `${site.plural} for Sale in Australia`;
   const totalProducts = response?.pagination?.total_products ?? 0;
 
   const allProducts = [
     ...(response.data?.products || []),
     ...(response.data?.emp_exclusive_products || []),
   ];
-const weburl = "https://www.caravansforsale.com.au"
+const weburl = site.url
 
   const footerDescription = response?.seo_v2?.footer_description
     ? stripHtml(response.seo_v2.footer_description)
@@ -284,7 +285,7 @@ const weburl = "https://www.caravansforsale.com.au"
   const searchResultsLd = {
     "@context": "https://schema.org/",
     "@type": "SearchResultsPage",
-    audience: { "@type": "Audience", audienceType: "SUV buyers" },
+    audience: { "@type": "Audience", audienceType: `${site.singular} buyers` },
     potentialAction: {
       "@type": "SearchAction",
       target: { "@type": "EntryPoint", urlTemplate: weburl },
@@ -325,7 +326,7 @@ const fetchListingsForHead = cache(
 export function buildBreadcrumbs(pathname: string): { name: string; url: string }[] {
   const crumbs: { name: string; url: string }[] = [
     { name: "Home", url: `${BASE_URL}/` },
-    { name: "SUVs for Sale", url: `${BASE_URL}/listings/` },
+    { name: `${site.plural} for Sale`, url: `${BASE_URL}/listings/` },
   ];
   if (pathname === "/listings/" || pathname === "/listings") return crumbs;
 

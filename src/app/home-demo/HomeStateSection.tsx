@@ -6,6 +6,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import CaravansByStateSkeleton from "../components/Caravansbystateskeleton";
+import { site } from "@/config/sites";
 
 interface Item {
   state: string;
@@ -49,7 +50,7 @@ export default function HomeStateSection({ stateBands }: Props) {
         <div className="row">
           <div className="col">
             <div className="section-head mb-4">
-              <h2 className="hd-section-title">Browse SUVs for Sale in Australia by State</h2>
+              <h2 className="hd-section-title">Browse {site.plural} for Sale in Australia by State</h2>
             </div>
           </div>
         </div>
@@ -94,7 +95,7 @@ export default function HomeStateSection({ stateBands }: Props) {
                             <div className="quick_linkss">
                               <p>{item.display_text}</p>
                               <a className="view_all" href={buildStateHref(item.permalink)}>
-                                View All SUVs for Sale in {meta.code}{" "}
+                                View All {site.plural} for Sale in {meta.code}{" "}
                                 <i className="bi bi-chevron-right" />
                               </a>
                             </div>

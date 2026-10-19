@@ -12,6 +12,7 @@
  import { formatPostDate } from "@/utils/date";
  import { useBanners } from "@/components/BannerHandler";
  import { useBannerTracking } from "@/hooks/useBannerTracking";
+ import { site, sitePaths } from "@/config/sites";
  
  // WP occasionally stores an image URL with a doubled protocol
  // (e.g. "https://https://...") from a bad admin copy-paste — that malformed
@@ -65,14 +66,14 @@
      viewAll: { text: "View all locations", href: "/listings/" },
      links: [],
      states: [
-       { text: "SUVs for Sale in Victoria",          href: "/listings/victoria-state/" },
-       { text: "SUVs for Sale in New South Wales",   href: "/listings/new-south-wales-state/" },
-       { text: "SUVs for Sale in Queensland",        href: "/listings/queensland-state/" },
-       { text: "SUVs for Sale in South Australia",   href: "/listings/south-australia-state/" },
-       { text: "SUVs for Sale in Western Australia", href: "/listings/western-australia-state/" },
-       { text: "SUVs for Sale in Tasmania",          href: "/listings/tasmania-state/" },
-       { text: "SUVs for Sale in ACT",               href: "/listings/australian-capital-territory-state/" },
-       { text: "SUVs for Sale in Northern Territory",href: "/listings/northern-territory-state/" },
+       { text: `${site.plural} for Sale in Victoria`,          href: "/listings/victoria-state/" },
+       { text: `${site.plural} for Sale in New South Wales`,   href: "/listings/new-south-wales-state/" },
+       { text: `${site.plural} for Sale in Queensland`,        href: "/listings/queensland-state/" },
+       { text: `${site.plural} for Sale in South Australia`,   href: "/listings/south-australia-state/" },
+       { text: `${site.plural} for Sale in Western Australia`, href: "/listings/western-australia-state/" },
+       { text: `${site.plural} for Sale in Tasmania`,          href: "/listings/tasmania-state/" },
+       { text: `${site.plural} for Sale in ACT`,               href: "/listings/australian-capital-territory-state/" },
+       { text: `${site.plural} for Sale in Northern Territory`,href: "/listings/northern-territory-state/" },
      ],
      regions: [
        { text: "Melbourne",     href: "/listings/victoria-state/melbourne-region/" },
@@ -98,34 +99,34 @@
      icon: "bi-buildings",
      viewAll: { text: "View all manufacturers", href: "/caravan-manufacturers/" },
      links: [
-       { text: "Jayco SUVs for Sale",       href: "/listings/jayco/" },
-       { text: "Snowy River SUVs for Sale", href: "/listings/snowy-river/" },
-       { text: "Evernew SUVs for Sale",     href: "/listings/evernew/" },
-       { text: "Crusader SUVs for Sale",    href: "/listings/crusader/" },
-       { text: "New Age SUVs for Sale",     href: "/listings/new-age/" },
-       { text: "MDC SUVs for Sale",         href: "/listings/mdc/" },
-       { text: "Essential SUVs for Sale",   href: "/listings/essential/" },
-       { text: "Design RV SUVs for Sale",   href: "/listings/design-rv/" },
-       { text: "JB SUVs for Sale",          href: "/listings/jb/" },
-       { text: "Supreme SUVs for Sale",     href: "/listings/supreme/" },
-       { text: "Avan SUVs for Sale",        href: "/listings/avan/" },
-       { text: "Lotus SUVs for Sale",       href: "/listings/lotus/" },
-       { text: "Royal Flair SUVs for Sale", href: "/listings/royal-flair/" },
-       { text: "Windsor SUVs for Sale",     href: "/listings/windsor/" },
-       { text: "Golf SUVs for Sale",        href: "/listings/golf/" },
-       { text: "Nova SUVs for Sale",        href: "/listings/nova/" },
-       { text: "Retreat SUVs for Sale",     href: "/listings/retreat/" },
-       { text: "Adria SUVs for Sale",       href: "/listings/adria/" },
-       { text: "Coromal SUVs for Sale",     href: "/listings/coromal/" },
+       { text: `Jayco ${site.plural} for Sale`,       href: "/listings/jayco/" },
+       { text: `Snowy River ${site.plural} for Sale`, href: "/listings/snowy-river/" },
+       { text: `Evernew ${site.plural} for Sale`,     href: "/listings/evernew/" },
+       { text: `Crusader ${site.plural} for Sale`,    href: "/listings/crusader/" },
+       { text: `New Age ${site.plural} for Sale`,     href: "/listings/new-age/" },
+       { text: `MDC ${site.plural} for Sale`,         href: "/listings/mdc/" },
+       { text: `Essential ${site.plural} for Sale`,   href: "/listings/essential/" },
+       { text: `Design RV ${site.plural} for Sale`,   href: "/listings/design-rv/" },
+       { text: `JB ${site.plural} for Sale`,          href: "/listings/jb/" },
+       { text: `Supreme ${site.plural} for Sale`,     href: "/listings/supreme/" },
+       { text: `Avan ${site.plural} for Sale`,        href: "/listings/avan/" },
+       { text: `Lotus ${site.plural} for Sale`,       href: "/listings/lotus/" },
+       { text: `Royal Flair ${site.plural} for Sale`, href: "/listings/royal-flair/" },
+       { text: `Windsor ${site.plural} for Sale`,     href: "/listings/windsor/" },
+       { text: `Golf ${site.plural} for Sale`,        href: "/listings/golf/" },
+       { text: `Nova ${site.plural} for Sale`,        href: "/listings/nova/" },
+       { text: `Retreat ${site.plural} for Sale`,     href: "/listings/retreat/" },
+       { text: `Adria ${site.plural} for Sale`,       href: "/listings/adria/" },
+       { text: `Coromal ${site.plural} for Sale`,     href: "/listings/coromal/" },
      ],
    },
    {
      label: "Condition",
      icon: "bi-patch-check",
-     viewAll: { text: "Browse all SUVs", href: "/listings/" },
+     viewAll: { text: `Browse all ${site.plural}`, href: "/listings/" },
      links: [
-       { text: "New SUVs for Sale", href: "/listings/new-condition/" },
-       { text: "Used SUVs for Sale", href: "/listings/used-condition/" },
+       { text: `New ${site.plural} for Sale`, href: "/listings/new-condition/" },
+       { text: `Used ${site.plural} for Sale`, href: "/listings/used-condition/" },
      ],
    },
    {
@@ -548,15 +549,15 @@
                    <img src="/images/category.svg" alt="" width={32} height={32} className="blog-browse-cta__icon-img" />
                    <div>
                      <h3 className="blog-browse-cta__heading">
-                       {catLabel ? `Ready to Browse ${catLabel} SUVs?` : "Ready to Browse SUVs?"}
+                       {catLabel ? `Ready to Browse ${catLabel} ${site.plural}?` : `Ready to Browse ${site.plural}?`}
                      </h3>
                      <p className="blog-browse-cta__desc">
-                       {catLabel ? `Explore hundreds of ${catLabel.toLowerCase()} SUVs for sale across Australia.` : "Explore thousands of SUVs for sale across Australia."}
+                       {catLabel ? `Explore hundreds of ${catLabel.toLowerCase()} ${site.nounPlural} for sale across Australia.` : `Explore thousands of ${site.nounPlural} for sale across Australia.`}
                      </p>
                    </div>
                  </div>
                  <a href={catLink} className="blog-browse-cta__btn">
-                   {catLabel ? `Browse ${catLabel} SUVs` : "Browse SUVs"} <i className="bi bi-arrow-right" />
+                   {catLabel ? `Browse ${catLabel} ${site.plural}` : `Browse ${site.plural}`} <i className="bi bi-arrow-right" />
                  </a>
                </div>
  
@@ -664,16 +665,16 @@
                )}
                <div className="blog-sidebar-sticky">
                  <div className="blog-sidebar-cta">
-                   <h3 className="blog-sidebar-cta__heading">Ready to Find Your Next SUV?</h3>
-                   <p className="blog-sidebar-cta__desc">Browse thousands of new and used SUVs from trusted dealers and private sellers across Australia.</p>
+                   <h3 className="blog-sidebar-cta__heading">Ready to Find Your Next {site.singular}?</h3>
+                   <p className="blog-sidebar-cta__desc">Browse thousands of new and used {site.nounPlural} from trusted dealers and private sellers across Australia.</p>
                    <a href="/listings/" className="blog-sidebar-cta__btn">
-                     Search SUVs Now <i className="bi bi-arrow-right" />
+                     Search {site.plural} Now <i className="bi bi-arrow-right" />
                    </a>
                  </div>
                  <div className="blog-sidebar-cta blog-sidebar-cta--sell">
-                   <h3 className="blog-sidebar-cta__heading">Sell Your SUV Faster with Australia's Growing SUV Marketplace</h3>
-                   <a href="/sell-my-suv/" className="blog-sidebar-cta__btn">
-                     List Your SUV Now <i className="bi bi-arrow-right" />
+                   <h3 className="blog-sidebar-cta__heading">Sell Your {site.singular} Faster with Australia's Growing {site.singular} Marketplace</h3>
+                   <a href={sitePaths.sell} className="blog-sidebar-cta__btn">
+                     List Your {site.singular} Now <i className="bi bi-arrow-right" />
                    </a>
                  </div>
                </div>
@@ -688,21 +689,21 @@
        {cats.length > 0 && (
          <section className="bds-cat-loc">
            <div className="container">
-             <h2 className="bds-cat-title">Find {catLabel} SUVs by Popular Location</h2>
+             <h2 className="bds-cat-title">Find {catLabel} {site.plural} by Popular Location</h2>
              <div className="bds-cat-loc__major">
                {CAT_MAJOR_CITIES.map((city) => (
                  <a key={city.name} href={`${catLink}${city.state}/${city.region}/`} className="bds-cat-city-card">
                    <div className="bds-cat-city-img-wrap">
                      <img src={city.img} alt={city.name} className="bds-cat-city-img" loading="lazy" />
                    </div>
-                   <span className="bds-cat-city-name">{catLabel} SUVs in {city.name} <i className="bi bi-chevron-right bds-cat-city-arrow" /></span>
+                   <span className="bds-cat-city-name">{catLabel} {site.plural} in {city.name} <i className="bi bi-chevron-right bds-cat-city-arrow" /></span>
                  </a>
                ))}
              </div>
              <div className="bds-cat-loc__minor">
                {CAT_MINOR_CITIES.map((city) => (
                  <a key={city.name} href={`${catLink}${city.state}/${city.region ? city.region + "/" : ""}`} className="bds-cat-minor-pill">
-                   {catLabel} SUVs in {city.name}
+                   {catLabel} {site.plural} in {city.name}
                  </a>
                ))}
              </div>
@@ -714,12 +715,12 @@
        {cats.length > 0 && (
          <section className="bds-cat-state">
            <div className="container">
-             <h2 className="bds-cat-title">Find {catLabel} SUVs by State</h2>
+             <h2 className="bds-cat-title">Find {catLabel} {site.plural} by State</h2>
              <div className="bds-cat-state__grid">
                {CAT_STATES.map((s) => (
                  <a key={s.name} href={`${catLink}${s.slug}/`} className="bds-cat-state-card">
                    <img src={s.img} alt={s.name} className="bds-cat-state-img" loading="lazy" />
-                   <span className="bds-cat-state-name">{catLabel} SUVs in {s.name}</span>
+                   <span className="bds-cat-state-name">{catLabel} {site.plural} in {s.name}</span>
                  </a>
                ))}
              </div>
@@ -733,16 +734,16 @@
        {/* ── Buy or Sell CTA ── */}
        <section className="bds-cta-section">
          <div className="bds-cta-card">
-           <h2 className="bds-cta-title">Ready to Buy or Sell an SUV?</h2>
+           <h2 className="bds-cta-title">Ready to Buy or Sell {site.article} {site.singular}?</h2>
            <p className="bds-cta-body">
              <strong>Looking to buy?</strong> Browse{" "}
-             <a href="/" className="bds-cta-link">SUVs for sale</a>{" "}
-             from dealers and private sellers across Australia, with listings available by make, model, price, location and SUV type.
+             <a href="/" className="bds-cta-link">{site.nounPlural} for sale</a>{" "}
+             from dealers and private sellers across Australia, with listings available by make, model, price, location and {site.noun} type.
            </p>
            <p className="bds-cta-body">
-             <strong>Looking to sell?</strong> If you&apos;re upgrading to a newer SUV or no longer need your current one,{" "}
-             <a href="/sell-my-suv/" className="bds-cta-link">sell your SUV</a>{" "}
-             by creating a listing on SuvForSale.com.au. Your advertisement stays online until it&apos;s sold for a one-time fee of $49.
+             <strong>Looking to sell?</strong> If you&apos;re upgrading to a newer {site.noun} or no longer need your current one,{" "}
+             <a href={sitePaths.sell} className="bds-cta-link">sell your {site.noun}</a>{" "}
+             by creating a listing on {site.brand}. Your advertisement stays online until it&apos;s sold for a one-time fee of $49.
            </p>
          </div>
        </section>

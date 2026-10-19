@@ -1,9 +1,10 @@
 // src/app/blogs-sitemap.xml/route.ts
 import { NextResponse } from "next/server";
+import { site } from "@/config/sites";
 import { fetchBlogs } from "@/api/blog/api";
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://www.caravansforsale.com.au";
+  process.env.NEXT_PUBLIC_SITE_URL || site.url;
 
 export async function GET() {
   const firstPage = await fetchBlogs(1);

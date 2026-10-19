@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { site, sitePaths } from "@/config/sites";
 
 const SELL_DATA = [
   {
@@ -125,8 +126,8 @@ export default function SellLinksPanel() {
           <div className="sell-panel">
             {/* Header row */}
             <div className="sell-panel__header">
-              <a href="/sell-my-suv/" className="sell-panel__main-link">
-                Sell My SUV
+              <a href={sitePaths.sell} className="sell-panel__main-link">
+                Sell My {site.singular}
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: 5, verticalAlign: "middle" }}>
                   <line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" />
                 </svg>
@@ -142,14 +143,14 @@ export default function SellLinksPanel() {
             <div className="sell-panel__grid">
               {SELL_DATA.map((s) => (
                 <div key={s.stateSlug} className="sell-panel__col">
-                  <a href={`/sell-my-suv/${s.stateSlug}/`} className="sell-panel__state-title">
-                    Sell My SUV in {s.state}
+                  <a href={`${sitePaths.sell}${s.stateSlug}/`} className="sell-panel__state-title">
+                    Sell My {site.singular} in {s.state}
                   </a>
                   <ul className="sell-panel__region-list">
                     {s.regions.map((r) => (
                       <li key={r.pageSlug}>
-                        <a href={`/sell-my-suv/${s.stateSlug}/${r.pageSlug}/`}>
-                          Sell My SUV in {r.label}
+                        <a href={`${sitePaths.sell}${s.stateSlug}/${r.pageSlug}/`}>
+                          Sell My {site.singular} in {r.label}
                         </a>
                       </li>
                     ))}

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import React, { useState } from "react";
+import { site } from "@/config/sites";
 
 type FormState = {
   "your-name": string;
@@ -170,7 +171,7 @@ export default function ContactSection() {
                   <form onSubmit={handleSubmit} className="form" method="post">
                     <div className="text-center header_form">
                       <h4>
-                        Exclusive Offers From Select Quality SUV
+                        Exclusive Offers From Select Quality {site.singular}{" "}
                         Manufacturers
                       </h4>
                       <Image
@@ -186,7 +187,7 @@ export default function ContactSection() {
                     </div>
                     <p className="required_txt">
                       Fill out the form below, and we&apos;ll send you exclusive
-                      deals for the best SUVs in the market.
+                      deals for the best {site.nounPlural} in the market.
                     </p>
                     <div className="row">
                       {/* Name */}
@@ -280,7 +281,7 @@ export default function ContactSection() {
                             required
                           >
                             <option value="">
-                              What type of SUV are you looking for?
+                              What type of {site.noun} are you looking for?
                             </option>
                             <option value="Off Road">Off Road</option>
                             <option value="Hybrid">Hybrid</option>
@@ -354,7 +355,7 @@ export default function ContactSection() {
                       </div>
                       <div className="col-lg-12">
                         <p className="terms_text">
-                          By clicking &apos;Submit&apos;, you agree to SUV
+                          By clicking &apos;Submit&apos;, you agree to {site.singular}{" "}
                           Marketplace{" "}
                           <Link
                             href="/privacy-collection-statement/"

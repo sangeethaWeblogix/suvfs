@@ -1,4 +1,5 @@
 "use client";
+import { site } from "@/config/sites";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -383,7 +384,7 @@ export default function ExculisiveContent({
              /> */}
                 <i className="bi bi-search" />
                 <h4 className="text-lg font-semibold text-gray-800">
-                  No SUVs match your filters
+                  No {site.nounPlural} match your filters
                 </h4>
                 <p className="text-gray-500 mt-1 max-w-md">
                   Here are some Spotlight Vans that may interest you.
@@ -427,7 +428,7 @@ export default function ExculisiveContent({
                               <ImageWithSkeleton
                                 src={firstImage}
                                 priority={isPriority}
-                                alt="SUV"
+                                alt={site.singular}
                                 width={400}
                                 height={300}
                               />
@@ -478,7 +479,7 @@ export default function ExculisiveContent({
                                     <div className="thumb_img">
                                       <ImageWithSkeleton
                                         src={img}
-                                        alt={`SUV ${i + 1}`}
+                                        alt={`${site.singular} ${i + 1}`}
                                         width={400}
                                         height={300}
                                       />
@@ -817,7 +818,7 @@ export default function ExculisiveContent({
                   </div>
 
                   <p className="terms_text">
-                    By clicking &lsquo;Send Enquiry&lsquo;, you agree to SUV
+                    By clicking &lsquo;Send Enquiry&lsquo;, you agree to {site.singular}{" "}
                     Marketplace{" "}
                     <Link href="/privacy-collection-statement" target="_blank">
                       Collection Statement

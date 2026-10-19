@@ -1,5 +1,6 @@
 "use client";
 
+import { site } from "@/config/sites";
 import { useEffect } from "react";
 import Link from "next/link";
 
@@ -68,7 +69,7 @@ export default function RootError({ error, reset }: ErrorProps) {
           Something went wrong
         </h2>
         <p style={{ fontSize: "15px", color: "#6c757d", margin: "0 0 24px", lineHeight: 1.6 }}>
-          This page couldn&apos;t load. Please try again or go back to browsing SUVs.
+          This page couldn&apos;t load. Please try again or go back to browsing {site.nounPlural}.
         </p>
 
         <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
@@ -100,7 +101,7 @@ export default function RootError({ error, reset }: ErrorProps) {
               textDecoration: "none",
             }}
           >
-            Browse SUVs
+            Browse {site.plural}
           </a>
         </div>
 

@@ -1,8 +1,9 @@
 // src/app/general-sitemap.xml/route.ts
 import { NextResponse } from "next/server";
+import { site, sitePaths } from "@/config/sites";
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://www.caravansforsale.com.au";
+  process.env.NEXT_PUBLIC_SITE_URL || site.url;
 
 // Static URLs (you can extend this later with categories, states, regions)
 const staticUrls = [
@@ -13,7 +14,7 @@ const staticUrls = [
   "about-us",
   "contact",
   "dealer-advertising",
-  "sell-my-suv",
+  sitePaths.sell.replace(/^\/|\/$/g, ""),
 ];
 
 export async function GET() {

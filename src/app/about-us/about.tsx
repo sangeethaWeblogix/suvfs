@@ -1,5 +1,7 @@
 'use client'
 
+import { site } from "@/config/sites";
+
 
 import Link from 'next/link'
 
@@ -14,18 +16,18 @@ export default function AboutUs() {
 
               <h2 className="wp-block-heading">Welcome to Marketplace Network</h2>
               <p>
-                At Marketplace Network, we’re dedicated to making your SUV research
+                At Marketplace Network, we’re dedicated to making your {site.noun} research
                 experience seamless, convenient, and importantly valuable. We have put
-                together a wide range of SUV models from a range of SUV
-                manufacturers.
+                together a wide range of {site.noun} models from a range
+                of {site.noun} manufacturers.
               </p>
 
-              <h4 className="wp-block-heading">Discover Your Perfect SUV</h4>
+              <h4 className="wp-block-heading">Discover Your Perfect {site.singular}</h4>
               <p>
-                <strong>Extensive Data :</strong> Explore thousands of new and used
-                SUVs available on Marketplace Network. With a diverse range of off
-                road, hybrid, luxury, family &amp; touring SUVs to choose from, we
-                are confident that you’ll find the perfect SUV to suit your needs
+                <strong>Extensive Data :</strong> Explore thousands of new and
+                used {site.nounPlural} available on Marketplace Network. With a diverse range of off
+                road, hybrid, luxury, family &amp; touring {site.nounPlural} to choose from, we
+                are confident that you’ll find the perfect {site.noun} to suit your needs
                 and preferences.
               </p>
 
@@ -33,16 +35,16 @@ export default function AboutUs() {
                 Find Quality Manufacturers Advertising With Us <strong>:</strong>
               </h4>
               <p>
-                We have identified specific SUV manufacturers who build quality
-                SUVs in various categories including off road, on road, touring
-                SUVs. These manufacturers don’t spend big on advertising and do not
+                We have identified specific {site.noun} manufacturers who build
+                quality {site.nounPlural} in various categories including off road, on road, touring {site.nounPlural}.
+                These manufacturers don’t spend big on advertising and do not
                 participate much on the show. However, the quality of the van is as good
                 as or even better than the big brands who spend big on their marketing.
                 They spend a fraction of the cost on advertising with us, however, we
                 are determined to showcase them to the buyer so it is a win-win for both
                 manufacturer and the buyer. Hence, you get better value for money and
                 higher quality vans, while the manufacturer can focus solely on building
-                quality SUVs.
+                quality {site.nounPlural}.
               </p>
 
               <p>
@@ -50,14 +52,14 @@ export default function AboutUs() {
                 to narrow down your options based on criteria such as category,
                 location, price range, brand, weights, and more. This helps you find
                 exactly what you’re looking for without hassle. In your search results,
-                along with the regular SUVs listed for sale, we will also display
-                and suggest the best SUVs in that market. We show them in the form
+                along with the regular {site.nounPlural} listed for sale, we will also display
+                and suggest the best {site.nounPlural} in that market. We show them in the form
                 of banner ads across the search results.
               </p>
 
               <p>
                 <strong>Comparative Analysis:</strong> Make informed decisions with our
-                comparative analysis tools. Easily compare multiple SUVs side by
+                comparative analysis tools. Easily compare multiple {site.nounPlural} side by
                 side to evaluate their specifications, features, and pricing, ensuring
                 you get the best value for your investment.
               </p>
@@ -84,9 +86,9 @@ export default function AboutUs() {
 
               <h4 className="wp-block-heading">Browse Marketplace Network Today</h4>
               <p>
-                Experience the convenience, reliability, and efficiency of Marketplace Network. If you are looking to buy a quality SUV at the right
-                price, we’re your trusted partner in the SUV market. Join us today
-                and embark on your next SUV adventure with confidence!
+                Experience the convenience, reliability, and efficiency of Marketplace Network. If you are looking to buy a quality {site.noun} at the right
+                price, we’re your trusted partner in the {site.noun} market. Join us today
+                and embark on your next {site.noun} adventure with confidence!
               </p>
             </div>
           </div>

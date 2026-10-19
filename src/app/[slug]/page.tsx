@@ -11,6 +11,7 @@ import { redirect, notFound } from "next/navigation";
 import Thankyou from './ThankYouClient '
 import { Metadata } from "next";
 import { fetchBlogDetail } from "./fetchBlogDetail";
+import { site } from "@/config/sites";
 
 type RouteParams = { slug: string };
 type PageProps = { params: Promise<RouteParams> };
@@ -43,7 +44,7 @@ export async function generateMetadata({
         google: "6tT6MT6AJgGromLaqvdnyyDQouJXq0VHS-7HC194xEo", // ✅ Google site verification
       },
       alternates: {
-        canonical: `https://www.caravansforsale.com.au/${slug}/`,
+        canonical: `${site.url}/${slug}/`,
       },
     };
   }
@@ -55,15 +56,15 @@ export async function generateMetadata({
     seo.meta_title ||
     data?.title ||
     data?.name ||
-    "Product - SUVs for Sale";
+    `Product - ${site.plural} for Sale`;
 
   const description =
     seo.metadescription ||
     seo.meta_description ||
     data?.short_description ||
-    "View SUV details.";
+    `View ${site.noun} details.`;
   const robots = "index, follow";
-  const canonicalUrl = `https://www.caravansforsale.com.au/${slug}/`;
+  const canonicalUrl = `${site.url}/${slug}/`;
   console.log("generateMetadata", { title, description, robots, canonicalUrl });
   return {
     title,
@@ -139,11 +140,11 @@ export default async function ProductDetailPage({ params }: PageProps) {
             </div>
             <Typography variant="h5" fontWeight="bold" gutterBottom>
               Thank you for submitting your information with{" "}
-              <span style={{ color: "#000" }}>suvforsale.com.au</span>.
+              <span style={{ color: "#000" }}>{site.domain}</span>.
             </Typography>
 
             <Typography variant="body1" color="text.secondary" gutterBottom>
-              Your SUV dealer will contact you as soon as possible.
+              Your {site.noun} dealer will contact you as soon as possible.
             </Typography>
 
             <Link href="/" style={{ textDecoration: "none" }}>

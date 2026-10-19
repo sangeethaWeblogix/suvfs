@@ -1,5 +1,6 @@
 "use client";
 
+import { site } from "@/config/sites";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
@@ -79,7 +80,7 @@ const FeaturedProductsSlider = () => {
       <div className="container">
         <div className="title">
           <div className="tpof_tab">
-            <h2>Featured SUVs For Sale</h2>
+            <h2>Featured {site.title}</h2>
             <div className="viewall_bttn">
               <Link href="">
                 <i className="bi bi-chevron-right"></i>

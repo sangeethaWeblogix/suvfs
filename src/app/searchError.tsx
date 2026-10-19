@@ -1,6 +1,7 @@
 // src/app/components/SearchSection.tsx
 "use client";
 
+import { site } from "@/config/sites";
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { flushSync } from "react-dom";
@@ -233,7 +234,7 @@ export default function SearchSection() {
                     ref={searchInputRef}
                     type="text"
                     className="search-box"
-                    placeholder="Search by SUVs..."
+                    placeholder={`Search by ${site.plural}...`}
                     id="searchInput"
                     autoComplete="off"
                     value={query}

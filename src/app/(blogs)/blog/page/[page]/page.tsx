@@ -4,6 +4,7 @@ import BlogListClient from "./BlogListClient";
 import { redirect } from "next/navigation";
 import "../../blog.css?=3";
 import { Metadata } from "next";
+import { site } from "@/config/sites";
 
 export const dynamic = "force-dynamic";
 
@@ -12,21 +13,21 @@ type Params = Promise<{ page?: string }>;
 export const metadata: Metadata = {
 title: "Latest News, Reviews & Advice",
   description:
-    "Latest news, in-depth reviews, and expert advice on the latest in the SUV market. Stay informed and make smarter decisions.",
+    `Latest news, in-depth reviews, and expert advice on the latest in the ${site.noun} market. Stay informed and make smarter decisions.`,
   robots: "index, follow",
   openGraph: {
   title: "Latest News, Reviews & Advice",
   description:
-    "Latest news, in-depth reviews, and expert advice on the latest in the SUV market. Stay informed and make smarter decisions.",
+    `Latest news, in-depth reviews, and expert advice on the latest in the ${site.noun} market. Stay informed and make smarter decisions.`,
   },
   twitter: {
     card: "summary_large_image",
     title: "Latest News, Reviews & Advice",
     description:
-      "Latest news, in-depth reviews, and expert advice on the latest in the SUV market. Stay informed and make smarter decisions.",
+      `Latest news, in-depth reviews, and expert advice on the latest in the ${site.noun} market. Stay informed and make smarter decisions.`,
   },
   alternates: {
-    canonical: "https://www.caravansforsale.com.au/blog/",
+    canonical: `${site.url}/blog/`,
   },
    
 };

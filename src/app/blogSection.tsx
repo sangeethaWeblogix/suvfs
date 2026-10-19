@@ -9,6 +9,7 @@ import "swiper/css/navigation";
 import { formatPostDate } from "@/utils/date";
 import { toSlug } from "@/utils/seo/slug";
 import { type BlogPost as ApiBlogPost } from "@/api/blog/api";
+import { site } from "@/config/sites";
 
 // WP blog titles come HTML-entity-encoded (e.g. "&#038;" for "&") — decode
 // before rendering as plain text, or entities show up literally on screen.
@@ -55,7 +56,7 @@ export default function HomeLatestBlogs({ posts: rawPosts }: Props) {
       <div className="container">
         <div className="title">
           <div className="tpof_tab">
-            <h2 className="hd-section-title">Latest SUV Buying Guides & Advice</h2>
+            <h2 className="hd-section-title">Latest {site.singular} Buying Guides & Advice</h2>
             <div className="viewall_bttn">
               <a href="/blog/">
                 <i className="bi bi-chevron-right" />
@@ -63,7 +64,7 @@ export default function HomeLatestBlogs({ posts: rawPosts }: Props) {
             </div>
           </div>
           <p className="hd-section-subtitle">
-            Research new and used SUVs with practical guides covering prices, models, features, inspections and buying considerations.
+            Research new and used {site.nounPlural} with practical guides covering prices, models, features, inspections and buying considerations.
           </p>
         </div>
       

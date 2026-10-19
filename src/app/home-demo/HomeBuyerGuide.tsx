@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { site, sitePaths } from "@/config/sites";
 
 export default function HomeBuyerGuide() {
   return (
@@ -13,7 +14,7 @@ export default function HomeBuyerGuide() {
               <div className="hbg-img-wrap">
                 <Image
                   src="/images/buyers_guid.jpg"
-                  alt="SUVs for Sale Australia"
+                  alt={`${site.plural} for Sale Australia`}
                   width={600}
                   height={420}
                   className="hbg-img"
@@ -24,7 +25,7 @@ export default function HomeBuyerGuide() {
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                     <polyline points="9 12 11 14 15 10"/>
                   </svg>
-                  <span className="hbg-badge-text">AUSTRALIA&apos;S TRUSTED<br />SUV MARKETPLACE</span>
+                  <span className="hbg-badge-text">AUSTRALIA&apos;S TRUSTED<br />{site.singular.toUpperCase()} MARKETPLACE</span>
                 </div>
               </div>
             </div>
@@ -32,14 +33,14 @@ export default function HomeBuyerGuide() {
             {/* Right: Text */}
             <div className="hbg-text-col">
               <h2 className="hbg-title">
-                SUVs for Sale Australia: <span className="hbg-title-accent">Buyer Guide</span>
+                {site.plural} for Sale Australia: <span className="hbg-title-accent">Buyer Guide</span>
               </h2>
               
               <p className="hbg-body">
-                SuvForSale.com.au makes it easy to explore SUV sales across Australia, with thousands of new and used SUVs for sale from dealers and private sellers. Browse affordable used SUVs, premium new models and options designed for touring, family holidays or off-road adventures. Compare important features such as layout, ATM, tare weight, sleeping capacity, length, suspension, condition, service history and towing requirements to narrow down your choices before contacting a seller or visiting a dealership. Our easy-to-use platform makes researching and comparing SUVs simple.
+                {site.brand} makes it easy to explore {site.noun} sales across Australia, with thousands of new and used {site.nounPlural} for sale from dealers and private sellers. Browse affordable used {site.nounPlural}, premium new models and options designed for touring, family holidays or off-road adventures. Compare important features such as layout, ATM, tare weight, sleeping capacity, length, suspension, condition, service history and towing requirements to narrow down your choices before contacting a seller or visiting a dealership. Our easy-to-use platform makes researching and comparing {site.nounPlural} simple.
               </p>
               <p className="hbg-body">
-                Explore popular SUV types including off-road, hybrid, pop top, touring and luxury SUVs, while also comparing trusted SUV brands and reputable dealers across Australia. Check whether dealers offer warranty support, finance options, trade-ins, after-sales service and detailed vehicle information before making your decision. Use our buyers guide and convenient search filters to browse listings by state, location, budget, size, weight and berth, helping you find the right SUV for your lifestyle and travel plans.
+                Explore popular {site.noun} types including off-road, hybrid, pop top, touring and luxury {site.nounPlural}, while also comparing trusted {site.noun} brands and reputable dealers across Australia. Check whether dealers offer warranty support, finance options, trade-ins, after-sales service and detailed vehicle information before making your decision. Use our buyers guide and convenient search filters to browse listings by state, location, budget, size, weight and berth, helping you find the right {site.noun} for your lifestyle and travel plans.
               </p>
               
             </div>
@@ -80,11 +81,11 @@ export default function HomeBuyerGuide() {
               <span className="hbg-sell-line" />
             </div>
 
-            <h2 className="hbg-sell-title">Looking to Sell Your SUV?</h2>
+            <h2 className="hbg-sell-title">Looking to Sell Your {site.singular}?</h2>
             <p className="hbg-sell-body">
-              If you&apos;re upgrading or no longer need your current SUV,{" "}
-              <a href="/sell-my-suv/" className="hbg-sell-link">sell your SUV</a>{" "}
-              by creating a listing on SuvForSale.com.au and connect with active buyers across Australia. Your advertisement stays online until it&apos;s sold for a one-time fee of $49.
+              If you&apos;re upgrading or no longer need your current {site.noun},{" "}
+              <a href={sitePaths.sell} className="hbg-sell-link">sell your {site.noun}</a>{" "}
+              by creating a listing on {site.brand} and connect with active buyers across Australia. Your advertisement stays online until it&apos;s sold for a one-time fee of $49.
             </p>
 
 
@@ -96,7 +97,7 @@ export default function HomeBuyerGuide() {
       <section className="hbg-why-section">
         <div className="container">
           <h2 className="hbg-why-title">
-            Why Australians Use <span className="hbg-why-accent">SuvForSale.com.au</span>
+            Why Australians Use <span className="hbg-why-accent">{site.brand}</span>
           </h2>
           
 
@@ -109,7 +110,7 @@ export default function HomeBuyerGuide() {
                 </div>
                 <h3 className="hbg-why-card-title">Dealers &amp; Private Sellers</h3>
                 <div className="hbg-why-card-sep" />
-                <p className="hbg-why-card-desc">Browse new and used SUVs for sale from trusted dealers and private sellers across Australia.</p>
+                <p className="hbg-why-card-desc">Browse new and used {site.nounPlural} for sale from trusted dealers and private sellers across Australia.</p>
               </div>
 
               <div className="hbg-why-card">
@@ -118,16 +119,16 @@ export default function HomeBuyerGuide() {
                 </div>
                 <h3 className="hbg-why-card-title">Australia-Wide Coverage</h3>
                 <div className="hbg-why-card-sep" />
-                <p className="hbg-why-card-desc">Find SUV listings across every state and territory, including major cities and regional locations.</p>
+                <p className="hbg-why-card-desc">Find {site.noun} listings across every state and territory, including major cities and regional locations.</p>
               </div>
 
               <div className="hbg-why-card">
                 <div className="hbg-why-icon">
-                  <Image src="/images/category.svg" alt="Dedicated SUV Marketplace" width={34} height={34} />
+                  <Image src="/images/category.svg" alt={`Dedicated ${site.singular} Marketplace`} width={34} height={34} />
                 </div>
-                <h3 className="hbg-why-card-title">Dedicated SUV Marketplace</h3>
+                <h3 className="hbg-why-card-title">Dedicated {site.singular} Marketplace</h3>
                 <div className="hbg-why-card-sep" />
-                <p className="hbg-why-card-desc">Explore an Australian marketplace focused exclusively on SUVs and SUV buyers.</p>
+                <p className="hbg-why-card-desc">Explore an Australian marketplace focused exclusively on {site.nounPlural} and {site.noun} buyers.</p>
               </div>
 
               <div className="hbg-why-card">
@@ -136,7 +137,7 @@ export default function HomeBuyerGuide() {
                 </div>
                 <h3 className="hbg-why-card-title">Easy to Compare</h3>
                 <div className="hbg-why-card-sep" />
-                <p className="hbg-why-card-desc">Compare SUV prices, features, layouts and seller details to find the right match.</p>
+                <p className="hbg-why-card-desc">Compare {site.noun} prices, features, layouts and seller details to find the right match.</p>
               </div>
 
             </div>

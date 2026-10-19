@@ -17,6 +17,7 @@ import { type HomeBlogPost } from "@/api/home/api";
 import { toSlug } from "@/utils/seo/slug";
 import ProductSkelton from "../../components/ProductCardSkeleton";
 import { useRouter } from "next/navigation";
+import { site } from "@/config/sites";
 
 type Attribute = {
   label?: string;
@@ -609,8 +610,7 @@ export default function ClientLogger({
                       href={makeHref}
                       className="back_to_search back_to_search_btn"
                     >
-                      <i className="bi bi-chevron-left"></i> Back to Similar
-                      SUVs
+                      <i className="bi bi-chevron-left"></i> Back to Similar {site.plural}
                     </a>
                   ))}
 
@@ -835,7 +835,7 @@ export default function ClientLogger({
                           className="cravan_buyer"
                           onClick={() => setShowPopup(true)}
                         >
-                          SUV Buyer Safety Checklist <i className="bi bi-info-circle-fill"></i>
+                          {site.singular} Buyer Safety Checklist <i className="bi bi-info-circle-fill"></i>
                         </button>
                   <p className="terms_text small">
                     By clicking 'Send Enquiry', you agree to Marketplace Network
@@ -923,7 +923,7 @@ export default function ClientLogger({
                           className="cravan_buyer"
                           onClick={() => setShowPopup(true)}
                         >
-                          SUV Buyer Safety Checklist <i className="bi bi-info-circle-fill"></i>
+                          {site.singular} Buyer Safety Checklist <i className="bi bi-info-circle-fill"></i>
                         </button>
                       </div>
                     </div>
@@ -950,9 +950,9 @@ export default function ClientLogger({
                       </svg>
                     </button>
 
-                    <h2 className="title">SUV Buyer Safety Checklist</h2>
+                    <h2 className="title">{site.singular} Buyer Safety Checklist</h2>
                     <p className="subtitle">
-                      Follow these steps to reduce the risk of scams when buying an SUV.
+                      Follow these steps to reduce the risk of scams when buying {site.article} {site.noun}.
                     </p>
 
                     <div className="safety-wrapper">
@@ -982,7 +982,7 @@ export default function ClientLogger({
                           <li>
                             <span className="num">3</span>
                             <div>
-                              <h4>Inspect the SUV first</h4>
+                              <h4>Inspect the {site.noun} first</h4>
                               <p>Inspect in person or arrange an inspection.</p>
                             </div>
                           </li>

@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 import Thankyou from './ThankYouClient '
 import { fetchBlogDetail } from "./fetchBlogDetail";
 import { isNonBlogSlug } from "@/utils/isNonBlogSlug";
+import { site } from "@/config/sites";
 type RouteParams = { slug: string };
 
 export async function generateMetadata({
@@ -28,12 +29,12 @@ export async function generateMetadata({
   const seo = data?.seo ?? {};
   const post = data?.data?.blog_detail || {};
 
-  const title = seo.metatitle || post.title || "SUVs for Sale Blog";
+  const title = seo.metatitle || post.title || `${site.plural} for Sale Blog`;
   const description =
     seo.metadescription ||
     post.short_description ||
-    "Read more on SUVs for Sale.";
-  const canonical = `https://www.caravansforsale.com.au/${slug}/`;
+    `Read more on ${site.plural} for Sale.`;
+  const canonical = `${site.url}/${slug}/`;
 
   return {
     title,

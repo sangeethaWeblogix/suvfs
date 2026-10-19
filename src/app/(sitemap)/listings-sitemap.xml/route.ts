@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
+import { site } from "@/config/sites";
 
 export const runtime = "nodejs";
 export const revalidate = 3600;
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://www.caravansforsale.com.au";
+  process.env.NEXT_PUBLIC_SITE_URL || site.url;
 
 const MPN_API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
 const MPN_API_KEY = process.env.MPN_API_KEY;

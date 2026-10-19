@@ -4,6 +4,7 @@
 import "./navbar.css?=70";
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import { site, sitePaths } from "@/config/sites";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -67,8 +68,8 @@ export default function Navbar() {
           <div className="logo_left">
             <a className="navbar-brand" href="/">
               <Image
-                src="/images/sfs_logo.svg"
-                alt="SUVs For Sale"
+                src={site.logo}
+                alt={site.title}
                 width={150}
                 height={22}
                 priority
@@ -100,7 +101,7 @@ export default function Navbar() {
                 </li>
 
                 <li className="nav-item">
-                  <a className="nav-link" href="/sell-my-suv/">Sell My SUV</a>
+                  <a className="nav-link" href={sitePaths.sell}>Sell My {site.singular}</a>
                 </li>
                 <li className="nav-item">
                   <a className="nav-link" href="/dealer-advertising/">Dealer Advertising</a>
@@ -119,8 +120,8 @@ export default function Navbar() {
                 </button>
                 {hamOpen && (
                   <div className="ham-dropdown">
-                    <a href="/listings/" className="ham-item">SUV Listings</a>
-                    <a href="/sell-my-suv/" className="ham-item">Sell My SUV</a>
+                    <a href="/listings/" className="ham-item">{site.singular} Listings</a>
+                    <a href={sitePaths.sell} className="ham-item">Sell My {site.singular}</a>
                     <a href="/dealer-advertising/" className="ham-item">Dealer Advertising</a>
                     <a href="/blog/" className="ham-item">Blog</a>
                     <a href="/about-us/" className="ham-item">About</a>
@@ -174,7 +175,7 @@ export default function Navbar() {
           <div className="sidenav-panel sidenav-panel-main">
             <div className="sidenav-header">
               <a href="/" onClick={closeNav} className="sidenav-logo-link">
-                <Image src="/images/sfs_logo.svg" alt="SUVs For Sale" width={168} height={25} className="sidenav-logo-img" />
+                <Image src={site.logo} alt={site.title} width={168} height={25} className="sidenav-logo-img" />
               </a>
               <button className="sidenav-close" onClick={closeNav} aria-label="Close menu">
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -193,7 +194,7 @@ export default function Navbar() {
                 </ul>
               </div>
               <div className="sidenav-cta">
-                <a href="/sell-my-suv/" className="sidenav-cta-link" onClick={closeNav}>Sell My SUV</a>
+                <a href={sitePaths.sell} className="sidenav-cta-link" onClick={closeNav}>Sell My {site.singular}</a>
                 <a href="/dealer-advertising/" className="sidenav-cta-link" onClick={closeNav}>Dealer Advertising</a>
                 <a href="https://seller.marketplacenetwork.com.au/seller-login/" className="sidenav-cta-login" onClick={closeNav}>
                   <i className="bi bi-person-fill"></i> Login
