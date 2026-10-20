@@ -182,7 +182,7 @@ import { site, sitePaths } from "@/config/sites";
              {[
                { img: "/images/chat2.png", title: "Direct Buyer Contact", desc: "Connect directly with genuine buyers. No middleman." },
                { img: "/images/calendar.png", title: "Live Until Sold", desc: `Your listing stays online and visible until your ${site.noun} is sold.` },
-               { img: "/images/caravan.png", title: `${site.singular}-Only Marketplace`, desc: `Reach a targeted audience actively looking to buy ${site.nounPlural}.` },
+               { img: site.vehicleIcon, title: `${site.singular}-Only Marketplace`, desc: `Reach a targeted audience actively looking to buy ${site.nounPlural}.` },
                { img: "/images/dollar.png", title: "Keep 100% of Your Sale", desc: "Pay only $49 Inc GST per listing. No commissions or hidden costs." },
              ].map((item, i) => (
                <div className="demo-feature-card" key={i}>
@@ -234,7 +234,7 @@ import { site, sitePaths } from "@/config/sites";
              {CITY_LINKS.map((c) => (
                <div key={c.label} className="demo-city-item">
                  <span className="demo-city-icon">
-                   <img src="/images/caravan.png" alt="" />
+                   <img src={site.vehicleIcon} alt="" />
                  </span>
                        <h3 className="demo-city-label">
 
@@ -256,8 +256,8 @@ import { site, sitePaths } from "@/config/sites";
            <div className="demo-reach-row">
            {/* Device image */}
            <div className="demo-reach-device">
-             <img src="/images/your-caravan-desktop-seller-2.jpg" className="img-fluid d-none d-lg-block" alt={`${site.singular} For Sale Desktop`} />
-             <img src="/images/your-caravan-mobile-2.jpg" className="img-fluid d-block d-lg-none" alt={`${site.singular} For Sale Mobile`} />
+             <img src="/images/sell-mockup-desktop.jpg" className="img-fluid d-none d-lg-block" alt={`${site.singular} For Sale Desktop`} />
+             <img src="/images/sell-mockup-mobile.jpg" className="img-fluid d-block d-lg-none" alt={`${site.singular} For Sale Mobile`} />
            </div>
  
            {/* Pricing + FAQ card */}
@@ -437,7 +437,7 @@ import { site, sitePaths } from "@/config/sites";
          <div className="container">
            <div className="row align-items-center g-4">
              <div className="col-md-6">
-               <img src="/images/your-caravan-desktop-seller-2.jpg" className="img-fluid demo-why-img" alt={`${site.singular} buyers`} />
+               <img src="/images/sell-mockup-desktop.jpg" className="img-fluid demo-why-img" alt={`${site.singular} buyers`} />
              </div>
              <div className="col-md-6">
                <h2>Why Thousands of {site.singular} Buyers Visit our website Every Month</h2>

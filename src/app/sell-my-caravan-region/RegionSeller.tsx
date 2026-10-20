@@ -156,7 +156,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
             {[
               { img: "/images/chat2.png", title: "Direct Buyer Contact", desc: "Communicate directly with buyers, no middleman." },
               { img: "/images/calendar.png", title: "Live Until Sold", desc: `Your listing stays live until your ${site.noun} is sold.` },
-              { img: "/images/caravan.png", title: `${site.singular}-Only Marketplace`, desc: `Reach engaged ${site.noun} buyers actively looking to buy ${site.nounPlural}.` },
+              { img: site.vehicleIcon, title: `${site.singular}-Only Marketplace`, desc: `Reach engaged ${site.noun} buyers actively looking to buy ${site.nounPlural}.` },
               { img: "/images/dollar.png", title: "Keep 100% of Your Sale", desc: "Pay only a one-time fee for maximum value. No hidden costs." },
             ].map((item, i) => (
               <div className="demo-feature-card" key={i}>
@@ -183,8 +183,8 @@ export default function RegionSeller({ region }: RegionSellerProps) {
           <div className="demo-reach-row">
           {/* Device image */}
           <div className="demo-reach-device">
-            <img src="/images/your-caravan-desktop-seller-2.jpg" className="img-fluid d-none d-lg-block" alt={`${site.singular} For Sale Desktop`} />
-            <img src="/images/your-caravan-mobile-2.jpg" className="img-fluid d-block d-lg-none" alt={`${site.singular} For Sale Mobile`} />
+            <img src="/images/sell-mockup-desktop.jpg" className="img-fluid d-none d-lg-block" alt={`${site.singular} For Sale Desktop`} />
+            <img src="/images/sell-mockup-mobile.jpg" className="img-fluid d-block d-lg-none" alt={`${site.singular} For Sale Mobile`} />
           </div>
 
           {/* Pricing + FAQ card */}
@@ -362,7 +362,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
         <div className="container">
           <div className="row align-items-center g-4">
             <div className="col-md-6">
-              <img src="/images/your-caravan-desktop-seller-2.jpg" className="img-fluid demo-why-img" alt={`${regionLabel} ${site.noun} buyers`} />
+              <img src="/images/sell-mockup-desktop.jpg" className="img-fluid demo-why-img" alt={`${regionLabel} ${site.noun} buyers`} />
             </div>
             <div className="col-md-6">
               <h2>Why {regionLabel} {site.singular} Buyers Visit {site.brand} Every Month</h2>

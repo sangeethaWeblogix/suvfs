@@ -11,6 +11,10 @@
   --brand: #4736FE;
   --brand-rgb: 71, 54, 254;
   --brand-secondary: #252525;
+  /* "Thinking of selling?" card photo — per site from src/config/sites.ts */
+  --seller-card-image: none;
+  /* Product details page banner photo — per site from src/config/sites.ts */
+  --details-banner-image: none;
 }
 
 @media (prefers-color-scheme: dark) {

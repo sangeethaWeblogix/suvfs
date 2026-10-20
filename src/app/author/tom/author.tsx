@@ -74,7 +74,7 @@ const loading = !data || !blogPosts || blogPosts.length === 0 && data.totalPages
               <div className="author_head">
                 <div className="author-avatar">
                   <Image
-                    src="/images/avathar.jpg"
+                    src={site.avatar}
                     alt="Avatar"
                     width={200} // set your desired width
                     height={200} // set your desired height

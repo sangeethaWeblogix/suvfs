@@ -27,6 +27,27 @@ The network colours are the defaults for every site:
    The RGB version of `color` is worked out automatically.
 3. Commit and push to `multi-site`. Every site rebuilds.
 
+## Page photos
+
+Same file name in every site's folder, so no code change is needed to replace one:
+
+| File | Where it shows | Size |
+|---|---|---|
+| `seller-card.jpg` | "Thinking of selling?" card (product details, blog) | 3:2, e.g. 1024×682 |
+| `buyer-guide.jpg` | Home page buyer guide | 3:2, e.g. 1024×682 |
+| `details-banner.jpg` | Product details page banner ("Find deals now"); keep the vehicle on the right, the left is covered by text | 3:1, e.g. 1024×342 |
+| `vehicle-icon.svg` | "[Vehicle]-Only Marketplace" icon on the sell pages (CSS recolours it to the brand purple) | square, solid glyph |
+
+## SEO images
+
+`og-image.png` (1200×630 share preview on Facebook, LinkedIn, X…) and
+`logo.png` (the logo Google reads from the site's structured data) are made
+from the site's `logo.svg`. After replacing a logo, regenerate them:
+
+```
+node scripts/generate-site-seo-images.mjs utes
+```
+
 ## Listings promo cards
 
 The "Sell my …" and "Dealer sign up" cards on the listings page are per site:

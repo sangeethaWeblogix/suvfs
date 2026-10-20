@@ -58,6 +58,8 @@ const nextConfig: NextConfig = {
       },
       // NOTE: old /sell-my-caravan-:slug rewrite removed — replaced by 301 redirects below.
       ...siteSlugRewrites,
+      // Browsers and crawlers that ask for /favicon.ico get this site's own icon.
+      { source: "/favicon.ico", destination: site.favicon },
     ];
   },
   experimental: {

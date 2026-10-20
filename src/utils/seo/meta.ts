@@ -397,9 +397,9 @@ export async function metaFromSlug(
       url: canonical,
       images: [
         {
-          url: "https://www.caravansforsale.com.au/images/cfs-logo.png",
-          width: 800,
-          height: 600,
+          url: `${site.url}${site.ogImage}`,
+          width: 1200,
+          height: 630,
           alt: `${site.plural} for Sale Australia`,
         },
       ],

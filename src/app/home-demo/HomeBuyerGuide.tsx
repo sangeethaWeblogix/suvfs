@@ -1,7 +1,39 @@
 import Image from "next/image";
-import { site, sitePaths } from "@/config/sites";
+import { SITES, site, sitePaths } from "@/config/sites";
+
+const RELATED_SITE_KEYS: Record<string, [string, string, string]> = {
+  suv: ["4x4", "wagons", "hybrid"],
+  utes: ["4x4", "vans", "suv"],
+  peoplemovers: ["vans", "suv", "wagons"],
+  sedans: ["hatchbacks", "coupes", "wagons"],
+  hatchbacks: ["sedans", "wagons", "electric"],
+  wagons: ["suv", "sedans", "peoplemovers"],
+  coupes: ["convertibles", "sedans", "hatchbacks"],
+  convertibles: ["coupes", "sedans", "electric"],
+  vans: ["utes", "peoplemovers", "suv"],
+  "4x4": ["suv", "utes", "wagons"],
+  electric: ["hybrid", "hatchbacks", "suv"],
+  hybrid: ["electric", "suv", "sedans"],
+};
+
+const RELATED_SITE_BENEFITS: Record<string, string> = {
+  suv: "versatile family driving",
+  utes: "work-ready practicality",
+  peoplemovers: "extra passenger space",
+  sedans: "comfortable everyday driving",
+  hatchbacks: "compact, city-friendly practicality",
+  wagons: "flexible passenger and cargo space",
+  coupes: "sporty styling and performance",
+  convertibles: "open-air driving",
+  vans: "business and cargo versatility",
+  "4x4": "off-road capability",
+  electric: "efficient electric driving",
+  hybrid: "improved fuel efficiency",
+};
 
 export default function HomeBuyerGuide() {
+  const relatedSites = (RELATED_SITE_KEYS[site.key] ?? RELATED_SITE_KEYS.suv).map((key) => SITES[key]);
+
   return (
     <>
       {/* ── Buyer Guide ── */}
@@ -13,10 +45,10 @@ export default function HomeBuyerGuide() {
             <div className="hbg-img-col">
               <div className="hbg-img-wrap">
                 <Image
-                  src="/images/buyers_guid.jpg"
+                  src={site.buyerGuideImage}
                   alt={`${site.plural} for Sale Australia`}
-                  width={600}
-                  height={420}
+                  width={1024}
+                  height={682}
                   className="hbg-img"
                   unoptimized
                 />
@@ -37,10 +69,10 @@ export default function HomeBuyerGuide() {
               </h2>
               
               <p className="hbg-body">
-                {site.brand} makes it easy to explore {site.noun} sales across Australia, with thousands of new and used {site.nounPlural} for sale from dealers and private sellers. Browse affordable used {site.nounPlural}, premium new models and options designed for touring, family holidays or off-road adventures. Compare important features such as layout, ATM, tare weight, sleeping capacity, length, suspension, condition, service history and towing requirements to narrow down your choices before contacting a seller or visiting a dealership. Our easy-to-use platform makes researching and comparing {site.nounPlural} simple.
+                {site.brand} makes it easy to browse new and used {site.nounPlural} for sale across Australia from dealers and private sellers. Compare affordable pre-owned vehicles, the latest new models and options suited to different budgets and driving needs. Review important details such as make, model, year, odometer, fuel type, transmission, drivetrain, seating, safety features, condition and service history before contacting a seller or visiting a dealership.
               </p>
               <p className="hbg-body">
-                Explore popular {site.noun} types including off-road, hybrid, pop top, touring and luxury {site.nounPlural}, while also comparing trusted {site.noun} brands and reputable dealers across Australia. Check whether dealers offer warranty support, finance options, trade-ins, after-sales service and detailed vehicle information before making your decision. Use our buyers guide and convenient search filters to browse listings by state, location, budget, size, weight and berth, helping you find the right {site.noun} for your lifestyle and travel plans.
+                Compare popular makes, models and variants from reputable dealers and private sellers across Australia. Consider running costs, fuel efficiency, warranty coverage, finance options, trade-ins and after-sales support before making your decision. Use our buyer&apos;s guide and convenient search filters to browse listings by state, location, budget, year, odometer and key specifications, helping you find the right {site.noun} for your lifestyle.
               </p>
               
             </div>
@@ -49,19 +81,19 @@ export default function HomeBuyerGuide() {
         </div>
       </section>
 
-      {/* ── Explore Other Travel Options ── */}
+      {/* ── Explore Other Vehicle Options ── */}
       <section className="hbg-explore-section">
         <div className="container">
           <div className="hbg-explore-card">
-            <h2 className="hbg-explore-title">Explore Other Travel Options</h2>
+            <h2 className="hbg-explore-title">Explore Other Vehicle Options</h2>
             <p className="hbg-explore-body">
-              Still deciding which travel setup suits you? Browse{" "}
-              <a href="https://www.motorhomesforsale.com.au/" className="hbg-explore-link" target="_blank" rel="noopener noreferrer">motorhomes for sale</a>{" "}
-              for a vehicle with integrated living space, or explore{" "}
-              <a href="https://www.campervansforsale.au/" className="hbg-explore-link" target="_blank" rel="noopener noreferrer">campervans for sale</a>{" "}
-              for a more compact option. For a towable camping setup, compare{" "}
-              <a href="https://www.campingtrailersforsale.com.au/" className="hbg-explore-link" target="_blank" rel="noopener noreferrer">camper trailers for sale</a>{" "}
-              across our other marketplaces.
+              Still deciding which vehicle best suits your needs? Browse{" "}
+              <a href={`${relatedSites[0].url}/`} className="hbg-explore-link" target="_blank" rel="noopener noreferrer">{relatedSites[0].nounPlural} for sale</a>{" "}
+              for {RELATED_SITE_BENEFITS[relatedSites[0].key]}, explore{" "}
+              <a href={`${relatedSites[1].url}/`} className="hbg-explore-link" target="_blank" rel="noopener noreferrer">{relatedSites[1].nounPlural} for sale</a>{" "}
+              for {RELATED_SITE_BENEFITS[relatedSites[1].key]}, or compare{" "}
+              <a href={`${relatedSites[2].url}/`} className="hbg-explore-link" target="_blank" rel="noopener noreferrer">{relatedSites[2].nounPlural} for sale</a>{" "}
+              for {RELATED_SITE_BENEFITS[relatedSites[2].key]} across our other Australian car marketplaces.
             </p>
           </div>
         </div>

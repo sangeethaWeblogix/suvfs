@@ -19,11 +19,6 @@ const BROWSE_LINKS = [
   { label: `All ${site.plural} for Sale`, href: "/listings/" },
   { label: `New ${site.plural}`, href: "/listings/new-condition/" },
   { label: `Used ${site.plural}`, href: "/listings/used-condition/" },
-  { label: `Off Road ${site.plural}`, href: "/listings/off-road-category/" },
-  { label: `Hybrid ${site.plural}`, href: "/listings/hybrid-category/" },
-  { label: `Pop Top ${site.plural}`, href: "/listings/pop-top-category/" },
-  { label: `Touring ${site.plural}`, href: "/listings/touring-category/" },
-  { label: `Luxury ${site.plural}`, href: "/listings/luxury-category/" },
 ];
 
 const LOCATION_LINKS = [
@@ -69,7 +64,6 @@ const DEALER_LINKS = [
 ];
 
 const GUIDE_LINKS = [
-  { label: `Off Road ${site.singular} Hub`, href: "/off-road-caravans/", accent: true },
   { label: "Blog", href: "/blog/" },
   { label: "Buyer Safety Guide", href: "/buyer-safety-guide/", nofollow: true },
   { label: "About Us", href: "/about-us/" },
@@ -156,7 +150,7 @@ const Footer = () => {
               <ul>
                 {GUIDE_LINKS.map((l) => (
                   <li key={l.label}>
-                    <a href={l.href} className={l.accent ? "cfs-footer__link--accent" : undefined} rel={l.nofollow ? "nofollow" : undefined}>
+                    <a href={l.href} rel={l.nofollow ? "nofollow" : undefined}>
                       {l.label}
                     </a>
                   </li>

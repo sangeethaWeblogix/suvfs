@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 
 import React, { useState } from "react";
 import { site } from "@/config/sites";
@@ -174,16 +173,6 @@ export default function ContactSection() {
                         Exclusive Offers From Select Quality {site.singular}{" "}
                         Manufacturers
                       </h4>
-                      <Image
-                        className="hidden-xs"
-                        src="/images/Blog_bottom_banner.webp"
-                        alt=""
-                        unoptimized
-                        width={0}
-                        height={0}
-                        sizes="100vw"
-                        style={{ width: "auto", height: "auto" }}
-                      />
                     </div>
                     <p className="required_txt">
                       Fill out the form below, and we&apos;ll send you exclusive

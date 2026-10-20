@@ -9,6 +9,7 @@ import { fetchRequirements } from "@/api/postRquirements/api";
 import { fetchHomePage } from "@/api/home/api";
 import { fetchHomeFeatured } from "@/api/homeApi/featured/api";
 import { fetchBlogs } from "@/api/blog/api";
+import { fetchSiteSchema } from "@/lib/siteSchema";
 
 const FEATURED_SEED_MAX = 15;
 
@@ -38,9 +39,9 @@ export const metadata: Metadata = {
     siteName: `${site.plural} for Sale`,
     images: [
       {
-        url: `${site.url}/images/cfs-logo.png`,
-        width: 800,
-        height: 600,
+        url: `${site.url}${site.ogImage}`,
+        width: 1200,
+        height: 630,
         alt: `${site.plural} for Sale Australia`,
       },
     ],
@@ -70,6 +71,7 @@ export default async function Page() {
     featuredNew,
     featuredUsed,
     blogPosts,
+    siteFilterSchema,
   ] = await Promise.all([
     fetchStateBasedCaravans(),
     fetchRequirements(),
@@ -78,6 +80,7 @@ export default async function Page() {
     fetchHomeFeatured({ type: "new", seed: featuredSeed, visitorIp }),
     fetchHomeFeatured({ type: "used", seed: featuredSeed, visitorIp }),
     fetchBlogs(1),
+    fetchSiteSchema(),
   ]);
 
   return (
@@ -90,6 +93,7 @@ export default async function Page() {
       featuredUsed={featuredUsed}
       blogPosts={blogPosts.items.slice(0, 6)}
       visitorIp={visitorIp}
+      siteFilterSchema={siteFilterSchema}
     />
   );
 }

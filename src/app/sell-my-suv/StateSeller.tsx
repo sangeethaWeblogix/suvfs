@@ -169,7 +169,7 @@ export default function StateSeller({ state }: StateSellerProps) {
             {[
               { img: "/images/chat2.png", title: "Direct Buyer Contact", desc: "Communicate directly with buyers, no middleman." },
               { img: "/images/calendar.png", title: "Live Until Sold", desc: `Your listing stays live until your ${site.noun} is sold.` },
-              { img: "/images/caravan.png", title: `${site.singular}-Only Marketplace`, desc: `Reach engaged ${site.noun} buyers actively looking to buy ${site.nounPlural}.` },
+              { img: site.vehicleIcon, title: `${site.singular}-Only Marketplace`, desc: `Reach engaged ${site.noun} buyers actively looking to buy ${site.nounPlural}.` },
               { img: "/images/dollar.png", title: "Keep 100% of Your Sale", desc: "Pay only a one-time fee for maximum value. No hidden costs." },
             ].map((item, i) => (
               <div className="demo-feature-card" key={i}>
@@ -199,7 +199,7 @@ export default function StateSeller({ state }: StateSellerProps) {
                 {CITY_LINKS.map((c) => (
                   <div key={c.label} className="demo-city-item">
                     <span className="demo-city-icon">
-                      <img src="/images/caravan.png" alt="" />
+                      <img src={site.vehicleIcon} alt="" />
                     </span>
                     <h3 className="demo-city-label">
                       <a
@@ -220,8 +220,8 @@ export default function StateSeller({ state }: StateSellerProps) {
           <div className="demo-reach-row">
             {/* Device image */}
             <div className="demo-reach-device">
-              <img src="/images/your-caravan-desktop-seller-2.jpg" className="img-fluid d-none d-lg-block" alt={`${site.singular} For Sale Desktop`} />
-              <img src="/images/your-caravan-mobile-2.jpg" className="img-fluid d-block d-lg-none" alt={`${site.singular} For Sale Mobile`} />
+              <img src="/images/sell-mockup-desktop.jpg" className="img-fluid d-none d-lg-block" alt={`${site.singular} For Sale Desktop`} />
+              <img src="/images/sell-mockup-mobile.jpg" className="img-fluid d-block d-lg-none" alt={`${site.singular} For Sale Mobile`} />
             </div>
 
             {/* Pricing + FAQ card */}
@@ -394,7 +394,7 @@ export default function StateSeller({ state }: StateSellerProps) {
         <div className="container">
           <div className="row align-items-center g-4">
             <div className="col-md-6">
-              <img src="/images/your-caravan-desktop-seller-2.jpg" className="img-fluid demo-why-img" alt={`${demonym} ${site.noun} buyers`} />
+              <img src="/images/sell-mockup-desktop.jpg" className="img-fluid demo-why-img" alt={`${demonym} ${site.noun} buyers`} />
             </div>
             <div className="col-md-6">
               <h2>Why {demonym} {site.singular} Buyers Visit {site.brand} Every Month</h2>

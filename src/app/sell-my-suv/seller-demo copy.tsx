@@ -199,8 +199,8 @@ export default function SellerDemo() {
 
           {/* Device image */}
           <div className="demo-reach-device">
-            <img src="/images/your-caravan-desktop-seller-2.jpg" className="img-fluid d-none d-lg-block" alt="SUV For Sale Desktop" />
-            <img src="/images/your-caravan-mobile-2.jpg" className="img-fluid d-block d-lg-none" alt="SUV For Sale Mobile" />
+            <img src="/images/sell-mockup-desktop.jpg" className="img-fluid d-none d-lg-block" alt="SUV For Sale Desktop" />
+            <img src="/images/sell-mockup-mobile.jpg" className="img-fluid d-block d-lg-none" alt="SUV For Sale Mobile" />
           </div>
 
           {/* Pricing + FAQ card */}
@@ -411,7 +411,7 @@ export default function SellerDemo() {
         <div className="container">
           <div className="row align-items-center g-4">
             <div className="col-md-6">
-              <img src="/images/your-caravan-desktop-seller-2.jpg" className="img-fluid demo-why-img" alt="SUV buyers" />
+              <img src="/images/sell-mockup-desktop.jpg" className="img-fluid demo-why-img" alt="SUV buyers" />
             </div>
             <div className="col-md-6">
               <h2>Why Thousands of SUV Buyers Visit SuvForSale Every Month</h2>

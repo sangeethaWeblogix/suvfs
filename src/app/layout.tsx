@@ -368,7 +368,7 @@ const Article = site.article === "an" ? "An" : "A";
     }
 
     return (
-      <html lang="en" style={{ "--brand": site.color, "--brand-rgb": site.colorRgb, "--brand-secondary": site.secondaryColor } as React.CSSProperties}>
+      <html lang="en" style={{ "--brand": site.color, "--brand-rgb": site.colorRgb, "--brand-secondary": site.secondaryColor, "--seller-card-image": `url(${site.sellerCardImage})`, "--details-banner-image": `url(${site.detailsBannerImage})` } as React.CSSProperties}>
         <head>
           {/* Static pages SEO — injected here to avoid metadata-in-body streaming issue */}
           {staticMeta && <title>{staticMeta.title}</title>}
@@ -432,7 +432,7 @@ const Article = site.article === "an" ? "An" : "A";
                       "url": `${site.url}`,
                       "logo": {
                         "@type": "ImageObject",
-                        "url": `${site.url}/images/cfs-logo-black.png`,
+                        "url": `${site.url}${site.schemaLogo}`,
                       },
                       "contactPoint": {
                         "@type": "ContactPoint",
@@ -878,7 +878,7 @@ const Article = site.article === "an" ? "An" : "A";
                       "url": `${site.url}/`,
                       "logo": {
                         "@type": "ImageObject",
-                        "url": `${site.url}/images/cfs-logo-black.svg`,
+                        "url": `${site.url}${site.schemaLogo}`,
                         "caption": `${site.title} by Marketplace Network`,
                       },
                       "contactPoint": {

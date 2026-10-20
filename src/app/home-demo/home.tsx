@@ -13,6 +13,7 @@ import { site, sitePaths } from "@/config/sites";
 import { type HomeBlogPost } from "@/api/home/api";
 import { type FeaturedListing } from "@/api/homeApi/featured/api";
 import { type BlogPost } from "@/api/blog/api";
+import { type SchemaItem } from "@/app/listings/SiteFilters";
 import HomeFeatured from "./HomeFeatured";
 import HomeStateSection from "./HomeStateSection";
 import HomeLocationSection from "./HomeLocationSection";
@@ -48,6 +49,7 @@ interface Props {
   featuredUsed: FeaturedListing[];
   blogPosts: BlogPost[];
   visitorIp: string;
+  siteFilterSchema?: SchemaItem[];
 }
 /* --------------------------------- Page ---------------------------------- */
 export default function HomePage({
@@ -60,6 +62,7 @@ export default function HomePage({
   featuredUsed,
   blogPosts,
   visitorIp,
+  siteFilterSchema = [],
 
  }: Props) {
 
@@ -146,7 +149,7 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
             <span className="hd-banner__divider-line" />
           </div>
           <p className="hd-banner__subtitle">
-            Browse thousands of new and used {site.nounPlural} for sale across Australia from trusted dealers and private sellers. Compare off-road, family, touring, luxury and pop-top {site.nounPlural} to find the right van for your next adventure.
+            {site.homeIntro}
           </p>
           <div className="hd-banner__trust">
             <div className="hd-banner__trust-item">
@@ -292,7 +295,7 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
       </div>
 
       {/* ── Find by Location ── */}
-      <HomeLocationSection />
+      <HomeLocationSection schema={siteFilterSchema} />
 
       {/* ── Buyer Guide + Why Australians ── */}
       <HomeBuyerGuide />

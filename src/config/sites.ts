@@ -23,6 +23,8 @@ export type SiteConfig = {
   /** Vehicle noun mid-sentence, e.g. "ute" / "utes" ("SUV" stays upper-case). */
   noun: string;
   nounPlural: string;
+  /** Vehicle-specific introductory copy shown in the home page hero. */
+  homeIntro: string;
   /** Indefinite article for `noun`: "an SUV", "a ute". */
   article: "a" | "an";
   /** URL slug for per-site pages: /sell-my-<slug>/, /<slug>-enquiry-form/. */
@@ -41,6 +43,20 @@ export type SiteConfig = {
   homeBanner: string;
   /** Phone-sized home banner (about 1.94:1, e.g. 1024×529) under /public. */
   homeBannerMobile: string;
+  /** Home page "Buyer Guide" photo (3:2, e.g. 1024×682) under /public. */
+  buyerGuideImage: string;
+  /** "Thinking of selling?" card photo (3:2, e.g. 1024×682) under /public. */
+  sellerCardImage: string;
+  /** Product details page banner photo (3:1, e.g. 1024×342), vehicle on the right, under /public. */
+  detailsBannerImage: string;
+  /** Solid side-profile vehicle glyph (square SVG) for feature icons, under /public. */
+  vehicleIcon: string;
+  /** 1200×630 social share image and PNG logo for schema.org, under /public
+   * (made from `logo` by scripts/generate-site-seo-images.mjs). */
+  ogImage: string;
+  schemaLogo: string;
+  /** 400×400 initials tile for the author avatar, under /public (same script). */
+  avatar: string;
 };
 
 // Network-wide brand colours; a site can override them in its SEEDS entry.
@@ -56,22 +72,22 @@ function hexToRgb(hex: string): string {
 // Branding per site: logo.svg and favicon.ico live in public/sites/<key>/;
 // `color` / `secondaryColor` / `logo` / `favicon` override the defaults
 // (see public/sites/README.md).
-type SiteSeed = Pick<SiteConfig, "key" | "domain" | "brand" | "singular" | "plural" | "noun" | "nounPlural" | "article" | "slug"> &
-  Partial<Pick<SiteConfig, "color" | "secondaryColor" | "logo" | "favicon" | "homeBanner" | "homeBannerMobile">>;
+type SiteSeed = Pick<SiteConfig, "key" | "domain" | "brand" | "singular" | "plural" | "noun" | "nounPlural" | "homeIntro" | "article" | "slug"> &
+  Partial<Pick<SiteConfig, "color" | "secondaryColor" | "logo" | "favicon" | "homeBanner" | "homeBannerMobile" | "buyerGuideImage" | "sellerCardImage" | "detailsBannerImage" | "vehicleIcon">>;
 
 const SEEDS: SiteSeed[] = [
-  { key: "suv",          domain: "suvforsale.com.au",          brand: "SuvForSale.com.au",          singular: "SUV",          plural: "SUVs",          noun: "SUV",          nounPlural: "SUVs",          article: "an", slug: "suv" },
-  { key: "utes",         domain: "utesforsale.com",            brand: "UtesForSale.com",            singular: "Ute",          plural: "Utes",          noun: "ute",          nounPlural: "utes",          article: "a",  slug: "ute" },
-  { key: "peoplemovers", domain: "peoplemoversforsale.com.au", brand: "PeopleMoversForSale.com.au", singular: "People Mover", plural: "People Movers", noun: "people mover", nounPlural: "people movers", article: "a",  slug: "people-mover" },
-  { key: "sedans",       domain: "sedancarsforsale.com.au",    brand: "SedanCarsForSale.com.au",    singular: "Sedan",        plural: "Sedans",        noun: "sedan",        nounPlural: "sedans",        article: "a",  slug: "sedan" },
-  { key: "hatchbacks",   domain: "hatchbackcarsforsale.com.au", brand: "HatchbackCarsForSale.com.au",  singular: "Hatchback",    plural: "Hatchbacks",    noun: "hatchback",    nounPlural: "hatchbacks",    article: "a",  slug: "hatchback" },
-  { key: "wagons",       domain: "wagoncarsforsale.com.au",    brand: "WagonCarsForSale.com.au",    singular: "Wagon",        plural: "Wagons",        noun: "wagon",        nounPlural: "wagons",        article: "a",  slug: "wagon" },
-  { key: "coupes",       domain: "coupecarsforsale.com.au",    brand: "CoupeCarsForSale.com.au",    singular: "Coupe",        plural: "Coupes",        noun: "coupe",        nounPlural: "coupes",        article: "a",  slug: "coupe" },
-  { key: "convertibles", domain: "convertiblecarsforsale.com.au", brand: "ConvertibleCarsForSale.com.au", singular: "Convertible",  plural: "Convertibles",  noun: "convertible",  nounPlural: "convertibles",  article: "a",  slug: "convertible" },
-  { key: "vans",         domain: "vansforsale.au",             brand: "VansForSale.au",             singular: "Van",          plural: "Vans",          noun: "van",          nounPlural: "vans",          article: "a",  slug: "van" },
-  { key: "4x4",          domain: "4x4forsale.com.au",          brand: "4x4ForSale.com.au",          singular: "4x4",          plural: "4x4s",          noun: "4x4",          nounPlural: "4x4s",          article: "a",  slug: "4x4" },
-  { key: "electric",     domain: "electriccarsforsale.au",     brand: "ElectricCarsForSale.au",     singular: "Electric Car", plural: "Electric Cars", noun: "electric car", nounPlural: "electric cars", article: "an", slug: "electric-car" },
-  { key: "hybrid",       domain: "hybridcarsforsale.com.au",   brand: "HybridCarsForSale.com.au",   singular: "Hybrid Car",   plural: "Hybrid Cars",   noun: "hybrid car",   nounPlural: "hybrid cars",   article: "a",  slug: "hybrid-car" },
+  { key: "suv",          domain: "suvforsale.com.au",          brand: "SuvForSale.com.au",          singular: "SUV",          plural: "SUVs",          noun: "SUV",          nounPlural: "SUVs",          homeIntro: "Browse thousands of new and used SUVs for sale across Australia from trusted dealers and private sellers. Compare compact, family, off-road, hybrid and luxury SUVs to find the right vehicle for your lifestyle.", article: "an", slug: "suv" },
+  { key: "utes",         domain: "utesforsale.com",            brand: "UtesForSale.com",            singular: "Ute",          plural: "Utes",          noun: "ute",          nounPlural: "utes",          homeIntro: "Browse thousands of new and used utes for sale across Australia from trusted dealers and private sellers. Compare 4x2, 4x4, single-cab, extra-cab and dual-cab utes to find the right vehicle for work or adventure.", article: "a",  slug: "ute" },
+  { key: "peoplemovers", domain: "peoplemoversforsale.com.au", brand: "PeopleMoversForSale.com.au", singular: "People Mover", plural: "People Movers", noun: "people mover", nounPlural: "people movers", homeIntro: "Browse new and used people movers for sale across Australia from trusted dealers and private sellers. Compare spacious seven-, eight- and nine-seat models to find the right vehicle for your family, group or business.", article: "a",  slug: "people-mover" },
+  { key: "sedans",       domain: "sedancarsforsale.com.au",    brand: "SedanCarsForSale.com.au",    singular: "Sedan",        plural: "Sedans",        noun: "sedan",        nounPlural: "sedans",        homeIntro: "Browse thousands of new and used sedans for sale across Australia from trusted dealers and private sellers. Compare compact, family, performance and luxury sedans to find the right car for your everyday drive.", article: "a",  slug: "sedan" },
+  { key: "hatchbacks",   domain: "hatchbackcarsforsale.com.au", brand: "HatchbackCarsForSale.com.au",  singular: "Hatchback",    plural: "Hatchbacks",    noun: "hatchback",    nounPlural: "hatchbacks",    homeIntro: "Browse thousands of new and used hatchbacks for sale across Australia from trusted dealers and private sellers. Compare compact, family, sporty, hybrid and electric hatchbacks to find the right car for your lifestyle.", article: "a",  slug: "hatchback" },
+  { key: "wagons",       domain: "wagoncarsforsale.com.au",    brand: "WagonCarsForSale.com.au",    singular: "Wagon",        plural: "Wagons",        noun: "wagon",        nounPlural: "wagons",        homeIntro: "Browse new and used wagons for sale across Australia from trusted dealers and private sellers. Compare family, touring, performance and luxury wagons to find the right blend of comfort, space and practicality.", article: "a",  slug: "wagon" },
+  { key: "coupes",       domain: "coupecarsforsale.com.au",    brand: "CoupeCarsForSale.com.au",    singular: "Coupe",        plural: "Coupes",        noun: "coupe",        nounPlural: "coupes",        homeIntro: "Browse new and used coupes for sale across Australia from trusted dealers and private sellers. Compare sporty, performance, grand touring and luxury coupes to find the right car for an engaging drive.", article: "a",  slug: "coupe" },
+  { key: "convertibles", domain: "convertiblecarsforsale.com.au", brand: "ConvertibleCarsForSale.com.au", singular: "Convertible",  plural: "Convertibles",  noun: "convertible",  nounPlural: "convertibles",  homeIntro: "Browse new and used convertibles for sale across Australia from trusted dealers and private sellers. Compare soft-top, hard-top, sporty and luxury convertibles to find the right car for open-air driving.", article: "a",  slug: "convertible" },
+  { key: "vans",         domain: "vansforsale.au",             brand: "VansForSale.au",             singular: "Van",          plural: "Vans",          noun: "van",          nounPlural: "vans",          homeIntro: "Browse thousands of new and used vans for sale across Australia from trusted dealers and private sellers. Compare compact, cargo, passenger and large vans to find the right vehicle for your work, family or travels.", article: "a",  slug: "van" },
+  { key: "4x4",          domain: "4x4forsale.com.au",          brand: "4x4ForSale.com.au",          singular: "4x4",          plural: "4x4s",          noun: "4x4",          nounPlural: "4x4s",          homeIntro: "Browse thousands of new and used 4x4s for sale across Australia from trusted dealers and private sellers. Compare off-road, touring, family, utility and luxury 4x4s to find the right vehicle for your next adventure.", article: "a",  slug: "4x4" },
+  { key: "electric",     domain: "electriccarsforsale.au",     brand: "ElectricCarsForSale.au",     singular: "Electric Car", plural: "Electric Cars", noun: "electric car", nounPlural: "electric cars", homeIntro: "Browse new and used electric cars for sale across Australia from trusted dealers and private sellers. Compare hatchbacks, sedans, SUVs and performance EVs by range, charging and features to find the right electric car for you.", article: "an", slug: "electric-car" },
+  { key: "hybrid",       domain: "hybridcarsforsale.com.au",   brand: "HybridCarsForSale.com.au",   singular: "Hybrid Car",   plural: "Hybrid Cars",   noun: "hybrid car",   nounPlural: "hybrid cars",   homeIntro: "Browse new and used hybrid cars for sale across Australia from trusted dealers and private sellers. Compare mild hybrid, full hybrid and plug-in hybrid models to find the right balance of efficiency and performance.", article: "a",  slug: "hybrid-car" },
 ];
 
 export const SITES: Record<string, SiteConfig> = Object.fromEntries(
@@ -90,6 +106,13 @@ export const SITES: Record<string, SiteConfig> = Object.fromEntries(
       favicon: s.favicon ?? `/sites/${s.key}/favicon.ico`,
       homeBanner: s.homeBanner ?? `/sites/${s.key}/home-banner.jpg`,
       homeBannerMobile: s.homeBannerMobile ?? `/sites/${s.key}/home-banner-mobile.jpg`,
+      buyerGuideImage: s.buyerGuideImage ?? `/sites/${s.key}/buyer-guide.jpg`,
+      sellerCardImage: s.sellerCardImage ?? `/sites/${s.key}/seller-card.jpg`,
+      detailsBannerImage: s.detailsBannerImage ?? `/sites/${s.key}/details-banner.jpg`,
+      vehicleIcon: s.vehicleIcon ?? `/sites/${s.key}/vehicle-icon.svg`,
+      ogImage: `/sites/${s.key}/og-image.png`,
+      schemaLogo: `/sites/${s.key}/logo.png`,
+      avatar: `/sites/${s.key}/avatar.png`,
     } satisfies SiteConfig,
   ]),
 );

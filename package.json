@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/prune-other-sites.mjs",
     "build": "next build",
     "start": "next start",
     "site": "node scripts/dev-site.mjs",

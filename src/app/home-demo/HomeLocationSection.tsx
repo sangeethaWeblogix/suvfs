@@ -2,6 +2,23 @@
 
 import Image from "next/image";
 import { site } from "@/config/sites";
+import { buildFilterSegments } from "@/config/filterDefs";
+import type { SchemaItem } from "@/app/listings/SiteFilters";
+import {
+  BatteryCharging,
+  CalendarDays,
+  CarFront,
+  Fuel,
+  Gauge,
+  Ruler,
+  Route,
+  Settings2,
+  Truck,
+  Users,
+  WalletCards,
+  Weight,
+  type LucideIcon,
+} from "lucide-react";
 
 const MAJOR_CITIES = [
   { name: "Adelaide",   href: "/listings/south-australia-state/adelaide-region/",    imgSrc: "/images/Adelaide.png"   },
@@ -25,62 +42,147 @@ const MINOR_CITIES = [
   { name: "Ballarat",       href: "/listings/victoria-state/ballarat-region/" },
 ];
 
-const FILTERS = [
-  {
-    icon: <Image src="/images/Budget.png" alt="Budget" width={24} height={24} unoptimized />,
-    label: "By Your Budget",
-    items: [
-      { text: "Under $30,000",       href: "/listings/under-30000/" },
-      { text: "$30,000 – $40,000",   href: "/listings/between-30000-40000/" },
-      { text: "$40,000 – $50,000",   href: "/listings/between-40000-50000/" },
-      { text: "$50,000 – $70,000",   href: "/listings/between-50000-70000/" },
-      { text: "$70,000 – $80,000",   href: "/listings/between-70000-80000/" },
-      { text: "$80,000 – $100,000",  href: "/listings/between-80000-100000/" },
-      { text: "Over $100,000",       href: "/listings/over-100000/" }, 
-    ],
-  },
-  {
-    icon: <Image src="/images/ATM.png" alt="Weight ATM" width={24} height={24} unoptimized />,
-    label: "By Weight (ATM)",
-    items: [
-      { text: "Under 1500kg", href: "/listings/under-1500-kg-atm/" },
-      { text: "Under 2000kg", href: "/listings/under-2000-kg-atm/" },
-      { text: "Under 2500kg", href: "/listings/under-2500-kg-atm/" },
-      { text: "Under 3000kg", href: "/listings/under-3000-kg-atm/" },
-       
-      { text: "Over 3000kg",  href: "/listings/over-3000-kg-atm/" },
-       
-    ],
-  },
-  {
-    icon: <Image src="/images/Length.png" alt="Length" width={24} height={24} unoptimized />,
-    label: "By Size (Length)",
-    items: [
-      
-      { text: "Under 16ft",     href: "/listings/under-16-length-in-feet/" },
-      { text: "16ft – 18ft",    href: "/listings/between-16-18-length-in-feet/" },
-      { text: "18ft – 20ft",    href: "/listings/between-18-20-length-in-feet/" },
-      { text: "20ft – 22ft",    href: "/listings/between-20-22-length-in-feet/" },
-      { text: "Over 22ft",      href: "/listings/over-22-length-in-feet/" },
-    ],
-  },
-  {
-    icon: <Image src="/images/Sleeping.png" alt="Sleeping" width={24} height={24} unoptimized />,
-    label: "By Sleeping Capacity",
-    items: [
-      { text: "2 Berth",     href: "/listings/2-people-sleeping-capacity/" },
-      { text: "3 Berth",     href: "/listings/3-people-sleeping-capacity/" },
-      { text: "4 Berth",     href: "/listings/4-people-sleeping-capacity/" },
-      { text: "5 Berth",     href: "/listings/5-people-sleeping-capacity/" },
-      { text: "6+ Berth",     href: "/listings/over-5-people-sleeping-capacity/" },
-      
-      
-    ],
-  },
-];
+type FilterItem = { text: string; href: string };
+type FilterRow = { icon: LucideIcon; label: string; items: FilterItem[] };
+
+const BUDGET_ROW: FilterRow = {
+  icon: WalletCards,
+  label: "By Your Budget",
+  items: [
+    { text: "Under $30,000",      href: "/listings/under-30000/" },
+    { text: "$30,000 – $40,000",  href: "/listings/between-30000-40000/" },
+    { text: "$40,000 – $50,000",  href: "/listings/between-40000-50000/" },
+    { text: "$50,000 – $70,000",  href: "/listings/between-50000-70000/" },
+    { text: "$70,000 – $80,000",  href: "/listings/between-70000-80000/" },
+    { text: "$80,000 – $100,000", href: "/listings/between-80000-100000/" },
+    { text: "Over $100,000",      href: "/listings/over-100000/" },
+  ],
+};
+
+const SITE_FILTER_PRIORITIES: Record<string, string[]> = {
+  suv: ["drive_type", "seats"],
+  utes: ["cab_type", "payload_weight"],
+  peoplemovers: ["seats", "fuel_type"],
+  sedans: ["fuel_type", "transmission"],
+  hatchbacks: ["fuel_type", "body_size"],
+  wagons: ["fuel_type", "drive_type"],
+  coupes: ["transmission", "engine_power"],
+  convertibles: ["transmission", "fuel_type"],
+  vans: ["wheelbase", "roof_height"],
+  "4x4": ["drive_type", "braked_towing_capacity"],
+  electric: ["driving_range", "battery_capacity"],
+  hybrid: ["body_type", "drive_type"],
+};
+
+const FILTER_ICONS: Record<string, LucideIcon> = {
+  year: CalendarDays,
+  body_type: CarFront,
+  body_size: CarFront,
+  fuel_type: Fuel,
+  transmission: Settings2,
+  drive_type: Gauge,
+  cab_type: Truck,
+  wheelbase: Ruler,
+  roof_height: Ruler,
+  seats: Users,
+  braked_towing_capacity: Weight,
+  payload_weight: Weight,
+  engine_power: Gauge,
+  cargo_volume: Truck,
+  battery_capacity: BatteryCharging,
+  driving_range: Route,
+};
+
+function listingHref(values: Record<string, string | number>): string {
+  return `/listings/${buildFilterSegments(values).join("/")}/`;
+}
+
+function formatValue(value: number, unit?: string): string {
+  const text = value.toLocaleString("en-AU");
+  if (!unit) return text;
+  if (unit === "AUD") return `$${text}`;
+  return `${text} ${unit.replace("m3", "m³")}`;
+}
+
+function schemaItems(item: SchemaItem): FilterItem[] {
+  if (item.control === "multi") {
+    return item.options.slice(0, 7).map((option, index) => {
+      const value = String(item.values?.[index] ?? option).toLowerCase();
+      return { text: String(option), href: listingHref({ [item.param]: value }) };
+    });
+  }
+
+  if (item.control === "min_dropdown") {
+    const options = item.options.length > 5
+      ? item.options.filter((_, index) => index % Math.ceil(item.options.length / 5) === 0).slice(0, 5)
+      : item.options;
+    return options.map((value) => ({
+      text: `${formatValue(value, item.unit)}+`,
+      href: listingHref({ [item.param]: value }),
+    }));
+  }
+
+  if (item.control === "range") {
+    const [fromParam, toParam] = item.params;
+    if (item.field === "year") {
+      const max = Math.floor(item.max);
+      const bands = [
+        { text: `${max - 2} – ${max}`, from: max - 2, to: max },
+        { text: `${max - 6} – ${max - 3}`, from: max - 6, to: max - 3 },
+        { text: `${max - 11} – ${max - 7}`, from: max - 11, to: max - 7 },
+        { text: `Before ${max - 11}`, to: max - 12 },
+      ];
+      return bands.map((band) => ({
+        text: band.text,
+        href: listingHref({
+          ...(band.from !== undefined && { [fromParam]: band.from }),
+          [toParam]: band.to,
+        }),
+      }));
+    }
+
+    const span = item.max - item.min;
+    const round = (value: number) =>
+      Math.round(value / Math.max(item.step, 1)) * Math.max(item.step, 1);
+    const q1 = round(item.min + span * 0.25);
+    const q2 = round(item.min + span * 0.5);
+    const q3 = round(item.min + span * 0.75);
+    return [
+      { text: `Under ${formatValue(q1, item.unit)}`, values: { [toParam]: q1 } },
+      { text: `${formatValue(q1, item.unit)} – ${formatValue(q2, item.unit)}`, values: { [fromParam]: q1, [toParam]: q2 } },
+      { text: `${formatValue(q2, item.unit)} – ${formatValue(q3, item.unit)}`, values: { [fromParam]: q2, [toParam]: q3 } },
+      { text: `${formatValue(q3, item.unit)}+`, values: { [fromParam]: q3 } },
+    ].map(({ text, values }) => ({ text, href: listingHref(values) }));
+  }
+
+  return [];
+}
+
+function buildFilterRows(schema: SchemaItem[]): FilterRow[] {
+  const fallbackYear: SchemaItem = {
+    field: "year",
+    label: "Year",
+    control: "range",
+    params: ["from_year", "to_year"],
+    min: 1980,
+    max: new Date().getFullYear(),
+    step: 1,
+  };
+  const year = schema.find((item) => item.field === "year") ?? fallbackYear;
+  const selected = (SITE_FILTER_PRIORITIES[site.key] ?? ["fuel_type", "transmission"])
+    .map((field) => schema.find((item) => item.field === field))
+    .filter((item): item is SchemaItem => Boolean(item));
+
+  return [year, ...selected].map((item) => ({
+    icon: FILTER_ICONS[item.field] ?? Settings2,
+    label: `By ${item.label}`,
+    items: schemaItems(item),
+  })).filter((row) => row.items.length > 0);
+}
 
 
-export default function HomeLocationSection() {
+export default function HomeLocationSection({ schema }: { schema: SchemaItem[] }) {
+  const filterRows = [BUDGET_ROW, ...buildFilterRows(schema)];
   return (
     <section className="hloc-section">
       <div className="container">
@@ -129,14 +231,16 @@ export default function HomeLocationSection() {
   <h2 className="hloc-title">
            Search {site.plural} for Sale <span className="hloc-title-accent">Your Way</span>
           </h2>
-          <p className="hloc-subtitle">Browse new and used {site.nounPlural} for sale by price, weight, length and sleeping capacity.</p>
+          <p className="hloc-subtitle">Browse new and used {site.nounPlural} for sale by price, year and the features that matter to you.</p>
         </div>
         <div className="hloc-filters">
           
-          {FILTERS.map((f) => (
+          {filterRows.map((f) => {
+            const Icon = f.icon;
+            return (
             <div key={f.label} className="hloc-filter-row">
               <div className="hloc-filter-label">
-                <span className="hloc-filter-icon-box">{f.icon}</span>
+                <span className="hloc-filter-icon-box"><Icon size={22} aria-hidden="true" /></span>
                 <span className="hloc-filter-text">{f.label}</span>
               </div>
               <div className="hloc-filter-chips">
@@ -149,7 +253,8 @@ export default function HomeLocationSection() {
                 </h3>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
  
         
