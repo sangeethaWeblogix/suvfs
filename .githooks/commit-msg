@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Checks the [sites: …] deploy tag (see README → Deploying).
+# No tag → reminder only. Unknown site key → commit refused, since Vercel
+# would then skip every site.
+
+MSG=$(grep -v '^#' "$1")
+ROOT=$(git rev-parse --show-toplevel)
+KEYS=$(grep -oE 'key: "[^"]+"' "$ROOT/src/config/sites.ts" | sed -E 's/key: "(.*)"/\1/' | tr '\n' ' ')
+
+TAG=$(printf '%s' "$MSG" | grep -oiE '\[sites?:[^]]*\]' | head -n1)
+if [ -z "$TAG" ]; then
+  echo "hint: no [sites: …] tag — this push will rebuild ALL car sites on Vercel." >&2
+  echo "hint: to build only some, add e.g. [sites: suv] or [sites: utes, 4x4]." >&2
+  exit 0
+fi
+
+LIST=$(printf '%s' "$TAG" | sed -E 's/^\[[^:]*:(.*)\]$/\1/' | tr 'A-Z' 'a-z' | tr ',' ' ')
+[ -z "${LIST// /}" ] && { echo "error: $TAG lists no sites. Use e.g. [sites: suv] or [sites: all]." >&2; exit 1; }
+for s in $LIST; do
+  [ "$s" = "all" ] && continue
+  case " $KEYS " in
+    *" $s "*) ;;
+    *) echo "error: unknown site key '$s' in $TAG" >&2
+       echo "       valid keys: all $KEYS" >&2
+       exit 1 ;;
+  esac
+done
+case " $LIST " in
+  *" all "*) echo "deploy: $TAG will rebuild all car sites" >&2 ;;
+  *) echo "deploy: $TAG will rebuild only:$(printf ' %s' $LIST)" >&2 ;;
+esac
