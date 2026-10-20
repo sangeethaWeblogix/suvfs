@@ -9,7 +9,7 @@ import { site } from "@/config/sites";
    title: `Login | ${site.title} – Dealer & Private Seller Access`,
   description:
      `Access your ${site.brand} account. Private sellers and dealers can log in to manage listings, post ${site.nounPlural} for sale, and connect with thousands of buyers across Australia.`,
-   icons: { icon: "/favicon.ico" },
+   icons: { icon: site.favicon },
    robots: "index, follow",
    verification: {
      google: "6tT6MT6AJgGromLaqvdnyyDQouJXq0VHS-7HC194xEo", // ✅ this auto generates <meta name="google-site-verification" />

@@ -11,7 +11,7 @@ import { ReactNode } from "react";
    },
    description:
      "Read the Privacy Policy for websites operated by Marketplace Network Pty Ltd (ABN 70 694 987 052), including how we collect, use, and protect your personal information.",
-   icons: { icon: "/favicon.ico" },
+   icons: { icon: site.favicon },
    robots: "index",
    verification: {
      google: "6tT6MT6AJgGromLaqvdnyyDQouJXq0VHS-7HC194xEo", // ✅ this auto generates <meta name="google-site-verification" />

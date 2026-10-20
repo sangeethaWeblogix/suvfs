@@ -12,7 +12,7 @@ import { ReactNode } from "react";
    },
    description:
      `Have a question about ${site.nounPlural} in Australia? Contact ${site.title} for support, inquiries, or help finding your next ${site.noun} today.`,
-   icons: { icon: "/favicon.ico" },
+   icons: { icon: site.favicon },
    robots: "index, follow",
    verification: {
      google: "6tT6MT6AJgGromLaqvdnyyDQouJXq0VHS-7HC194xEo", // ✅ this auto generates <meta name="google-site-verification" />

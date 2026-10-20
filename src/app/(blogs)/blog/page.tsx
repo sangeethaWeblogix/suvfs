@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: { default: "Latest News, Reviews & Advice", template: "%s " },
   description:
     `Latest news, in-depth reviews, and expert advice on the latest in the ${site.noun} market. Stay informed and make smarter decisions.`,
-  icons: { icon: "/favicon.ico" },
+  icons: { icon: site.favicon },
   robots: "index, follow",
   alternates: {
     canonical: `${site.url}/blog/`,

@@ -10,6 +10,7 @@
   /* Brand colour — overridden per site on <html> from src/config/sites.ts */
   --brand: #4736FE;
   --brand-rgb: 71, 54, 254;
+  --brand-secondary: #252525;
 }
 
 @media (prefers-color-scheme: dark) {

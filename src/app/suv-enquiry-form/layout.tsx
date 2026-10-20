@@ -11,7 +11,7 @@ import { site, sitePaths } from "@/config/sites";
    },
    description:
      `Fill out our ${site.noun} enquiry form to receive exclusive offers from select quality ${site.noun} manufacturers. Get the best ${site.noun} deals sent directly to you.`,
-   icons: { icon: "/favicon.ico" },
+   icons: { icon: site.favicon },
    robots: "index, follow",
    verification: {
      google: "6tT6MT6AJgGromLaqvdnyyDQouJXq0VHS-7HC194xEo", // ✅ this auto generates <meta name="google-site-verification" />

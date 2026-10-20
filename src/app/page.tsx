@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: "%s ",
   },
   description: HOME_DESCRIPTION,
-  icons: { icon: "/favicon.ico" },
+  icons: { icon: site.favicon },
   robots: "index, follow",
   verification: {
     google: "6tT6MT6AJgGromLaqvdnyyDQouJXq0VHS-7HC194xEo",

@@ -1,6 +1,6 @@
 "use client";
 
-import { site, sitePaths } from "@/config/sites";
+import { site, sitePaths, sitePromos } from "@/config/sites";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useEnquiryForm } from "@/app/components/ListContent/enquiryform";
@@ -81,9 +81,9 @@ interface Props {
 }
 
 const PROMO_BANNERS = [
-  { src: "/images/sell-my-caravan.jpg?=11", href: sitePaths.sell, alt: `Sell My ${site.singular}` },
+  { src: sitePromos.sell, href: sitePaths.sell, alt: `Sell My ${site.singular}` },
   // { src: "/images/home.jpg?=3",            href: "https://www.aussiefivestarcaravans.com.au/", alt: "Aussie Five Star Caravans" },
-  { src: "/images/dealer-advertising.jpg?=7", href: "/dealer-advertising/", alt: "Dealer Advertising" },
+  { src: sitePromos.dealer, href: "/dealer-advertising/", alt: "Dealer Advertising" },
 ];
 
 function seededSample(size: number, count: number, seed: number): number[] {
