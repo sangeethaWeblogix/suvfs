@@ -130,11 +130,15 @@ export function useSiteFacets(filters: FilterState): Facets {
 const FACET_KEY: Record<string, string> = { condition: "conditions", year: "years" };
 
 function countFor(facets: Facets, item: SchemaItem, value: string, label: string): number | undefined {
-  if (item.control === "min_dropdown") return facets?.buckets?.[item.field]?.[value];
+  // undefined = no counts for this field (yet); an option missing from a known bucket has 0 listings.
+  if (item.control === "min_dropdown") {
+    const buckets = facets?.buckets?.[item.field];
+    return buckets ? Number(buckets[value] ?? 0) : undefined;
+  }
   const bucket = facets?.[FACET_KEY[item.field] ?? item.field];
   if (!bucket || typeof bucket !== "object" || "min" in bucket) return undefined;
   // "8+" seats is counted under "8" by the API.
-  return bucket[value] ?? bucket[label] ?? bucket[label.toLowerCase()] ?? bucket[value.replace(/\+$/, "")];
+  return bucket[value] ?? bucket[label] ?? bucket[label.toLowerCase()] ?? bucket[value.replace(/\+$/, "")] ?? 0;
 }
 
 /** Dual-thumb range slider over `steps`; the ends mean "Any". */
@@ -178,6 +182,45 @@ function RangeSlider({ item, from, to, onChange }: {
   );
 }
 
+/** Ranges shown as From / To dropdowns instead of a slider, matching the CFS sites. */
+const SELECT_RANGES = new Set(["from_year", "from_price"]);
+
+/** Price buckets, same as the CFS sites. */
+const PRICE_OPTIONS = [10000,20000,30000,40000,50000,60000,70000,80000,90000,100000,125000,150000,175000,200000,225000,250000,275000,300000];
+
+/** From / To dropdowns: years newest first, price in the CFS buckets. */
+function RangeSelects({ item, from, to, onChange }: {
+  item: Extract<SchemaItem, { control: "range" }>; from: number | null; to: number | null;
+  onChange: (from: number | null, to: number | null) => void;
+}) {
+  const isYear = item.params[0] === "from_year";
+  const steps: number[] = [];
+  if (isYear) for (let y = Math.floor(item.max); y >= Math.ceil(item.min); y--) steps.push(y);
+  else steps.push(...PRICE_OPTIONS);
+  const label = (v: number) => (isYear ? String(v) : formatAmount(v, "AUD"));
+  const pick = (v: string) => (v ? Number(v) : null);
+  return (
+    <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+      <div style={{ flex: 1, minWidth: 130 }}>
+        <label style={{ fontSize: 13, color: "#555", display: "block", marginBottom: 6 }}>From</label>
+        <select className="cfs-select-input form-select" value={from ?? ""}
+          onChange={(e) => onChange(pick(e.target.value), to)}>
+          <option value="">Any</option>
+          {steps.filter((v) => to === null || v <= to).map((v) => <option key={v} value={v}>{label(v)}</option>)}
+        </select>
+      </div>
+      <div style={{ flex: 1, minWidth: 130 }}>
+        <label style={{ fontSize: 13, color: "#555", display: "block", marginBottom: 6 }}>To</label>
+        <select className="cfs-select-input form-select" value={to ?? ""}
+          onChange={(e) => onChange(from, pick(e.target.value))}>
+          <option value="">Any</option>
+          {steps.filter((v) => from === null || v >= from).map((v) => <option key={v} value={v}>{label(v)}</option>)}
+        </select>
+      </div>
+    </div>
+  );
+}
+
 /* ── One filter's controls (shared by the button modals and the All-filters modal) ── */
 function FilterControl({ item, values, onChange, facets }: {
   item: SchemaItem; values: Values; onChange: (patch: Values) => void; facets: Facets;
@@ -188,18 +231,20 @@ function FilterControl({ item, values, onChange, facets }: {
       const next = selected.includes(value) ? selected.filter((v) => v !== value) : [...selected, value];
       onChange({ [item.param]: next.length ? next.join(",") : undefined });
     };
+    // Like CFS: no counts shown, and options with no active listings are hidden
+    // (kept while selected so they can be unticked; all shown until counts load).
+    const options = multiOptions(item).filter((o) =>
+      selected.includes(o.value) || (countFor(facets, item, o.value, o.label) ?? 1) > 0);
     return (
       <ul className="loc-state-list">
-        {multiOptions(item).map((o) => {
+        {options.map((o) => {
           const isOn = selected.includes(o.value);
-          const count = countFor(facets, item, o.value, o.label);
           return (
             <li key={o.value} className="loc-state-item" onClick={() => toggle(o.value)}>
               <span className={`loc-checkbox${isOn ? " checked" : ""}`}>
                 {isOn && <i className="bi bi-check" style={{ color: "#fff", fontSize: 14, lineHeight: 1 }} />}
               </span>
               <span className="loc-state-name">{o.label}</span>
-              {count !== undefined && <span className="loc-state-count" style={{ marginLeft: "auto", color: "#888", fontSize: 13 }}>{count}</span>}
             </li>
           );
         })}
@@ -208,14 +253,14 @@ function FilterControl({ item, values, onChange, facets }: {
   }
 
   if (item.control === "min_dropdown") {
+    const current = present(values[item.param]) ? String(values[item.param]) : "";
+    const options = item.options.filter((n) =>
+      String(n) === current || (countFor(facets, item, String(n), String(n)) ?? 1) > 0);
     return (
-      <select className="cfs-select-input form-select" value={present(values[item.param]) ? String(values[item.param]) : ""}
+      <select className="cfs-select-input form-select" value={current}
         onChange={(e) => onChange({ [item.param]: e.target.value || undefined })}>
         <option value="">Any</option>
-        {item.options.map((n) => {
-          const count = countFor(facets, item, String(n), String(n));
-          return <option key={n} value={n}>{formatAmount(n, item.unit)}+{count !== undefined ? ` (${count})` : ""}</option>;
-        })}
+        {options.map((n) => <option key={n} value={n}>{formatAmount(n, item.unit)}+</option>)}
       </select>
     );
   }
@@ -224,6 +269,8 @@ function FilterControl({ item, values, onChange, facets }: {
     const [fromKey, toKey] = item.params;
     const from = present(values[fromKey]) ? Number(values[fromKey]) : null;
     const to = present(values[toKey]) ? Number(values[toKey]) : null;
+    if (SELECT_RANGES.has(fromKey)) return <RangeSelects item={item} from={from} to={to}
+      onChange={(f, t) => onChange({ [fromKey]: f ?? undefined, [toKey]: t ?? undefined })} />;
     return (
       <RangeSlider item={item} from={from} to={to}
         onChange={(f, t) => onChange({ [fromKey]: f ?? undefined, [toKey]: t ?? undefined })} />
