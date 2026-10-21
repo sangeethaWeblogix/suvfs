@@ -18,7 +18,6 @@ function buildApiParams(filters: FilterState): URLSearchParams {
   const params = new URLSearchParams({ order_by: "default", per_page: "21", page: "1", seed: "1" });
   if (filters.state)              params.set("state",             String(filters.state));
   if (filters.region)             params.set("region",            String(filters.region));
-  if (filters.category)           params.set("category",          String(filters.category));
   if (filters.condition)          params.set("condition",         String(filters.condition));
   if (filters.make)               params.set("make",              String(filters.make));
   if (filters.model)              params.set("model",             String(filters.model));
@@ -26,12 +25,6 @@ function buildApiParams(filters: FilterState): URLSearchParams {
   if (filters.pincode)            params.set("pincode",           String(filters.pincode));
   if (filters.from_price)         params.set("from_price",        String(filters.from_price));
   if (filters.to_price)           params.set("to_price",          String(filters.to_price));
-  if (filters.minKg)              params.set("from_atm",          String(filters.minKg));
-  if (filters.maxKg)              params.set("to_atm",            String(filters.maxKg));
-  if (filters.from_sleep)         params.set("from_sleep",        String(filters.from_sleep));
-  if (filters.to_sleep)           params.set("to_sleep",          String(filters.to_sleep));
-  if (filters.from_length)        params.set("from_length",       String(filters.from_length));
-  if (filters.to_length)          params.set("to_length",         String(filters.to_length));
   if (filters.from_year)  params.set("from_year", String(filters.from_year));
   if (filters.to_year)    params.set("to_year",   String(filters.to_year));
   if (filters.keyword) {

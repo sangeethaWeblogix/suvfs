@@ -2,30 +2,18 @@
 
 import { site } from "@/config/sites";
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
-import { useSiteFilterSchema } from "./SiteFilters";
+import { useSiteFacets, useSiteFilterSchema } from "./SiteFilters";
 import {
-  BUDGET_ROW,
+  budgetRow,
   buildSiteFilterRows,
   scopeBrowseHref,
 } from "./siteBrowseFilters";
 import {
   toStateSlug,
   stateLabel,
-  cleanRegionName,
   STATES,
-  TYPES_NO_STATE,
-  FILTERS_NO_STATE,
-  PRICE_BANDS,
-  ATM_BANDS,
-  LENGTH_BANDS,
-  SLEEP_BANDS,
-  categoryLabel,
-  buildStatesForCategory,
-  buildPopularRegionsForCategory,
   buildAllRegionsForState,
-  buildFiltersForState,
   type CountItem,
   type BrowseSectionData,
 } from "./browseSectionShared";
@@ -42,159 +30,54 @@ async function fetchGroupCounts(groupBy: string, scope: Record<string, string>):
   }
 }
 
-async function fetchBandCount(scope: Record<string, string>, query: string): Promise<number> {
-  try {
-    const qs = new URLSearchParams(scope);
-    new URLSearchParams(query).forEach((v, k) => qs.set(k, v));
-    const res = await fetch(`/api/product-exists-check/?${qs.toString()}`);
-    if (!res.ok) return 0;
-    const json = await res.json();
-    return json?.count ?? (json?.exists ? 1 : 0);
-  } catch {
-    return 0;
-  }
-}
-
-async function fetchAllBandCounts(scope: Record<string, string>) {
-  const [price, atm, length, sleep] = await Promise.all([
-    Promise.all(PRICE_BANDS.map((b) => fetchBandCount(scope, b.query))),
-    Promise.all(ATM_BANDS.map((b) => fetchBandCount(scope, b.query))),
-    Promise.all(LENGTH_BANDS.map((b) => fetchBandCount(scope, b.query))),
-    Promise.all(SLEEP_BANDS.map((b) => fetchBandCount(scope, b.query))),
-  ]);
-  return { price, atm, length, sleep };
-}
-
 interface Props {
   state?: string;
   region?: string;
-  category?: string;
   /** Server-fetched counts (SSR/ISR) for the current filters — when present,
    * seeds the pills/links straight into the first render (so they land in
    * page source for crawlers) and skips the redundant client-side refetch. */
   initialData?: BrowseSectionData;
 }
 
-export default function StateBrowseSection({ state, region, category, initialData }: Props) {
+/** "Browse by …" section under the listings. Rows come from this site's filter
+ * schema (budget, year and the site's key filters), trimmed to options that
+ * have listings; the top row shows regions/states and popular makes. */
+export default function StateBrowseSection({ state, region, initialData }: Props) {
   const siteFilterSchema = useSiteFilterSchema();
-  const schemaRows = buildSiteFilterRows(siteFilterSchema);
+  // Counts for this state (or the whole site) — drops chips with no listings.
+  const siteFacets = useSiteFacets(state ? { state: toStateSlug(state) } : {});
+  const schemaRows = buildSiteFilterRows(siteFilterSchema, siteFacets);
+  const budget = budgetRow(siteFacets);
   const typeRow = schemaRows.find((row) => row.field !== "year");
-  const hasState    = !!state;
-  const hasRegion   = !!region;
-  const hasCategory = !!category;
+  const stateRegionMode = !!state && !!region;
 
-  const categoryOnly            = !hasState && hasCategory;
-  const stateRegionMode         = hasState && hasRegion && !hasCategory;
-  const categoryStateMode       = hasState && hasCategory && !hasRegion;
-  const categoryStateRegionMode = hasState && hasCategory && hasRegion;
-  const defaultMode             = !hasCategory && !hasRegion;
-
-  // Every dynamic mode below shares this same count state — only one mode is
-  // ever active for a given render, so there's no cross-talk between fetches.
   // Seeded from server-fetched initialData when available (SSR), so the
   // first render already has real data instead of null/skeleton.
-  const [makeCounts,     setMakeCounts]     = useState<CountItem[] | null>(initialData?.makeCounts ?? null);
-  const [stateCounts,    setStateCounts]    = useState<CountItem[] | null>(initialData?.stateCounts ?? null);
-  const [regionCounts,   setRegionCounts]   = useState<CountItem[] | null>(initialData?.regionCounts ?? null);
-  const [categoryCounts, setCategoryCounts] = useState<CountItem[] | null>(initialData?.categoryCounts ?? null);
-  const [priceCounts,    setPriceCounts]    = useState<number[] | null>(initialData?.priceCounts ?? null);
-  const [atmCounts,      setAtmCounts]      = useState<number[] | null>(initialData?.atmCounts ?? null);
-  const [lengthCounts,   setLengthCounts]   = useState<number[] | null>(initialData?.lengthCounts ?? null);
-  const [sleepCounts,    setSleepCounts]    = useState<number[] | null>(initialData?.sleepCounts ?? null);
+  const [makeCounts, setMakeCounts] = useState<CountItem[] | null>(initialData?.makeCounts ?? null);
 
   // initialData only covers the filters the server rendered this page with —
   // filter changes happen via client-side pushState (see home.tsx), not a
-  // fresh server request, so once state/region/category drift from this
-  // captured snapshot the effects below must fall back to fetching live.
-  const initialFiltersRef = useRef({ state, region, category });
+  // fresh server request, so once state/region drift from this captured
+  // snapshot the effect below must fall back to fetching live.
+  const initialFiltersRef = useRef({ state, region });
   const isInitialFilters =
     state === initialFiltersRef.current.state &&
-    region === initialFiltersRef.current.region &&
-    category === initialFiltersRef.current.category;
+    region === initialFiltersRef.current.region;
 
-  // Default/state-only pages — populate the top-right Popular Manufacturers panel.
   useEffect(() => {
-    if (!defaultMode || (initialData?.makeCounts !== undefined && isInitialFilters)) return;
+    if (initialData?.makeCounts !== undefined && isInitialFilters) return;
     let cancelled = false;
     setMakeCounts(null);
-    fetchGroupCounts("make", state ? { state } : {})
-      .then((data) => { if (!cancelled) setMakeCounts(data); });
+    const scope: Record<string, string> = {};
+    if (state) scope.state = state;
+    if (stateRegionMode) scope.region = region!;
+    fetchGroupCounts("make", scope).then((data) => { if (!cancelled) setMakeCounts(data); });
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultMode, state]);
+  }, [state, region]);
 
-  // Category only — Popular Make/State/Region + Price.
-  useEffect(() => {
-    if (!categoryOnly || (initialData && isInitialFilters)) return;
-    let cancelled = false;
-    const scope = { category: category! };
-    fetchGroupCounts("make", scope).then((d) => { if (!cancelled) setMakeCounts(d); });
-    fetchGroupCounts("state", scope).then((d) => { if (!cancelled) setStateCounts(d); });
-    fetchGroupCounts("region", scope).then((d) => { if (!cancelled) setRegionCounts(d); });
-    Promise.all(PRICE_BANDS.map((b) => fetchBandCount(scope, b.query)))
-      .then((counts) => { if (!cancelled) setPriceCounts(counts); });
-    return () => { cancelled = true; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categoryOnly, category]);
-
-  // State + region (no category) — Popular Make/Category + Price/ATM/Sleep.
-  useEffect(() => {
-    if (!stateRegionMode || (initialData && isInitialFilters)) return;
-    let cancelled = false;
-    const scope = { state: state!, region: region! };
-    fetchGroupCounts("make", scope).then((d) => { if (!cancelled) setMakeCounts(d); });
-    fetchGroupCounts("category", scope).then((d) => { if (!cancelled) setCategoryCounts(d); });
-    Promise.all(PRICE_BANDS.map((b) => fetchBandCount(scope, b.query)))
-      .then((counts) => { if (!cancelled) setPriceCounts(counts); });
-    Promise.all(ATM_BANDS.map((b) => fetchBandCount(scope, b.query)))
-      .then((counts) => { if (!cancelled) setAtmCounts(counts); });
-    Promise.all(SLEEP_BANDS.map((b) => fetchBandCount(scope, b.query)))
-      .then((counts) => { if (!cancelled) setSleepCounts(counts); });
-    return () => { cancelled = true; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stateRegionMode, state, region]);
-
-  // Category + state (no region) — Region/Make + Price/ATM/Length/Sleep.
-  useEffect(() => {
-    if (!categoryStateMode || (initialData && isInitialFilters)) return;
-    let cancelled = false;
-    const scope = { category: category!, state: state! };
-    fetchGroupCounts("region", scope).then((d) => { if (!cancelled) setRegionCounts(d); });
-    fetchGroupCounts("make", scope).then((d) => { if (!cancelled) setMakeCounts(d); });
-    fetchAllBandCounts(scope).then(({ price, atm, length, sleep }) => {
-      if (cancelled) return;
-      setPriceCounts(price); setAtmCounts(atm); setLengthCounts(length); setSleepCounts(sleep);
-    });
-    return () => { cancelled = true; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categoryStateMode, category, state]);
-
-  // Category + state + region (all three) — Make + Price/ATM/Length/Sleep.
-  useEffect(() => {
-    if (!categoryStateRegionMode || (initialData && isInitialFilters)) return;
-    let cancelled = false;
-    const scope = { category: category!, state: state!, region: region! };
-    fetchGroupCounts("make", scope).then((d) => { if (!cancelled) setMakeCounts(d); });
-    fetchAllBandCounts(scope).then(({ price, atm, length, sleep }) => {
-      if (cancelled) return;
-      setPriceCounts(price); setAtmCounts(atm); setLengthCounts(length); setSleepCounts(sleep);
-    });
-    return () => { cancelled = true; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categoryStateRegionMode, category, state, region]);
-
-  // Shared shape for the "By Budget/ATM/Length/Sleep"-style vertical-list
-  // filter columns used by every dynamic mode below.
-  const bandPanel = (basePath: string, bands: typeof PRICE_BANDS, counts: number[] | null) =>
-    bands
-      .filter((_, i) => (counts?.[i] ?? 1) > 0)
-      .map((b) => ({ text: b.text, href: `${basePath}${b.href.replace("/listings", "")}` }));
-
-  // group_by-based panels (make/state/region/category) only know what to show
-  // once their /api/params-count/ response arrives — unlike the band panels
-  // above, there's no "show everything" fallback that's safe to filter later.
-  // While that fetch is still in flight (count state === null), render
-  // shimmer pills instead of nothing so a slow response doesn't look empty.
+  // While the make counts are in flight (null), render shimmer pills instead
+  // of nothing so a slow response doesn't look empty.
   const pillSkeleton = (count = 8) => (
     <>
       {Array.from({ length: count }).map((_, i) => (
@@ -207,16 +90,14 @@ export default function StateBrowseSection({ state, region, category, initialDat
     </>
   );
 
-  const renderFilterCols = (panels: { icon: string | LucideIcon; title: string; links: { text: string; href: string }[] }[], rowClass: string) => (
+  const renderFilterCols = (panels: { icon: LucideIcon; title: string; links: { text: string; href: string }[] }[], rowClass: string) => (
     <div className={`lsd-browse__row2 ${rowClass}`}>
       {panels.filter((p) => p.links.length > 0).map((p) => {
-        const Icon = typeof p.icon === "string" ? null : p.icon;
+        const Icon = p.icon;
         return (
           <div key={p.title} className="lsd-browse__filter-col">
             <div className="lsd-browse__filter-head">
-              {Icon
-                ? <Icon size={20} aria-hidden="true" />
-                : <Image src={p.icon as string} alt={p.title} width={20} height={20} unoptimized />}
+              <Icon size={20} aria-hidden="true" />
               <span className="lsd-browse__filter-title">{p.title}</span>
             </div>
             <div className="lsd-browse__filter-links">
@@ -230,147 +111,33 @@ export default function StateBrowseSection({ state, region, category, initialDat
     </div>
   );
 
-  if (categoryOnly) {
-    const label = categoryLabel(category!);
-
-    // While a count list hasn't loaded yet, show the full static list rather
-    // than an empty panel — narrowed down the moment counts arrive.
-    const makePanel = (makeCounts ?? [])
-      .filter((m) => m.count > 0)
-      .map((m) => ({ text: m.name, href: `/listings/${m.slug}/${category}-category/` }));
-
-    const statePanel = buildStatesForCategory(category!)
-      .filter((s) => stateCounts === null || (stateCounts.find((sc) => sc.slug === s.slug)?.count ?? 0) > 0)
-      .map((s) => ({ text: s.name, href: s.href }));
-
-    const regionPanel = buildPopularRegionsForCategory(category!)
-      .filter((r) => regionCounts === null || (regionCounts.find((rc) => rc.slug === r.slug)?.count ?? 0) > 0)
-      .map((r) => ({ text: r.name, href: r.href }));
-
-    const pricePanel = bandPanel(`/listings/${category}-category`, PRICE_BANDS, priceCounts);
-
-    const showStatePanel  = stateCounts === null || statePanel.length > 0;
-    const showRegionPanel = regionCounts === null || regionPanel.length > 0;
-    const showMakePanel   = makeCounts === null || makePanel.length > 0;
-    const showPricePanel  = pricePanel.length > 0;
-
-    return (
-      <section className="lsd-browse">
-        <div className="container">
-
-          {(showStatePanel || showRegionPanel) && (
-            <div className="lsd-browse__row1">
-              {showStatePanel && (
-                <div className="lsd-browse__panel">
-                  <h3 className="lsd-browse__panel-title">{`Browse ${label} ${site.plural} by State`}</h3>
-                  <div className="lsd-browse__pills">
-                    {statePanel.map((s) => (
-                      <a key={s.text} href={s.href} className="lsd-browse__pill">{s.text}</a>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {showStatePanel && showRegionPanel && <div className="lsd-browse__divider-v" />}
-
-              {showRegionPanel && (
-                <div className="lsd-browse__panel">
-                  <h3 className="lsd-browse__panel-title">{`Browse ${label} ${site.plural} by Popular Region`}</h3>
-                  <div className="lsd-browse__pills">
-                    {regionPanel.map((r) => (
-                      <a key={r.text} href={r.href} className="lsd-browse__pill">{r.text}</a>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {(showMakePanel || showPricePanel) && (
-            <div className="lsd-browse__row2 lsd-browse__row2--half">
-              {showMakePanel && (
-                <div className="lsd-browse__filter-col">
-                  <div className="lsd-browse__filter-head">
-                    <Image src="/images/category.svg" alt="Popular Make" width={20} height={20} unoptimized />
-                    <span className="lsd-browse__filter-title">{`Browse ${label} ${site.plural} by Popular Manufacturers`}</span>
-                  </div>
-                  <div className={`lsd-browse__pills${makePanel.length > 12 ? " lsd-browse__pills--scroll" : ""}`}>
-                    {makeCounts === null ? pillSkeleton() : makePanel.map((l) => (
-                      <a key={l.text} href={l.href} className="lsd-browse__pill">{l.text}</a>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {showPricePanel && (
-                <div className="lsd-browse__filter-col">
-                  <div className="lsd-browse__filter-head">
-                    <Image src="/images/Budget.png" alt="Price" width={20} height={20} unoptimized />
-                    <span className="lsd-browse__filter-title">{`Browse ${label} ${site.plural} by Price`}</span>
-                  </div>
-                  <div className="lsd-browse__filter-links">
-                    {pricePanel.map((l) => (
-                      <a key={l.text} href={l.href} className="lsd-browse__filter-link">{l.text}</a>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-        </div>
-      </section>
-    );
-  }
-
   if (stateRegionMode) {
     const regionName = stateLabel(region!);
     const stateSlug   = toStateSlug(state!);
     const regionSlug  = toStateSlug(region!);
     const basePath    = `/listings/${stateSlug}-state/${regionSlug}-region`;
+    const inRegion = (href: string) => `${basePath}${href.replace("/listings", "")}`;
 
     const makePanel = (makeCounts ?? [])
       .filter((m) => m.count > 0)
       .map((m) => ({ text: m.name, href: `/listings/${m.slug}/${stateSlug}-state/${regionSlug}-region/` }));
 
-    const categoryPanel = typeRow
-      ? typeRow.items.map((item) => ({
-          text: item.text,
-          href: `${basePath}${item.href.replace("/listings", "")}`,
-        }))
-      : TYPES_NO_STATE
-          .filter((t) => {
-            if (categoryCounts === null) return true;
-            const slug = t.href.match(/\/listings\/([a-z-]+)-category\//)?.[1] ?? "";
-            return (categoryCounts.find((cc) => cc.slug === slug)?.count ?? 0) > 0;
-          })
-          .map((t) => {
-            const slug = t.href.match(/\/listings\/([a-z-]+)-category\//)?.[1] ?? "";
-            return { text: t.label, href: `/listings/${slug}-category/${stateSlug}-state/${regionSlug}-region/` };
-          });
+    const typePanel = (typeRow?.items ?? []).map((item) => ({ text: item.text, href: inRegion(item.href) }));
 
-    const panels = siteFilterSchema.length > 0
-      ? [BUDGET_ROW, ...schemaRows].map((row) => ({
-          icon: row.icon,
-          title: `Browse ${site.plural} ${row.label.toLowerCase()} in ${regionName}`,
-          links: row.items.map((item) => ({
-            text: item.text,
-            href: `${basePath}${item.href.replace("/listings", "")}`,
-          })),
-        }))
-      : [
-          { icon: "/images/Budget.png", title: `Browse ${site.plural} by Price in ${regionName}`, links: bandPanel(basePath, PRICE_BANDS, priceCounts) },
-          { icon: "/images/ATM.png", title: `Browse ${site.plural} by Weight (ATM) in ${regionName}`, links: bandPanel(basePath, ATM_BANDS, atmCounts) },
-          { icon: "/images/Sleeping.png", title: `Browse ${site.plural} by Sleeping Capacity in ${regionName}`, links: bandPanel(basePath, SLEEP_BANDS, sleepCounts) },
-        ];
+    const panels = [budget, ...schemaRows].map((row) => ({
+      icon: row.icon,
+      title: `Browse ${site.plural} ${row.label.toLowerCase()} in ${regionName}`,
+      links: row.items.map((item) => ({ text: item.text, href: inRegion(item.href) })),
+    }));
 
-    const showMakePanel     = makeCounts === null || makePanel.length > 0;
-    const showCategoryPanel = categoryCounts === null || categoryPanel.length > 0;
+    const showMakePanel = makeCounts === null || makePanel.length > 0;
+    const showTypePanel = typePanel.length > 0;
 
     return (
       <section className="lsd-browse">
         <div className="container">
 
-          {(showMakePanel || showCategoryPanel) && (
+          {(showMakePanel || showTypePanel) && (
             <div className="lsd-browse__row1">
               {showMakePanel && (
                 <div className="lsd-browse__panel">
@@ -383,13 +150,13 @@ export default function StateBrowseSection({ state, region, category, initialDat
                 </div>
               )}
 
-              {showMakePanel && showCategoryPanel && <div className="lsd-browse__divider-v" />}
+              {showMakePanel && showTypePanel && <div className="lsd-browse__divider-v" />}
 
-              {showCategoryPanel && (
+              {showTypePanel && (
                 <div className="lsd-browse__panel">
-                  <h3 className="lsd-browse__panel-title">{`Browse ${site.plural} by ${typeRow?.label.replace(/^By\s+/i, "") ?? "Type"} in ${regionName}`}</h3>
+                  <h3 className="lsd-browse__panel-title">{`Browse ${site.plural} ${typeRow!.label.toLowerCase()} in ${regionName}`}</h3>
                   <div className="lsd-browse__pills">
-                    {categoryPanel.map((c) => (
+                    {typePanel.map((c) => (
                       <a key={c.text} href={c.href} className="lsd-browse__pill">{c.text}</a>
                     ))}
                   </div>
@@ -405,141 +172,34 @@ export default function StateBrowseSection({ state, region, category, initialDat
     );
   }
 
-  if (categoryStateMode) {
-    const label = categoryLabel(category!);
-    const stateName  = stateLabel(state!);
-    const stateSlug  = toStateSlug(state!);
-    const basePath   = `/listings/${category}-category/${stateSlug}-state`;
-
-    const regionPanel = (regionCounts ?? [])
-      .filter((r) => r.count > 0)
-      .map((r) => ({ text: cleanRegionName(r.name), href: `${basePath}/${r.slug}-region/` }));
-
-    const makePanel = (makeCounts ?? [])
-      .filter((m) => m.count > 0)
-      .map((m) => ({ text: m.name, href: `/listings/${m.slug}/${category}-category/${stateSlug}-state/` }));
-
-    const panels = [
-      { icon: "/images/Budget.png",   title: `Browse ${label} ${site.plural} by Price in ${stateName}`,            links: bandPanel(basePath, PRICE_BANDS, priceCounts) },
-      { icon: "/images/ATM.png",      title: `Browse ${label} ${site.plural} by Weight (ATM) in ${stateName}`,      links: bandPanel(basePath, ATM_BANDS, atmCounts) },
-      { icon: "/images/Length.png",   title: `Browse ${label} ${site.plural} by Size (Length) in ${stateName}`,     links: bandPanel(basePath, LENGTH_BANDS, lengthCounts) },
-      { icon: "/images/Sleeping.png", title: `Browse ${label} ${site.plural} by Sleeping Capacity in ${stateName}`, links: bandPanel(basePath, SLEEP_BANDS, sleepCounts) },
-    ];
-
-    const showRegionPanel = regionCounts === null || regionPanel.length > 0;
-    const showMakePanel   = makeCounts === null || makePanel.length > 0;
-
-    return (
-      <section className="lsd-browse">
-        <div className="container">
-
-          {(showRegionPanel || showMakePanel) && (
-            <div className="lsd-browse__row1">
-              {showRegionPanel && (
-                <div className="lsd-browse__panel">
-                  <h3 className="lsd-browse__panel-title">{`Browse ${label} ${site.plural} by Region in ${stateName}`}</h3>
-                  <div className="lsd-browse__pills">
-                    {regionCounts === null ? pillSkeleton() : regionPanel.map((r) => (
-                      <a key={r.text} href={r.href} className="lsd-browse__pill">{r.text}</a>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {showRegionPanel && showMakePanel && <div className="lsd-browse__divider-v" />}
-
-              {showMakePanel && (
-                <div className="lsd-browse__panel">
-                  <h3 className="lsd-browse__panel-title">{`Browse ${label} ${site.plural} by Popular Manufacturers in ${stateName}`}</h3>
-                  <div className={`lsd-browse__pills${makePanel.length > 12 ? " lsd-browse__pills--scroll" : ""}`}>
-                    {makeCounts === null ? pillSkeleton() : makePanel.map((m) => (
-                      <a key={m.text} href={m.href} className="lsd-browse__pill">{m.text}</a>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {renderFilterCols(panels, "")}
-
-        </div>
-      </section>
-    );
-  }
-
-  if (categoryStateRegionMode) {
-    const label = categoryLabel(category!);
-    const regionName = stateLabel(region!);
-    const stateSlug  = toStateSlug(state!);
-    const regionSlug = toStateSlug(region!);
-    const basePath   = `/listings/${category}-category/${stateSlug}-state/${regionSlug}-region`;
-
-    const makePanel = (makeCounts ?? [])
-      .filter((m) => m.count > 0)
-      .map((m) => ({ text: m.name, href: `/listings/${m.slug}/${category}-category/${stateSlug}-state/${regionSlug}-region/` }));
-
-    const panels = [
-      { icon: "/images/Budget.png",   title: `Browse ${label} ${site.plural} by Price in ${regionName}`,            links: bandPanel(basePath, PRICE_BANDS, priceCounts) },
-      { icon: "/images/ATM.png",      title: `Browse ${label} ${site.plural} by Weight (ATM) in ${regionName}`,      links: bandPanel(basePath, ATM_BANDS, atmCounts) },
-      { icon: "/images/Length.png",   title: `Browse ${label} ${site.plural} by Size (Length) in ${regionName}`,     links: bandPanel(basePath, LENGTH_BANDS, lengthCounts) },
-      { icon: "/images/Sleeping.png", title: `Browse ${label} ${site.plural} by Sleeping Capacity in ${regionName}`, links: bandPanel(basePath, SLEEP_BANDS, sleepCounts) },
-    ];
-
-    const showMakePanel = makeCounts === null || makePanel.length > 0;
-
-    return (
-      <section className="lsd-browse">
-        <div className="container">
-
-          {showMakePanel && (
-            <>
-              <h3 className="lsd-browse__panel-title">{`Browse ${label} ${site.plural} by Popular Manufacturers in ${regionName}`}</h3>
-              <div className="lsd-browse__pills" style={{ marginBottom: 20 }}>
-                {makeCounts === null ? pillSkeleton() : makePanel.map((m) => (
-                  <a key={m.text} href={m.href} className="lsd-browse__pill">{m.text}</a>
-                ))}
-              </div>
-            </>
-          )}
-
-          {renderFilterCols(panels, "")}
-
-        </div>
-      </section>
-    );
-  }
-
-  const regions = hasState ? buildAllRegionsForState(state!) : STATES;
+  const regions = state ? buildAllRegionsForState(state) : STATES;
   const manufacturerLinks = (makeCounts ?? [])
     .filter((make) => make.count > 0)
     .slice(0, 12)
     .map((make) => ({
       label: make.name,
-      href: hasState
-        ? `/listings/${make.slug}/${toStateSlug(state!)}-state/`
+      href: state
+        ? `/listings/${make.slug}/${toStateSlug(state)}-state/`
         : `/listings/${make.slug}/`,
     }));
-  const filters = hasState ? buildFiltersForState(state!) : FILTERS_NO_STATE;
-  const primaryRows = schemaRows.filter((row) => row.field !== "year");
-  const schemaFilterRows = [BUDGET_ROW, ...primaryRows].map((row) => ({
-    ...row,
-    items: row.items.map((item) => ({
-      ...item,
-      href: scopeBrowseHref(item.href, state),
-    })),
-  }));
+  // Year is left out here — it's in the filter bar and the row would crowd the panel.
+  const filterRows = [budget, ...schemaRows.filter((row) => row.field !== "year")]
+    .map((row) => ({
+      ...row,
+      items: row.items.map((item) => ({ ...item, href: scopeBrowseHref(item.href, state) })),
+    }))
+    .filter((row) => row.items.length > 0);
 
-  const leftTitle  = hasState ? `Browse ${site.plural} by Region in ${stateLabel(state!)}` : `Browse ${site.plural} by State`;
-  const rightTitle = hasState
-    ? `Browse ${site.plural} by Popular Makes in ${stateLabel(state!)}`
+  const leftTitle  = state ? `Browse ${site.plural} by Region in ${stateLabel(state)}` : `Browse ${site.plural} by State`;
+  const rightTitle = state
+    ? `Browse ${site.plural} by Popular Makes in ${stateLabel(state)}`
     : `Browse ${site.plural} by Popular Makes`;
 
   return (
     <section className="lsd-browse">
       <div className="container">
 
-        {/* Row 1 — Region/State + Type */}
+        {/* Row 1 — Region/State + popular makes */}
         <div className="lsd-browse__row1">
           <div className="lsd-browse__panel">
             <h3 className="lsd-browse__panel-title">{leftTitle}</h3>
@@ -548,7 +208,6 @@ export default function StateBrowseSection({ state, region, category, initialDat
                 <a key={r.name} href={r.href} className="lsd-browse__pill">{r.name}</a>
               ))}
             </div>
-
           </div>
 
           <div className="lsd-browse__divider-v" />
@@ -565,43 +224,25 @@ export default function StateBrowseSection({ state, region, category, initialDat
           </div>
         </div>
 
-        {/* Row 2 — price, year and the filters recommended for this car site. */}
-        {siteFilterSchema.length > 0 ? (
-          <div className="lsd-browse__row2">
-            {schemaFilterRows.map((f) => {
-              const Icon = f.icon;
-              return (
-                <div key={f.field} className="lsd-browse__filter-col">
-                  <div className="lsd-browse__filter-head">
-                    <Icon size={20} aria-hidden="true" />
-                    <span className="lsd-browse__filter-title">{f.label}</span>
-                  </div>
-                  <div className="lsd-browse__filter-links">
-                    {f.items.map((item) => (
-                      <a key={item.text} href={item.href} className="lsd-browse__filter-link">{item.text}</a>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="lsd-browse__row2">
-            {filters.map((f) => (
-              <div key={f.title} className="lsd-browse__filter-col">
+        {/* Row 2 — budget and the filters recommended for this car site. */}
+        <div className="lsd-browse__row2">
+          {filterRows.map((f) => {
+            const Icon = f.icon;
+            return (
+              <div key={f.field} className="lsd-browse__filter-col">
                 <div className="lsd-browse__filter-head">
-                  <Image src={f.icon} alt={f.title} width={20} height={20} unoptimized />
-                  <span className="lsd-browse__filter-title">{f.title}</span>
+                  <Icon size={20} aria-hidden="true" />
+                  <span className="lsd-browse__filter-title">{f.label}</span>
                 </div>
                 <div className="lsd-browse__filter-links">
-                  {f.links.map((l) => (
-                    <a key={l.text} href={l.href} className="lsd-browse__filter-link">{l.text}</a>
+                  {f.items.map((item) => (
+                    <a key={item.text} href={item.href} className="lsd-browse__filter-link">{item.text}</a>
                   ))}
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            );
+          })}
+        </div>
 
       </div>
     </section>

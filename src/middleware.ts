@@ -5,16 +5,11 @@ import {
 } from "@/lib/visitorCheck";
 import { parseSlugToFilters, type Filters } from "@/app/components/urlBuilder";
 import { buildSlugFromFilters } from "@/app/components/slugBuilter";
-import indexableUrlsData from "../cfs-paths/indexable-urls.json";
+import { isIndexableListingPath } from "@/utils/seo/indexRules";
 import { site } from "@/config/sites";
 import { appendFilterParams, FILTER_PARAM_KEYS } from "@/config/filterDefs";
 const API_KEY = process.env.MPN_API_KEY;
 const SERVER_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36';
-
-/* Curated indexable paths from url.csv (cfs-paths/indexable-urls.json snapshot —
- * same source the <meta name="robots"> tag uses, see src/utils/seo/indexable-urls.ts).
- * Single source of truth for the X-Robots-Tag header below — no live API call needed. */
-const INDEXABLE_PATHS = new Set<string>(indexableUrlsData as string[]);
 
 /* ──────────────────────────────────────────────
    Edge-safe in-memory cache
@@ -114,7 +109,6 @@ function render410(request: NextRequest): NextResponse {
 function buildApiParams(filters: Filters): URLSearchParams {
   const p = new URLSearchParams();
   p.set('page', '1');
-  if (filters.category) p.set('category', filters.category);
   if (filters.make) p.set('make', filters.make);
   if (filters.model) p.set('model', filters.model);
   if (filters.state) p.set('state', filters.state);
@@ -123,14 +117,7 @@ function buildApiParams(filters: Filters): URLSearchParams {
   if (filters.pincode) p.set('pincode', filters.pincode);
   if (filters.from_price) p.set('from_price', `${filters.from_price}`);
   if (filters.to_price) p.set('to_price', `${filters.to_price}`);
-  if (filters.minKg) p.set('from_atm', `${filters.minKg}`);
-  if (filters.maxKg) p.set('to_atm', `${filters.maxKg}`);
-  if (filters.from_length) p.set('from_length', `${filters.from_length}`);
-  if (filters.to_length) p.set('to_length', `${filters.to_length}`);
   if (filters.condition) p.set('condition', filters.condition.toLowerCase().replace(/\s+/g, '-'));
-  if (filters.sleeps) p.set('sleep', `${filters.sleeps}`);
-  if (filters.from_sleep) p.set('from_sleep', `${filters.from_sleep}`);
-  if (filters.to_sleep) p.set('to_sleep', `${filters.to_sleep}`);
   if (filters.from_year) p.set('from_year', `${filters.from_year}`);
   if (filters.to_year) p.set('to_year', `${filters.to_year}`);
   appendFilterParams(p, filters);
@@ -162,7 +149,7 @@ async function refreshSeoCache(cacheKey: string, url: URL, request: NextRequest)
       const exclusiveOnly = data?.exclusive_products ?? [];
       const isEmpty = totalCount === 0 && exclusiveOnly.length === 0;
       const hasExclusiveOnly = totalCount === 0 && exclusiveOnly.length > 0;
-      // X-Robots-Tag itself is decided purely from INDEXABLE_PATHS (url.csv) in
+      // X-Robots-Tag itself is decided by isIndexableListingPath (indexRules.ts) in
       // the main handler, not from this cache — only isEmpty/hasExclusiveOnly
       // (which still require a live product-count check) are cached here.
       seoCache.set(cacheKey, { isEmpty, hasExclusiveOnly, expires: Date.now() + CACHE_TTL, staleExpires: Date.now() + CACHE_STALE_TTL });
@@ -303,12 +290,9 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
         // Search slug + any other filter → 410; search alone → 200
         if (slugParts.some(s => s.endsWith('-search'))) {
           const hasOtherFilter = !!(
-            filters.make || filters.model || filters.condition || filters.category ||
+            filters.make || filters.model || filters.condition ||
             filters.state || filters.region || filters.suburb ||
             filters.from_price || filters.to_price ||
-            filters.minKg || filters.maxKg ||
-            filters.from_length || filters.to_length ||
-            filters.from_sleep || filters.to_sleep ||
             filters.from_year || filters.to_year ||
             FILTER_PARAM_KEYS.some((k) => filters[k])
           );
@@ -343,7 +327,7 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
 
   /* 🚫 Unknown multi-segment paths → 410 (e.g. /queensland-state/stoney-creek/ without /listings/ prefix) */
   const KNOWN_MULTI_SEGMENT = new Set([
-    'listings', 'listings-demo', 'product', 'api', '_next', 'blog', 'author', 'caravan-manufacturers',
+    'listings', 'listings-demo', 'product', 'api', '_next', 'blog', 'author',
     '410', '404', '410-new', 'images', 'fonts', 'icons', 'sites',
     'demo', 'product-detail-demo',
     'sell-my-suv', `sell-my-${site.slug}`,
@@ -444,13 +428,12 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
   }
 
   /* 3️⃣ SEO Middleware (LISTINGS ONLY) */
-  // X-Robots-Tag is decided purely from the curated url.csv allowlist
-  // (cfs-paths/indexable-urls.json) — the same source the <meta name="robots">
-  // tag uses (src/utils/seo/indexable-urls.ts) — instead of a live WP call +
-  // band-filter heuristic. Overridden to noindex below only when the live
-  // product count for this exact filter combo is genuinely zero.
+  // X-Robots-Tag is decided by the car-site index rules (utils/seo/indexRules.ts)
+  // — the same rules the <meta name="robots"> tag uses. Overridden to noindex
+  // below only when the live product count for this exact filter combo is
+  // genuinely zero.
   let robotsHeader = "noindex, nofollow";
-  if (isListingsPath && INDEXABLE_PATHS.has(url.pathname)) {
+  if (isListingsPath && isIndexableListingPath(url.pathname)) {
     robotsHeader = "index, follow";
   }
 
@@ -488,8 +471,6 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
           Object.fromEntries(url.searchParams)
         );
 
-        // Build API params using the same mapping as fetchListings (api/listings/api.ts).
-        // Raw filter keys (minKg, maxKg, sleeps) must be converted to API names (from_atm, to_atm, sleep).
         const apiParams = buildApiParams(filters);
         const apiUrl = `${API_WP}/pool?${apiParams.toString()}`;
 

@@ -13,6 +13,7 @@ import type { BrowseSectionData } from "./browseSectionShared";
 import StateContent from "./StateContent";
 import { buildApiUrl, buildListingsSlug, buildFilterBreadcrumbs, buildExploreTravelTarget, parseDemoFilters } from "./urlUtils";
 import { bucketPoolResponse, bucketPoolResponseCombined } from "./listingShared";
+import { FILTER_PARAM_KEYS } from "@/config/filterDefs";
 import { trackEngagement } from "@/utils/engagement";
 // import { useBanners } from "@/components/BannerHandler";
 // import { useBannerTracking } from "@/hooks/useBannerTracking";
@@ -65,22 +66,17 @@ interface Props {
    * extra pool re-fetch when it flips the default true → false).
    */
   serverIsIndexed?: boolean;
-  /** Server-fetched (SSR) static filter data — passed through to StateFilterBar
-   * so it skips the redundant client-side /api/product-list/ + /api/make-details/
-   * mount fetch. */
-  initialCategories?: { name: string; slug: string }[];
+  /** Server-fetched (SSR) state list — passed through to StateFilterBar so it
+   * skips the redundant client-side /api/product-list/ mount fetch. */
   initialStates?: any[];
-  initialMakes?: { name: string; slug: string; models?: { name: string; slug: string }[] }[];
-  /** Server-fetched (SSR) category/make counts — only present for the plain
-   * /listings/ page (no active filters). See StateFilterBar for the guard
-   * that keeps every other filter combination fetching live, unchanged. */
-  initialCategoryCounts?: { name: string; slug: string; count: number }[];
+  /** Server-fetched (SSR) make counts for initialFilters — see StateFilterBar
+   * for the guard that skips only the redundant mount refetch. */
   initialMakeCounts?: { name: string; slug: string; count: number }[];
 }
 
 export default function StateHome({
   initialFilters, browseData, initialPool, initialSeo, serverIsIndexed,
-  initialCategories, initialStates, initialMakes, initialCategoryCounts, initialMakeCounts,
+  initialStates, initialMakeCounts,
 }: Props) {
   const [filters, setFilters] = useState<FilterState>(initialFilters ?? {});
   const exploreTravel = buildExploreTravelTarget(filters);
@@ -103,8 +99,8 @@ export default function StateHome({
       : { featured: [], new: [], used: [] }
   );
   const [poolLoading, setPoolLoading] = useState(!initialPool);
-  // Whether the current canonical /listings/ URL is in url.csv's curated
-  // indexed set — gates the full hero banner (image + description) and the
+  // Whether the current canonical /listings/ URL is indexable (car-site rules
+  // in utils/seo/indexRules.ts) — gates the full hero banner (image + description) and the
   // Featured/New/Used split: indexed pages split the pool by slot_bucket into
   // three sections, non-indexed pages get one combined grid.
   const [isIndexed, setIsIndexed] = useState(initialPool?.isIndexed ?? serverIsIndexed ?? true);
@@ -120,7 +116,7 @@ export default function StateHome({
   const initialPropConsumed = useRef(initialPool == null);
   // Skip the very first /api/indexed-url/ check when the server already
   // determined isIndexed (serverIsIndexed prop) — re-fetching the identical
-  // url.csv lookup client-side on mount is redundant. Later filter changes
+  // index check client-side on mount is redundant. Later filter changes
   // (client-side navigation, no fresh SSR) still need the live check.
   const indexedUrlConsumed = useRef(serverIsIndexed === undefined);
   console.log("seoo89", seo)
@@ -394,10 +390,11 @@ export default function StateHome({
   };
 
   const hasActiveFilters = !!(
-    filters.category || filters.condition || filters.make ||
-    filters.from_price || filters.to_price || filters.minKg || filters.maxKg ||
-    filters.region || filters.suburb || filters.from_sleep || filters.to_sleep ||
-    filters.from_year || filters.from_length || filters.keyword
+    filters.condition || filters.make ||
+    filters.from_price || filters.to_price ||
+    filters.region || filters.suburb ||
+    filters.from_year || filters.to_year || filters.keyword ||
+    FILTER_PARAM_KEYS.some((k) => filters[k])
   );
 
   const handleNextPage = () => {
@@ -491,12 +488,7 @@ export default function StateHome({
           <StateFilterBar
             currentFilters={filters}
             onFilterChange={handleFilterChange}
-            onClearAll={handleClearAll}
-            initialCategories={initialCategories}
-            initialStates={initialStates}
-            initialMakes={initialMakes}
-            initialCategoryCounts={initialCategoryCounts}
-            initialMakeCounts={initialMakeCounts}
+            onClearAll={handleClearAll}            initialStates={initialStates}            initialMakeCounts={initialMakeCounts}
           />
           {ip.isIndexed ? (
             <>
@@ -538,14 +530,8 @@ export default function StateHome({
               hideBanners={!!filters.make}
             />
           )}
-          <StateBrowseSection state={filters.state} region={filters.region} category={filters.category} initialData={browseData} />
+          <StateBrowseSection state={filters.state} region={filters.region} initialData={browseData} />
           <StateContent footerDescription={ip.seo?.footer_description} faq={ip.seo?.faq} />
-          {filters.category === 'off-road' && (
-            <section className="lsd-offroad-extra"><div className="container">
-              <h2 className="lsd-offroad-extra__title">Find Your Ideal Off Road {site.singular}</h2>
-              <p className="lsd-offroad-extra__body">Need help choosing the right off road {site.noun}? Visit our <a href="https://www.caravansforsale.com.au/off-road-caravans/">Off Road {site.plural}</a> hub to compare {site.noun} types, current prices, brands, models, market data, reviews and buying guides.</p>
-            </div></section>
-          )}
           <div className="lsd-sell-cta">
             <div className="container">
               <div className="lsd-sell-cta__inner">
@@ -589,12 +575,7 @@ export default function StateHome({
         <StateFilterBar
           currentFilters={filters}
           onFilterChange={handleFilterChange}
-          onClearAll={handleClearAll}
-          initialCategories={initialCategories}
-          initialStates={initialStates}
-          initialMakes={initialMakes}
-          initialCategoryCounts={initialCategoryCounts}
-          initialMakeCounts={initialMakeCounts}
+          onClearAll={handleClearAll}          initialStates={initialStates}          initialMakeCounts={initialMakeCounts}
         />
         <StateListingGrid
           title={initialSeo.meta_title ? `Featured ${initialSeo.meta_title}` : ""}
@@ -604,7 +585,7 @@ export default function StateHome({
           showSpotlight={true}
           hideViewAll
         />
-        <StateBrowseSection state={filters.state} region={filters.region} category={filters.category} initialData={browseData} />
+        <StateBrowseSection state={filters.state} region={filters.region} initialData={browseData} />
         <StateContent footerDescription={initialSeo.footer_description} faq={initialSeo.faq} />
         <div className="lsd-sell-cta">
           <div className="container">
@@ -676,12 +657,7 @@ export default function StateHome({
         <StateFilterBar
           currentFilters={filters}
           onFilterChange={handleFilterChange}
-          onClearAll={handleClearAll}
-          initialCategories={initialCategories}
-          initialStates={initialStates}
-          initialMakes={initialMakes}
-          initialCategoryCounts={initialCategoryCounts}
-          initialMakeCounts={initialMakeCounts}
+          onClearAll={handleClearAll}          initialStates={initialStates}          initialMakeCounts={initialMakeCounts}
         />
 
         {isIndexed ? (
@@ -728,14 +704,8 @@ export default function StateHome({
 
         {maxPages > 1 && pagination}
 
-        <StateBrowseSection state={filters.state} region={filters.region} category={filters.category} initialData={browseData} />
+        <StateBrowseSection state={filters.state} region={filters.region} initialData={browseData} />
         <StateContent footerDescription={seo?.footer_description} faq={seo?.faq} />
-        {filters.category === 'off-road' && (
-          <section className="lsd-offroad-extra"><div className="container">
-            <h2 className="lsd-offroad-extra__title">Find Your Ideal Off Road {site.singular}</h2>
-            <p className="lsd-offroad-extra__body">Need help choosing the right off road {site.noun}? Visit our <a href="https://www.caravansforsale.com.au/off-road-caravans/">Off Road {site.plural}</a> hub to compare {site.noun} types, current prices, brands, models, market data, reviews and buying guides.</p>
-          </div></section>
-        )}
         <div className="lsd-sell-cta">
           <div className="container">
             <div className="lsd-sell-cta__inner">
@@ -793,12 +763,7 @@ export default function StateHome({
       <StateFilterBar
         currentFilters={filters}
         onFilterChange={handleFilterChange}
-        onClearAll={handleClearAll}
-        initialCategories={initialCategories}
-        initialStates={initialStates}
-        initialMakes={initialMakes}
-        initialCategoryCounts={initialCategoryCounts}
-        initialMakeCounts={initialMakeCounts}
+        onClearAll={handleClearAll}        initialStates={initialStates}        initialMakeCounts={initialMakeCounts}
       />
 
       <StateListingGrid
@@ -813,14 +778,8 @@ export default function StateHome({
 
       {maxPages > 1 && pagination}
 
-      <StateBrowseSection state={filters.state} region={filters.region} category={filters.category} initialData={browseData} />
+      <StateBrowseSection state={filters.state} region={filters.region} initialData={browseData} />
       <StateContent footerDescription={seo?.footer_description} faq={seo?.faq} />
-      {filters.category === 'off-road' && (
-        <section className="lsd-offroad-extra"><div className="container">
-          <h2 className="lsd-offroad-extra__title">Find Your Ideal Off Road {site.singular}</h2>
-          <p className="lsd-offroad-extra__body">Need help choosing the right off road {site.noun}? Visit our <a href="https://www.caravansforsale.com.au/off-road-caravans/">Off Road {site.plural}</a> hub to compare {site.noun} types, current prices, brands, models, market data, reviews and buying guides.</p>
-        </div></section>
-      )}
       <div className="lsd-sell-cta">
         <div className="container">
           <div className="lsd-sell-cta__inner">

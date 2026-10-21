@@ -9,13 +9,10 @@ export type Listing = {
   suburb?: string;
   regular_price: string;
   sale_price?: string;
-  categories?: string[];
   image_format?: string[];
   image_url?: string[];
   image?: string;
   seller_type?: string;
-  kg?: string;
-  length?: string;
   make?: string;
   odometer?: string;
   transmission?: string;
@@ -51,10 +48,8 @@ export function buildFeaturedOrder(products: Listing[], premiumsRaw: Listing[], 
   return [...hero, ...rest];
 }
 
-/** Raw product item as returned by the `/caravans/pool` WP endpoint (the
- * "listing-page API") — distinct schema from the old pool_test endpoint:
- * different field names (title/category/atm/sleep/r2_thumbnails) and numeric
- * (not string) prices/dimensions. */
+/** Raw product item as returned by the cars `/pool` endpoint (title,
+ * r2_thumbnails, numeric prices/specs). */
 type RawPoolProduct = Record<string, any>;
 
 /** Adapt one raw `/pool` product into the shared Listing shape so every
@@ -77,8 +72,6 @@ export function normalizePoolProduct(raw: RawPoolProduct): Listing {
   const numToStr = (v: unknown): string | undefined =>
     v === null || v === undefined ? undefined : String(v);
 
-  const rawCategories: unknown[] = raw.category ?? raw.categories ?? [];
-
   return {
     id: raw.id,
     name: raw.title ?? raw.name ?? "",
@@ -89,11 +82,8 @@ export function normalizePoolProduct(raw: RawPoolProduct): Listing {
     suburb: raw.suburb || undefined,
     regular_price: numToStr(raw.regular_price) ?? "",
     sale_price: numToStr(raw.sale_price),
-    categories: rawCategories.map(toDisplayString).filter(Boolean),
     image_format: raw.r2_thumbnails ?? raw.image_format ?? [],
     seller_type: raw.seller_type,
-    kg: raw.atm != null ? String(raw.atm) : raw.kg,
-    length: raw.length != null ? String(raw.length) : raw.length,
     make: raw.make != null ? toDisplayString(raw.make) : undefined,
     odometer: numToStr(raw.odometer),
     transmission: numToStr(raw.transmission),

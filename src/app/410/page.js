@@ -1,8 +1,7 @@
   // app/410/page.tsx
 import "./page.css";
-import fs from "fs";
-import path from "path";
 import { headers } from "next/headers";
+import { isIndexableListingPath } from "@/utils/seo/indexRules";
 import StateHome from "@/app/listings/home";
 import { parseDemoFilters, buildListingsSlug } from "@/app/listings/urlUtils";
 import { fetchBrowseSectionData } from "@/app/listings/fetchBrowseSectionData";
@@ -16,23 +15,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-// Cache the indexed-URL set for the lifetime of this server instance
-// (same approach as /listings/[[...slug]]/page.tsx — read once, never re-read).
-let _indexedPaths = null;
-function isPathIndexed(urlPath) {
-  if (!_indexedPaths) {
-    const csvPath = path.join(process.cwd(), "src", "app", "url.csv");
-    const raw = fs.readFileSync(csvPath, "utf-8");
-    const set = new Set();
-    for (const line of raw.split("\n").slice(1)) {
-      const u = line.split("\t")[1];
-      if (u) set.add(u.replace(/^https?:\/\/[^/]+/, "").trim().toLowerCase().replace(/\/+$/, ""));
-    }
-    _indexedPaths = set;
-  }
-  const normalized = urlPath.trim().toLowerCase().replace(/\/+$/, "");
-  return _indexedPaths.has(normalized);
-}
+const isPathIndexed = isIndexableListingPath;
 
 export default async function GonePage() {
   // The middleware rewrites to /410/ but the original URL is still in x-pathname

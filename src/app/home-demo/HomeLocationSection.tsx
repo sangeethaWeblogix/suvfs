@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { site } from "@/config/sites";
 import type { SchemaItem } from "@/app/listings/SiteFilters";
-import { BUDGET_ROW, buildSiteFilterRows } from "@/app/listings/siteBrowseFilters";
+import { budgetRow, buildSiteFilterRows, type SiteFacets } from "@/app/listings/siteBrowseFilters";
 
 const MAJOR_CITIES = [
   { name: "Adelaide",   href: "/listings/south-australia-state/adelaide-region/",    imgSrc: "/images/Adelaide.png"   },
@@ -27,8 +27,9 @@ const MINOR_CITIES = [
   { name: "Ballarat",       href: "/listings/victoria-state/ballarat-region/" },
 ];
 
-export default function HomeLocationSection({ schema }: { schema: SchemaItem[] }) {
-  const filterRows = [{ ...BUDGET_ROW, label: "By Your Budget" }, ...buildSiteFilterRows(schema)];
+export default function HomeLocationSection({ schema, facets }: { schema: SchemaItem[]; facets?: SiteFacets | null }) {
+  const filterRows = [{ ...budgetRow(facets), label: "By Your Budget" }, ...buildSiteFilterRows(schema, facets)]
+    .filter((row) => row.items.length > 0);
   return (
     <section className="hloc-section">
       <div className="container">

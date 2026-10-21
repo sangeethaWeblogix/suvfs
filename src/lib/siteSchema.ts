@@ -29,3 +29,27 @@ export async function fetchSiteSchema(): Promise<SchemaItem[]> {
     return [];
   }
 }
+
+/** Site-wide facet counts (GET /car-sites/{site}/filters), used to hide browse
+ *  chips with no listings. Cached for 5 minutes; null on failure (show all chips). */
+export async function fetchSiteFacets(): Promise<Record<string, any> | null> {
+  if (!API_BASE) return null;
+  try {
+    const res = await fetch(`${API_BASE.replace(/\/$/, "")}/filters`, {
+      headers: {
+        Accept: "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        ...(API_KEY && { "X-Secret-Key": API_KEY }),
+      },
+      next: { revalidate: 300 },
+    });
+    if (!res.ok) {
+      console.error(`[siteFacets] HTTP ${res.status} from ${API_BASE}/filters`);
+      return null;
+    }
+    return await res.json();
+  } catch (err) {
+    console.error("[siteFacets] fetch failed:", (err as Error).message);
+    return null;
+  }
+}

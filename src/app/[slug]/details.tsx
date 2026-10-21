@@ -30,35 +30,6 @@
    regions?: BrowseLink[];
  };
  
- const CAT_MAJOR_CITIES = [
-   { name: "Adelaide",       img: "/images/Adelaide.png",   state: "south-australia-state",           region: "adelaide-region" },
-   { name: "Brisbane",       img: "/images/Brisbane.png",   state: "queensland-state",                region: "brisbane-region" },
-   { name: "Gold Coast",     img: "/images/Gold-Coast.png", state: "queensland-state",                region: "gold-coast-region" },
-   { name: "Melbourne",      img: "/images/Melbourne.png",  state: "victoria-state",                  region: "melbourne-region" },
-   { name: "Perth",          img: "/images/Perth.png",      state: "western-australia-state",         region: "perth-region" },
-   { name: "Sydney",         img: "/images/Sydney.png",     state: "new-south-wales-state",           region: "sydney-region" },
- ];
- const CAT_MINOR_CITIES = [
-   { name: "Cairns",         state: "queensland-state",                   region: "cairns-region" },
-   { name: "Canberra",       state: "australian-capital-territory-state", region: "" },
-   { name: "Darwin",         state: "northern-territory-state",           region: "darwin-region" },
-   { name: "Geelong",        state: "victoria-state",                     region: "geelong-region" },
-   { name: "Hobart",         state: "tasmania-state",                     region: "hobart-region" },
-   { name: "Newcastle",      state: "new-south-wales-state",              region: "newcastle-region" },
-   { name: "Sunshine Coast", state: "queensland-state",                   region: "sunshine-coast-region" },
-   { name: "Townsville",     state: "queensland-state",                   region: "townsville-region" },
-   { name: "Wollongong",     state: "new-south-wales-state",              region: "illawarra-region" },
-   { name: "Ballarat",       state: "victoria-state",                     region: "ballarat-region" },
- ];
- const CAT_STATES = [
-   { name: "Victoria",          slug: "victoria-state",                  img: "/images/vic_map.svg" },
-   { name: "New South Wales",   slug: "new-south-wales-state",           img: "/images/nsw_map.svg" },
-   { name: "Queensland",        slug: "queensland-state",                img: "/images/qld_map.svg" },
-   { name: "South Australia",   slug: "south-australia-state",           img: "/images/sa_map.svg" },
-   { name: "Western Australia", slug: "western-australia-state",         img: "/images/wa_map.svg" },
-   { name: "Tasmania",          slug: "tasmania-state",                  img: "/images/tas_map.svg" },
- ];
- 
  const BROWSE_TABS: BrowseTab[] = [
    {
      label: "Location",
@@ -97,7 +68,7 @@
    {
      label: "Manufacturer",
      icon: "bi-buildings",
-     viewAll: { text: "View all manufacturers", href: "/caravan-manufacturers/" },
+     viewAll: { text: "View all manufacturers", href: "/listings/" },
      links: [
        { text: `Jayco ${site.plural} for Sale`,       href: "/listings/jayco/" },
        { text: `Snowy River ${site.plural} for Sale`, href: "/listings/snowy-river/" },
@@ -130,30 +101,6 @@
      ],
    },
    {
-     label: "Weight",
-     icon: "bi-speedometer2",
-     viewAll: { text: "Browse by weight", href: "/listings/" },
-     links: [
-       { text: "Under 1500kg", href: "/listings/under-1500-kg-atm/" },
-       { text: "Under 2000kg", href: "/listings/under-2000-kg-atm/" },
-       { text: "Under 2500kg", href: "/listings/under-2500-kg-atm/" },
-       { text: "Under 3000kg", href: "/listings/under-3000-kg-atm/" },
-       { text: "Over 3000kg",  href: "/listings/over-3000-kg-atm/" },
-     ],
-   },
-   {
-     label: "Length",
-     icon: "bi-rulers",
-     viewAll: { text: "Browse by length", href: "/listings/" },
-     links: [
-       { text: "Under 16ft",  href: "/listings/under-16-length-in-feet/" },
-       { text: "16ft – 18ft", href: "/listings/between-16-18-length-in-feet/" },
-       { text: "18ft – 20ft", href: "/listings/between-18-20-length-in-feet/" },
-       { text: "20ft – 22ft", href: "/listings/between-20-22-length-in-feet/" },
-       { text: "Over 22ft",   href: "/listings/over-22-length-in-feet/" },
-     ],
-   },
-   {
      label: "Price",
      icon: "bi-currency-dollar",
      viewAll: { text: "View all price ranges", href: "/listings/" },
@@ -165,18 +112,6 @@
        { text: "$70,000 – $80,000",   href: "/listings/between-70000-80000/" },
        { text: "$80,000 – $100,000",  href: "/listings/between-80000-100000/" },
        { text: "Over $100,000",       href: "/listings/over-100000/" },
-     ],
-   },
-   {
-     label: "Sleep",
-     icon: "bi-moon-stars",
-     viewAll: { text: "Browse by sleeping capacity", href: "/listings/" },
-     links: [
-       { text: "2 Berth",  href: "/listings/2-people-sleeping-capacity/" },
-       { text: "3 Berth",  href: "/listings/3-people-sleeping-capacity/" },
-       { text: "4 Berth",  href: "/listings/4-people-sleeping-capacity/" },
-       { text: "5 Berth",  href: "/listings/5-people-sleeping-capacity/" },
-       { text: "6+ Berth", href: "/listings/over-5-people-sleeping-capacity/" },
      ],
    },
  ];
@@ -210,7 +145,6 @@
    image?: string;
    toc?: string;
    content?: string;
-   product_category?: string | string[];
    category_featured_products?: CategoryFeaturedProduct[];
    product_sections?: ProductSection[];
    faq?: { heading: string; content: string }[];
@@ -337,18 +271,6 @@
  
    const cleanTitle = (s?: string) => decodeEntities(stripHtml(s));
    const plainTitle = cleanTitle(data?.data?.blog_detail?.title);
- 
-   const rawCatRaw = data?.data?.blog_detail?.product_category;
-   const rawCats = Array.isArray(rawCatRaw) ? rawCatRaw : rawCatRaw ? [rawCatRaw] : [];
-   const cats = rawCats
-     .map(c => c.trim())
-     .filter(Boolean)
-     .map(c => ({
-       label: c.replace(/-/g, " ").replace(/\b\w/g, (ch: string) => ch.toUpperCase()),
-       link: `/listings/${c.toLowerCase()}-category/`,
-     }));
-   const catLabel = cats[0]?.label ?? "";
-   const catLink  = cats[0]?.link ?? "/listings/";
  
    const blogContentRef = useRef<HTMLDivElement | null>(null);
  
@@ -549,15 +471,15 @@
                    <img src="/images/category.svg" alt="" width={32} height={32} className="blog-browse-cta__icon-img" />
                    <div>
                      <h3 className="blog-browse-cta__heading">
-                       {catLabel ? `Ready to Browse ${catLabel} ${site.plural}?` : `Ready to Browse ${site.plural}?`}
+                       {`Ready to Browse ${site.plural}?`}
                      </h3>
                      <p className="blog-browse-cta__desc">
-                       {catLabel ? `Explore hundreds of ${catLabel.toLowerCase()} ${site.nounPlural} for sale across Australia.` : `Explore thousands of ${site.nounPlural} for sale across Australia.`}
+                       {`Explore thousands of ${site.nounPlural} for sale across Australia.`}
                      </p>
                    </div>
                  </div>
-                 <a href={catLink} className="blog-browse-cta__btn">
-                   {catLabel ? `Browse ${catLabel} ${site.plural}` : `Browse ${site.plural}`} <i className="bi bi-arrow-right" />
+                 <a href="/listings/" className="blog-browse-cta__btn">
+                   {`Browse ${site.plural}`} <i className="bi bi-arrow-right" />
                  </a>
                </div>
  
@@ -683,52 +605,9 @@
          </div>
        </section>
  
-       <FaqSection data={data?.data?.blog_detail?.faq ?? []} cats={cats} />
+       <FaqSection data={data?.data?.blog_detail?.faq ?? []} />
  
-       {/* ── Browse by Popular Location ── */}
-       {cats.length > 0 && (
-         <section className="bds-cat-loc">
-           <div className="container">
-             <h2 className="bds-cat-title">Find {catLabel} {site.plural} by Popular Location</h2>
-             <div className="bds-cat-loc__major">
-               {CAT_MAJOR_CITIES.map((city) => (
-                 <a key={city.name} href={`${catLink}${city.state}/${city.region}/`} className="bds-cat-city-card">
-                   <div className="bds-cat-city-img-wrap">
-                     <img src={city.img} alt={city.name} className="bds-cat-city-img" loading="lazy" />
-                   </div>
-                   <span className="bds-cat-city-name">{catLabel} {site.plural} in {city.name} <i className="bi bi-chevron-right bds-cat-city-arrow" /></span>
-                 </a>
-               ))}
-             </div>
-             <div className="bds-cat-loc__minor">
-               {CAT_MINOR_CITIES.map((city) => (
-                 <a key={city.name} href={`${catLink}${city.state}/${city.region ? city.region + "/" : ""}`} className="bds-cat-minor-pill">
-                   {catLabel} {site.plural} in {city.name}
-                 </a>
-               ))}
-             </div>
-           </div>
-         </section>
-       )}
- 
-       {/* ── Browse by State ── */}
-       {cats.length > 0 && (
-         <section className="bds-cat-state">
-           <div className="container">
-             <h2 className="bds-cat-title">Find {catLabel} {site.plural} by State</h2>
-             <div className="bds-cat-state__grid">
-               {CAT_STATES.map((s) => (
-                 <a key={s.name} href={`${catLink}${s.slug}/`} className="bds-cat-state-card">
-                   <img src={s.img} alt={s.name} className="bds-cat-state-img" loading="lazy" />
-                   <span className="bds-cat-state-name">{catLabel} {site.plural} in {s.name}</span>
-                 </a>
-               ))}
-             </div>
-           </div>
-         </section>
-       )}
- 
-       <BlogFeaturedListings products={(data?.data?.blog_detail?.category_featured_products ?? []).map(normalizePoolProduct)} category={catLabel} />
+       <BlogFeaturedListings products={(data?.data?.blog_detail?.category_featured_products ?? []).map(normalizePoolProduct)} />
        <RelatedNews blogs={data?.data?.related_blogs ?? []} />
 
        {/* ── Buy or Sell CTA ── */}

@@ -8,36 +8,11 @@ import { appendFilterParams } from "@/config/filterDefs";
  * exact same scope and never drift apart.
  */
 
-/** Scope for a category-count query — every active filter except category itself. */
-export function buildCategoryCountScope(filters: FilterState): URLSearchParams {
+/** Every active filter except make/model, as /params-count scope params.
+ * Pass `make` to also scope by make (state/region counts for a chosen make). */
+export function buildCountScope(filters: FilterState, make?: string): URLSearchParams {
   const params = new URLSearchParams();
-  if (filters.make)               params.set("make", filters.make);
-  if (filters.model)              params.set("model", filters.model);
-  if (filters.condition)          params.set("condition", filters.condition);
-  if (filters.state)              params.set("state", String(filters.state).toLowerCase());
-  if (filters.region)             params.set("region", filters.region);
-  if (filters.suburb)             params.set("suburb", filters.suburb);
-  if (filters.pincode)            params.set("pincode", filters.pincode);
-  if (filters.from_price)         params.set("from_price", String(filters.from_price));
-  if (filters.to_price)           params.set("to_price", String(filters.to_price));
-  if (filters.minKg)              params.set("from_atm", String(filters.minKg));
-  if (filters.maxKg)              params.set("to_atm", String(filters.maxKg));
-  if (filters.from_year)  params.set("from_year", String(filters.from_year));
-  if (filters.to_year)    params.set("to_year", String(filters.to_year));
-  if (filters.from_length)        params.set("from_length", String(filters.from_length));
-  if (filters.to_length)          params.set("to_length", String(filters.to_length));
-  if (filters.from_sleep)         params.set("from_sleep", String(filters.from_sleep));
-  if (filters.to_sleep)           params.set("to_sleep", String(filters.to_sleep));
-  if (filters.keyword)            params.set("keyword", filters.keyword);
-  appendFilterParams(params, filters);
-  return params;
-}
-
-/** Scope for a make-count query — every active filter except make/model
- * (make/model are excluded on purpose — they're what group_by is counting). */
-export function buildMakeCountScope(filters: FilterState): URLSearchParams {
-  const params = new URLSearchParams();
-  if (filters.category)          params.set("category", filters.category);
+  if (make)                      params.set("make", make);
   if (filters.condition)         params.set("condition", filters.condition);
   if (filters.state)             params.set("state", String(filters.state).toLowerCase());
   if (filters.region)            params.set("region", filters.region);
@@ -45,15 +20,14 @@ export function buildMakeCountScope(filters: FilterState): URLSearchParams {
   if (filters.pincode)           params.set("pincode", filters.pincode);
   if (filters.from_price)        params.set("from_price", String(filters.from_price));
   if (filters.to_price)          params.set("to_price", String(filters.to_price));
-  if (filters.minKg)             params.set("from_atm", String(filters.minKg));
-  if (filters.maxKg)             params.set("to_atm", String(filters.maxKg));
-  if (filters.from_year) params.set("from_year", String(filters.from_year));
-  if (filters.to_year)   params.set("to_year", String(filters.to_year));
-  if (filters.from_length)       params.set("from_length", String(filters.from_length));
-  if (filters.to_length)         params.set("to_length", String(filters.to_length));
-  if (filters.from_sleep)        params.set("from_sleep", String(filters.from_sleep));
-  if (filters.to_sleep)          params.set("to_sleep", String(filters.to_sleep));
+  if (filters.from_year)         params.set("from_year", String(filters.from_year));
+  if (filters.to_year)           params.set("to_year", String(filters.to_year));
   if (filters.keyword)           params.set("keyword", filters.keyword);
   appendFilterParams(params, filters);
   return params;
+}
+
+/** Scope for a make-count query (make/model excluded — they're what group_by counts). */
+export function buildMakeCountScope(filters: FilterState): URLSearchParams {
+  return buildCountScope(filters);
 }

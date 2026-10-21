@@ -14,7 +14,6 @@ export function buildApiUrl(base: string, filters: FilterState, seed: number, lo
   params.set("order_by", ORDERBY);
   params.set("seed", String(seed));
   if (filters.state)              params.set("state",              filters.state);
-  if (filters.category)           params.set("category",          filters.category);
   if (filters.make)               params.set("make",               filters.make);
   if (filters.model)              params.set("model",              filters.model);
   if (filters.region)             params.set("region",             filters.region);
@@ -23,14 +22,8 @@ export function buildApiUrl(base: string, filters: FilterState, seed: number, lo
   if (filters.suburb && filters.radius_kms) params.set("radius_kms", String(filters.radius_kms));
   if (filters.from_price)         params.set("from_price",         String(filters.from_price));
   if (filters.to_price)           params.set("to_price",           String(filters.to_price));
-  if (filters.minKg)              params.set("from_atm",           String(filters.minKg));
-  if (filters.maxKg)              params.set("to_atm",             String(filters.maxKg));
-  if (filters.from_sleep)         params.set("from_sleep",         String(filters.from_sleep));
-  if (filters.to_sleep)           params.set("to_sleep",           String(filters.to_sleep));
   if (filters.from_year)  params.set("from_year",  String(filters.from_year));
   if (filters.to_year)    params.set("to_year",    String(filters.to_year));
-  if (filters.from_length)        params.set("from_length",        String(filters.from_length));
-  if (filters.to_length)          params.set("to_length",          String(filters.to_length));
   // Backend free-text search only recognizes `search` (see production's
   // fetchListings) — not `keyword`. Sending `keyword` here silently no-ops
   // and the pool call falls back to the full unfiltered listing set.
@@ -45,7 +38,7 @@ export function buildApiUrl(base: string, filters: FilterState, seed: number, lo
 }
 
 /** Real /listings/ URL for a "View all" link — keeps the active filters
- * (e.g. category + state) and optionally locks the condition segment, so
+ * (e.g. make + state) and optionally locks the condition segment, so
  * the Featured/New/Used sections each link to the matching filtered page. */
 export function buildListingsSlug(filters: FilterState, conditionOverride?: string): string {
   const { keyword, condition, ...rest } = filters;
@@ -77,8 +70,8 @@ export function buildExploreTravelTarget(filters: FilterState): { path: string; 
 export interface FilterBreadcrumb {
   label: string;
   /** Direct link to the page for just this one filter dimension (e.g. the
-   * category crumb links straight to /listings/luxury-category/), not the
-   * combination of every active filter. */
+   * make crumb links straight to /listings/toyota/), not the combination of
+   * every active filter. */
   href: string;
 }
 
@@ -99,10 +92,6 @@ const BREADCRUMB_PRIORITY: Array<{
     hrefFilters: (f) => ({ state: f.state, region: f.region, suburb: f.suburb, pincode: f.pincode }),
   },
   {
-    label: (f) => (f.category ? toTitleCase(String(f.category)) : null),
-    hrefFilters: (f) => ({ category: f.category }),
-  },
-  {
     label: (f) => (f.make ? toTitleCase(String(f.make)) : null),
     hrefFilters: (f) => ({ make: f.make }),
   },
@@ -114,36 +103,6 @@ const BREADCRUMB_PRIORITY: Array<{
       return `Upto $${Number(f.to_price).toLocaleString()}`;
     },
     hrefFilters: (f) => ({ from_price: f.from_price, to_price: f.to_price }),
-  },
-  {
-    label: (f) => {
-      if (!f.minKg && !f.maxKg) return null;
-      if (f.minKg && f.maxKg) return `${Number(f.minKg).toLocaleString()} – ${Number(f.maxKg).toLocaleString()} kg`;
-      if (f.minKg) return `From ${Number(f.minKg).toLocaleString()} kg`;
-      return `Upto ${Number(f.maxKg).toLocaleString()} kg`;
-    },
-    hrefFilters: (f) => ({ minKg: f.minKg, maxKg: f.maxKg }),
-  },
-  {
-    label: (f) => {
-      if (!f.from_sleep && !f.to_sleep) return null;
-      if (f.from_sleep && f.to_sleep) {
-        if (String(f.from_sleep) === String(f.to_sleep)) return `${f.from_sleep} Berth`;
-        return `${f.from_sleep} – ${f.to_sleep} Berths`;
-      }
-      if (f.from_sleep) return `From ${f.from_sleep} Berths`;
-      return `Upto ${f.to_sleep} Berths`;
-    },
-    hrefFilters: (f) => ({ from_sleep: f.from_sleep, to_sleep: f.to_sleep }),
-  },
-  {
-    label: (f) => {
-      if (!f.from_length && !f.to_length) return null;
-      if (f.from_length && f.to_length) return `${f.from_length} – ${f.to_length} ft`;
-      if (f.from_length) return `From ${f.from_length} ft`;
-      return `Upto ${f.to_length} ft`;
-    },
-    hrefFilters: (f) => ({ from_length: f.from_length, to_length: f.to_length }),
   },
   {
     label: (f) => {
@@ -160,12 +119,11 @@ const BREADCRUMB_PRIORITY: Array<{
   },
 ];
 
-/** Home > Caravans for Sale > up to 3 active filters — always rendered in
- * BREADCRUMB_PRIORITY order (Location, Type, Make, Price, Weight, Sleeps,
- * Size, Year, Condition) so the trail reads the same regardless of which
- * filters the visitor picked or in what order. Each crumb links straight to
- * its own single-filter page (e.g. clicking "Luxury" goes to
- * /listings/luxury-category/, not the current combined-filter URL). */
+/** Home > {Site} for Sale > up to 3 active filters — always rendered in
+ * BREADCRUMB_PRIORITY order (Location, Make, Price, Year, Condition) so the
+ * trail reads the same regardless of which filters the visitor picked or in
+ * what order. Each crumb links straight to its own single-filter page (e.g.
+ * clicking "Toyota" goes to /listings/toyota/, not the combined-filter URL). */
 export function buildFilterBreadcrumbs(filters: FilterState): FilterBreadcrumb[] {
   const crumbs: FilterBreadcrumb[] = [];
   for (const entry of BREADCRUMB_PRIORITY) {

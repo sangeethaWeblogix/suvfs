@@ -1,34 +1,17 @@
 import type { Metadata } from "next";
-import fs from "fs";
-import path from "path";
 import StateHome from "../home";
 import { parseDemoFilters, buildListingsSlug } from "../urlUtils";
 import { metaFromSlug } from "@/utils/seo/meta";
+import { isIndexableListingPath } from "@/utils/seo/indexRules";
 import { fetchBrowseSectionData, fetchGroupCountsServer } from "../fetchBrowseSectionData";
 import { fetchInitialPool } from "../fetchInitialPool";
-import { fetchProductList, fetchMakeDetails } from "@/api/productList/api";
-import { buildCategoryCountScope, buildMakeCountScope } from "../paramsCountScope";
+import { fetchProductList } from "@/api/productList/api";
+import { buildMakeCountScope } from "../paramsCountScope";
 import "../../globals.css";
 
 export const revalidate = 86400;
 
-// Cache the indexed-URL set for the lifetime of this server instance
-// (same approach as /api/indexed-url/route.ts — read once, never re-read).
-let _indexedPaths: Set<string> | null = null;
-function isPathIndexed(urlPath: string): boolean {
-  if (!_indexedPaths) {
-    const csvPath = path.join(process.cwd(), "src", "app", "url.csv");
-    const raw = fs.readFileSync(csvPath, "utf-8");
-    const set = new Set<string>();
-    for (const line of raw.split("\n").slice(1)) {
-      const u = line.split("\t")[1];
-      if (u) set.add(u.replace(/^https?:\/\/[^/]+/, "").trim().toLowerCase().replace(/\/+$/, ""));
-    }
-    _indexedPaths = set;
-  }
-  const normalized = urlPath.trim().toLowerCase().replace(/\/+$/, "");
-  return _indexedPaths.has(normalized);
-}
+const isPathIndexed = isIndexableListingPath;
 
 type Params = Promise<{ slug?: string[] }>;
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -67,21 +50,15 @@ export default async function LocationStateDemoPage({
   const canonicalPath = buildListingsSlug(initialFilters);
   const isIndexed = isPathIndexed(canonicalPath);
 
-  // Category/make counts, scoped to initialFilters via the exact same
-  // buildCategoryCountScope/buildMakeCountScope StateFilterBar uses client-side
-  // — so whatever filters this URL landed on, the server fetches the identical
-  // query the client would have fetched on mount, and StateFilterBar's
-  // isInitialFilters guard skips the redundant client refetch.
-  const categoryCountScope = Object.fromEntries(buildCategoryCountScope(initialFilters));
+  // Make counts, scoped to initialFilters via the exact same buildMakeCountScope
+  // StateFilterBar uses client-side — so the server fetches the identical query
+  // the client would have fetched on mount, and StateFilterBar skips that refetch.
   const makeCountScope = Object.fromEntries(buildMakeCountScope(initialFilters));
 
-  // const [browseData, initialPool, productList, makeOptions, categoryCounts, makeCounts] = await Promise.all([
-  const [browseData, initialPool, productList, makeOptions, categoryCounts, makeCounts] = await Promise.all([
+  const [browseData, initialPool, productList, makeCounts] = await Promise.all([
     fetchBrowseSectionData(initialFilters),
     fetchInitialPool(initialFilters, isIndexed),
     fetchProductList(),
-    fetchMakeDetails(),
-    fetchGroupCountsServer("category", categoryCountScope),
     fetchGroupCountsServer("make", makeCountScope),
   ]);
 
@@ -91,10 +68,7 @@ export default async function LocationStateDemoPage({
       browseData={browseData}
       initialPool={initialPool}
       serverIsIndexed={isIndexed}
-      initialCategories={productList?.data?.all_categories ?? []}
       initialStates={productList?.data?.states ?? []}
-      initialMakes={makeOptions}
-      initialCategoryCounts={categoryCounts}
       initialMakeCounts={makeCounts}
     />
   );

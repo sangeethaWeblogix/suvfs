@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEnquiryForm } from "@/app/components/ListContent/enquiryform";
 import CaravanDetailModal from "@/app/product/[slug]/CaravanDetailModal";
+import { Fuel, Gauge, Settings2 } from "lucide-react";
 import "./demo.css";
 import { trackListingView } from "@/utils/engagement";
 
@@ -189,9 +190,6 @@ const fmtDate = (d: string) => {
   return mo ? `${mo} ${parseInt(day, 10)}, ${y}` : dateOnly;
 };
 
-function isNonEmpty(s: unknown): s is string {
-  return typeof s === "string" && s.trim().length > 0;
-}
 
 /* ── Mosaic gallery ── */
 const Gallery = memo(function Gallery({ images, onOpen }: { images: string[]; onOpen: (index: number) => void }) {
@@ -321,12 +319,6 @@ export default function ProductDetailDemo({ data, similarData }: Props) {
     [product.image_url]
   );
 
-  const rawCats: Category[] = Array.isArray(product.categories) ? product.categories
-    : Array.isArray(pd.categories) ? pd.categories : [];
-  const categoryNames: string[] = rawCats
-    .map(c => typeof c === "string" ? c : (c?.name ?? c?.label ?? c?.value ?? ""))
-    .filter(isNonEmpty);
-
   const reg  = parseAmt(product.regular_price);
   const sale = parseAmt(product.sale_price);
   const displayPrice = sale > 0 && sale < reg ? sale : reg;
@@ -350,9 +342,13 @@ export default function ProductDetailDemo({ data, similarData }: Props) {
         return abbr ? `, ${abbr}` : `, ${s}`;
       })
     : location;
-  const shortCategory = categoryNames[0]?.replace(/\s+caravans?$/i, '').trim() ?? categoryNames[0];
-  const shortSleeps   = getAttr("sleeps").replace(/\s+people?$/i, '').trim();
-  const shortAtm      = getAttr("ATM");
+  // Headline specs for the bar above the gallery (each shown only when the car has it).
+  const specBarItems = [
+    { label: "Body Type",    value: getAttr("Body Type"),    icon: <img src="/images/category.svg" width="20" height="20" alt="" /> },
+    { label: "Odometer",     value: getAttr("Odometer"),     icon: <Gauge size={20} aria-hidden="true" /> },
+    { label: "Transmission", value: getAttr("Transmission"), icon: <Settings2 size={20} aria-hidden="true" /> },
+    { label: "Fuel Type",    value: getAttr("Fuel Type"),    icon: <Fuel size={20} aria-hidden="true" /> },
+  ].filter((s) => s.value);
 
   /* helper: find first matching attribute with value + url (+ taxonomy slug, when the
      value is an object like { name, slug } rather than a plain string) */
@@ -364,22 +360,18 @@ export default function ProductDetailDemo({ data, similarData }: Props) {
     return { value: "", url: "" };
   };
 
-  /* caravan details — with link logic matching live layout */
+  /* vehicle details — make/model/year/condition/location rows link to their listings pages */
   type DetailLink = { href: string; text: string };
   type DetailRow = { label: string; value: string; url: string; links?: DetailLink[] };
 
   const makeDetailUrl = (label: string, value: string, apiUrl: string, valueSlug?: string): string => {
     const v = String(value ?? "").trim();
     const L = label.toLowerCase();
-    if (L === "year" || L === "years") { const n = toInt(v); return n ? `/listings/${n}-caravans-range/` : ""; }
+    if (L === "year" || L === "years") { const n = toInt(v); return n ? `/listings/${n}-year/` : ""; }
     if (apiUrl) return linkFromApiUrl(apiUrl, v).href;
-    if (L === "type" || L === "category") return v ? `/listings/${slugify(v.replace(/\s*caravans?\s*/gi, " ").trim())}-category/` : "";
     if (L === "make") return v ? `/listings/${valueSlug || slugify(v)}/` : "";
     if (L === "model") { const mk = pickFull("Make"); const mkSlug = mk.slug || mk.url?.trim().replace(/^\/+|\/+$/g, "") || slugify(mk.value); return v ? `/listings/${mkSlug}/${valueSlug || slugify(v)}/` : ""; }
     if (L === "condition" || L === "conditions") return v ? `/listings/${slugify(v)}-condition/` : "";
-    if (L === "sleeping capacity" || L === "sleep" || L === "sleeps") { const n = toInt(v); return n ? `/listings/under-${n}-people-sleeping-capacity/` : ""; }
-    if (L === "length") { const n = toInt(v); return n ? `/listings/under-${n}-length-in-feet/` : ""; }
-    if (L === "atm") { const n = toInt(v); return n ? `/listings/under-${n}-kg-atm/` : ""; }
     return "";
   };
 
@@ -388,11 +380,7 @@ export default function ProductDetailDemo({ data, similarData }: Props) {
     return { label, value, url: makeDetailUrl(label, value, url, slug) };
   };
 
-  const typeLinks: DetailLink[] = (categoryNames.length > 0 ? categoryNames : [getAttr("Type")].filter(Boolean))
-    .map(c => ({ href: `/listings/${slugify(c.replace(/\s*caravans?\s*/gi, " ").trim())}-category/`, text: c }));
-
   const detailRows: DetailRow[] = [
-    { label: "Type", value: (categoryNames.length > 0 ? categoryNames : [getAttr("Type")]).filter(Boolean).join(", "), url: "", links: typeLinks.length ? typeLinks : undefined },
     makeRow("Make",               "Make"),
     makeRow("Model",              "Model"),
     makeRow("Year",               "Years"),
@@ -438,22 +426,16 @@ export default function ProductDetailDemo({ data, similarData }: Props) {
 
   /* related searches — built from attribute values */
   const make = getAttr("Make");
-  /* strip trailing "Caravans" from make so labels don't duplicate (e.g. "Retreat Caravans") */
-  const makeLabel = make.replace(/\s+caravans?$/i, "").trim() || make;
-
-  const catKeyword = categoryNames[0]?.toLowerCase().replace(/\s*caravans?$/i, "").trim() ?? "";
-  const isOffRoad = catKeyword.includes("off road") || catKeyword.includes("off-road");
-  const offRoadSeed = Number(product.id ?? 0);
+  const makeSlug = pickFull("Make").slug || slugify(make);
 
 const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -1;
   const priceHi = priceUpperIdx >= 0 ? PRICE_STEPS[priceUpperIdx] : 0;
   const priceLo = priceUpperIdx >= 1 ? PRICE_STEPS[priceUpperIdx - 1] : 0;
 
   const relatedSearches: { label: string; href: string }[] = [
-    make ? { label: make, href: `/listings/${slugify(makeLabel)}/` } : null,
+    make ? { label: `${make} ${site.plural} for Sale`, href: `/listings/${makeSlug}/` } : null,
     state ? { label: `${site.plural} for Sale in ${state}`, href: `/listings/${slugify(state)}-state/` } : null,
     locationCity ? { label: `${site.plural} for Sale in ${locationCity.replace(/\b\w/g, c => c.toUpperCase())}`, href: `/listings/${slugify(state)}-state/${slugify(locationCity)}-region/` } : null,
-    shortCategory ? { label: `${shortCategory} ${site.plural} for Sale`, href: `/listings/${slugify(shortCategory)}-category/` } : null,
     priceHi ? { label: `${site.plural} Under $${priceHi.toLocaleString("en-AU")}`, href: `/listings/under-${priceHi}/` } : null,
     (priceHi && priceLo) ? { label: `${site.plural} Between $${priceLo.toLocaleString("en-AU")} to $${priceHi.toLocaleString("en-AU")}`, href: `/listings/between-${priceLo}-${priceHi}/` } : null,
     { label: `All ${site.plural} for Sale`, href: `/listings/` },
@@ -500,7 +482,6 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
     { label: `${site.plural} for Sale`, href: "/listings/" },
     ...(state ? [{ label: state, href: `/listings/${slugify(state)}-state/` }] : []),
     ...(product.region?.value ? [{ label: product.region.value.replace(/-/g, " "), href: `/listings/${slugify(state)}-state/${(product.region.slug ?? slugify(product.region.value)).replace(/(?:-region)?$/, "-region")}/` }] : []),
-    ...(categoryNames[0] ? [{ label: categoryNames[0], href: `/listings/${slugify(categoryNames[0].replace(/\s*caravan\s*/gi, " ").trim())}-category/` }] : []),
   ];
 
   return (
@@ -527,42 +508,15 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
 
             {/* Specs bar — inside left column, horizontal layout */}
             <div className="pdd-specs-bar">
-              {shortCategory && (
-                <div className="pdd-specs-bar__item">
-                  <img src="/images/category.svg" width="20" height="20" alt="" />
+              {specBarItems.map((s) => (
+                <div key={s.label} className="pdd-specs-bar__item">
+                  {s.icon}
                   <div className="pdd-specs-bar__text">
-                    <span className="pdd-specs-bar__val">{shortCategory}</span>
-                    <span className="pdd-specs-bar__lbl">{site.singular} Type</span>
+                    <span className="pdd-specs-bar__val">{s.value}</span>
+                    <span className="pdd-specs-bar__lbl">{s.label}</span>
                   </div>
                 </div>
-              )}
-              {shortSleeps && (
-                <div className="pdd-specs-bar__item">
-                  <img src="/images/bed.svg" width="20" height="20" alt="" />
-                  <div className="pdd-specs-bar__text">
-                    <span className="pdd-specs-bar__val">{shortSleeps}</span>
-                    <span className="pdd-specs-bar__lbl">Sleeps</span>
-                  </div>
-                </div>
-              )}
-              {shortAtm && (
-                <div className="pdd-specs-bar__item">
-                  <img src="/images/weight.svg" width="20" height="20" alt="" />
-                  <div className="pdd-specs-bar__text">
-                    <span className="pdd-specs-bar__val">{shortAtm}</span>
-                    <span className="pdd-specs-bar__lbl">ATM</span>
-                  </div>
-                </div>
-              )}
-              {getAttr("Length") && (
-                <div className="pdd-specs-bar__item">
-                  <img src="/images/length.svg" width="20" height="20" alt="" />
-                  <div className="pdd-specs-bar__text">
-                    <span className="pdd-specs-bar__val">{getAttr("Length")}</span>
-                    <span className="pdd-specs-bar__lbl">Length</span>
-                  </div>
-                </div>
-              )}
+              ))}
               {product.seller_type && (
                 <div className="pdd-specs-bar__item">
                   <img src="/images/seller.svg" width="20" height="20" alt="" />
@@ -704,20 +658,6 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
           </aside>
         </div>
 
-        {/* ── Off Road Extra Content ── */}
-        {isOffRoad && (
-          <section className="lsd-offroad-extra">
-            
-              <h2 className="lsd-offroad-extra__title">Find Your Ideal Off Road {site.singular}</h2>
-              <p className="lsd-offroad-extra__body">
-                Need help choosing the right off road {site.noun}? Visit our{" "}
-                <a href="https://www.caravansforsale.com.au/off-road-caravans/">Off Road {site.plural}</a>{" "}
-                hub to compare {site.noun} types, current prices, brands, models, market data, reviews and buying guides.
-              </p>
-            
-          </section>
-        )}
-
         {/* ── Sell CTA ── */}
         <section className="hbg-sell-section">
           
@@ -742,7 +682,7 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
         {/* ── Similar Caravans ── */}
         {makeSimilar.length > 0 && (
           <section className="pdd-section pdd-similar">
-            <h2 className="pdd-section__title">Similar {site.plural} in the {makeLabel} Range</h2>
+            <h2 className="pdd-section__title">Similar {site.plural} in the {make} Range</h2>
             <div className="pdd-similar__grid">
                 {makeSimilar.filter(r => r.slug !== product.slug).slice(0, 5).map((r, i) => {
                   const rName     = r.name ?? r.title ?? "";

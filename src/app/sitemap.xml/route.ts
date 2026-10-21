@@ -6,25 +6,20 @@ export async function GET() {
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || site.url;
 
+  // One entry per sitemap type the cars API supports
+  // (/car-sites/{site}/sitemap: listings, blog, states, regions, makes,
+  // models, state-make, region-make, price) plus the static pages.
   const sitemaps = [
     "general-sitemap.xml",
     "listings-sitemap.xml",
-    "categories-sitemap.xml",
     "states-sitemap.xml",
     "regions-sitemap.xml",
     "makes-sitemap.xml",
     "blogs-sitemap.xml",
     "models-sitemap.xml",
-    "weights-sitemap.xml",
     "prices-sitemap.xml",
-    "length-sitemap.xml",
-    "category-state-sitemap.xml",
-    "category-region-sitemap.xml",
-    "attributes-others-sitemap.xml",
     "state-make-sitemap.xml",
     "region-make-sitemap.xml",
-    // "sleep-sitemap.xml",
-    // "category-sleep-sitemap.xml",
   ];
 
   const lastModified = new Date().toISOString().split("T")[0];

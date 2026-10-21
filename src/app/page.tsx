@@ -9,14 +9,14 @@ import { fetchRequirements } from "@/api/postRquirements/api";
 import { fetchHomePage } from "@/api/home/api";
 import { fetchHomeFeatured } from "@/api/homeApi/featured/api";
 import { fetchBlogs } from "@/api/blog/api";
-import { fetchSiteSchema } from "@/lib/siteSchema";
+import { fetchSiteFacets, fetchSiteSchema } from "@/lib/siteSchema";
 
 const FEATURED_SEED_MAX = 15;
 
 export const dynamic = "force-dynamic";
 
 const HOME_TITLE = `${site.title} – New & Used ${site.singular} Marketplace in Australia`;
-const HOME_DESCRIPTION = `Browse ${site.nounPlural} for sale across Australia. Compare prices on off-road, hybrid, pop top, touring, luxury models with size, weight & sleeping capacity.`;
+const HOME_DESCRIPTION = `Browse new and used ${site.nounPlural} for sale across Australia. Compare prices, makes and models from dealers and private sellers.`;
 
 export const metadata: Metadata = {
   title: {
@@ -72,6 +72,7 @@ export default async function Page() {
     featuredUsed,
     blogPosts,
     siteFilterSchema,
+    siteFacets,
   ] = await Promise.all([
     fetchStateBasedCaravans(),
     fetchRequirements(),
@@ -81,6 +82,7 @@ export default async function Page() {
     fetchHomeFeatured({ type: "used", seed: featuredSeed, visitorIp }),
     fetchBlogs(1),
     fetchSiteSchema(),
+    fetchSiteFacets(),
   ]);
 
   return (
@@ -94,6 +96,7 @@ export default async function Page() {
       blogPosts={blogPosts.items.slice(0, 6)}
       visitorIp={visitorIp}
       siteFilterSchema={siteFilterSchema}
+      siteFacets={siteFacets}
     />
   );
 }

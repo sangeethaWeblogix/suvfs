@@ -10,11 +10,10 @@ type Item = {
   slug?: string;
   make?: string;
   model?: string;
-  length?: number | string | null;
+  body_type?: string | null;
   regular_price?: number | string | null;
   sale_price?: number | string | null;
   r2_thumbnails?: string[];
-  category?: string[];
 };
 
 type ApiResponse = {
@@ -67,7 +66,6 @@ async function fetchPoolListingsForHead(
   params.set("seed", "1"); // fixed seed — this is for SEO schema, not user-facing shuffle
   params.set("page", String(page));
   if (filters.state) params.set("state", String(filters.state));
-  if (filters.category) params.set("category", String(filters.category));
   if (filters.make) params.set("make", String(filters.make));
   if (filters.model) params.set("model", String(filters.model));
   if (filters.region) params.set("region", String(filters.region));
@@ -75,14 +73,8 @@ async function fetchPoolListingsForHead(
   if (filters.pincode) params.set("pincode", String(filters.pincode));
   if (filters.from_price) params.set("from_price", String(filters.from_price));
   if (filters.to_price) params.set("to_price", String(filters.to_price));
-  if (filters.minKg) params.set("from_atm", String(filters.minKg));
-  if (filters.maxKg) params.set("to_atm", String(filters.maxKg));
-  if (filters.from_sleep) params.set("from_sleep", String(filters.from_sleep));
-  if (filters.to_sleep) params.set("to_sleep", String(filters.to_sleep));
   if (filters.from_year) params.set("from_year", String(filters.from_year));
   if (filters.to_year) params.set("to_year", String(filters.to_year));
-  if (filters.from_length) params.set("from_length", String(filters.from_length));
-  if (filters.to_length) params.set("to_length", String(filters.to_length));
   if (filters.condition) params.set("condition", String(filters.condition));
   if (filters.search || filters.keyword) params.set("search", String(filters.search ?? filters.keyword));
   appendFilterParams(params, filters);
@@ -141,13 +133,6 @@ async function fetchPoolListingsForHead(
   return data;
 }
 
-function parseLengthFt(raw: string): number {
-  // handles "19'6 ft" (feet+inches) and "24.93 ft" (decimal feet)
-  const feetInches = raw.match(/^(\d+)'(\d+)/);
-  if (feetInches) return parseInt(feetInches[1]) + parseInt(feetInches[2]) / 12;
-  return parseFloat(raw);
-}
-
 function cleanPrice(raw: string): string {
   return raw.replace(/[$,]/g, "").trim();
 }
@@ -182,11 +167,6 @@ function parseFaq(raw?: string): Faq[] {
 function buildProductListItem(item: Item, position: number) {
   const rawPrice = item.sale_price != null && item.sale_price !== "" ? item.sale_price : item.regular_price;
   const price = cleanPrice(String(rawPrice ?? ""));
-  const lengthFt = parseLengthFt(String(item.length ?? ""));
-  const widthMt =
-    !isNaN(lengthFt) && lengthFt > 0
-      ? (lengthFt * 0.3048).toFixed(2)
-      : "";
   const images = (item.r2_thumbnails ?? [])
     .slice(0, 5)
     .map((url) => ({ "@type": "ImageObject", url }));
@@ -195,14 +175,7 @@ function buildProductListItem(item: Item, position: number) {
     position,
     item: {
       "@type": "Car",
-      bodyType: item.category && item.category.length > 0
-        ? item.category.join(", ")
-        : "",
-      width: {
-        "@type": "QuantitativeValue",
-        unitCode: "MT",
-        value: widthMt,
-      },
+      ...(item.body_type && { bodyType: item.body_type }),
       url: item.slug ? `${BASE_URL}/product/${item.slug}/` : BASE_URL,
       name: item.title,
       model: item.model ?? "",
@@ -336,7 +309,7 @@ export function buildBreadcrumbs(pathname: string): { name: string; url: string 
   const slugParts = slugString.split("/").filter(Boolean);
   slugParts.forEach((segment, i) => {
     const label = segment
-      .replace(/-(category|state|region|condition|search|suburb)$/, "")
+      .replace(/-(state|region|condition|search|suburb)$/, "")
       .replace(/[-+]/g, " ")
       .replace(/\b\w/g, (c) => c.toUpperCase());
     crumbs.push({

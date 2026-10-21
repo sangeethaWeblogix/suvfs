@@ -9,9 +9,7 @@
     "start": "next start",
     "site": "node scripts/dev-site.mjs",
     "prepare": "node scripts/setup-git-hooks.mjs",
-    "lint": "next lint",
-    "warm": "node scripts/warm-cache.mjs https://www.caravansforsale.com.au",
-    "warm:staging": "node scripts/warm-cache.mjs"
+    "lint": "next lint"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

@@ -5,10 +5,8 @@ import { site, sitePaths } from "@/config/sites";
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || site.url;
 
-// Static URLs (you can extend this later with categories, states, regions)
+// Static URLs (states, regions, makes etc. have their own sitemaps)
 const staticUrls = [
-  "caravan-manufacturers",
-  "off-road-caravans-manufacturers",
   "listings",
   "blog",
   "about-us",

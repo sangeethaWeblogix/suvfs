@@ -2,7 +2,6 @@
 import { parseFilterSegment } from "@/config/filterDefs";
 
 export interface Filters {
-  category?: string;
   condition?: string;
   state?: string;
   region?: string;
@@ -10,11 +9,6 @@ export interface Filters {
   pincode?: string;
   from_price?: string;
   to_price?: string;
-  minKg?: string;
-  maxKg?: string;
-  from_length?: string;
-  to_length?: string;
-  sleeps?: string;
   make?: string;
   model?: string;
   orderby?: string;
@@ -23,8 +17,6 @@ export interface Filters {
   from_year?: number | string;
   to_year?: number | string;
   search?: string;
-  from_sleep?: string | number;
-  to_sleep?: string | number;
   clickid?: string | null;
   keyword?: string; // parsed -> canonicalized to `search`
   /** Car-site filters from config/filterDefs.ts (fuel_type, from_odometer, …). */
@@ -46,9 +38,14 @@ export function parseSlugToFilters(
     used: "Used",
   };
 
+  // Caravan-era segments (-category, -kg-atm, -length-in-feet,
+  // -people-sleeping-capacity, -caravans-range) are not parsed: car listings
+  // have none of these attributes. They stay reserved so they are never read
+  // as a make/model — the rebuilt canonical path then differs and middleware
+  // answers 410.
   const hasReservedSuffix = (s: string) =>
     /-(category|condition|state|region|suburb|keyword)$/.test(s) ||
-    /-(kg-atm|length-in-feet|people-sleeping-capacity)$/.test(s) ||
+    /-(kg-atm|length-in-feet|people-sleeping-capacity|caravans-range)$/.test(s) ||
     /^over-\d+/.test(s) ||
     /^under-\d+/.test(s) ||
     /^between-/.test(s) ||
@@ -68,11 +65,6 @@ export function parseSlugToFilters(
     }
 
     // --- Typed segments ---
-    if (part.endsWith("-category")) {
-      filters.category = part.replace("-category", "");
-      return;
-    }
-
     if (part.endsWith("-condition")) {
       // Multi-select: new-or-demo-condition → "New,demo"
       filters.condition = part
@@ -120,87 +112,6 @@ export function parseSlugToFilters(
       filters.pincode = part;
       return;
     }
-    // ATM: support canonical and legacy patterns
-    if (part.includes("-kg-atm")) {
-      const canon = part.match(/^between-(\d+)-kg-(\d+)-kg-atm$/);
-      if (canon) {
-        filters.minKg = canon[1];
-        filters.maxKg = canon[2];
-        return;
-      }
-      const legacy = part.match(/^between-(\d+)-kg-(\d+)-kg-atm$/);
-      if (legacy) {
-        filters.minKg = legacy[1];
-        filters.maxKg = legacy[2];
-        return;
-      }
-      const over = part.match(/^over-(\d+)-kg-atm$/);
-      if (over) {
-        filters.minKg = over[1];
-        return;
-      }
-      const under = part.match(/^under-(\d+)-kg-atm$/);
-      if (under) {
-        filters.maxKg = under[1];
-        return;
-      }
-    }
-
-    // Length (feet)
-    if (part.includes("length-in-feet")) {
-      const between = part.match(/^between-(\d+)-(\d+)-length-in-feet$/);
-      if (between) {
-        filters.from_length = between[1];
-        filters.to_length = between[2];
-        return;
-      }
-      const over = part.match(/^over-(\d+)-length-in-feet$/);
-      if (over) {
-        filters.from_length = over[1];
-        return;
-      }
-      const under = part.match(/^under-(\d+)-length-in-feet$/);
-      if (under) {
-        filters.to_length = under[1];
-        return;
-      }
-    }
-
-    // Sleeps (range-based)
-    if (part.includes("-people-sleeping-capacity")) {
-      // between-x-y-people-sleeping-capacity
-      const between = part.match(
-        /^between-(\d+)-(\d+)-people-sleeping-capacity$/
-      );
-      if (between) {
-        filters.from_sleep = between[1];
-        filters.to_sleep = between[2];
-        return;
-      }
-
-      // over-x-people-sleeping-capacity
-      const over = part.match(/^over-(\d+)-people-sleeping-capacity$/);
-      if (over) {
-        filters.from_sleep = over[1];
-        return;
-      }
-
-      // under-x-people-sleeping-capacity
-      const under = part.match(/^under-(\d+)-people-sleeping-capacity$/);
-      if (under) {
-        filters.to_sleep = under[1];
-        return;
-      }
-
-      // fallback: single value like 2-people-sleeping-capacity
-      const single = part.match(/^(\d+)-people-sleeping-capacity$/);
-      if (single) {
-        filters.from_sleep = single[1];
-        filters.to_sleep = single[1];
-        return;
-      }
-    }
-
     // Price
     if (/^over-\d+$/.test(part)) {
       filters.from_price = part.replace("over-", "");
@@ -217,31 +128,6 @@ export function parseSlugToFilters(
         filters.to_price = match[2];
       }
       return;
-    }
-    // Year range: 2020-2025-caravans-range, year-from-2025-caravans-range, year-to-2025-caravans-range
-    if (part.includes("-caravans-range")) {
-      const bothMatch = part.match(/^(\d{4})-(\d{4})-caravans-range$/);
-      if (bothMatch) {
-        filters.from_year = bothMatch[1];
-        filters.to_year = bothMatch[2];
-        return;
-      }
-      const singleMatch = part.match(/^(\d{4})-caravans-range$/);
-      if (singleMatch) {
-        filters.from_year = singleMatch[1];
-        filters.to_year = singleMatch[1];
-        return;
-      }
-      const fromMatch = part.match(/^year-from-(\d{4})-caravans-range$/);
-      if (fromMatch) {
-        filters.from_year = fromMatch[1];
-        return;
-      }
-      const toMatch = part.match(/^year-to-(\d{4})-caravans-range$/);
-      if (toMatch) {
-        filters.to_year = toMatch[1];
-        return;
-      }
     }
 
     // Search + fallback

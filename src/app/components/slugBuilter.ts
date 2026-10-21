@@ -38,10 +38,7 @@ export function buildSlugFromFilters(f: Filters): string {
     .sort();
   if (conditions.length) segments.push(`${conditions.join("-or-")}-condition`);
 
-  // 3) Category
-  if (f.category) segments.push(`${toSlug(f.category)}-category`);
-
-  // 4) Location
+  // 3) Location
    const state = cleanSlug(f.state);
   const region = cleanSlug(f.region);
   const suburb = cleanSlug(f.suburb);
@@ -63,55 +60,14 @@ export function buildSlugFromFilters(f: Filters): string {
   }
 
 
-  // 5) Price
+  // 4) Price
   const fromPrice = asNum(f.from_price);
   const toPrice = asNum(f.to_price);
   if (fromPrice && toPrice) segments.push(`between-${fromPrice}-${toPrice}`);
   else if (fromPrice) segments.push(`over-${fromPrice}`);
   else if (toPrice) segments.push(`under-${toPrice}`);
 
-  // 6) ATM (kg)
-  const minKg = asNum(f.minKg);
-  const maxKg = asNum(f.maxKg);
-  if (minKg !== undefined && maxKg !== undefined) {
-    segments.push(`between-${minKg}-kg-${maxKg}-kg-atm`);
-  } else if (minKg !== undefined) {
-    segments.push(`over-${minKg}-kg-atm`);
-  } else if (maxKg !== undefined) {
-    segments.push(`under-${maxKg}-kg-atm`);
-  }
-  // 7) Length (feet)
-  const fromLen = asNum(f.from_length);
-  const toLen = asNum(f.to_length);
-  if (fromLen && toLen)
-    segments.push(`between-${fromLen}-${toLen}-length-in-feet`);
-  else if (fromLen) segments.push(`over-${fromLen}-length-in-feet`);
-  else if (toLen) segments.push(`under-${toLen}-length-in-feet`);
-
-  // 8) Sleeps (single-value)
-  // if (f.sleeps) {
-  //   const n = String(f.sleeps).replace("-people", "");
-  //   if (!isNaN(Number(n))) segments.push(`${n}-people-sleeping-capacity`);
-  // }
-  // 8) Sleeps (range-based)
-  const fromSleep = asNum(f.from_sleep);
-  const toSleep = asNum(f.to_sleep);
-  
-
-  if (fromSleep && toSleep) {
-    if (fromSleep === toSleep) {
-      segments.push(`${fromSleep}-people-sleeping-capacity`);
-    } else {
-      segments.push(`between-${fromSleep}-${toSleep}-people-sleeping-capacity`);
-    }
-  } else if (fromSleep) {
-    segments.push(`over-${fromSleep}-people-sleeping-capacity`);
-  } else if (toSleep) {
-    segments.push(`under-${toSleep}-people-sleeping-capacity`);
-  }
-
-
-  // 9) Car-site filters: year, odometer, fuel type, seats, towing, … (config/filterDefs.ts)
+  // 5) Car-site filters: year, odometer, fuel type, seats, towing, … (config/filterDefs.ts)
   segments.push(...buildFilterSegments(f));
 
   const query = new URLSearchParams();

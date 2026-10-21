@@ -2,6 +2,7 @@ import Link from "next/link";
 import "./not-found.css";
 import Notfound from "./searchError";
 import { site } from "@/config/sites";
+import { BUDGET_ROW } from "@/app/listings/siteBrowseFilters";
 
 export const metadata = {
   title: `404 - Page Not Found | ${site.title}`,
@@ -10,15 +11,6 @@ export const metadata = {
 };
 
 export default function NotFoundPage() {
-  const categories = [
-    { name: `Off Road ${site.plural}`, slug: "off-road-category" },
-    { name: `Hybrid ${site.plural}`, slug: "hybrid-category" },
-    { name: `Pop Top ${site.plural}`, slug: "pop-top-category" },
-    { name: `Luxury ${site.plural}`, slug: "luxury-category" },
-    { name: `Family ${site.plural}`, slug: "family-category" },
-    { name: `Touring ${site.plural}`, slug: "touring-category" },
-  ];
-
   const states = [
     {
       name: "Australian Capital Territory",
@@ -58,15 +50,15 @@ export default function NotFoundPage() {
           </a>
         </div>
 
-        {/* ✅ Browse by Type & State Side by Side */}
+        {/* ✅ Browse by Budget & State Side by Side */}
         <div className="browse-grid">
-          {/* Left: Category */}
+          {/* Left: Budget */}
           <div className="browse-column">
-            <h4>Browse by Type:</h4>
+            <h4>Browse by Budget:</h4>
             <ul>
-              {categories.map((cat) => (
-                <li key={cat.slug}>
-                  <a href={`/listings/${cat.slug}/`}>{cat.name}</a>
+              {BUDGET_ROW.items.map((band) => (
+                <li key={band.href}>
+                  <a href={band.href}>{band.text}</a>
                 </li>
               ))}
             </ul>

@@ -14,6 +14,7 @@ import { type HomeBlogPost } from "@/api/home/api";
 import { type FeaturedListing } from "@/api/homeApi/featured/api";
 import { type BlogPost } from "@/api/blog/api";
 import { type SchemaItem } from "@/app/listings/SiteFilters";
+import type { SiteFacets } from "@/app/listings/siteBrowseFilters";
 import HomeFeatured from "./HomeFeatured";
 import HomeStateSection from "./HomeStateSection";
 import HomeLocationSection from "./HomeLocationSection";
@@ -50,6 +51,7 @@ interface Props {
   blogPosts: BlogPost[];
   visitorIp: string;
   siteFilterSchema?: SchemaItem[];
+  siteFacets?: SiteFacets | null;
 }
 /* --------------------------------- Page ---------------------------------- */
 export default function HomePage({
@@ -63,6 +65,7 @@ export default function HomePage({
   blogPosts,
   visitorIp,
   siteFilterSchema = [],
+  siteFacets = null,
 
  }: Props) {
 
@@ -295,7 +298,7 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
       </div>
 
       {/* ── Find by Location ── */}
-      <HomeLocationSection schema={siteFilterSchema} />
+      <HomeLocationSection schema={siteFilterSchema} facets={siteFacets} />
 
       {/* ── Buyer Guide + Why Australians ── */}
       <HomeBuyerGuide />

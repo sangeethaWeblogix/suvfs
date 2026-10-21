@@ -4,7 +4,7 @@ import { site } from "@/config/sites";
  
 export const metadata: Metadata = {
   title: `${site.title} – Australia’s Marketplace for New & Used ${site.plural}`,
-  description: `Browse ${site.nounPlural} for sale across Australia. Compare prices on off-road, hybrid, pop top, touring, luxury models with size, weight & sleeping capacity`,
+  description: `Browse new and used ${site.nounPlural} for sale across Australia. Compare prices, makes and models from dealers and private sellers.`,
   robots: "noindex, nofollow",
   alternates: {
     canonical: `${site.url}/home-demo/`,

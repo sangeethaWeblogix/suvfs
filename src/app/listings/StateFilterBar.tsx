@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import SearchSuggestionSkeleton from "../components/Searchsuggestionskeleton ";
 import { fetchLocations } from "@/api/location/api";
 import { fetchHomeSearchList, fetchKeywordSuggestions } from "@/api/homeSearch/api";
-import { buildMakeCountScope } from "./paramsCountScope";
-import { appendFilterParams, FILTER_PARAM_KEYS } from "@/config/filterDefs";
+import { buildCountScope, buildMakeCountScope } from "./paramsCountScope";
+import { FILTER_PARAM_KEYS } from "@/config/filterDefs";
 import {
   SiteFilterButtons, SiteFilterChips, SiteFilterSections,
   useSiteFilterSchema, hasValue, pickSiteFilterValues, siteFilterUpdates,
@@ -28,7 +28,6 @@ export interface StateOption {
 }
 
 export interface FilterState {
-  category?: string;
   make?: string;
   model?: string;
   state?: string;
@@ -37,15 +36,9 @@ export interface FilterState {
   pincode?: string;
   from_price?: string | number;
   to_price?: string | number;
-  minKg?: string | number;
-  maxKg?: string | number;
   condition?: string;
-  from_sleep?: string | number;
-  to_sleep?: string | number;
   from_year?: string | number;
   to_year?: string | number;
-  from_length?: string | number;
-  to_length?: string | number;
   keyword?: string;
   [key: string]: any;
 }
@@ -54,17 +47,12 @@ interface Props {
   currentFilters: FilterState;
   onFilterChange: (f: FilterState) => void;
   onClearAll: () => void;
-  /** Server-fetched (SSR) static filter data — categories/states from
-   * /params-product-list, makes from /make_details. When present, skips the
-   * redundant client-side mount fetch of /api/product-list/ + /api/make-details/. */
-  initialCategories?: { name: string; slug: string }[];
+  /** Server-fetched (SSR) state list from /params-product-list. When present,
+   * skips the redundant client-side mount fetch of /api/product-list/. */
   initialStates?: StateOption[];
-  initialMakes?: { name: string; slug: string; models?: { name: string; slug: string }[] }[];
-  /** Server-fetched (SSR) category/make counts, scoped to initialFilters via
-   * the same buildCategoryCountScope/buildMakeCountScope as this component —
-   * skips the redundant client-side mount fetch. Any filter change after
-   * mount still fetches live, exactly as before. */
-  initialCategoryCounts?: { name: string; slug: string; count: number }[];
+  /** Server-fetched (SSR) make counts, scoped to initialFilters via the same
+   * buildMakeCountScope as this component — skips the redundant client-side
+   * mount fetch. Any filter change after mount still fetches live. */
   initialMakeCounts?: { name: string; slug: string; count: number }[];
 }
 
@@ -78,7 +66,7 @@ const buildMakeCountParams = (filters: FilterState): URLSearchParams => {
 
 export default function StateFilterBar({
   currentFilters, onFilterChange, onClearAll,
-  initialCategories, initialStates, initialMakes,
+  initialStates,
   initialMakeCounts,
 }: Props) {
   // One string for every car-site filter value, for effect dependency lists.
@@ -88,7 +76,6 @@ export default function StateFilterBar({
 
   /* ── Data ── */
   const [states,     setStates]     = useState<StateOption[]>(initialStates ?? []);
-  const [makes,      setMakes]      = useState<{name: string; slug: string; models?: {name: string; slug: string}[]}[]>(initialMakes ?? []);
 
   // Guards the make count effect below so it skips its one redundant client
   // refetch on mount (SSR already fetched that exact scope). Must track "is
@@ -100,18 +87,15 @@ export default function StateFilterBar({
   const makeCountsFirstRunRef = useRef(true);
 
   useEffect(() => {
-    // Static state/make lists don't depend on currentFilters — safe to skip
-    // entirely whenever the server already supplied them.
-    if (initialCategories) return;
+    // The state list doesn't depend on currentFilters — safe to skip entirely
+    // whenever the server already supplied it. (Makes and models come from
+    // the live params-count fetches below.)
+    if (initialStates) return;
     fetch("/api/product-list/")
       .then(r => r.ok ? r.json() : null)
       .then((res: any) => { if (res?.data) setStates(res.data.states || []); })
       .catch(() => {});
-    fetch("/api/make-details/")
-      .then(r => r.ok ? r.json() : null)
-      .then((json: any) => setMakes(json?.data?.make_options || []))
-      .catch(() => {});
-  }, [initialCategories]);
+  }, [initialStates]);
 
   /* ── Suburb search ── */
   const RADIUS_OPTIONS = [25, 50, 100, 250, 500, 1000] as const;
@@ -155,7 +139,6 @@ export default function StateFilterBar({
   // re-fetched whenever any other active filter changes so the make list
   // narrows to what's actually available (not just the full static make list).
   useEffect(() => {
-    // Same skip-only-the-mount-refetch guard as the category counts above.
     const isFirstRun = makeCountsFirstRunRef.current;
     makeCountsFirstRunRef.current = false;
     if (initialMakeCounts && isFirstRun) return;
@@ -167,10 +150,9 @@ export default function StateFilterBar({
       .catch(e => { if (e.name !== "AbortError") console.error(e); });
     return () => controller.abort();
   }, [
-    currentFilters.category, currentFilters.condition, currentFilters.state, currentFilters.region,
+    currentFilters.condition, currentFilters.state, currentFilters.region,
     currentFilters.suburb, currentFilters.pincode, currentFilters.from_price, currentFilters.to_price,
-    currentFilters.minKg, currentFilters.maxKg, currentFilters.from_year, currentFilters.to_year,
-    currentFilters.from_length, currentFilters.to_length, currentFilters.from_sleep, currentFilters.to_sleep,
+    currentFilters.from_year, currentFilters.to_year,
     currentFilters.keyword, siteFilterKey,
   ]);
 
@@ -180,22 +162,11 @@ export default function StateFilterBar({
   useEffect(() => {
     if (!currentFilters.make) { setStateCounts([]); return; }
     const controller = new AbortController();
-    const params = new URLSearchParams();
-    params.set("make", resolveMakeSlug(currentFilters.make));
-    if (currentFilters.category)          params.set("category", currentFilters.category);
-    if (currentFilters.condition)         params.set("condition", currentFilters.condition);
-    if (currentFilters.from_price)        params.set("from_price", String(currentFilters.from_price));
-    if (currentFilters.to_price)          params.set("to_price", String(currentFilters.to_price));
-    if (currentFilters.minKg)             params.set("from_atm", String(currentFilters.minKg));
-    if (currentFilters.maxKg)             params.set("to_atm", String(currentFilters.maxKg));
-    if (currentFilters.from_year) params.set("from_year", String(currentFilters.from_year));
-    if (currentFilters.to_year)   params.set("to_year", String(currentFilters.to_year));
-    if (currentFilters.from_length)       params.set("from_length", String(currentFilters.from_length));
-    if (currentFilters.to_length)         params.set("to_length", String(currentFilters.to_length));
-    if (currentFilters.from_sleep)        params.set("from_sleep", String(currentFilters.from_sleep));
-    if (currentFilters.to_sleep)          params.set("to_sleep", String(currentFilters.to_sleep));
-    if (currentFilters.keyword)           params.set("keyword", currentFilters.keyword);
-    appendFilterParams(params, currentFilters);
+    // State counts for this make — location is what's being counted, so drop it.
+    const params = buildCountScope(
+      { ...currentFilters, state: undefined, region: undefined, suburb: undefined, pincode: undefined },
+      resolveMakeSlug(currentFilters.make),
+    );
     params.set("group_by", "state");
     fetch(`/api/params-count/?${params.toString()}`, { signal: controller.signal })
       .then(r => r.json())
@@ -203,10 +174,9 @@ export default function StateFilterBar({
       .catch(e => { if (e.name !== "AbortError") console.error(e); });
     return () => controller.abort();
   }, [
-    currentFilters.make, currentFilters.category, currentFilters.condition,
-    currentFilters.from_price, currentFilters.to_price, currentFilters.minKg, currentFilters.maxKg,
+    currentFilters.make, currentFilters.condition,
+    currentFilters.from_price, currentFilters.to_price,
     currentFilters.from_year, currentFilters.to_year,
-    currentFilters.from_length, currentFilters.to_length, currentFilters.from_sleep, currentFilters.to_sleep,
     currentFilters.keyword, siteFilterKey,
   ]);
 
@@ -224,22 +194,11 @@ export default function StateFilterBar({
       if (!sc.slug) return;
       const ctrl = new AbortController();
       controllers.push(ctrl);
-      const params = new URLSearchParams({ group_by: "region", state: sc.slug.toLowerCase() });
-      params.set("make", resolveMakeSlug(currentFilters.make!).toLowerCase());
-      if (currentFilters.category)          params.set("category", currentFilters.category);
-      if (currentFilters.condition)         params.set("condition", currentFilters.condition);
-      if (currentFilters.from_price)        params.set("from_price", String(currentFilters.from_price));
-      if (currentFilters.to_price)          params.set("to_price", String(currentFilters.to_price));
-      if (currentFilters.minKg)             params.set("from_atm", String(currentFilters.minKg));
-      if (currentFilters.maxKg)             params.set("to_atm", String(currentFilters.maxKg));
-      if (currentFilters.from_year) params.set("from_year", String(currentFilters.from_year));
-      if (currentFilters.to_year)   params.set("to_year", String(currentFilters.to_year));
-      if (currentFilters.from_length)       params.set("from_length", String(currentFilters.from_length));
-      if (currentFilters.to_length)         params.set("to_length", String(currentFilters.to_length));
-      if (currentFilters.from_sleep)        params.set("from_sleep", String(currentFilters.from_sleep));
-      if (currentFilters.to_sleep)          params.set("to_sleep", String(currentFilters.to_sleep));
-      if (currentFilters.keyword)           params.set("keyword", currentFilters.keyword);
-      appendFilterParams(params, currentFilters);
+      const params = buildCountScope(
+        { ...currentFilters, state: sc.slug.toLowerCase(), region: undefined, suburb: undefined, pincode: undefined },
+        resolveMakeSlug(currentFilters.make!).toLowerCase(),
+      );
+      params.set("group_by", "region");
       fetch(`/api/params-count/?${params}`, { signal: ctrl.signal })
         .then(r => r.json())
         .then(json => {
@@ -400,8 +359,7 @@ export default function StateFilterBar({
     return i > 0 ? [list[i], ...list.slice(0, i), ...list.slice(i + 1)] : list;
   };
 
-  const makeSourceRaw = makeCounts.length > 0 ? makeCounts : makes.map(m => ({ name: m.name, slug: m.slug, count: 0 }));
-  const makeSource = [...makeSourceRaw].sort((a, b) => a.name.localeCompare(b.name));
+  const makeSource = [...makeCounts].sort((a, b) => a.name.localeCompare(b.name));
   const filteredMakes = makeSearch
     ? (() => {
         const q = makeSearch.toLowerCase();
@@ -414,8 +372,7 @@ export default function StateFilterBar({
           });
       })()
     : pinToTop(makeSource, currentFilters.make);
-  const availableModels = makes.find(m => m.slug === tempMake)?.models ?? [];
-  const modelSource = modelCounts.length > 0 ? modelCounts : availableModels.map(m => ({ name: m.name, slug: m.slug, count: 0 }));
+  const modelSource = modelCounts;
   const filteredModels = modelSearch
     ? (() => {
         const q = modelSearch.toLowerCase();
@@ -624,7 +581,6 @@ export default function StateFilterBar({
                 <span className="chip-label" onClick={() => handleMakeOpen("models")}>
                   {toTitleCase(
                     makeCounts.find(m => m.slug === currentFilters.make)?.name ??
-                      makes.find(m => m.slug === currentFilters.make)?.name ??
                       currentFilters.make,
                   )}
                 </span>

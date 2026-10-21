@@ -3,8 +3,7 @@ import { normalizeCountItems } from "@/lib/countItems";
 const MPN_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
 const API_KEY  = process.env.MPN_API_KEY;
 
-// params-count calls (make/model/category counts) use the MPN key/base;
-// every other endpoint in this file keeps the CFS one.
+// params-count calls (make/model counts) and params-product-list (states).
  
 
 /** Shared headers for every WP API call. */
@@ -17,25 +16,6 @@ const mpnHeaders = (): Record<string, string> => ({
   Accept: "application/json",
 ...(API_KEY && { "X-Secret-Key": API_KEY }),
 });
-
-// ---------------------------------------------------------------------------
-// fetchMakeDetails
-// Next.js 24h fetch cache.
-// ---------------------------------------------------------------------------
-export const fetchMakeDetails = async () => {
-  try {
-    const res = await fetch(`${MPN_BASE}/make_details`, {
-      headers: wpHeaders(),
-      next: { revalidate: 86400 },
-    });
-    if (!res.ok) throw new Error("Failed to fetch make details");
-    const json = await res.json();
-    return json?.data?.make_options || [];
-  } catch (error) {
-    console.error("fetchMakeDetails error:", error);
-    return [];
-  }
-};
 
 // ---------------------------------------------------------------------------
 // fetchModelCounts — WP params-count with a 1h Next.js fetch cache.
@@ -93,29 +73,6 @@ export const fetchMakeCounts = async (): Promise<
   }
 };
 
-// ---------------------------------------------------------------------------
-// fetchCategoryCounts — WP params-count with a 1h Next.js fetch cache.
-// ---------------------------------------------------------------------------
-export const fetchCategoryCounts = async (): Promise<
-  { name: string; slug: string; count: number }[]
-> => {
-  try {
-    const res = await fetch(`${MPN_BASE}/params-count?group_by=category`, {
-      headers: mpnHeaders(),
-      next: { revalidate: 3600 },
-    });
-    if (!res.ok) return [];
-    const data = await res.json();
-    return normalizeCountItems<{ name: string; slug: string; count: number }>(data?.data ?? []).map(
-      (c) => ({
-        ...c,
-        slug: c.slug.replace(/-category$/, ""),
-      })
-    );
-  } catch {
-    return [];
-  }
-};
 
 // ---------------------------------------------------------------------------
 // fetchProductList — Next.js 1h fetch cache.
