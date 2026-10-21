@@ -3,6 +3,13 @@
 import { site } from "@/config/sites";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import type { LucideIcon } from "lucide-react";
+import { useSiteFilterSchema } from "./SiteFilters";
+import {
+  BUDGET_ROW,
+  buildSiteFilterRows,
+  scopeBrowseHref,
+} from "./siteBrowseFilters";
 import {
   toStateSlug,
   stateLabel,
@@ -18,7 +25,6 @@ import {
   buildStatesForCategory,
   buildPopularRegionsForCategory,
   buildAllRegionsForState,
-  buildTypesForState,
   buildFiltersForState,
   type CountItem,
   type BrowseSectionData,
@@ -70,6 +76,9 @@ interface Props {
 }
 
 export default function StateBrowseSection({ state, region, category, initialData }: Props) {
+  const siteFilterSchema = useSiteFilterSchema();
+  const schemaRows = buildSiteFilterRows(siteFilterSchema);
+  const typeRow = schemaRows.find((row) => row.field !== "year");
   const hasState    = !!state;
   const hasRegion   = !!region;
   const hasCategory = !!category;
@@ -78,6 +87,7 @@ export default function StateBrowseSection({ state, region, category, initialDat
   const stateRegionMode         = hasState && hasRegion && !hasCategory;
   const categoryStateMode       = hasState && hasCategory && !hasRegion;
   const categoryStateRegionMode = hasState && hasCategory && hasRegion;
+  const defaultMode             = !hasCategory && !hasRegion;
 
   // Every dynamic mode below shares this same count state — only one mode is
   // ever active for a given render, so there's no cross-talk between fetches.
@@ -101,6 +111,17 @@ export default function StateBrowseSection({ state, region, category, initialDat
     state === initialFiltersRef.current.state &&
     region === initialFiltersRef.current.region &&
     category === initialFiltersRef.current.category;
+
+  // Default/state-only pages — populate the top-right Popular Manufacturers panel.
+  useEffect(() => {
+    if (!defaultMode || (initialData?.makeCounts !== undefined && isInitialFilters)) return;
+    let cancelled = false;
+    setMakeCounts(null);
+    fetchGroupCounts("make", state ? { state } : {})
+      .then((data) => { if (!cancelled) setMakeCounts(data); });
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultMode, state]);
 
   // Category only — Popular Make/State/Region + Price.
   useEffect(() => {
@@ -186,21 +207,26 @@ export default function StateBrowseSection({ state, region, category, initialDat
     </>
   );
 
-  const renderFilterCols = (panels: { icon: string; title: string; links: { text: string; href: string }[] }[], rowClass: string) => (
+  const renderFilterCols = (panels: { icon: string | LucideIcon; title: string; links: { text: string; href: string }[] }[], rowClass: string) => (
     <div className={`lsd-browse__row2 ${rowClass}`}>
-      {panels.filter((p) => p.links.length > 0).map((p) => (
-        <div key={p.title} className="lsd-browse__filter-col">
-          <div className="lsd-browse__filter-head">
-            <Image src={p.icon} alt={p.title} width={20} height={20} unoptimized />
-            <span className="lsd-browse__filter-title">{p.title}</span>
+      {panels.filter((p) => p.links.length > 0).map((p) => {
+        const Icon = typeof p.icon === "string" ? null : p.icon;
+        return (
+          <div key={p.title} className="lsd-browse__filter-col">
+            <div className="lsd-browse__filter-head">
+              {Icon
+                ? <Icon size={20} aria-hidden="true" />
+                : <Image src={p.icon as string} alt={p.title} width={20} height={20} unoptimized />}
+              <span className="lsd-browse__filter-title">{p.title}</span>
+            </div>
+            <div className="lsd-browse__filter-links">
+              {p.links.map((l) => (
+                <a key={l.text} href={l.href} className="lsd-browse__filter-link">{l.text}</a>
+              ))}
+            </div>
           </div>
-          <div className="lsd-browse__filter-links">
-            {p.links.map((l) => (
-              <a key={l.text} href={l.href} className="lsd-browse__filter-link">{l.text}</a>
-            ))}
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 
@@ -306,22 +332,36 @@ export default function StateBrowseSection({ state, region, category, initialDat
       .filter((m) => m.count > 0)
       .map((m) => ({ text: m.name, href: `/listings/${m.slug}/${stateSlug}-state/${regionSlug}-region/` }));
 
-    const categoryPanel = TYPES_NO_STATE
-      .filter((t) => {
-        if (categoryCounts === null) return true;
-        const slug = t.href.match(/\/listings\/([a-z-]+)-category\//)?.[1] ?? "";
-        return (categoryCounts.find((cc) => cc.slug === slug)?.count ?? 0) > 0;
-      })
-      .map((t) => {
-        const slug = t.href.match(/\/listings\/([a-z-]+)-category\//)?.[1] ?? "";
-        return { text: t.label, href: `/listings/${slug}-category/${stateSlug}-state/${regionSlug}-region/` };
-      });
+    const categoryPanel = typeRow
+      ? typeRow.items.map((item) => ({
+          text: item.text,
+          href: `${basePath}${item.href.replace("/listings", "")}`,
+        }))
+      : TYPES_NO_STATE
+          .filter((t) => {
+            if (categoryCounts === null) return true;
+            const slug = t.href.match(/\/listings\/([a-z-]+)-category\//)?.[1] ?? "";
+            return (categoryCounts.find((cc) => cc.slug === slug)?.count ?? 0) > 0;
+          })
+          .map((t) => {
+            const slug = t.href.match(/\/listings\/([a-z-]+)-category\//)?.[1] ?? "";
+            return { text: t.label, href: `/listings/${slug}-category/${stateSlug}-state/${regionSlug}-region/` };
+          });
 
-    const panels = [
-      { icon: "/images/Budget.png",   title: `Browse ${site.plural} by Price in ${regionName}`,            links: bandPanel(basePath, PRICE_BANDS, priceCounts) },
-      { icon: "/images/ATM.png",      title: `Browse ${site.plural} by Weight (ATM) in ${regionName}`,      links: bandPanel(basePath, ATM_BANDS, atmCounts) },
-      { icon: "/images/Sleeping.png", title: `Browse ${site.plural} by Sleeping Capacity in ${regionName}`, links: bandPanel(basePath, SLEEP_BANDS, sleepCounts) },
-    ];
+    const panels = siteFilterSchema.length > 0
+      ? [BUDGET_ROW, ...schemaRows].map((row) => ({
+          icon: row.icon,
+          title: `Browse ${site.plural} ${row.label.toLowerCase()} in ${regionName}`,
+          links: row.items.map((item) => ({
+            text: item.text,
+            href: `${basePath}${item.href.replace("/listings", "")}`,
+          })),
+        }))
+      : [
+          { icon: "/images/Budget.png", title: `Browse ${site.plural} by Price in ${regionName}`, links: bandPanel(basePath, PRICE_BANDS, priceCounts) },
+          { icon: "/images/ATM.png", title: `Browse ${site.plural} by Weight (ATM) in ${regionName}`, links: bandPanel(basePath, ATM_BANDS, atmCounts) },
+          { icon: "/images/Sleeping.png", title: `Browse ${site.plural} by Sleeping Capacity in ${regionName}`, links: bandPanel(basePath, SLEEP_BANDS, sleepCounts) },
+        ];
 
     const showMakePanel     = makeCounts === null || makePanel.length > 0;
     const showCategoryPanel = categoryCounts === null || categoryPanel.length > 0;
@@ -347,7 +387,7 @@ export default function StateBrowseSection({ state, region, category, initialDat
 
               {showCategoryPanel && (
                 <div className="lsd-browse__panel">
-                  <h3 className="lsd-browse__panel-title">{`Browse ${site.plural} by Type in ${regionName}`}</h3>
+                  <h3 className="lsd-browse__panel-title">{`Browse ${site.plural} by ${typeRow?.label.replace(/^By\s+/i, "") ?? "Type"} in ${regionName}`}</h3>
                   <div className="lsd-browse__pills">
                     {categoryPanel.map((c) => (
                       <a key={c.text} href={c.href} className="lsd-browse__pill">{c.text}</a>
@@ -471,11 +511,29 @@ export default function StateBrowseSection({ state, region, category, initialDat
   }
 
   const regions = hasState ? buildAllRegionsForState(state!) : STATES;
-  const types   = hasState ? buildTypesForState(state!) : TYPES_NO_STATE;
+  const manufacturerLinks = (makeCounts ?? [])
+    .filter((make) => make.count > 0)
+    .slice(0, 12)
+    .map((make) => ({
+      label: make.name,
+      href: hasState
+        ? `/listings/${make.slug}/${toStateSlug(state!)}-state/`
+        : `/listings/${make.slug}/`,
+    }));
   const filters = hasState ? buildFiltersForState(state!) : FILTERS_NO_STATE;
+  const primaryRows = schemaRows.filter((row) => row.field !== "year");
+  const schemaFilterRows = [BUDGET_ROW, ...primaryRows].map((row) => ({
+    ...row,
+    items: row.items.map((item) => ({
+      ...item,
+      href: scopeBrowseHref(item.href, state),
+    })),
+  }));
 
   const leftTitle  = hasState ? `Browse ${site.plural} by Region in ${stateLabel(state!)}` : `Browse ${site.plural} by State`;
-  const rightTitle = hasState ? `Browse ${site.plural} by Type in ${stateLabel(state!)}`   : `Browse ${site.plural} by Type`;
+  const rightTitle = hasState
+    ? `Browse ${site.plural} by Popular Makes in ${stateLabel(state!)}`
+    : `Browse ${site.plural} by Popular Makes`;
 
   return (
     <section className="lsd-browse">
@@ -498,29 +556,52 @@ export default function StateBrowseSection({ state, region, category, initialDat
           <div className="lsd-browse__panel">
             <h3 className="lsd-browse__panel-title">{rightTitle}</h3>
             <div className="lsd-browse__type-grid">
-              {types.map((t) => (
-                <a key={t.label} href={t.href} className="lsd-browse__type-card">{t.label}</a>
-              ))}
+              {makeCounts === null
+                ? pillSkeleton(6)
+                : manufacturerLinks.map((make) => (
+                    <a key={make.label} href={make.href} className="lsd-browse__type-card">{make.label}</a>
+                  ))}
             </div>
           </div>
         </div>
 
-        {/* Row 2 — 4 Filter columns */}
-        <div className="lsd-browse__row2">
-          {filters.map((f) => (
-            <div key={f.title} className="lsd-browse__filter-col">
-              <div className="lsd-browse__filter-head">
-                <Image src={f.icon} alt={f.title} width={20} height={20} unoptimized />
-                <span className="lsd-browse__filter-title">{f.title}</span>
+        {/* Row 2 — price, year and the filters recommended for this car site. */}
+        {siteFilterSchema.length > 0 ? (
+          <div className="lsd-browse__row2">
+            {schemaFilterRows.map((f) => {
+              const Icon = f.icon;
+              return (
+                <div key={f.field} className="lsd-browse__filter-col">
+                  <div className="lsd-browse__filter-head">
+                    <Icon size={20} aria-hidden="true" />
+                    <span className="lsd-browse__filter-title">{f.label}</span>
+                  </div>
+                  <div className="lsd-browse__filter-links">
+                    {f.items.map((item) => (
+                      <a key={item.text} href={item.href} className="lsd-browse__filter-link">{item.text}</a>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="lsd-browse__row2">
+            {filters.map((f) => (
+              <div key={f.title} className="lsd-browse__filter-col">
+                <div className="lsd-browse__filter-head">
+                  <Image src={f.icon} alt={f.title} width={20} height={20} unoptimized />
+                  <span className="lsd-browse__filter-title">{f.title}</span>
+                </div>
+                <div className="lsd-browse__filter-links">
+                  {f.links.map((l) => (
+                    <a key={l.text} href={l.href} className="lsd-browse__filter-link">{l.text}</a>
+                  ))}
+                </div>
               </div>
-              <div className="lsd-browse__filter-links">
-                {f.links.map((l) => (
-                  <a key={l.text} href={l.href} className="lsd-browse__filter-link">{l.text}</a>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
       </div>
     </section>

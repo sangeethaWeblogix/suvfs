@@ -54,11 +54,11 @@ const POPULAR_LOCATIONS = [
 const SELLER_LINKS = [
   { label: `Sell My ${site.singular}`, href: sitePaths.sell },
   { label: "Sell by Location", href: "#footer-sell-by-location" },
-  { label: "Seller Login", href: "https://seller.marketplacenetwork.com.au/seller-login/" },
+  { label: "Seller Login", href: "https://cars.marketplacenetwork.com.au/seller-login/" },
 ];
 
 const DEALER_LINKS = [
-  { label: "Dealer Login", href: "https://seller.marketplacenetwork.com.au/seller-login/" },
+  { label: "Dealer Login", href: "https://cars.marketplacenetwork.com.au/seller-login/" },
   { label: "Dealer Advertising", href: "/dealer-advertising/" },
   { label: "Dealer Sign Up", href: "https://seller.marketplacenetwork.com.au/caravan-dealer-subscription/" },
 ];

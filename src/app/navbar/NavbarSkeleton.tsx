@@ -31,7 +31,7 @@ export default function NavbarSkeleton() {
                 <a className="nav-link" href="/dealer-advertising/">Dealer Advertising</a>
               </li>
               <li className="nav-item login">
-                <a className="nav-link" href="https://seller.marketplacenetwork.com.au/seller-login/">
+                <a className="nav-link" href="https://cars.marketplacenetwork.com.au/seller-login/">
                   <i className="bi bi-person-fill"></i> Login
                 </a>
               </li>
