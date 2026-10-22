@@ -701,6 +701,46 @@ input.loc-search-input:focus { box-shadow: 0 0 0 1.5px #7e7e7e !important; }
   align-items: start;
 }
 
+/* Make page: by state | by region on top, models full width below */
+.lsd-browse__make-card {
+  background: #fff;
+  border: 1px solid #e8ecf0;
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin-bottom: 20px;
+}
+.lsd-browse__make-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 2fr);
+  align-items: start;
+}
+.lsd-browse__make-top--single { grid-template-columns: minmax(0, 1fr); }
+.lsd-browse__make-models {
+  border-top: 1px solid #e8ecf0;
+  margin-top: 6px;
+  padding-top: 22px;
+}
+.lsd-browse__make-models .lsd-browse__pills { margin-bottom: 0; }
+@media (max-width: 1023px) {
+  .lsd-browse__make-card { padding: 20px; }
+  .lsd-browse__make-top { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* States/regions + popular makes: give the make cards more room — 12 makes
+   fill 4 columns × 3 rows exactly, so neither side leaves a tall empty gap. */
+.lsd-browse__row1--makes { grid-template-columns: minmax(0, 2fr) auto minmax(0, 3fr); }
+.lsd-browse__row1--makes .lsd-browse__type-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 0;
+}
+.lsd-browse__row1--makes .lsd-browse__type-card { padding: 9px 14px; }
+@media (max-width: 1100px) {
+  .lsd-browse__row1--makes .lsd-browse__type-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 480px) {
+  .lsd-browse__row1--makes .lsd-browse__type-grid { grid-template-columns: 1fr 1fr; }
+}
+
 .lsd-browse__divider-v {
   width: 1px;
   background: #e8ecf0;
@@ -846,6 +886,20 @@ input.loc-search-input:focus { box-shadow: 0 0 0 1.5px #7e7e7e !important; }
 }
 .lsd-browse__filter-link:last-child { border-bottom: none; }
 .lsd-browse__filter-link:hover { color: var(--brand); text-decoration: none; }
+
+/* A long list (e.g. 9 budget bands) runs in two sub-columns, top to bottom,
+   in a slightly wider card — so it ends level with its shorter neighbours. */
+.lsd-browse__row2--lead {
+  grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
+}
+@media (min-width: 640px) {
+  .lsd-browse__filter-links--split {
+    display: grid;
+    grid-auto-flow: column;
+    column-gap: 24px;
+  }
+  .lsd-browse__filter-link--col-end { border-bottom: none; }
+}
 
 /* Caps long lists (e.g. Popular Make with 50+ entries) so one column doesn't
    dwarf the others next to it. */

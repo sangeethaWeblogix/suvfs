@@ -101,19 +101,18 @@ const loading = !data || !blogPosts || blogPosts.length === 0 && data.totalPages
                 <p>
                   He helps Australians make informed decisions across every
                   stage of the {site.noun} journey, from choosing the right model to
-                  comparing prices and discovering hidden gems from regional
-                  manufacturers.
+                  comparing prices and spotting great-value listings.
                 </p>
                 <p>
-                  Tom’s articles focus on off-road {site.nounPlural}, touring models,
-                  hybrids, and family-friendly designs, offering practical
-                  insights tailored to Australian conditions, travel habits, and
+                  Tom’s articles cover buying guides, model comparisons, running
+                  costs and ownership tips for {site.nounPlural}, offering practical
+                  insights tailored to Australian roads, driving habits and
                   market trends.
                 </p>
                 <p>
-                  With a genuine love for the outdoors, Tom’s writing reflects
-                  Australia’s {site.noun} lifestyle — adventure, community, and
-                  freedom on the open road.
+                  Tom’s writing reflects how Australians really use their
+                  {" "}{site.nounPlural} — from the daily commute and school run to
+                  weekend getaways and long trips on the open road.
                 </p>
               </div>
             </div>

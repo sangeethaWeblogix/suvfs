@@ -51,7 +51,7 @@ export const toTitleCase = (s: string) => s.replace(/[-_]/g, " ").replace(/\b\w/
 
 const stripLocationSuffix = (v: string) => toSlug(v.replace(/-state|-region|-suburb/g, "").trim());
 
-/** Cross-marketplace "Explore Other Travel Options" target — driven only by
+/** Cross-site "Explore Other Vehicle Options" target — driven only by
  * state/region (every other active filter is ignored, per the 3-tier rule):
  * no state → the sister site's Australia-wide /listings/; state only → that
  * state's page; state + region → that region's page. */

@@ -1,4 +1,6 @@
-import { getRegionsByState } from "../sell-my-caravan-region/regions-data";
+import { SINGLE_VALUE_SUBJECTS } from "@/utils/seo/indexRules";
+import { BUDGET_BAND_PARAMS } from "./siteBrowseFilters";
+import { ALL_REGIONS, getRegionsByState } from "../sell-my-caravan-region/regions-data";
 
 export function toStateSlug(state: string): string {
   return state.trim().toLowerCase().replace(/ /g, "-");
@@ -45,4 +47,52 @@ export type CountItem = { name: string; slug: string; count: number };
 
 export interface BrowseSectionData {
   makeCounts?: CountItem[] | null;
+  /** Listings per region of the state — only on state pages. */
+  regionCounts?: CountItem[] | null;
+  /** Listings per value of each indexable filter (drive type, seats, body size) in this location. */
+  subjectCounts?: Record<string, CountItem[]> | null;
+  /** Make pages only (no location): this make's listings per state, region and model. */
+  makeStateCounts?: CountItem[] | null;
+  makeRegionCounts?: CountItem[] | null;
+  modelCounts?: CountItem[] | null;
+  /** Listings per budget band in this location (BUDGET_BANDS order); null = unknown. */
+  priceCounts?: (number | null)[] | null;
+}
+
+/** Counts behind the browse section for one location — shared by the server
+ * (SSR/ISR) and client fetches, which differ only in how they call params-count.
+ * `fetchTotal` returns the listing total for a scope, or null when unknown. */
+export async function loadBrowseCounts(
+  fetchGroup: (groupBy: string, scope: Record<string, string>) => Promise<CountItem[]>,
+  fetchTotal: (scope: Record<string, string>) => Promise<number | null>,
+  { state, region, make }: { state?: string; region?: string; make?: string },
+): Promise<BrowseSectionData> {
+  const scope: Record<string, string> = {};
+  if (state) scope.state = state;
+  if (state && region) scope.region = region;
+  const makeScope = make && !state ? { make } : null;
+  const [makeCounts, regionCounts, makeStateCounts, makeRegionCounts, modelCounts, priceCounts, ...subjects] = await Promise.all([
+    fetchGroup("make", scope),
+    state && !region ? fetchGroup("region", scope) : Promise.resolve(null),
+    makeScope ? fetchGroup("state", makeScope) : Promise.resolve(null),
+    makeScope ? fetchGroup("region", makeScope) : Promise.resolve(null),
+    makeScope ? fetchGroup("model", makeScope) : Promise.resolve(null),
+    Promise.all(BUDGET_BAND_PARAMS.map((band) => fetchTotal({ ...scope, ...band }))),
+    ...SINGLE_VALUE_SUBJECTS.map((field) => fetchGroup(field, scope)),
+  ]);
+  return {
+    makeCounts,
+    regionCounts,
+    makeStateCounts,
+    makeRegionCounts,
+    modelCounts,
+    priceCounts,
+    subjectCounts: Object.fromEntries(SINGLE_VALUE_SUBJECTS.map((field, i) => [field, subjects[i]])),
+  };
+}
+
+/** A region slug from params-count (e.g. "melbourne", "north-west") → its
+ * region page under its state, or undefined when the region is unknown. */
+export function findRegionBySlug(slug: string) {
+  return ALL_REGIONS.find((r) => r.slug === `${slug}-region`) ?? ALL_REGIONS.find((r) => r.pageSlug === slug);
 }

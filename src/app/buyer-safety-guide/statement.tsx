@@ -220,8 +220,8 @@ export default function CaravanBuyingSafetyGuide() {
               <p>You can contact our team at:</p>
 
               <p>
-                <a href="mailto:admin@caravansforsale.com.au">
-                  admin@caravansforsale.com.au
+                <a href="mailto:admin@marketplacenetwork.com.au">
+                  admin@marketplacenetwork.com.au
                 </a>
               </p>
 

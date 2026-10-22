@@ -1,6 +1,7 @@
 'use client'
 
 import { site } from "@/config/sites";
+import { siteRange } from "@/config/siteRange";
 
 
 import Link from 'next/link'
@@ -25,32 +26,26 @@ export default function AboutUs() {
               <h4 className="wp-block-heading">Discover Your Perfect {site.singular}</h4>
               <p>
                 <strong>Extensive Data :</strong> Explore thousands of new and
-                used {site.nounPlural} available on Marketplace Network. With a diverse range of off
-                road, hybrid, luxury, family &amp; touring {site.nounPlural} to choose from, we
-                are confident that you’ll find the perfect {site.noun} to suit your needs
-                and preferences.
+                used {site.nounPlural} available on Marketplace Network. With a diverse range
+                of {siteRange} to choose from, we are confident that you’ll find the
+                perfect {site.noun} to suit your needs and preferences.
               </p>
 
               <h4 className="wp-block-heading">
-                Find Quality Manufacturers Advertising With Us <strong>:</strong>
+                Buy From Trusted Dealers and Private Sellers <strong>:</strong>
               </h4>
               <p>
-                We have identified specific {site.noun} manufacturers who build
-                quality {site.nounPlural} in various categories including off road, on road, touring {site.nounPlural}.
-                These manufacturers don’t spend big on advertising and do not
-                participate much on the show. However, the quality of the van is as good
-                as or even better than the big brands who spend big on their marketing.
-                They spend a fraction of the cost on advertising with us, however, we
-                are determined to showcase them to the buyer so it is a win-win for both
-                manufacturer and the buyer. Hence, you get better value for money and
-                higher quality vans, while the manufacturer can focus solely on building
-                quality {site.nounPlural}.
+                We bring together {site.nounPlural} for sale from licensed dealers and
+                private sellers right across Australia, so you can compare the whole
+                market in one place. Every listing shows the details that matter, such as
+                make, model, year, odometer, fuel type, transmission and location, and you
+                can contact the seller directly with no middleman and no commission.
               </p>
 
               <p>
                 <strong>Advanced Search Tools:</strong> Use our advanced search filters
-                to narrow down your options based on criteria such as category,
-                location, price range, brand, weights, and more. This helps you find
+                to narrow down your options based on criteria such as make, model,
+                location, price range, year, odometer, fuel type and more. This helps you find
                 exactly what you’re looking for without hassle. In your search results,
                 along with the regular {site.nounPlural} listed for sale, we will also display
                 and suggest the best {site.nounPlural} in that market. We show them in the form
@@ -76,11 +71,11 @@ export default function AboutUs() {
                 We’re here to ensure your experience with Marketplace Network is smooth
                 and satisfactory. Please email your queries to{' '}
                 <Link
-                  href="mailto:info@caravansforsale.com.au"
+                  href="mailto:admin@marketplacenetwork.com.au"
                   target="_blank"
                   rel="noreferrer noopener"
                 >
-                  info@caravansforsale.com.au
+                  admin@marketplacenetwork.com.au
                 </Link>
               </p>
 

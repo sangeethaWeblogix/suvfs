@@ -8,7 +8,7 @@ export default function LoginPage() {
       <div className="auth-container">
         <div className="auth-sidebar">
           <div>
-            <h2>Welcome to the CFS Network</h2>
+            <h2>Welcome to Marketplace Network</h2>
           </div>
 
           <div
@@ -19,7 +19,7 @@ export default function LoginPage() {
             {/* Private Seller */}
             <a
               className="login-card private"
-              href="https://seller.caravansforsale.com.au/seller-login/"
+              href="https://cars.marketplacenetwork.com.au/seller-login/"
               aria-label="Private Seller Login"
             >
               <div className="login-icon" aria-hidden="true">
@@ -37,7 +37,7 @@ export default function LoginPage() {
             {/* Dealer */}
             <a
               className="login-card dealer"
-              href="https://seller.caravansforsale.com.au/subscriber-login/"
+              href="https://cars.marketplacenetwork.com.au/seller-login/"
               aria-label="Dealer Login"
             >
               <div className="login-icon" aria-hidden="true">
@@ -53,13 +53,6 @@ export default function LoginPage() {
             </a>
           </div>
 
-          {/*<div className="social">
-            <span className="text">
-              Grow your caravan dealership with unlimited listings and
-              high-intent buyer leads. Reach serious caravan shoppers across
-              Australia with CFS.
-            </span>
-          </div> */}
         </div>
       </div>
     </section>

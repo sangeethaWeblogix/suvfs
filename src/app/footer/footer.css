@@ -504,7 +504,7 @@ footer.style-8 .content .logo-social .socials a:hover {
   margin: 32px 0;
 }
 
-/* ── Marketplace network cards ── */
+/* ── Marketplace network strip ── */
 .cfs-footer__network-title {
   position: relative;
   color: #000000;
@@ -522,44 +522,61 @@ footer.style-8 .content .logo-social .socials a:hover {
   height: 2px;
   background: var(--brand);
 }
-.cfs-footer__network-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 28px;
+/* One auto-scrolling row of every network logo. The list is rendered twice
+   (Footer.tsx) and the track slides by exactly one copy (-50%), so it loops
+   with no jump. Pauses on hover/focus; static and swipeable when the visitor
+   prefers reduced motion. */
+.cfs-footer__network-strip {
+  overflow: hidden;
+  margin-bottom: 8px;
+  padding: 6px 0;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
 }
-.cfs-footer__network-card {
+.cfs-footer__network-track {
+  display: flex;
+  width: max-content;
+  animation: cfs-network-scroll 70s linear infinite;
+}
+.cfs-footer__network-strip:hover .cfs-footer__network-track,
+.cfs-footer__network-strip:focus-within .cfs-footer__network-track {
+  animation-play-state: paused;
+}
+.cfs-footer__network-list {
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: #f8f9fa;
-  border: 1px solid #e8e8e8;
-  border-radius: 10px;
-  padding: 22px 18px;
-  text-decoration: none;
-  transition: border-color 0.2s, background 0.2s;
+  gap: 56px;
+  margin: 0;
+  padding: 0 56px 0 0; /* trailing gap = item gap, so the seam between copies matches */
+  list-style: none;
 }
-.cfs-footer__network-card:hover {
-  border-color: var(--brand);
-  background: #efedff;
+.cfs-footer__network-list a {
+  display: block;
+  opacity: 0.75;
+  transition: opacity 0.2s;
 }
-.cfs-footer__network-card--current {
-  cursor: default;
-}
-.cfs-footer__network-card--current:hover {
-  border-color: #e8e8e8;
-  background: #f8f9fa;
+.cfs-footer__network-list a:hover,
+.cfs-footer__network-list a:focus-visible {
+  opacity: 1;
 }
 .cfs-footer__network-logo {
-  height: 28px;
+  display: block;
+  height: 24px;
   width: auto;
+  max-width: none;
 }
-
+@keyframes cfs-network-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cfs-footer__network-strip { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+  .cfs-footer__network-track { animation: none; }
+}
 @media (max-width: 767px) {
-  .cfs-footer__network-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 420px) {
-  .cfs-footer__network-grid { grid-template-columns: 1fr; }
+  .cfs-footer__network-list { gap: 36px; padding-right: 36px; }
+  .cfs-footer__network-logo { height: 20px; }
+  .cfs-footer__network-track { animation-duration: 55s; }
 }
 
 /* ── Sell My Caravan by Location bar ── */

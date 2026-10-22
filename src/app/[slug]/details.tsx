@@ -1,5 +1,6 @@
  "use client";
  import Image from "next/image";
+ import ExploreOtherVehicles from "@/app/components/ExploreOtherVehicles";
  import { WP_ORIGIN } from "@/lib/apiBase";
  import { redirect } from "next/navigation";
  import FaqSection from "./FaqSection";
@@ -627,20 +628,11 @@
          </div>
        </section>
 
-       {/* ── Explore Other Travel Options ── */}
+       {/* ── Explore Other Vehicle Options (related car sites) ── */}
        <section className="bds-explore-section">
          <div className="container">
            <div className="bds-explore-card">
-             <h2 className="bds-explore-title">Explore Other Travel Options</h2>
-             <p className="bds-explore-body">
-               Still deciding which travel setup suits you? Browse{" "}
-               <a href="https://www.motorhomesforsale.com.au/" className="bds-explore-link" target="_blank" rel="noopener noreferrer">motorhomes for sale</a>{" "}
-               for a vehicle with integrated living space, or explore{" "}
-               <a href="https://www.campervansforsale.au/" className="bds-explore-link" target="_blank" rel="noopener noreferrer">campervans for sale</a>{" "}
-               for a more compact option. For a towable camping setup, compare{" "}
-               <a href="https://www.campingtrailersforsale.com.au/" className="bds-explore-link" target="_blank" rel="noopener noreferrer">camper trailers for sale</a>{" "}
-               across our other marketplaces.
-             </p>
+             <ExploreOtherVehicles classes={{ title: "bds-explore-title", body: "bds-explore-body", link: "bds-explore-link" }} />
            </div>
          </div>
        </section>

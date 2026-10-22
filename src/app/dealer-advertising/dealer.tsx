@@ -87,7 +87,7 @@ const DealerLandingPage = () => {
                 </p>
 
                 <a
-                  href="https://seller.marketplacenetwork.com.au/caravan-dealer-subscription/"
+                  href="https://cars.marketplacenetwork.com.au/car-dealer-subscription/"
                   className="btn white_btn"
                 >
                   Start Dealer Signup
@@ -266,7 +266,7 @@ const DealerLandingPage = () => {
               </section>
             </div>
           </div>
-          {/* Reach Caravan Buyers Section */}
+          {/* Reach Buyers Section */}
           <div className="col-lg-12">
             <div className="heading-box">
               <h2>Reach {site.singular} buyers across Australia</h2>
@@ -305,7 +305,7 @@ const DealerLandingPage = () => {
                   </ul>
 
                   <a
-                    href="https://seller.marketplacenetwork.com.au/caravan-dealer-subscription/"
+                    href="https://cars.marketplacenetwork.com.au/car-dealer-subscription/"
                     className="btn white_btn"
                   >
                     Start Dealer Signup

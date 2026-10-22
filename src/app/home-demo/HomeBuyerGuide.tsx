@@ -1,39 +1,8 @@
 import Image from "next/image";
-import { SITES, site, sitePaths } from "@/config/sites";
-
-const RELATED_SITE_KEYS: Record<string, [string, string, string]> = {
-  suv: ["4x4", "wagons", "hybrid"],
-  utes: ["4x4", "vans", "suv"],
-  peoplemovers: ["vans", "suv", "wagons"],
-  sedans: ["hatchbacks", "coupes", "wagons"],
-  hatchbacks: ["sedans", "wagons", "electric"],
-  wagons: ["suv", "sedans", "peoplemovers"],
-  coupes: ["convertibles", "sedans", "hatchbacks"],
-  convertibles: ["coupes", "sedans", "electric"],
-  vans: ["utes", "peoplemovers", "suv"],
-  "4x4": ["suv", "utes", "wagons"],
-  electric: ["hybrid", "hatchbacks", "suv"],
-  hybrid: ["electric", "suv", "sedans"],
-};
-
-const RELATED_SITE_BENEFITS: Record<string, string> = {
-  suv: "versatile family driving",
-  utes: "work-ready practicality",
-  peoplemovers: "extra passenger space",
-  sedans: "comfortable everyday driving",
-  hatchbacks: "compact, city-friendly practicality",
-  wagons: "flexible passenger and cargo space",
-  coupes: "sporty styling and performance",
-  convertibles: "open-air driving",
-  vans: "business and cargo versatility",
-  "4x4": "off-road capability",
-  electric: "efficient electric driving",
-  hybrid: "improved fuel efficiency",
-};
+import { site, sitePaths } from "@/config/sites";
+import ExploreOtherVehicles from "@/app/components/ExploreOtherVehicles";
 
 export default function HomeBuyerGuide() {
-  const relatedSites = (RELATED_SITE_KEYS[site.key] ?? RELATED_SITE_KEYS.suv).map((key) => SITES[key]);
-
   return (
     <>
       {/* ── Buyer Guide ── */}
@@ -85,16 +54,7 @@ export default function HomeBuyerGuide() {
       <section className="hbg-explore-section">
         <div className="container">
           <div className="hbg-explore-card">
-            <h2 className="hbg-explore-title">Explore Other Vehicle Options</h2>
-            <p className="hbg-explore-body">
-              Still deciding which vehicle best suits your needs? Browse{" "}
-              <a href={`${relatedSites[0].url}/`} className="hbg-explore-link" target="_blank" rel="noopener noreferrer">{relatedSites[0].nounPlural} for sale</a>{" "}
-              for {RELATED_SITE_BENEFITS[relatedSites[0].key]}, explore{" "}
-              <a href={`${relatedSites[1].url}/`} className="hbg-explore-link" target="_blank" rel="noopener noreferrer">{relatedSites[1].nounPlural} for sale</a>{" "}
-              for {RELATED_SITE_BENEFITS[relatedSites[1].key]}, or compare{" "}
-              <a href={`${relatedSites[2].url}/`} className="hbg-explore-link" target="_blank" rel="noopener noreferrer">{relatedSites[2].nounPlural} for sale</a>{" "}
-              for {RELATED_SITE_BENEFITS[relatedSites[2].key]} across our other Australian car marketplaces.
-            </p>
+            <ExploreOtherVehicles classes={{ title: "hbg-explore-title", body: "hbg-explore-body", link: "hbg-explore-link" }} />
           </div>
         </div>
       </section>

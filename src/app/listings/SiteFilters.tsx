@@ -285,6 +285,9 @@ const CloseIcon = ({ onClick }: { onClick: () => void }) => (
   </button>
 );
 
+/** Filters shown only inside the "Filters" (all filters) modal, not as toolbar buttons. */
+const MODAL_ONLY_FIELDS = new Set(["odometer", "transmission", "braked_towing_capacity"]);
+
 /* ── Toolbar buttons + one modal per filter ── */
 export function SiteFilterButtons({ filters, onApply }: { filters: FilterState; onApply: (updates: Values) => void }) {
   const schema = useSiteFilterSchema();
@@ -307,7 +310,7 @@ export function SiteFilterButtons({ filters, onApply }: { filters: FilterState; 
 
   return (
     <>
-      {schema.map((item) => {
+      {schema.filter((item) => !MODAL_ONLY_FIELDS.has(item.field)).map((item) => {
         const active = hasValue(item, filters);
         return (
           <button key={item.field} className={`tag${active ? " active" : ""}`} onClick={() => openItem(item)}>

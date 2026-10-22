@@ -1,5 +1,6 @@
   "use client";
  import "@fortawesome/fontawesome-free/css/fontawesome.min.css";
+ import { siteRange } from "@/config/siteRange";
  import "@fortawesome/fontawesome-free/css/solid.min.css";
  import "@fortawesome/fontawesome-free/css/regular.min.css";
  import React, { useState } from "react";
@@ -36,18 +37,6 @@ import { site, sitePaths } from "@/config/sites";
    };
  });
  
- const CARAVAN_TYPES = [
-   { label: `Off Road ${site.plural}`, img: "/images/off-road.webp", href: "/listings/off-road-category/" },
-   { label: `Family ${site.plural}`, img: "/images/family.webp", href: "/listings/family-caravans-category/" },
-   { label: `Pop Top ${site.plural}`, img: "/images/pop-top.webp", href: "/listings/pop-top-category/" },
-   { label: `Hybrid ${site.plural}`, img: "/images/hybrid.webp", href: "/listings/hybrid-caravans-category/" },
-   { label: `Luxury ${site.plural}`, img: "/images/luxury.webp", href: "/listings/luxury-caravans-category/" },
-   { label: `Couples ${site.plural}`, img: "/images/touring.webp", href: "/listings/couples-caravans-category/" },
-   { label: `Touring ${site.plural}`, img: "/images/touring.webp", href: "/listings/touring-caravans-category/" },
-   { label: `Bunk ${site.plural}`, img: "/images/family.webp", href: "/listings/bunk-caravans-category/" },
-   { label: `Small ${site.plural}`, img: "/images/pop-top.webp", href: "/listings/small-caravans-category/" },
-   { label: `Used ${site.plural}`, img: "/images/off-road.webp", href: "/listings/used-condition/" },
- ];
  
  const HOW_TO_STEPS = [
    { num: 1, iconSet: "fa-regular", icon: "fa-file-lines",    title: "Create Your Listing",    desc: `Add your ${site.noun} details, specifications, price and contact information.` },
@@ -415,22 +404,6 @@ import { site, sitePaths } from "@/config/sites";
  
      
  
-       {/* ── Caravan types ── */}
-       <section className="demo-types-section">
-         <div className="container">
-           <h2 className="demo-section-title">Sell Any Type of {site.singular}</h2>
-           <div className="demo-types-grid">
-             {CARAVAN_TYPES.map((t) => (
-               <div key={t.label} className="demo-type-item">
-                 <div className="demo-type-icon">
-                   <img src={t.img} alt={t.label} width={80} height={80} />
-                 </div>
-                 <span className="demo-type-label">{t.label}</span>
-               </div>
-             ))}
-           </div>
-         </div>
-       </section>
  
        {/* ── Why buyers section ── */}
        <section className="demo-why-section">
@@ -444,8 +417,7 @@ import { site, sitePaths } from "@/config/sites";
                <p>
                  {site.brand} is Australia's dedicated {site.noun} marketplace, built exclusively
                  for {site.noun} buyers and sellers. We attract thousands of genuine buyers every day who
-                 are actively searching for road {site.nounPlural}, family {site.nounPlural}, pop-top {site.nounPlural}, luxury
-                 {" "}{site.nounPlural} and more.
+                 are actively searching for {siteRange}.
                </p>
                <div className="demo-check-grid demo-check-grid--2col mt-3">
                  {[
@@ -506,21 +478,6 @@ import { site, sitePaths } from "@/config/sites";
            <a href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" className="btn white_btn">
              List Your {site.singular} Now
            </a>
-         </div>
-       </section>
-
-       {/* ── Have something other than a caravan to sell? ── */}
-       <section className="demo-sell-explore">
-         <div className="container text-center">
-           <h2 className="demo-sell-explore__title">Have something other than {site.article} {site.noun} to sell?</h2>
-           <p className="demo-sell-explore__body">
-             You can{" "}
-             <a href="https://www.motorhomesforsale.com.au/sell-my-motorhome/" target="_blank" rel="noopener noreferrer">sell your motorhome</a>,{" "}
-             <a href="https://www.campervansforsale.au/sell-my-campervan/" target="_blank" rel="noopener noreferrer">sell your campervan</a>{" "}
-             or{" "}
-             <a href="https://www.campingtrailersforsale.com.au/sell-my-camper-trailer/" target="_blank" rel="noopener noreferrer">sell your camper trailer</a>{" "}
-             through our other marketplaces. Visit the relevant website to see your listing options and get started.
-           </p>
          </div>
        </section>
 

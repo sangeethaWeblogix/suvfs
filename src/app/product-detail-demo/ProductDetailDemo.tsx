@@ -7,6 +7,8 @@ import Image from "next/image";
 import { useEnquiryForm } from "@/app/components/ListContent/enquiryform";
 import CaravanDetailModal from "@/app/product/[slug]/CaravanDetailModal";
 import { Fuel, Gauge, Settings2 } from "lucide-react";
+import ExploreOtherVehicles from "@/app/components/ExploreOtherVehicles";
+import { siteRange } from "@/config/siteRange";
 import "./demo.css";
 import { trackListingView } from "@/utils/engagement";
 
@@ -406,8 +408,8 @@ export default function ProductDetailDemo({ data, similarData }: Props) {
     detailRows.push({ label: "Location", value: [locationCity, locationState].filter(Boolean).join(", "), url: "", links });
   }
 
-  /* "Explore Other Travel Options" cross-marketplace links — same state/region
-     this product is listed in, on the sister sites (motorhomes/campervans/camper trailers). */
+  /* "Explore Other Vehicle Options" links — same state/region this product is
+     listed in, on the related car sites (config/relatedSites.ts). */
   const exploreRegionSlugBase = product.region?.slug ?? slugify(locationCity || "");
   const exploreRegionSlug = exploreRegionSlugBase && !exploreRegionSlugBase.endsWith("-region") ? `${exploreRegionSlugBase}-region` : exploreRegionSlugBase;
   const exploreStateSlug = locationState ? `${slugify(locationState)}-state` : "";
@@ -672,8 +674,8 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
               <h2 className="hbg-sell-title">Looking for More {site.plural}?</h2>
               <p className="hbg-sell-body">
                 This {site.noun} is just one of thousands of listings available on Australia&apos;s {site.noun} marketplace. Browse our complete range of{" "}
-                <a href="/" className="hbg-sell-link">{site.nounPlural} for sale</a>{" "}
-                across Australia, including new {site.nounPlural}, used {site.nounPlural}, off-road {site.nounPlural}, hybrid {site.nounPlural} and family {site.nounPlural} from trusted dealers and private sellers.
+                <a href="/" className="hbg-sell-link">new and used {site.nounPlural} for sale</a>{" "}
+                across Australia from trusted dealers and private sellers, including {siteRange}.
               </p>
             </div>
           
@@ -867,21 +869,14 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
           <a href="/" className="pdd-banner__cta">FIND DEALS NOW</a>
         </div>
 
-        {/* ── Explore Other Travel Options ── */}
+        {/* ── Explore Other Vehicle Options (sister car sites, same location) ── */}
         <section className="pdd-explore-section">
           <div className="pdd-explore-card">
-            <h2 className="pdd-explore-title">
-              Explore Other Travel Options{exploreLocationLabel ? ` in ${exploreLocationLabel}` : ""}
-            </h2>
-            <p className="pdd-explore-body">
-              Still deciding which travel setup suits you? Browse{" "}
-              <a href={`https://www.motorhomesforsale.com.au${exploreListingsPath}`} className="pdd-explore-link" target="_blank" rel="noopener noreferrer">motorhomes for sale</a>{" "}
-              for a vehicle with integrated living space, or explore{" "}
-              <a href={`https://www.campervansforsale.au${exploreListingsPath}`} className="pdd-explore-link" target="_blank" rel="noopener noreferrer">campervans for sale</a>{" "}
-              for a more compact option. For a towable camping setup, compare{" "}
-              <a href={`https://www.campingtrailersforsale.com.au${exploreListingsPath}`} className="pdd-explore-link" target="_blank" rel="noopener noreferrer">camper trailers for sale</a>{" "}
-              across our other marketplaces.
-            </p>
+            <ExploreOtherVehicles
+              path={exploreListingsPath}
+              label={exploreLocationLabel || undefined}
+              classes={{ title: "pdd-explore-title", body: "pdd-explore-body", link: "pdd-explore-link" }}
+            />
           </div>
         </section>
 

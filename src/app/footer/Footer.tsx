@@ -1,12 +1,10 @@
-import "./footer.css?=20";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by the hidden network section below
-import Image from "next/image";
+import "./footer.css?=22";
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import BackToTopButton from "./BackToTopButton";
 import FooterNav from "./FooterNav";
 import FooterPopularLocations from "./FooterPopularLocations";
 import SellByLocationLink from "./SellByLocationLink";
-import { site, sitePaths } from "@/config/sites";
+import { SITES, site, sitePaths } from "@/config/sites";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- social links temporarily hidden
 const SOCIAL_LINKS = [
@@ -30,7 +28,7 @@ const LOCATION_LINKS = [
   { label: "Tasmania", href: "/listings/tasmania-state/" },
 ];
 
-/** Same city set as the home page's "Find Caravans for Sale by Popular
+/** Same city set as the home page's "Find {Site} for Sale by Popular
  * Location" section (HomeLocationSection.tsx) — major + minor cities. */
 const POPULAR_LOCATIONS = [
   { label: "Adelaide", href: "/listings/south-australia-state/adelaide-region/" },
@@ -60,7 +58,7 @@ const SELLER_LINKS = [
 const DEALER_LINKS = [
   { label: "Dealer Login", href: "https://cars.marketplacenetwork.com.au/seller-login/" },
   { label: "Dealer Advertising", href: "/dealer-advertising/" },
-  { label: "Dealer Sign Up", href: "https://seller.marketplacenetwork.com.au/caravan-dealer-subscription/" },
+  { label: "Dealer Sign Up", href: "https://cars.marketplacenetwork.com.au/car-dealer-subscription/" },
 ];
 
 const GUIDE_LINKS = [
@@ -70,13 +68,37 @@ const GUIDE_LINKS = [
   { label: "Contact Us", href: "/contact/" },
 ];
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- network section temporarily hidden
-const NETWORK_SITES = [
-  { logo: "/images/our_sites/cfs-logo-black.svg", w: 556, h: 60, href: "", label: site.plural },
-  { logo: "/images/our_sites/mfs-logo.svg", w: 633, h: 63, href: "https://www.motorhomesforsale.com.au/", label: "Motorhomes" },
-  { logo: "/images/our_sites/camper_logo.svg", w: 1159, h: 141, href: "https://www.campervansforsale.au/", label: "Campervans" },
-  { logo: "/images/our_sites/cts-logo.svg", w: 688, h: 64, href: "https://www.campingtrailersforsale.com.au/", label: "Camper Trailers" },
+type NetworkSite = { key: string; logo: string; href: string; label: string };
+
+/** "Our Marketplace Network" strip: every car site (this one is shown but not
+ * linked) plus the RV marketplaces. */
+const NETWORK_SITES: NetworkSite[] = [
+  ...Object.values(SITES).map((s) => ({ key: s.key, logo: s.logo, href: `${s.url}/`, label: s.domain })),
+  { key: "caravans", logo: "/images/our_sites/cfs-logo-black.svg", href: "https://www.caravansforsale.com.au/", label: "caravansforsale.com.au" },
+  { key: "motorhomes", logo: "/images/our_sites/mfs-logo.svg", href: "https://www.motorhomesforsale.com.au/", label: "motorhomesforsale.com.au" },
+  { key: "campervans", logo: "/images/our_sites/camper_logo.svg", href: "https://www.campervansforsale.au/", label: "campervansforsale.au" },
+  { key: "camper-trailers", logo: "/images/our_sites/cts-logo.svg", href: "https://www.campingtrailersforsale.com.au/", label: "campingtrailersforsale.com.au" },
 ];
+
+/** One pass of the strip. Rendered twice so the CSS scroll loops seamlessly;
+ * the copy is hidden from screen readers and keyboard focus. */
+const NetworkStripItems = ({ copy = false }: { copy?: boolean }) => (
+  <ul className="cfs-footer__network-list" aria-hidden={copy || undefined}>
+    {NETWORK_SITES.map((s) => (
+      <li key={s.key}>
+        {s.key === site.key ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={s.logo} alt={copy ? "" : s.label} className="cfs-footer__network-logo cfs-footer__network-logo--current" loading="lazy" />
+        ) : (
+          <a href={s.href} target="_blank" rel="noopener noreferrer" title={s.label} tabIndex={copy ? -1 : undefined}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={s.logo} alt={copy ? "" : s.label} className="cfs-footer__network-logo" loading="lazy" />
+          </a>
+        )}
+      </li>
+    ))}
+  </ul>
+);
 
 const LEGAL_LINKS = [
   { label: "Terms & Conditions", href: "/terms-conditions/" },
@@ -161,26 +183,20 @@ const Footer = () => {
 
           <hr className="cfs-footer__hr" />
 
-          {/* ── Marketplace network ── (temporarily hidden)
+          {/* ── Marketplace network ── */}
           <div className="cfs-footer__network">
             <h4 className="cfs-footer__network-title">Our Marketplace Network</h4>
-            <div className="cfs-footer__network-grid">
-              {NETWORK_SITES.map((s) =>
-                s.href ? (
-                  <a key={s.logo} href={s.href} target="_blank" rel="noopener noreferrer" className="cfs-footer__network-card">
-                    <Image src={s.logo} alt={s.label} width={s.w} height={s.h} className="cfs-footer__network-logo" unoptimized />
-                  </a>
-                ) : (
-                  <div key={s.logo} className="cfs-footer__network-card cfs-footer__network-card--current">
-                    <Image src={s.logo} alt={s.label} width={s.w} height={s.h} className="cfs-footer__network-logo" unoptimized />
-                  </div>
-                )
-              )}
+            <div className="cfs-footer__network-strip">
+              <div className="cfs-footer__network-track">
+                <NetworkStripItems />
+                <NetworkStripItems copy />
+              </div>
             </div>
           </div>
-          */}
 
-          {/* ── Sell my caravan by location (accordion) ── */}
+          <hr className="cfs-footer__hr" />
+
+          {/* ── Sell my {site} by location (accordion) ── */}
           <div id="footer-sell-by-location">
             <FooterNav />
           </div>

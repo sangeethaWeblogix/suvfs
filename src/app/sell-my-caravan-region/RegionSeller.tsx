@@ -1,23 +1,11 @@
   "use client";
 import "@fortawesome/fontawesome-free/css/fontawesome.min.css";
+import { siteRange } from "@/config/siteRange";
 import "@fortawesome/fontawesome-free/css/solid.min.css";
 import "@fortawesome/fontawesome-free/css/regular.min.css";
 import React, { useState } from "react";
 import { RegionInfo } from "./regions-data";
 import { site, sitePaths } from "@/config/sites";
-
-const CARAVAN_TYPES = [
-  { label: `Off Road ${site.plural}`, img: "/images/off-road.webp", href: "/listings/off-road-category/" },
-  { label: `Family ${site.plural}`, img: "/images/family.webp", href: "/listings/family-caravans-category/" },
-  { label: `Pop Top ${site.plural}`, img: "/images/pop-top.webp", href: "/listings/pop-top-category/" },
-  { label: `Hybrid ${site.plural}`, img: "/images/hybrid.webp", href: "/listings/hybrid-caravans-category/" },
-  { label: `Luxury ${site.plural}`, img: "/images/luxury.webp", href: "/listings/luxury-caravans-category/" },
-  { label: `Couples ${site.plural}`, img: "/images/touring.webp", href: "/listings/couples-caravans-category/" },
-  { label: `Touring ${site.plural}`, img: "/images/touring.webp", href: "/listings/touring-caravans-category/" },
-  { label: `Bunk ${site.plural}`, img: "/images/family.webp", href: "/listings/bunk-caravans-category/" },
-  { label: `Small ${site.plural}`, img: "/images/pop-top.webp", href: "/listings/small-caravans-category/" },
-  { label: `Used ${site.plural}`, img: "/images/off-road.webp", href: "/listings/used-condition/" },
-];
 
 interface RegionSellerProps {
   region: RegionInfo;
@@ -340,23 +328,6 @@ export default function RegionSeller({ region }: RegionSellerProps) {
         </div>
       </section>
 
-      {/* ── Caravan types ── */}
-      <section className="demo-types-section">
-        <div className="container">
-          <h2 className="demo-section-title">Sell Any Type of {site.singular}</h2>
-          <div className="demo-types-grid">
-            {CARAVAN_TYPES.map((t) => (
-              <div key={t.label} className="demo-type-item">
-                <div className="demo-type-icon">
-                  <img src={t.img} alt={t.label} width={80} height={80} />
-                </div>
-                <span className="demo-type-label">{t.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── Why buyers section ── */}
       <section className="demo-why-section">
         <div className="container">
@@ -368,8 +339,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
               <h2>Why {regionLabel} {site.singular} Buyers Visit {site.brand} Every Month</h2>
               <p>
                 {site.brand} helps {site.noun} sellers in {regionLabel} reach buyers searching for
-                used {site.nounPlural}, off road {site.nounPlural}, family {site.nounPlural}, pop tops, hybrids and touring
-                {" "}{site.nounPlural} across {regionLabel} and regional {stateLabel}.
+                {" "}{siteRange} across {regionLabel} and regional {stateLabel}.
               </p>
               <div className="demo-check-grid demo-check-grid--2col mt-3">
                 {[
@@ -429,21 +399,6 @@ export default function RegionSeller({ region }: RegionSellerProps) {
           </a>
           <p className="demo-cta-strip__alt-link">
             Not in {regionLabel}? Sell your {site.noun} across {stateLabel} <a href={`${sitePaths.sell}${stateSlug}/`}>here</a>.
-          </p>
-        </div>
-      </section>
-
-      {/* ── Have something other than a caravan to sell? ── */}
-      <section className="demo-sell-explore">
-        <div className="container text-center">
-          <h2 className="demo-sell-explore__title">Have something other than {site.article} {site.noun} to sell in {regionLabel}?</h2>
-          <p className="demo-sell-explore__body">
-            You can{" "}
-            <a href={`https://www.motorhomesforsale.com.au/sell-my-motorhome/${stateSlug}/${region.pageSlug}/`} target="_blank" rel="noopener noreferrer">sell your motorhome</a>,{" "}
-            <a href={`https://www.campervansforsale.au/sell-my-campervan/${stateSlug}/${region.pageSlug}/`} target="_blank" rel="noopener noreferrer">sell your campervan</a>{" "}
-            or{" "}
-            <a href={`https://www.campingtrailersforsale.com.au/sell-my-camper-trailer/${stateSlug}/${region.pageSlug}/`} target="_blank" rel="noopener noreferrer">sell your camper trailer</a>{" "}
-            through our other marketplaces. Visit the relevant website to see your listing options and get started.
           </p>
         </div>
       </section>

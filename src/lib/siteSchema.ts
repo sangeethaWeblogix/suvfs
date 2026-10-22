@@ -6,6 +6,14 @@ import type { SchemaItem } from "@/app/listings/SiteFilters";
 const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
 const API_KEY = process.env.MPN_API_KEY;
 
+/** The API lists the top seats option as "8+"; the site shows and links it as
+ * plain "8" (/listings/8-seats/). The API returns the same cars for seats=8. */
+function normalizeSeats(item: SchemaItem): SchemaItem {
+  if (item.field !== "seats" || item.control !== "multi") return item;
+  const plain = (v: string | number) => String(v).replace(/\+$/, "");
+  return { ...item, options: item.options.map(plain), ...(item.values && { values: item.values.map(plain) }) };
+}
+
 export async function fetchSiteSchema(): Promise<SchemaItem[]> {
   if (!API_BASE) return [];
   try {
@@ -23,7 +31,7 @@ export async function fetchSiteSchema(): Promise<SchemaItem[]> {
       return [];
     }
     const json = await res.json();
-    return Array.isArray(json?.filters_schema) ? json.filters_schema : [];
+    return Array.isArray(json?.filters_schema) ? json.filters_schema.map(normalizeSeats) : [];
   } catch (err) {
     console.error("[siteSchema] fetch failed:", (err as Error).message);
     return [];

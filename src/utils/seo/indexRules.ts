@@ -9,10 +9,10 @@
 //   {state} | {state}/{region}                  location pages
 //   {subject} | {state}/{subject} | {state}/{region}/{subject}
 //     subject = make, make/model, one body size, one seats value,
-//               one drive type, or a year (single year or year band)
-//   {price band}                                listed bands only, no location
+//               one drive type, a year (single year or year band),
+//               or a listed price band (INDEXABLE_PRICE_BANDS)
 // Everything else is noindex: condition, suburb, search, multi-value
-// selections (7-or-8-plus-seats), other filters (fuel type, odometer, …),
+// selections (7-or-8-seats), other filters (fuel type, odometer, …),
 // two subjects together (make + body size), unlisted price bands.
 // Middleware still forces noindex when a page has no listings.
 import { parseSlugToFilters } from "@/app/components/urlBuilder";
@@ -27,10 +27,12 @@ export const INDEXABLE_PRICE_BANDS = new Set([
   "between-70000-80000",
   "between-80000-100000",
   "over-100000",
+  // "Under $X" for the price dropdown values up to $100,000 (SiteFilters.tsx PRICE_OPTIONS).
+  ...[10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000].map((n) => `under-${n}`),
 ]);
 
 /** Single-value filters that make an indexable page on their own or with a location. */
-const SINGLE_VALUE_SUBJECTS = ["body_size", "seats", "drive_type"];
+export const SINGLE_VALUE_SUBJECTS = ["body_size", "seats", "drive_type"];
 
 /** Every filter key an indexable URL may carry. Any other key → noindex. */
 const ALLOWED_KEYS = new Set([
@@ -77,8 +79,8 @@ export function isIndexableListingPath(pathname: string): boolean {
   // Multi-value selections (small-or-medium-body-size) are not indexed.
   if (SINGLE_VALUE_SUBJECTS.some((k) => String(f[k] ?? "").includes(","))) return false;
 
-  // Price pages: listed bands only, Australia-wide only.
-  if (hasPrice) return !hasLocation && INDEXABLE_PRICE_BANDS.has(priceSlug(f.from_price, f.to_price));
+  // Price pages: listed bands only.
+  if (hasPrice) return INDEXABLE_PRICE_BANDS.has(priceSlug(f.from_price, f.to_price));
 
   return true;
 }

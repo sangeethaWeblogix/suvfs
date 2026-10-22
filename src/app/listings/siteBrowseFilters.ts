@@ -1,5 +1,6 @@
 import { buildFilterSegments } from "@/config/filterDefs";
 import { site } from "@/config/sites";
+import { SINGLE_VALUE_SUBJECTS } from "@/utils/seo/indexRules";
 import type { SchemaItem } from "./SiteFilters";
 import {
   BatteryCharging,
@@ -29,8 +30,12 @@ export type BrowseFilterRow = {
  *  { years: {year: n}, price: {min, max}, <multi field>: {value: n}, <range field>: {min, max}, buckets: {field: {value: n}} }. */
 export type SiteFacets = Record<string, any>;
 
+// The indexable price bands (INDEXABLE_PRICE_BANDS in utils/seo/indexRules.ts),
+// so budget links only ever lead to indexed pages.
 const BUDGET_BANDS = [
-  { text: "Under $30,000", href: "/listings/under-30000/", from: 0, to: 30000 },
+  { text: "Under $10,000", href: "/listings/under-10000/", from: 0, to: 10000 },
+  { text: "$10,000 – $20,000", href: "/listings/between-10000-20000/", from: 10000, to: 20000 },
+  { text: "$20,000 – $30,000", href: "/listings/between-20000-30000/", from: 20000, to: 30000 },
   { text: "$30,000 – $40,000", href: "/listings/between-30000-40000/", from: 30000, to: 40000 },
   { text: "$40,000 – $50,000", href: "/listings/between-40000-50000/", from: 40000, to: 50000 },
   { text: "$50,000 – $70,000", href: "/listings/between-50000-70000/", from: 50000, to: 70000 },
@@ -48,15 +53,24 @@ function facetRange(facets: SiteFacets | null | undefined, key: string): { min: 
   return Number.isFinite(min) && Number.isFinite(max) ? { min, max } : null;
 }
 
-/** Budget bands, minus those outside the site's actual price range. */
-export function budgetRow(facets?: SiteFacets | null): BrowseFilterRow {
+/** API price params per budget band, in BUDGET_BANDS order — for counting each band's listings. */
+export const BUDGET_BAND_PARAMS: Record<string, string>[] = BUDGET_BANDS.map((band) => ({
+  ...(band.from > 0 && { from_price: String(band.from) }),
+  ...(Number.isFinite(band.to) && { to_price: String(band.to) }),
+}));
+
+/** Budget bands, minus those outside the site's actual price range and — when
+ *  `bandCounts` (listings per band in this location, BUDGET_BANDS order) is
+ *  known — those with no listings, whose pages are noindex. */
+export function budgetRow(facets?: SiteFacets | null, bandCounts?: (number | null)[] | null): BrowseFilterRow {
   const price = facetRange(facets, "price");
   return {
     field: "price",
     icon: WalletCards,
     label: "By Budget",
     items: BUDGET_BANDS
-      .filter((band) => !price || (band.to >= price.min && band.from <= price.max))
+      .filter((band, i) =>
+        (!price || (band.to >= price.min && band.from <= price.max)) && (bandCounts?.[i] ?? 1) > 0)
       .map(({ text, href }) => ({ text, href })),
   };
 }
@@ -116,13 +130,18 @@ function multiCount(facets: SiteFacets | null | undefined, field: string, value:
   return bucket[value] ?? bucket[label] ?? bucket[label.toLowerCase()] ?? bucket[value.replace(/\+$/, "")] ?? 0;
 }
 
+/** Fewest listings an option needs to get a browse link. Below this the page is
+ *  thin and usually a mis-tagged listing (e.g. a 1961 Kombi counted as a
+ *  3-seat SUV), so it isn't worth linking. The filter bar still offers it. */
+const MIN_BROWSE_LISTINGS = 5;
+
 /** Browse chips for one schema filter. With `facets`, chips that would lead to
- *  an empty listing page are dropped (e.g. "2 seats" on the SUV site). */
+ *  an empty or near-empty listing page are dropped (e.g. "3 seats" on the SUV site). */
 export function schemaItems(item: SchemaItem, facets?: SiteFacets | null): BrowseFilterItem[] {
   if (item.control === "multi") {
     return item.options
       .map((option, index) => ({ text: String(option), value: String(item.values?.[index] ?? option).toLowerCase() }))
-      .filter(({ text, value }) => (multiCount(facets, item.field, value, text) ?? 1) > 0)
+      .filter(({ text, value }) => (multiCount(facets, item.field, value, text) ?? MIN_BROWSE_LISTINGS) >= MIN_BROWSE_LISTINGS)
       .slice(0, 7)
       .map(({ text, value }) => ({ text, href: listingHref({ [item.param]: value }) }));
   }
@@ -200,15 +219,39 @@ export function buildSiteFilterRows(schema: SchemaItem[], facets?: SiteFacets | 
     .map((field) => schema.find((item) => item.field === field))
     .filter((item): item is SchemaItem => Boolean(item));
 
-  return [year, ...selected].map((item) => ({
+  return [year, ...selected].map((item) => toRow(item, facets)).filter((row) => row.items.length > 0);
+}
+
+function toRow(item: SchemaItem, facets?: SiteFacets | null): BrowseFilterRow {
+  return {
     field: item.field,
     icon: FILTER_ICONS[item.field] ?? Settings2,
     label: `By ${item.label}`,
     items: schemaItems(item, facets),
-  })).filter((row) => row.items.length > 0);
+  };
 }
 
-export function scopeBrowseHref(href: string, state?: string): string {
+/** Rows for the listings browse section: only filters that make an indexable
+ * page alone or with a location (drive type, seats, body size — this site's
+ * priorities first), then year. */
+export function buildIndexableBrowseRows(schema: SchemaItem[], facets?: SiteFacets | null): BrowseFilterRow[] {
+  const priorities = SITE_FILTER_PRIORITIES[site.key] ?? [];
+  const fields = [...new Set([...priorities, ...SINGLE_VALUE_SUBJECTS])]
+    .filter((field) => SINGLE_VALUE_SUBJECTS.includes(field));
+  const year = buildSiteFilterRows(schema, facets).find((row) => row.field === "year");
+  return [
+    ...fields
+      .map((field) => schema.find((item) => item.field === field))
+      .filter((item): item is SchemaItem => Boolean(item))
+      .map((item) => toRow(item, facets)),
+    ...(year ? [year] : []),
+  ].filter((row) => row.items.length > 0);
+}
+
+/** Prefixes a /listings/ href with the state (and region) segments. */
+export function scopeBrowseHref(href: string, state?: string, region?: string): string {
   if (!state) return href;
-  return `/listings/${state.trim().toLowerCase().replace(/ /g, "-")}-state${href.replace("/listings", "")}`;
+  const slug = (value: string) => value.trim().toLowerCase().replace(/ /g, "-");
+  const location = `${slug(state)}-state${region ? `/${slug(region)}-region` : ""}`;
+  return `/listings/${location}${href.replace("/listings", "")}`;
 }

@@ -11,6 +11,9 @@ import StateListingGrid, { SeoV2, Listing } from "./StateListingGrid";
 import StateBrowseSection from "./StateBrowseSection";
 import type { BrowseSectionData } from "./browseSectionShared";
 import StateContent from "./StateContent";
+import ExploreOtherVehicles from "@/app/components/ExploreOtherVehicles";
+
+const EXPLORE_CLASSES = { title: "lsd-explore-cta__title", body: "lsd-explore-cta__body", link: "lsd-explore-cta__link" };
 import { buildApiUrl, buildListingsSlug, buildFilterBreadcrumbs, buildExploreTravelTarget, parseDemoFilters } from "./urlUtils";
 import { bucketPoolResponse, bucketPoolResponseCombined } from "./listingShared";
 import { FILTER_PARAM_KEYS } from "@/config/filterDefs";
@@ -530,7 +533,7 @@ export default function StateHome({
               hideBanners={!!filters.make}
             />
           )}
-          <StateBrowseSection state={filters.state} region={filters.region} initialData={browseData} />
+          <StateBrowseSection state={filters.state} region={filters.region} make={filters.make} currentPath={buildListingsSlug(filters)} initialData={browseData} />
           <StateContent footerDescription={ip.seo?.footer_description} faq={ip.seo?.faq} />
           <div className="lsd-sell-cta">
             <div className="container">
@@ -547,16 +550,7 @@ export default function StateHome({
           <div className="lsd-explore-cta">
             <div className="container">
               <div className="lsd-explore-cta__inner">
-                <h2 className="lsd-explore-cta__title">Explore Other Travel Options in {exploreTravel.label}</h2>
-                <p className="lsd-explore-cta__body">
-                  Still deciding which travel setup suits you? Browse{" "}
-                  <a href={`https://www.motorhomesforsale.com.au${exploreTravel.path}`} className="lsd-explore-cta__link" target="_blank" rel="noopener noreferrer">motorhomes for sale</a>{" "}
-                  for a vehicle with integrated living space, or explore{" "}
-                  <a href={`https://www.campervansforsale.au${exploreTravel.path}`} className="lsd-explore-cta__link" target="_blank" rel="noopener noreferrer">campervans for sale</a>{" "}
-                  for a more compact option. For a towable camping setup, compare{" "}
-                  <a href={`https://www.campingtrailersforsale.com.au${exploreTravel.path}`} className="lsd-explore-cta__link" target="_blank" rel="noopener noreferrer">camper trailers for sale</a>{" "}
-                  across our other marketplaces.
-                </p>
+                <ExploreOtherVehicles path={exploreTravel.path} label={exploreTravel.label} classes={EXPLORE_CLASSES} />
               </div>
             </div>
           </div>
@@ -585,7 +579,7 @@ export default function StateHome({
           showSpotlight={true}
           hideViewAll
         />
-        <StateBrowseSection state={filters.state} region={filters.region} initialData={browseData} />
+        <StateBrowseSection state={filters.state} region={filters.region} make={filters.make} currentPath={buildListingsSlug(filters)} initialData={browseData} />
         <StateContent footerDescription={initialSeo.footer_description} faq={initialSeo.faq} />
         <div className="lsd-sell-cta">
           <div className="container">
@@ -602,16 +596,7 @@ export default function StateHome({
         <div className="lsd-explore-cta">
           <div className="container">
             <div className="lsd-explore-cta__inner">
-              <h2 className="lsd-explore-cta__title">Explore Other Travel Options in {exploreTravel.label}</h2>
-              <p className="lsd-explore-cta__body">
-                Still deciding which travel setup suits you? Browse{" "}
-                <a href={`https://www.motorhomesforsale.com.au${exploreTravel.path}`} className="lsd-explore-cta__link" target="_blank" rel="noopener noreferrer">motorhomes for sale</a>{" "}
-                for a vehicle with integrated living space, or explore{" "}
-                <a href={`https://www.campervansforsale.au${exploreTravel.path}`} className="lsd-explore-cta__link" target="_blank" rel="noopener noreferrer">campervans for sale</a>{" "}
-                for a more compact option. For a towable camping setup, compare{" "}
-                <a href={`https://www.campingtrailersforsale.com.au${exploreTravel.path}`} className="lsd-explore-cta__link" target="_blank" rel="noopener noreferrer">camper trailers for sale</a>{" "}
-                across our other marketplaces.
-              </p>
+              <ExploreOtherVehicles path={exploreTravel.path} label={exploreTravel.label} classes={EXPLORE_CLASSES} />
             </div>
           </div>
         </div>
@@ -704,7 +689,7 @@ export default function StateHome({
 
         {maxPages > 1 && pagination}
 
-        <StateBrowseSection state={filters.state} region={filters.region} initialData={browseData} />
+        <StateBrowseSection state={filters.state} region={filters.region} make={filters.make} currentPath={buildListingsSlug(filters)} initialData={browseData} />
         <StateContent footerDescription={seo?.footer_description} faq={seo?.faq} />
         <div className="lsd-sell-cta">
           <div className="container">
@@ -721,16 +706,7 @@ export default function StateHome({
         <div className="lsd-explore-cta">
           <div className="container">
             <div className="lsd-explore-cta__inner">
-              <h2 className="lsd-explore-cta__title">Explore Other Travel Options in {exploreTravel.label}</h2>
-              <p className="lsd-explore-cta__body">
-                Still deciding which travel setup suits you? Browse{" "}
-                <a href={`https://www.motorhomesforsale.com.au${exploreTravel.path}`} className="lsd-explore-cta__link" target="_blank" rel="noopener noreferrer">motorhomes for sale</a>{" "}
-                for a vehicle with integrated living space, or explore{" "}
-                <a href={`https://www.campervansforsale.au${exploreTravel.path}`} className="lsd-explore-cta__link" target="_blank" rel="noopener noreferrer">campervans for sale</a>{" "}
-                for a more compact option. For a towable camping setup, compare{" "}
-                <a href={`https://www.campingtrailersforsale.com.au${exploreTravel.path}`} className="lsd-explore-cta__link" target="_blank" rel="noopener noreferrer">camper trailers for sale</a>{" "}
-                across our other marketplaces.
-              </p>
+              <ExploreOtherVehicles path={exploreTravel.path} label={exploreTravel.label} classes={EXPLORE_CLASSES} />
             </div>
           </div>
         </div>
@@ -778,7 +754,7 @@ export default function StateHome({
 
       {maxPages > 1 && pagination}
 
-      <StateBrowseSection state={filters.state} region={filters.region} initialData={browseData} />
+      <StateBrowseSection state={filters.state} region={filters.region} make={filters.make} currentPath={buildListingsSlug(filters)} initialData={browseData} />
       <StateContent footerDescription={seo?.footer_description} faq={seo?.faq} />
       <div className="lsd-sell-cta">
         <div className="container">
@@ -795,16 +771,7 @@ export default function StateHome({
       <div className="lsd-explore-cta">
         <div className="container">
           <div className="lsd-explore-cta__inner">
-            <h2 className="lsd-explore-cta__title">Explore Other Travel Options in {exploreTravel.label}</h2>
-            <p className="lsd-explore-cta__body">
-              Still deciding which travel setup suits you? Browse{" "}
-              <a href={`https://www.motorhomesforsale.com.au${exploreTravel.path}`} className="lsd-explore-cta__link" target="_blank" rel="noopener noreferrer">motorhomes for sale</a>{" "}
-              for a vehicle with integrated living space, or explore{" "}
-              <a href={`https://www.campervansforsale.au${exploreTravel.path}`} className="lsd-explore-cta__link" target="_blank" rel="noopener noreferrer">campervans for sale</a>{" "}
-              for a more compact option. For a towable camping setup, compare{" "}
-              <a href={`https://www.campingtrailersforsale.com.au${exploreTravel.path}`} className="lsd-explore-cta__link" target="_blank" rel="noopener noreferrer">camper trailers for sale</a>{" "}
-              across our other marketplaces.
-            </p>
+            <ExploreOtherVehicles path={exploreTravel.path} label={exploreTravel.label} classes={EXPLORE_CLASSES} />
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { normalizeCountItems } from "@/lib/countItems";
-import type { CountItem, BrowseSectionData } from "./browseSectionShared";
+import { loadBrowseCounts, type CountItem, type BrowseSectionData } from "./browseSectionShared";
 
 // params-count (make/state/region counts) uses the MPN key/base.
 const MPN_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
@@ -29,17 +29,27 @@ export async function fetchGroupCountsServer(
   }
 }
 
-/** Server-side mirror of StateBrowseSection's make-count fetch — run during
- * SSR/ISR so the Popular Manufacturers links land in the initial HTML instead
- * of only appearing after the client's useEffect fetch finishes. The other
- * browse rows come from the site's filter schema + facet counts. */
+/** Listing total for a scope (params-count's total_products), or null when unknown. */
+async function fetchTotalServer(scope: Record<string, string>): Promise<number | null> {
+  try {
+    const qs = new URLSearchParams({ group_by: "make", ...scope });
+    const res = await fetch(`${MPN_BASE}/params-count?${qs.toString()}`, {
+      headers: mpnHeaders(),
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return null;
+    const total = (await res.json())?.total_products;
+    return typeof total === "number" ? total : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Server-side mirror of StateBrowseSection's count fetch — run during SSR/ISR
+ * so the browse links land in the initial HTML, already trimmed to pages with
+ * listings, instead of only appearing after the client's useEffect fetch. */
 export async function fetchBrowseSectionData(
-  filters: { state?: string; region?: string },
+  filters: { state?: string; region?: string; make?: string },
 ): Promise<BrowseSectionData> {
-  const { state, region } = filters;
-  const scope: Record<string, string> = {};
-  if (state) scope.state = state;
-  if (state && region) scope.region = region;
-  const makeCounts = await fetchGroupCountsServer("make", scope);
-  return { makeCounts };
+  return loadBrowseCounts(fetchGroupCountsServer, fetchTotalServer, filters);
 }

@@ -6,7 +6,7 @@
 // to API query params, so middleware/edge code can parse URLs without an API call.
 //
 // URL segments (all lower-case, one per filter, emitted in FILTER_DEFS order):
-//   multi        {value}[-or-{value}…]-{slug}   diesel-or-hybrid-fuel-type, 7-or-8-plus-seats
+//   multi        {value}[-or-{value}…]-{slug}   diesel-or-hybrid-fuel-type, 7-or-8-seats
 //   range        under-{n}-{slug} | over-{n}-{slug} | between-{a}-{b}-{slug}
 //   min_dropdown over-{n}-{slug}
 // Decimals use "_" instead of "." (7_5-cargo-volume) so paths never look like file names.
@@ -59,9 +59,10 @@ const toUrlNum = (v: unknown) => String(v).replace(".", "_");
 const fromUrlNum = (v: string) => v.replace("_", ".");
 const present = (v: unknown) => v !== undefined && v !== null && String(v).trim() !== "";
 
-// seats "8+" is the only multi value that is not already a slug.
-const valueToSlug = (v: string) => v.trim().toLowerCase().replace(/\+$/, "-plus");
-const slugToValue = (v: string) => v.replace(/-plus$/, "+");
+// Multi values are already slugs. Seats used to have "8+" (8-plus-seats); it is
+// now plain "8" — a stray "+" is dropped, and middleware 301s old -plus URLs.
+const valueToSlug = (v: string) => v.trim().toLowerCase().replace(/\+$/, "");
+const slugToValue = (v: string) => v;
 
 /** Split a comma list ("diesel,hybrid") into trimmed, non-empty values. */
 export function splitMulti(v: unknown): string[] {

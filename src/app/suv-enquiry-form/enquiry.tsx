@@ -5,18 +5,21 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { site } from "@/config/sites";
 
+/** Site-specific "what type" question (see page.tsx); null hides the field. */
+export type TypeQuestion = { question: string; options: string[] };
+
 type FormState = {
   "your-name": string;
   "your-email": string;
   "your-phone": string;
   "you-postcode": string; // keep as-is since your CF7 works with this key
   "your-message": string;
-  "caravan-type": "";
-  condition: "";
-  budget: "";
+  "vehicle-type": string;
+  condition: string;
+  budget: string;
 };
 
-export default function ContactSection() {
+export default function ContactSection({ typeQuestion }: { typeQuestion: TypeQuestion | null }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [formData, setFormData] = useState<FormState>({
@@ -25,7 +28,7 @@ export default function ContactSection() {
     "your-phone": "",
     "you-postcode": "",
     "your-message": "",
-    "caravan-type": "",
+    "vehicle-type": "",
     condition: "",
     budget: "",
   });
@@ -77,14 +80,19 @@ export default function ContactSection() {
       next["you-postcode"] = "Postcode must be 4 digits.";
     }
 
-    // Caravan type
-    if (!formData["caravan-type"].trim()) {
-      next["caravan-type"] = "Type is required.";
+    // Vehicle type (only when this site asks it)
+    if (typeQuestion && !formData["vehicle-type"].trim()) {
+      next["vehicle-type"] = "Please choose an option.";
     }
 
     // Condition
     if (!formData["condition"].trim()) {
       next["condition"] = "Condition is required.";
+    }
+
+    // Requirements (the API requires it)
+    if (!formData["your-message"].trim()) {
+      next["your-message"] = "Please tell us what you're looking for.";
     }
 
     // Budget validation (only numbers)
@@ -111,15 +119,21 @@ export default function ContactSection() {
     try {
       setLoading(true);
 
+      // The enquiry API has no field for the type answer, so it goes at the
+      // top of the requirements text the team receives.
+      const type = formData["vehicle-type"];
       const payload = {
         name: formData["your-name"],
         phone: formData["your-phone"],
         email: formData["your-email"],
         postcode: formData["you-postcode"],
-        category: formData["caravan-type"],
         condition: formData.condition,
         budget: formData.budget,
-        requirements: formData["your-message"],
+        requirements: type && typeQuestion
+          ? `${typeQuestion.question} ${type}
+
+${formData["your-message"]}`
+          : formData["your-message"],
       };
 
       const res = await fetch("/api/caravan-enquiry", {
@@ -142,7 +156,7 @@ export default function ContactSection() {
           "your-phone": "",
           "you-postcode": "",
           "your-message": "",
-          "caravan-type": "",
+          "vehicle-type": "",
           condition: "",
           budget: "",
         });
@@ -259,36 +273,33 @@ export default function ContactSection() {
                         </div>
                       </div>
 
-                      {/* Caravan Type */}
-                      <div className="col-lg-6">
-                        <div className="form-group mb-20">
-                          <select
-                            name="caravan-type"
-                            className="form-control"
-                            value={formData["caravan-type"]}
-                            onChange={handleChange}
-                            required
-                          >
-                            <option value="">
-                              What type of {site.noun} are you looking for?
-                            </option>
-                            <option value="Off Road">Off Road</option>
-                            <option value="Hybrid">Hybrid</option>
-                            <option value="Pop Top">Pop Top</option>
-                            <option value="Luxury">Luxury</option>
-                            <option value="Family">Family</option>
-                            <option value="Touring">Touring</option>
-                          </select>
-                          {errors["caravan-type"] && (
-                            <small className="text-danger">
-                              {errors["caravan-type"]}
-                            </small>
-                          )}
+                      {/* Vehicle type — site-specific question (page.tsx) */}
+                      {typeQuestion && (
+                        <div className="col-lg-6">
+                          <div className="form-group mb-20">
+                            <select
+                              name="vehicle-type"
+                              className="form-control"
+                              value={formData["vehicle-type"]}
+                              onChange={handleChange}
+                              required
+                            >
+                              <option value="">{typeQuestion.question}</option>
+                              {typeQuestion.options.map((o) => (
+                                <option key={o} value={o}>{o}</option>
+                              ))}
+                            </select>
+                            {errors["vehicle-type"] && (
+                              <small className="text-danger">
+                                {errors["vehicle-type"]}
+                              </small>
+                            )}
+                          </div>
                         </div>
-                      </div>
+                      )}
 
                       {/* Condition */}
-                      <div className="col-lg-6">
+                      <div className={typeQuestion ? "col-lg-6" : "col-lg-12"}>
                         <div className="form-group mb-20">
                           <select
                             name="condition"
@@ -336,10 +347,16 @@ export default function ContactSection() {
                           <textarea
                             name="your-message"
                             className="form-control"
-                            placeholder="To ensure we find the right manufacturer, please include your weights, must have inclusions such as bunk beds, and any other specific requirements. This way, we can find the best possible solution for your inquiry.*"
+                            placeholder={`Tell us what you're after: preferred make and model, year, kilometres, must-have features and anything else that matters to you. This helps us find the right ${site.noun} for you.*`}
                             value={formData["your-message"]}
                             onChange={handleChange}
+                            required
                           />
+                          {errors["your-message"] && (
+                            <small className="text-danger">
+                              {errors["your-message"]}
+                            </small>
+                          )}
                         </div>
                       </div>
                       <div className="col-lg-12">

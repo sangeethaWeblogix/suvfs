@@ -256,6 +256,15 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
 
   /* 🚫 Listings: forbidden segments, unknown params, OR wrong URL order → 410 */
   if (isListingsPath) {
+    // Seats "8+" became plain "8": /8-plus-seats/ (and 7-or-8-plus-seats) → 301
+    // to the -seats URL so the indexed page keeps its ranking.
+    const seatsPath = url.pathname.replace(/(\d+)-plus(?=(?:-or-[^/]*)?-seats(?:\/|$))/g, '$1');
+    if (seatsPath !== url.pathname) {
+      const target = url.clone();
+      target.pathname = seatsPath;
+      return NextResponse.redirect(target, 301);
+    }
+
     const segments = url.pathname.split('/').filter(Boolean);
     const hasForbiddenSegment = segments.some(s => /(page|feed)/i.test(s));
 
@@ -431,8 +440,11 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
   // X-Robots-Tag is decided by the car-site index rules (utils/seo/indexRules.ts)
   // — the same rules the <meta name="robots"> tag uses. Overridden to noindex
   // below only when the live product count for this exact filter combo is
-  // genuinely zero.
-  let robotsHeader = "noindex, nofollow";
+  // genuinely zero. Plain "noindex" (links still followed): noindex pages pass
+  // weight to indexed pages through their browse links.
+  let robotsHeader = "noindex";
+  // Set when the page has 0 products — tells the layout to render <meta robots="noindex">.
+  let emptyPage = false;
   if (isListingsPath && isIndexableListingPath(url.pathname)) {
     robotsHeader = "index, follow";
   }
@@ -458,7 +470,7 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
         url.searchParams.forEach((v, k) => rewriteUrl.searchParams.set(k, v));
         return NextResponse.rewrite(rewriteUrl);
       }
-      if (cached!.isEmpty) robotsHeader = "noindex, nofollow";
+      if (cached!.isEmpty) { robotsHeader = "noindex"; emptyPage = true; }
     } else {
       try {
         const slugParts = url.pathname
@@ -511,7 +523,8 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
             if (empExclusive.length === 0) {
               // Don't 410 from middleware — ISR/page component handles empty state
               seoCache.set(cacheKey, { isEmpty: true, hasExclusiveOnly: false, expires: Date.now() + CACHE_TTL, staleExpires: Date.now() + CACHE_STALE_TTL });
-              robotsHeader = "noindex, nofollow";
+              robotsHeader = "noindex";
+              emptyPage = true;
             } else {
               seoCache.set(cacheKey, { isEmpty: false, hasExclusiveOnly: true, expires: Date.now() + CACHE_TTL, staleExpires: Date.now() + CACHE_STALE_TTL });
               const rewriteUrl = new URL(`/api/listings-410/${slugParts.join('/')}${url.search}`, request.url);
@@ -534,7 +547,8 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
             const empExclusive410 = data410?.emp_exclusive_products ?? [];
             if (empExclusive410.length === 0) {
               seoCache.set(cacheKey, { isEmpty: true, hasExclusiveOnly: false, expires: Date.now() + CACHE_TTL, staleExpires: Date.now() + CACHE_STALE_TTL });
-              robotsHeader = "noindex, nofollow";
+              robotsHeader = "noindex";
+              emptyPage = true;
               // Don't render410 — let ISR serve cached HTML
             } else {
               seoCache.set(cacheKey, { isEmpty: false, hasExclusiveOnly: true, expires: Date.now() + CACHE_TTL, staleExpires: Date.now() + CACHE_STALE_TTL });
@@ -543,7 +557,8 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
             }
           } catch {
             seoCache.set(cacheKey, { isEmpty: true, hasExclusiveOnly: false, expires: Date.now() + CACHE_TTL, staleExpires: Date.now() + CACHE_STALE_TTL });
-            robotsHeader = "noindex, nofollow";
+            robotsHeader = "noindex";
+            emptyPage = true;
             // Don't render410 — let ISR serve cached HTML
           }
         }
@@ -556,6 +571,7 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
   }
 
   /* 4️⃣ Create response */
+  if (emptyPage) requestHeaders.set("x-robots", "noindex");
   const response = NextResponse.next({ request: { headers: requestHeaders } });
 
   if (isListingsPath) {
