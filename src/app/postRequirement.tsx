@@ -141,10 +141,6 @@ useEffect(() => {
                       <div className="post_flip">
                         <div className="home-post__item">
                           <div className="fet_feild">
-                            <div className="type pst_table">
-                              <span className="slugn">Type</span>
-                              {item.type}
-                            </div>
                             <div className="condition pst_table">
                               <span className="slugn">Condition</span>
                               {item.condition}

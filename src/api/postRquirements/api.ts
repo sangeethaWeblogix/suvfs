@@ -1,11 +1,12 @@
 // src/api/requirements/api.ts
-const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
+import { WP_ORIGIN } from "@/lib/apiBase";
+import { site } from "@/config/sites";
+
 const API_KEY = process.env.MPN_API_KEY; // ✅ Add this
 
 export type Requirement = {
   id?: number; // if the API returns one
   featured?: "0" | "1";
-  type: string; // e.g., "Hybrid"
   condition: string; // e.g., "Used" | "New"
   location: string; // e.g., "2033"
   requirements: string; // text
@@ -20,8 +21,9 @@ type ListResp = {
 };
 
 export async function fetchRequirements(): Promise<Requirement[]> {
-  if (!API_BASE) return [];
-  const url = `${API_BASE}/get-home-enquiries-list`;
+  if (!WP_ORIGIN) return [];
+  // Featured home enquiries for this site only.
+  const url = `${WP_ORIGIN}/wp-json/mpn/v1/cars/get-home-enquiries-list?site=${encodeURIComponent(site.key)}`;
   try {
     const res = await fetch(url, {
       next: { revalidate: 86400 },
