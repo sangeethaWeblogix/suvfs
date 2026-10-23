@@ -18,6 +18,7 @@ import {
   STATES,
   buildAllRegionsForState,
   loadBrowseCounts,
+  subjectFieldsFor,
   findRegionBySlug,
   type CountItem,
   type BrowseSectionData,
@@ -108,7 +109,8 @@ export default function StateBrowseSection({ state, region, make, currentPath, i
     if (initialData?.makeCounts !== undefined && isInitialFilters) return;
     let cancelled = false;
     setCounts(null);
-    loadBrowseCounts(fetchGroupCounts, fetchTotal, { state, region, make }).then((data) => { if (!cancelled) setCounts(data); });
+    loadBrowseCounts(fetchGroupCounts, fetchTotal, { state, region, make }, subjectFieldsFor(schema.map((s) => s.field)))
+      .then((data) => { if (!cancelled) setCounts(data); });
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state, region, make]);
@@ -118,7 +120,8 @@ export default function StateBrowseSection({ state, region, make, currentPath, i
   const subjectRows = buildIndexableBrowseRows(schema, facets);
 
   // Scope a row's links to this page's location and drop any that would lead
-  // to a noindex page.
+  // to a noindex page. A one-link column ("By Wheelbase: Long") reads as
+  // broken, so it gives its place to the next filter.
   const scopeRows = (rows: BrowseFilterRow[]) =>
     rows
       .map((row) => ({
@@ -127,7 +130,7 @@ export default function StateBrowseSection({ state, region, make, currentPath, i
           .map((item) => ({ ...item, href: scopeBrowseHref(item.href, state, regionMode ? region : undefined) }))
           .filter((item) => linkable(item.href)),
       }))
-      .filter((row) => row.items.length > 0);
+      .filter((row) => row.items.length >= 2);
 
   // While the make counts are in flight (null), render shimmer pills instead
   // of nothing so a slow response doesn't look empty.
@@ -242,13 +245,14 @@ export default function StateBrowseSection({ state, region, make, currentPath, i
     );
   }
 
-  // State pages list only regions that have listings (all while counts load);
-  // empty region pages are noindex.
+  // State pages list only regions that have listings (all while counts load),
+  // and the Australia-wide page only states that do — empty pages are noindex.
   const regionCounts = counts?.regionCounts;
+  const stateCounts = siteFacets?.states as Record<string, number> | undefined;
   const regions = (state
     ? buildAllRegionsForState(state).filter((r) =>
         !regionCounts?.length || regionCounts.some((c) => c.count > 0 && r.href.endsWith(`/${c.slug}-region/`)))
-    : STATES
+    : STATES.filter((s) => !stateCounts || Number(stateCounts[s.href.match(/listings\/([a-z-]+)-state\//)?.[1] ?? ""] ?? 0) > 0)
   ).filter((r) => linkable(r.href));
   // Other makes only — the current make's page is the one being viewed.
   const manufacturerLinks = (makeCounts ?? [])

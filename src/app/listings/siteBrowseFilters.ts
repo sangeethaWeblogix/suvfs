@@ -1,11 +1,12 @@
 import { buildFilterSegments } from "@/config/filterDefs";
 import { site } from "@/config/sites";
-import { SINGLE_VALUE_SUBJECTS } from "@/utils/seo/indexRules";
+import { SINGLE_VALUE_SUBJECTS, isIndexableListingPath } from "@/utils/seo/indexRules";
 import type { SchemaItem } from "./SiteFilters";
 import {
   BatteryCharging,
   CalendarDays,
   CarFront,
+  Factory,
   Fuel,
   Gauge,
   Ruler,
@@ -77,20 +78,28 @@ export function budgetRow(facets?: SiteFacets | null, bandCounts?: (number | nul
 
 export const BUDGET_ROW: BrowseFilterRow = budgetRow();
 
+// Home page "Search … Your Way" rows after Budget and Year, most-searched
+// first. Only filters each site indexes (utils/seo/indexRules.ts) — rows link
+// to indexed pages only, so odometer, payload, engine power, battery and
+// range are never rows.
 export const SITE_FILTER_PRIORITIES: Record<string, string[]> = {
-  suv: ["drive_type", "seats", "body_size"],
-  utes: ["cab_type", "payload_weight", "drive_type"],
-  peoplemovers: ["seats", "body_size", "fuel_type"],
-  sedans: ["body_size", "transmission", "odometer"],
-  hatchbacks: ["body_size", "transmission", "odometer"],
-  wagons: ["drive_type", "cargo_volume", "odometer"],
-  coupes: ["transmission", "engine_power", "odometer"],
-  convertibles: ["transmission", "engine_power", "odometer"],
-  vans: ["wheelbase", "roof_height", "payload_weight"],
-  "4x4": ["drive_type", "braked_towing_capacity", "seats"],
-  electric: ["driving_range", "battery_capacity", "body_type"],
-  hybrid: ["body_type", "drive_type", "odometer"],
+  suv: ["drive_type", "seats", "body_size", "make"],
+  utes: ["cab_type", "drive_type", "fuel_type", "make"],
+  peoplemovers: ["seats", "body_size", "make"],
+  sedans: ["body_size", "fuel_type", "drive_type", "make"],
+  hatchbacks: ["body_size", "fuel_type", "make"],
+  wagons: ["drive_type", "fuel_type", "body_size", "make"],
+  coupes: ["drive_type", "seats", "make"],
+  convertibles: ["drive_type", "seats", "make"],
+  vans: ["fuel_type", "seats", "make"],
+  "4x4": ["body_type", "make", "fuel_type", "seats"],
+  electric: ["body_type", "body_size", "drive_type", "make"],
+  hybrid: ["body_type", "fuel_type", "drive_type", "seats", "make"],
 };
+
+/** A home page row needs at least this many links — a lone chip ("Manual")
+ * reads as a broken row. Rows fill out as stock grows. */
+const MIN_ROW_ITEMS = 2;
 
 const FILTER_ICONS: Record<string, LucideIcon> = {
   year: CalendarDays,
@@ -161,24 +170,16 @@ export function schemaItems(item: SchemaItem, facets?: SiteFacets | null): Brows
   if (item.control === "range") {
     const [fromParam, toParam] = item.params;
     if (item.field === "year") {
+      // Single years only — year ranges are noindex (utils/seo/indexRules.ts).
+      // The most recent years with enough listings, newest first.
       const max = Math.floor(item.max);
-      const bands = [
-        { text: `${max - 2} – ${max}`, from: max - 2, to: max },
-        { text: `${max - 6} – ${max - 3}`, from: max - 6, to: max - 3 },
-        { text: `${max - 11} – ${max - 7}`, from: max - 11, to: max - 7 },
-        { text: `Before ${max - 11}`, to: max - 12 },
-      ];
-      const years = facets?.years;
-      const yearCount = (from: number | undefined, to: number) =>
-        Object.entries(years ?? {})
-          .filter(([year]) => Number(year) <= to && (from === undefined || Number(year) >= from))
-          .reduce((sum, [, count]) => sum + Number(count), 0);
-      return bands.filter((band) => !years || yearCount(band.from, band.to) > 0).map((band) => ({
-        text: band.text,
-        href: listingHref({
-          ...(band.from !== undefined && { [fromParam]: band.from }),
-          [toParam]: band.to,
-        }),
+      const years = facets?.years as Record<string, number> | undefined;
+      const recent = Array.from({ length: 12 }, (_, i) => max - i)
+        .filter((year) => !years || Number(years[year] ?? 0) >= MIN_BROWSE_LISTINGS)
+        .slice(0, 8);
+      return recent.map((year) => ({
+        text: String(year),
+        href: listingHref({ [fromParam]: year, [toParam]: year }),
       }));
     }
 
@@ -215,11 +216,44 @@ export function buildSiteFilterRows(schema: SchemaItem[], facets?: SiteFacets | 
     step: 1,
   };
   const year = schema.find((item) => item.field === "year") ?? fallbackYear;
-  const selected = (SITE_FILTER_PRIORITIES[site.key] ?? ["fuel_type", "transmission"])
-    .map((field) => schema.find((item) => item.field === field))
-    .filter((item): item is SchemaItem => Boolean(item));
+  const rows = (SITE_FILTER_PRIORITIES[site.key] ?? ["fuel_type", "transmission"])
+    .map((field) => {
+      if (field === "make") return makeRow(facets);
+      const item = schema.find((s) => s.field === field);
+      return item ? toRow(item, facets) : null;
+    })
+    .filter((row): row is BrowseFilterRow => Boolean(row))
+    // Link indexed pages only (e.g. 4x4 body type: ute/SUV/wagon/van, not
+    // hatchback) — internal links should pass weight to pages Google keeps.
+    .map((row) => ({ ...row, items: row.items.filter((i) => isIndexableListingPath(i.href)) }))
+    .filter((row) => row.items.length >= MIN_ROW_ITEMS);
 
-  return [year, ...selected].map((item) => toRow(item, facets)).filter((row) => row.items.length > 0);
+  return [toRow(year, facets), ...rows].filter((row) => row.items.length > 0);
+}
+
+// Make slugs whose display name isn't just the title-cased slug.
+const MAKE_NAMES: Record<string, string> = {
+  bmw: "BMW", byd: "BYD", gac: "GAC", gwm: "GWM", kgm: "KGM", ldv: "LDV", mg: "MG",
+  "mercedes-benz": "Mercedes-Benz", ssangyong: "SsangYong",
+};
+
+function makeName(slug: string): string {
+  return MAKE_NAMES[slug] ?? slug.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+}
+
+/** The site's most-listed makes, linking to their (indexable) make pages. */
+function makeRow(facets?: SiteFacets | null): BrowseFilterRow {
+  const makes = facets?.makes && typeof facets.makes === "object" ? facets.makes : {};
+  return {
+    field: "make",
+    icon: Factory,
+    label: "By Make",
+    items: Object.entries(makes as Record<string, number>)
+      .filter(([, count]) => Number(count) >= MIN_BROWSE_LISTINGS)
+      .sort(([, a], [, b]) => Number(b) - Number(a))
+      .slice(0, 10)
+      .map(([slug]) => ({ text: makeName(slug), href: `/listings/${slug}/` })),
+  };
 }
 
 function toRow(item: SchemaItem, facets?: SiteFacets | null): BrowseFilterRow {

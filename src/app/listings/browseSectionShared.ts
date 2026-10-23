@@ -59,6 +59,12 @@ export interface BrowseSectionData {
   priceCounts?: (number | null)[] | null;
 }
 
+/** The indexable filters this site's filter panel actually has — no point
+ * counting body size on the utes site. An empty schema (API down) counts all. */
+export function subjectFieldsFor(schemaFields: string[]): string[] {
+  return schemaFields.length ? SINGLE_VALUE_SUBJECTS.filter((f) => schemaFields.includes(f)) : SINGLE_VALUE_SUBJECTS;
+}
+
 /** Counts behind the browse section for one location — shared by the server
  * (SSR/ISR) and client fetches, which differ only in how they call params-count.
  * `fetchTotal` returns the listing total for a scope, or null when unknown. */
@@ -66,6 +72,7 @@ export async function loadBrowseCounts(
   fetchGroup: (groupBy: string, scope: Record<string, string>) => Promise<CountItem[]>,
   fetchTotal: (scope: Record<string, string>) => Promise<number | null>,
   { state, region, make }: { state?: string; region?: string; make?: string },
+  subjectFields: string[] = SINGLE_VALUE_SUBJECTS,
 ): Promise<BrowseSectionData> {
   const scope: Record<string, string> = {};
   if (state) scope.state = state;
@@ -78,7 +85,7 @@ export async function loadBrowseCounts(
     makeScope ? fetchGroup("region", makeScope) : Promise.resolve(null),
     makeScope ? fetchGroup("model", makeScope) : Promise.resolve(null),
     Promise.all(BUDGET_BAND_PARAMS.map((band) => fetchTotal({ ...scope, ...band }))),
-    ...SINGLE_VALUE_SUBJECTS.map((field) => fetchGroup(field, scope)),
+    ...subjectFields.map((field) => fetchGroup(field, scope)),
   ]);
   return {
     makeCounts,
@@ -87,7 +94,7 @@ export async function loadBrowseCounts(
     makeRegionCounts,
     modelCounts,
     priceCounts,
-    subjectCounts: Object.fromEntries(SINGLE_VALUE_SUBJECTS.map((field, i) => [field, subjects[i]])),
+    subjectCounts: Object.fromEntries(subjectFields.map((field, i) => [field, subjects[i]])),
   };
 }
 

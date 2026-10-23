@@ -95,8 +95,10 @@ export default function HomeStateSection({ stateBands }: Props) {
                             <div className="quick_linkss">
                               <p>{item.display_text}</p>
                               <a className="view_all" href={buildStateHref(item.permalink)}>
-                                View All {site.plural} for Sale in {meta.code}{" "}
-                                <i className="bi bi-chevron-right" />
+                                View All {site.plural} for Sale in{" "}
+                                <span className="text-nowrap">
+                                  {meta.code} <i className="bi bi-chevron-right" />
+                                </span>
                               </a>
                             </div>
                           </div>

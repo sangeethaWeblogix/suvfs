@@ -27,9 +27,21 @@ const MINOR_CITIES = [
   { name: "Ballarat",       href: "/listings/victoria-state/ballarat-region/" },
 ];
 
+/** False when the site's facets show no listings in the city's state — its
+ * page would be empty, and empty listings pages are noindex. */
+function hasStateListings(href: string, facets?: SiteFacets | null): boolean {
+  const states = facets?.states;
+  if (!states || typeof states !== "object") return true;
+  const state = href.match(/^\/listings\/([a-z-]+)-state\//)?.[1];
+  return !state || Number(states[state] ?? 0) > 0;
+}
+
 export default function HomeLocationSection({ schema, facets }: { schema: SchemaItem[]; facets?: SiteFacets | null }) {
+  // No year row here — the listings footer still links single years.
   const filterRows = [{ ...budgetRow(facets), label: "By Your Budget" }, ...buildSiteFilterRows(schema, facets)]
-    .filter((row) => row.items.length > 0);
+    .filter((row) => row.field !== "year" && row.items.length > 0);
+  const majorCities = MAJOR_CITIES.filter((city) => hasStateListings(city.href, facets));
+  const minorCities = MINOR_CITIES.filter((city) => hasStateListings(city.href, facets));
   return (
     <section className="hloc-section">
       <div className="container">
@@ -43,7 +55,7 @@ export default function HomeLocationSection({ schema, facets }: { schema: Schema
         </div>
 
         <div className="hloc-major-grid">
-          {MAJOR_CITIES.map((city) => (
+          {majorCities.map((city) => (
             <a key={city.name} href={city.href} className="hloc-city-card">
               <div className="hloc-city-img-wrap">
                 <div className="hloc-city-circle" />
@@ -64,7 +76,7 @@ export default function HomeLocationSection({ schema, facets }: { schema: Schema
         </div>
 
         <div className="hloc-minor-wrap">
-          {MINOR_CITIES.map((city, idx) => (
+          {minorCities.map((city, idx) => (
             <a
               key={city.name}
               href={city.href}
@@ -78,7 +90,7 @@ export default function HomeLocationSection({ schema, facets }: { schema: Schema
   <h2 className="hloc-title">
            Search {site.plural} for Sale <span className="hloc-title-accent">Your Way</span>
           </h2>
-          <p className="hloc-subtitle">Browse new and used {site.nounPlural} for sale by price, year and the features that matter to you.</p>
+          <p className="hloc-subtitle">Browse new and used {site.nounPlural} for sale by price, make and the features that matter to you.</p>
         </div>
         <div className="hloc-filters">
           

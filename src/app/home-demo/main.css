@@ -1271,6 +1271,16 @@
 .caravans_by_state .service-box:hover {
 }
 
+/* Equal-height state cards even when a link wraps to two lines */
+.caravans_by_state .swiper-slide {
+  height: auto;
+}
+.caravans_by_state .swiper-slide .service-box {
+  height: calc(100% - 10px);
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
 .caravans_by_state .col-lg-4 {
   margin-bottom: 25px;
 }

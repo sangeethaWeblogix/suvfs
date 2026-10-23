@@ -1,5 +1,6 @@
 import { normalizeCountItems } from "@/lib/countItems";
-import { loadBrowseCounts, type CountItem, type BrowseSectionData } from "./browseSectionShared";
+import { fetchSiteSchema } from "@/lib/siteSchema";
+import { loadBrowseCounts, subjectFieldsFor, type CountItem, type BrowseSectionData } from "./browseSectionShared";
 
 // params-count (make/state/region counts) uses the MPN key/base.
 const MPN_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
@@ -51,5 +52,6 @@ async function fetchTotalServer(scope: Record<string, string>): Promise<number |
 export async function fetchBrowseSectionData(
   filters: { state?: string; region?: string; make?: string },
 ): Promise<BrowseSectionData> {
-  return loadBrowseCounts(fetchGroupCountsServer, fetchTotalServer, filters);
+  const schema = await fetchSiteSchema();
+  return loadBrowseCounts(fetchGroupCountsServer, fetchTotalServer, filters, subjectFieldsFor(schema.map((s) => s.field)));
 }
