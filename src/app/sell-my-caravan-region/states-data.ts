@@ -168,7 +168,7 @@ export function buildStateJsonLd(state: StateData) {
             name: `How should I price my ${site.noun} in ${state.label}?`,
             acceptedAnswer: {
               "@type": "Answer",
-              text: `Check similar ${site.nounPlural} for sale in ${state.label} before setting your price. Compare by make, model, year, condition, length, ATM, tare weight, sleeping capacity, features and location. A realistic asking price can help attract more genuine buyers.`,
+              text: `Check similar ${site.nounPlural} for sale in ${state.label} before setting your price. Compare by make, model, year, kilometres, condition, features and location. A realistic asking price can help attract more genuine buyers.`,
             },
           },
           {

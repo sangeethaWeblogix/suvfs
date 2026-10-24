@@ -223,7 +223,7 @@ export function buildRegionJsonLd(region: RegionInfo) {
             name: `How should I price my ${site.noun}?`,
             acceptedAnswer: {
               "@type": "Answer",
-              text: `Check similar ${site.nounPlural} for sale in ${region.label} before setting your price. Compare by make, model, year, condition, length, ATM, tare weight, sleeping capacity, features and location. A realistic asking price can help attract more genuine buyers.`,
+              text: `Check similar ${site.nounPlural} for sale in ${region.label} before setting your price. Compare by make, model, year, kilometres, condition, features and location. A realistic asking price can help attract more genuine buyers.`,
             },
           },
           {

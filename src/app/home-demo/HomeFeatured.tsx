@@ -25,15 +25,7 @@ export default function HomeFeatured({ items }: Props) {
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
 
-  if (!items.length) {
-    return (
-      <section className="hf-section">
-        <div className="container">
-          <div style={{ minHeight: 340, background: "#f8f9fa", borderRadius: 8 }} />
-        </div>
-      </section>
-    );
-  }
+  if (!items.length) return null;
 
   return (
     <section className="hf-section">

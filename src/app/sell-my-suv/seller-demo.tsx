@@ -70,11 +70,11 @@ import { site, sitePaths } from "@/config/sites";
    },
    {
      q: `What photos should I upload when selling my ${site.noun}?`,
-     a: <p>Upload clear photos of the outside, inside, kitchen, beds, seating area, bathroom, tyres, drawbar and any included accessories. Good photos help buyers understand the condition of your {site.noun} and can increase enquiries.</p>,
+     a: <p>Upload clear photos of the outside, inside, seats, dashboard, odometer, boot, tyres and any included accessories. Good photos help buyers understand the condition of your {site.noun} and can increase enquiries.</p>,
    },
    {
      q: `How should I price my ${site.noun}?`,
-     a: <p>Check similar {site.nounPlural} for sale before setting your price. Compare by make, model, year, condition, length, ATM, tare weight, sleeping capacity, features and location. A realistic asking price can help attract more genuine buyers.</p>,
+     a: <p>Check similar {site.nounPlural} for sale before setting your price. Compare by make, model, year, kilometres, condition, features and location. A realistic asking price can help attract more genuine buyers.</p>,
    },
    {
      q: `Is it safe to sell my ${site.noun} privately online?`,
@@ -324,7 +324,7 @@ import { site, sitePaths } from "@/config/sites";
                </div>
                <ul className="demo-guide-card__list">
                  <li>{site.singular}-only marketplace, not a general classifieds page.</li>
-                 <li>Buyers search by type, price, weight, sleeps and location.</li>
+                 <li>Buyers search by make, model, price, year and location.</li>
                  <li>Your {site.noun} is shown to people already looking to buy.</li>
                  <li>Direct enquiries, no commission on the final sale.</li>
                </ul>
@@ -336,8 +336,8 @@ import { site, sitePaths } from "@/config/sites";
                  <h3>What you need before listing</h3>
                </div>
                <ul className="demo-guide-card__list">
-                 <li>Photos: exterior, interior, beds, kitchen, tyres and accessories.</li>
-                 <li>Details: make, model, year, ATM, tare, length and sleeps.</li>
+                 <li>Photos: exterior, interior, dashboard, odometer, tyres and boot.</li>
+                 <li>Details: make, model, year, variant, kilometres, transmission and fuel type.</li>
                  <li>Condition, rego, service history, upgrades and asking price.</li>
                </ul>
              </div>
@@ -349,7 +349,7 @@ import { site, sitePaths } from "@/config/sites";
                </div>
                <ul className="demo-guide-card__list">
                  <li>Check similar {site.nounPlural} before setting your asking price.</li>
-                 <li>Compare make, year, condition, length, features and location.</li>
+                 <li>Compare make, model, year, kilometres, condition and location.</li>
                  <li>Leave room for negotiation while staying competitive.</li>
                </ul>
              </div>

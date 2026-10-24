@@ -39,9 +39,7 @@ const RESERVED_TOP_LEVEL_SLUGS = new Set([
   "caravan-homepage-takeover", "caravan-manufacturers", "caravan-sales", "contact",
   "cookie-policy", "dealer-advertising", "family-caravan-category-sponsorship",
   "hybrid-caravan-category-sponsorship", "listings", "login",
-  "luxury-caravan-category-sponsorship", "off-road-caravan-category-sponsorship",
-  "off-road-caravan-market-report", "off-road-caravan-types", "off-road-caravans",
-  "off-road-caravans-manufacturers", "pop-top-caravan-category-sponsorship",
+  "luxury-caravan-category-sponsorship", "pop-top-caravan-category-sponsorship",
   "privacy-collection-statement", "privacy-policy", "product", "product-detail-demo",
   sitePaths.sell.replace(/\//g, ""), "store", "terms-conditions", "touring-caravan-category-sponsorship",
   "404", "410", "sitemap.xml", "robots.txt", "favicon.ico",
@@ -100,9 +98,6 @@ const Article = site.article === "an" ? "An" : "A";
     const isContactPage = pathname === "/contact/" || pathname === "/contact";
     const isMainListings = pathname === "/listings/" || pathname === "/listings";
     const isHomePage = pathname === "/" || pathname === "";
-    const isOffRoadCaravansPage = pathname === "/off-road-caravans/" || pathname === "/off-road-caravans";
-    const isOffRoadCaravanTypesPage = pathname === "/off-road-caravan-types/" || pathname === "/off-road-caravan-types";
-    const isOffRoadMarketReportPage = pathname === "/off-road-caravan-market-report/" || pathname === "/off-road-caravan-market-report";
     const isSellMyCaravanPage = pathname === sitePaths.sell || pathname === sitePaths.sell.slice(0, -1);
     const isDealerAdvertisingPage = pathname === "/dealer-advertising/" || pathname === "/dealer-advertising";
     const isBlogPage = pathname === "/blog/" || pathname === "/blog";
@@ -244,11 +239,6 @@ const Article = site.article === "an" ? "An" : "A";
         title: `Top 10 ${site.singular} Manufacturers in Australia: Best Brands of 2024`,
         description: `See how top Australian ${site.noun} manufacturers excel with the best in innovative designs, quality construction, cost efficiency, and expert craftsmanship.`,
         canonical: `${site.url}/caravan-manufacturers/`,
-      },
-      "/off-road-caravans-manufacturers/": {
-        title: `Top Off-Road ${site.singular} Manufacturers in Australia: Best Brands 2024`,
-        description: `Discover Australia's leading off-road ${site.noun} manufacturers. Compare top brands known for rugged build quality, innovative design, and outback-ready performance.`,
-        canonical: `${site.url}/off-road-caravans-manufacturers/`,
       },
     };
     const staticMeta = STATIC_META[pathname] ?? null;
@@ -446,161 +436,6 @@ const Article = site.article === "an" ? "An" : "A";
               }}
             />
           )}
-          {/* Off Road Caravans page JSON-LD */}
-          {isOffRoadCaravansPage && (
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: JSON.stringify({
-                  "@context": "https://schema.org",
-                  "@graph": [
-                    {
-                      "@type": "CollectionPage",
-                      "@id": `${site.url}/off-road-caravans/`,
-                      "url": `${site.url}/off-road-caravans/`,
-                      "name": `Off Road ${site.plural} Australia | New & Used Off Road ${site.plural} for Sale`,
-                      "description": `Discover Australia's largest collection of off road ${site.nounPlural}. Compare full off road, semi off road and hybrid ${site.nounPlural}, browse live listings, read expert reviews and explore detailed buying guides.`,
-                      "inLanguage": "en-AU",
-                      "breadcrumb": { "@id": `${site.url}/off-road-caravans/#breadcrumb` },
-                      "isPartOf": { "@type": "WebSite", "url": `${site.url}/` },
-                    },
-                    {
-                      "@type": "BreadcrumbList",
-                      "@id": `${site.url}/off-road-caravans/#breadcrumb`,
-                      "itemListElement": [
-                        { "@type": "ListItem", "position": 1, "name": "Home",             "item": `${site.url}/` },
-                        { "@type": "ListItem", "position": 2, "name": `Off Road ${site.plural}`, "item": `${site.url}/off-road-caravans/` },
-                      ],
-                    },
-                    {
-                      "@type": "FAQPage",
-                      "mainEntity": [
-                        {
-                          "@type": "Question",
-                          "name": `What is an off road ${site.noun}?`,
-                          "acceptedAnswer": { "@type": "Answer", "text": `An off road ${site.noun} is ${site.article} ${site.noun} built to handle rough, unsealed tracks and remote terrain. They typically feature heavy-duty chassis, independent suspension, reinforced bodywork, larger water and battery capacity, and off-road tyres to handle Australia's outback and bush conditions.` },
-                        },
-                        {
-                          "@type": "Question",
-                          "name": `What is the difference between semi off road and full off road ${site.nounPlural}?`,
-                          "acceptedAnswer": { "@type": "Answer", "text": `Semi off road ${site.nounPlural} are built for light unsealed roads and easy bush tracks, with upgraded suspension and stronger construction. Full off road ${site.nounPlural} are engineered for extreme terrain — think river crossings, rocky tracks and remote touring — with independent suspension, heavy-duty chassis and full off-grid capability.` },
-                        },
-                        {
-                          "@type": "Question",
-                          "name": `Can off road ${site.nounPlural} go off grid?`,
-                          "acceptedAnswer": { "@type": "Answer", "text": `Yes. Most off road ${site.nounPlural} come with or can be fitted with solar panels, lithium batteries, large fresh water tanks and composting or cassette toilets, allowing extended stays in remote areas without external power or water hookups.` },
-                        },
-                        {
-                          "@type": "Question",
-                          "name": `Do I need a special vehicle to tow an off road ${site.noun}?`,
-                          "acceptedAnswer": { "@type": "Answer", "text": `Yes. Off road ${site.nounPlural} are heavier and wider than standard ${site.nounPlural}. You'll need a high-capacity 4WD with a tow bar rated to the ${site.noun}'s ATM. Always check the ${site.noun}'s ATM and the tow vehicle's GVM and tow rating before purchasing.` },
-                        },
-                        {
-                          "@type": "Question",
-                          "name": `Are off road ${site.nounPlural} suitable for families?`,
-                          "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. Many off road models come in family-friendly layouts with bunk beds, multiple sleeping berths, full kitchens and ensuites. Brands like Jayco, New Age and Trakmaster offer popular family off road models across a range of budgets." },
-                        },
-                        {
-                          "@type": "Question",
-                          "name": `What is the average price of an off road ${site.noun} in Australia?`,
-                          "acceptedAnswer": { "@type": "Answer", "text": `Off road ${site.noun} prices in Australia typically range from around $40,000 for entry-level semi off road models to over $150,000 for premium full off road expedition ${site.nounPlural}. The most popular mid-range models sit between $60,000 and $100,000.` },
-                        },
-                      ],
-                    },
-                  ],
-                }),
-              }}
-            />
-          )}
-          {/* Off Road Caravan Types page JSON-LD */}
-          {isOffRoadCaravanTypesPage && (
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: JSON.stringify({
-                  "@context": "https://schema.org",
-                  "@graph": [
-                    {
-                      "@type": "CollectionPage",
-                      "@id": `${site.url}/off-road-caravan-types/`,
-                      "url": `${site.url}/off-road-caravan-types/`,
-                      "name": `Off Road ${site.singular} Types Compared | Semi, Full, Hybrid & Extreme`,
-                      "description": `Compare semi, full, extreme and hybrid off road ${site.nounPlural} in Australia. Understand terrain capability, towing, weight, construction and off-grid features.`,
-                      "inLanguage": "en-AU",
-                      "breadcrumb": { "@id": `${site.url}/off-road-caravan-types/#breadcrumb` },
-                      "isPartOf": { "@type": "WebSite", "url": `${site.url}/` },
-                    },
-                    {
-                      "@type": "BreadcrumbList",
-                      "@id": `${site.url}/off-road-caravan-types/#breadcrumb`,
-                      "itemListElement": [
-                        { "@type": "ListItem", "position": 1, "name": "Home",              "item": `${site.url}/` },
-                        { "@type": "ListItem", "position": 2, "name": `Off Road ${site.plural}`, "item": `${site.url}/off-road-caravans/` },
-                        { "@type": "ListItem", "position": 3, "name": `Off Road ${site.singular} Types`, "item": `${site.url}/off-road-caravan-types/` },
-                      ],
-                    },
-                    {
-                      "@type": "FAQPage",
-                      "mainEntity": [
-                        { "@type": "Question", "name": `What are the main types of off road ${site.nounPlural}?`,                          "acceptedAnswer": { "@type": "Answer", "text": `The most commonly used categories in Australia are semi off road, full off road, extreme off road and hybrid off road ${site.nounPlural}. These are commonly used market descriptions rather than one nationally standardised classification system, so specifications should always be compared between individual models.` } },
-                        { "@type": "Question", "name": `What is the difference between semi off road and full off road ${site.nounPlural}?`,"acceptedAnswer": { "@type": "Answer", "text": `Semi off road ${site.nounPlural} are generally intended for sealed roads, gravel and maintained unsealed roads. Full off road ${site.nounPlural} typically add more substantial suspension, chassis, ground clearance, protection and off-grid equipment for more demanding remote-road travel.` } },
-                        { "@type": "Question", "name": `What is an extreme off road ${site.noun}?`,                                   "acceptedAnswer": { "@type": "Answer", "text": `Extreme off road is generally a marketing term used for highly specified ${site.nounPlural} designed around serious remote travel. They often include heavy-duty suspension, increased payload, extensive protection and larger water, battery and solar systems.` } },
-                        { "@type": "Question", "name": `What is a hybrid off road ${site.noun}?`,                                     "acceptedAnswer": { "@type": "Answer", "text": `A hybrid off road ${site.noun} combines features of an off-road camper trailer and ${site.article} ${site.noun}. Hybrids are commonly more compact than conventional ${site.nounPlural} while retaining hard-sided sleeping accommodation and many ${site.noun}-style amenities.` } },
-                        { "@type": "Question", "name": `Is a hybrid ${site.noun} better than a full off road ${site.noun}?`,               "acceptedAnswer": { "@type": "Answer", "text": `Neither type is automatically better. A hybrid generally offers more compact dimensions and manoeuvrability, while a full-size off road ${site.noun} usually offers greater internal living space and storage. The right choice depends on your travel plans.` } },
-                        { "@type": "Question", "name": `Do I need a 4WD to tow an off road ${site.noun}?`,                            "acceptedAnswer": { "@type": "Answer", "text": `Not every off road ${site.noun} automatically requires a 4WD, but the tow vehicle must be suitable for the ${site.noun}'s loaded weight and intended terrain. Remote or demanding off-road travel will generally favour appropriately rated four-wheel-drive tow vehicles.` } },
-                        { "@type": "Question", "name": `Does full off road mean ${site.article} ${site.noun} can go anywhere?`,                      "acceptedAnswer": { "@type": "Answer", "text": `No. ${Article} ${site.noun} marketed as full off road still has limits. Always check the manufacturer's intended-use statement, specifications and warranty conditions before travelling on difficult terrain.` } },
-                        { "@type": "Question", "name": `Are off road ${site.nounPlural} heavier than touring ${site.nounPlural}?`,                    "acceptedAnswer": { "@type": "Answer", "text": "They often can be because stronger chassis components, suspension, larger tyres, additional batteries, water tanks and protection systems add weight. However, weight varies significantly between models." } },
-                        { "@type": "Question", "name": `Is independent suspension essential for an off road ${site.noun}?`,            "acceptedAnswer": { "@type": "Answer", "text": `Independent suspension is common on full off-road ${site.nounPlural} because it can improve wheel movement over uneven terrain, but it is only one part of the overall design. Chassis, tyres, brakes, clearance, body construction and payload are also important.` } },
-                        { "@type": "Question", "name": `How do I know which off road ${site.noun} is right for me?`,                   "acceptedAnswer": { "@type": "Answer", "text": `Start with the roads you genuinely intend to travel, then consider your tow vehicle, ${site.noun} ATM, payload requirements, desired layout, number of travellers, off-grid duration and budget. Choose the level of off-road capability that matches those needs rather than simply buying the most heavily specified ${site.noun} available.` } },
-                      ],
-                    },
-                  ],
-                }),
-              }}
-            />
-          )}
-          {/* Off Road Caravan Market Report page JSON-LD */}
-          {isOffRoadMarketReportPage && (
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: JSON.stringify({
-                  "@context": "https://schema.org",
-                  "@graph": [
-                    {
-                      "@type": "Article",
-                      "@id": `${site.url}/off-road-caravan-market-report/`,
-                      "url": `${site.url}/off-road-caravan-market-report/`,
-                      "headline": `Australian Off Road ${site.singular} Market Report 2026`,
-                      "description": `Analysis of active off road ${site.noun} advertisements on ${site.brand} covering prices, supply, sizes, weights, brands and location data across Australia.`,
-                      "inLanguage": "en-AU",
-                      "publisher": { "@type": "Organization", "name": `${site.brand}`, "url": `${site.url}/` },
-                      "breadcrumb": { "@id": `${site.url}/off-road-caravan-market-report/#breadcrumb` },
-                    },
-                    {
-                      "@type": "BreadcrumbList",
-                      "@id": `${site.url}/off-road-caravan-market-report/#breadcrumb`,
-                      "itemListElement": [
-                        { "@type": "ListItem", "position": 1, "name": "Home",              "item": `${site.url}/` },
-                        { "@type": "ListItem", "position": 2, "name": `Off Road ${site.plural}`, "item": `${site.url}/off-road-caravans/` },
-                        { "@type": "ListItem", "position": 3, "name": "Market Report",     "item": `${site.url}/off-road-caravan-market-report/` },
-                      ],
-                    },
-                    {
-                      "@type": "FAQPage",
-                      "mainEntity": [
-                        { "@type": "Question", "name": `How much does an off road ${site.noun} cost in Australia?`,         "acceptedAnswer": { "@type": "Answer", "text": `The current median advertised asking price for off road ${site.nounPlural} on ${site.brand} varies by condition. New ${site.nounPlural} typically carry a higher median than used ${site.nounPlural}. Check the live market data on this page for current figures.` } },
-                        { "@type": "Question", "name": `Which state has the most off road ${site.nounPlural} for sale?`,         "acceptedAnswer": { "@type": "Answer", "text": `Victoria typically has the largest number of off road ${site.nounPlural} advertised on ${site.brand}, followed by New South Wales and Queensland.` } },
-                        { "@type": "Question", "name": `What is the most common off road ${site.noun} size?`,               "acceptedAnswer": { "@type": "Answer", "text": `The 18–20ft range is consistently one of the most common size categories advertised across Australian off road ${site.noun} listings.` } },
-                        { "@type": "Question", "name": "Are the prices in this report actual sale prices?",             "acceptedAnswer": { "@type": "Answer", "text": "No. All prices shown are advertised asking prices from active marketplace listings. The final amount paid may differ from the advertised price." } },
-                        { "@type": "Question", "name": `What is ATM and why does it matter for off road ${site.nounPlural}?`,    "acceptedAnswer": { "@type": "Answer", "text": `ATM means Aggregate Trailer Mass — the maximum allowable laden weight of the ${site.noun} as specified by the manufacturer. It is a key figure when determining whether a tow vehicle is rated to tow a specific ${site.noun}.` } },
-                      ],
-                    },
-                  ],
-                }),
-              }}
-            />
-          )}
           {/* Sell My Caravan page JSON-LD */}
           {isSellMyCaravanPage && (
             <script
@@ -699,7 +534,7 @@ const Article = site.article === "an" ? "An" : "A";
                           "name": `How should I price my ${site.noun}?`,
                           "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": `Check similar ${site.nounPlural} for sale before setting your price. Compare by make, model, year, condition, length, ATM, tare weight, sleeping capacity, features and location. A realistic asking price can help attract more genuine buyers.`,
+                            "text": `Check similar ${site.nounPlural} for sale before setting your price. Compare by make, model, year, kilometres, condition, features and location. A realistic asking price can help attract more genuine buyers.`,
                           },
                         },
                         {

@@ -48,11 +48,11 @@ export default function RegionSeller({ region }: RegionSellerProps) {
     },
     {
       q: `What photos should I upload when selling my ${site.noun}?`,
-      a: <p>Upload clear photos of the outside, inside, kitchen, beds, seating area, bathroom, tyres, drawbar and any included accessories. Good photos help buyers understand the condition of your {site.noun} and can increase enquiries.</p>,
+      a: <p>Upload clear photos of the outside, inside, seats, dashboard, odometer, boot, tyres and any included accessories. Good photos help buyers understand the condition of your {site.noun} and can increase enquiries.</p>,
     },
     {
       q: `How should I price my ${site.noun}?`,
-      a: <p>Check similar {site.nounPlural} for sale in {regionLabel} before setting your price. Compare by make, model, year, condition, length, ATM, tare weight, sleeping capacity, features and location. A realistic asking price can help attract more genuine buyers.</p>,
+      a: <p>Check similar {site.nounPlural} for sale in {regionLabel} before setting your price. Compare by make, model, year, kilometres, condition, features and location. A realistic asking price can help attract more genuine buyers.</p>,
     },
     {
       q: `Is it safe to sell my ${site.noun} privately online?`,
@@ -262,9 +262,9 @@ export default function RegionSeller({ region }: RegionSellerProps) {
                 <h3>What you need before listing</h3>
               </div>
               <ul className="demo-guide-card__list">
-                <li>Photos: exterior, interior, kitchen, bathroom, tyres, accessories.</li>
-                <li>Details: make, model, year, ATM, tare, length, sleeps, condition.</li>
-                <li>Extras: rego, service history, inclusions, price, location.</li>
+                <li>Photos: exterior, interior, dashboard, odometer, tyres, boot.</li>
+                <li>Details: make, model, year, variant, kilometres, transmission, fuel type.</li>
+                <li>Extras: rego, service history, condition, price, location.</li>
               </ul>
             </div>
 
@@ -275,7 +275,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
               </div>
               <ul className="demo-guide-card__list">
                 <li>Check similar {site.nounPlural} for sale in {regionLabel}.</li>
-                <li>Compare make, model, year, condition and inclusions.</li>
+                <li>Compare make, model, year, kilometres and condition.</li>
                 <li>List at a realistic price to attract more buyers.</li>
               </ul>
             </div>

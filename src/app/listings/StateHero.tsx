@@ -88,9 +88,8 @@ export default function StateHero({ title, description, loading, breadcrumbs }: 
                 dangerouslySetInnerHTML={{
                   __html: description
                     ? sanitizeRichText(description)
-                    : `<p>Browse new and used ${site.nounPlural} for sale from dealers and private sellers. ` +
-                      `Find off road ${site.nounPlural}, family ${site.nounPlural}, luxury ${site.nounPlural}, pop tops, hybrids and ` +
-                      `touring ${site.nounPlural}, and filter local inventory by price, condition, layout, berths, and travel dimensions.</p>`,
+                    : `<p>Browse new and used ${site.nounPlural} for sale from dealers and private sellers across Australia. ` +
+                      `Filter by make, model, price, year, condition and location to find the right ${site.noun} for you.</p>`,
                 }}
               />
             </>
