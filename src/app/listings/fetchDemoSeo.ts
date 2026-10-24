@@ -1,8 +1,8 @@
 import { buildApiUrl } from "./urlUtils";
 import type { FilterState } from "./StateFilterBar";
 import type { SeoV2 } from "./StateListingGrid";
+import { poolUrl } from "@/lib/apiBase";
 
-const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
 const API_KEY = process.env.MPN_API_KEY;
 
 /** Server-side counterpart to the shared pool's client fetch — same params,
@@ -11,7 +11,7 @@ const API_KEY = process.env.MPN_API_KEY;
 export async function fetchDemoSeo(filters: FilterState): Promise<SeoV2 | null> {
   try {
     const qs = buildApiUrl("?per_page=1", filters, 1);
-    const res = await fetch(`${API_BASE}/pool${qs}`, {
+    const res = await fetch(poolUrl(qs), {
       headers: {
         Accept: "application/json",
         ...(API_KEY && { "X-Secret-Key": API_KEY }),

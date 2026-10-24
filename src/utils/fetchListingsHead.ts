@@ -2,6 +2,7 @@
 import { site } from "@/config/sites";
 import { parseSlugToFilters } from "@/app/components/urlBuilder";
 import { appendFilterParams } from "@/config/filterDefs";
+import { poolUrl } from "@/lib/apiBase";
 
 /** Local shapes for the /pool response fields this file actually reads —
  * kept here instead of importing from the (removed) old listings API module. */
@@ -23,7 +24,7 @@ type ApiResponse = {
     meta_title?: string;
     meta_description?: string;
     footer_description?: string;
-    faq?: string;
+    faq?: string | { q: string; a: string }[];
   };
   pagination?: {
     total_products?: number;
@@ -38,7 +39,6 @@ type ApiResponse = {
 };
 
 const BASE_URL = site.url;
-const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
 const API_KEY = process.env.MPN_API_KEY;
 
 /** Manual TTL cache (mirrors seoCache/productCache in middleware.ts) instead of
@@ -79,7 +79,7 @@ async function fetchPoolListingsForHead(
   if (filters.search || filters.keyword) params.set("search", String(filters.search ?? filters.keyword));
   appendFilterParams(params, filters);
 
-  const url = `${API_BASE}/pool?${params.toString()}`;
+  const url = poolUrl(params.toString());
 
   const cached = headPoolCache.get(url);
   if (cached && cached.expires > Date.now()) return cached.data;
@@ -153,10 +153,11 @@ function stripHtml(raw: string): string {
 
 type Faq = { q: string; a: string };
 
-function parseFaq(raw?: string): Faq[] {
+function parseFaq(raw?: string | Faq[]): Faq[] {
   if (!raw) return [];
   try {
-    const parsed = JSON.parse(raw);
+    // The API now sends faq as a real array; older rows were a JSON string.
+    const parsed = typeof raw === "string" ? JSON.parse(raw) : raw;
     if (!Array.isArray(parsed)) return [];
     return parsed.filter((f): f is Faq => !!f?.q && !!f?.a);
   } catch {

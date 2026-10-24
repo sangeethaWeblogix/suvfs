@@ -1,5 +1,6 @@
 
 import { NextRequest, NextResponse } from "next/server";
+import { poolUrl } from "@/lib/apiBase";
 
 export const preferredRegion = "syd1";
 
@@ -47,7 +48,7 @@ export async function GET(request: NextRequest) {
   const params = searchParams.toString();
 
   // Forward all params directly to WP pool (SQL engine, no typesense).
-  const url = `${API_BASE}/pool?${params}`;
+  const url = poolUrl(params);
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 30000);
