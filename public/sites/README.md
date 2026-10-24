@@ -3,7 +3,7 @@
 Each car site reads its logo, favicon and brand colours from
 `src/config/sites.ts`. Files live in `public/sites/<key>/` for every site
 (suv, utes, peoplemovers, sedans, hatchbacks, wagons, coupes, convertibles,
-vans, 4x4, electric, hybrid):
+vans, 4x4, 4wd, electric, hybrid):
 
 - `logo.svg`: header logo.
 - `favicon.ico`: browser tab icon (32×32).

@@ -39,6 +39,17 @@ const FOUR_BY_FOUR_INDEX_RULES: SiteIndexRules = {
   priceBands: ["under-15000", "under-25000"],
 };
 
+// 4wdforsale.com.au (touring / family 4WDs, added 24 Oct 2026): "7 seater
+// 4wd", "awd/4wd suv", "4wd wagon", "diesel 4wd", "cheap 4wd". Seats and
+// drive type are already shared subjects.
+const FOUR_WD_INDEX_RULES: SiteIndexRules = {
+  subjects: {
+    body_type: ["suv", "wagon", "people-mover"],
+    fuel_type: ["diesel", "petrol", "hybrid"],
+  },
+  priceBands: ["under-15000", "under-25000"],
+};
+
 // The rest are from "Car Sites Search Keywords & Index Rules" (23 Oct 2026):
 // values Australians search on Google, whatever today's listing counts (the
 // backend imports stock daily; pages with 0 listings are noindex anyway).
@@ -121,6 +132,7 @@ const HYBRID_INDEX_RULES: SiteIndexRules = {
 /** Site key → its own index rules. */
 const SITE_INDEX_RULES: Record<string, SiteIndexRules> = {
   "4x4": FOUR_BY_FOUR_INDEX_RULES,
+  "4wd": FOUR_WD_INDEX_RULES,
   utes: UTES_INDEX_RULES,
   vans: VANS_INDEX_RULES,
   sedans: SEDANS_INDEX_RULES,

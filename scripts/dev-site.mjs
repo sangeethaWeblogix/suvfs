@@ -7,7 +7,7 @@
 import { spawn } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 
-const SITES = ["suv", "utes", "peoplemovers", "sedans", "hatchbacks", "wagons", "coupes", "convertibles", "vans", "4x4", "electric", "hybrid"];
+const SITES = ["suv", "utes", "peoplemovers", "sedans", "hatchbacks", "wagons", "coupes", "convertibles", "vans", "4x4", "4wd", "electric", "hybrid"];
 const API = "https://admin-cars.marketplacenetwork.com.au/wp-json/mpn/v1/car-sites";
 
 const [key = "suv", portArg] = process.argv.slice(2);

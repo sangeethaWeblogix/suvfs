@@ -17,7 +17,7 @@ const ROOT = resolve(import.meta.dirname, "..");
 // Initials shown on each site's favicon; the avatar repeats them.
 const INITIALS = {
   suv: "SFS", utes: "UFS", peoplemovers: "PFS", sedans: "SCS", hatchbacks: "HCS", wagons: "WCS",
-  coupes: "CCS", convertibles: "CCFS", vans: "VFS", "4x4": "4X4", electric: "ECS", hybrid: "HCFS",
+  coupes: "CCS", convertibles: "CCFS", vans: "VFS", "4x4": "4X4", "4wd": "4WD", electric: "ECS", hybrid: "HCFS",
 };
 const keys = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(SITES);
 

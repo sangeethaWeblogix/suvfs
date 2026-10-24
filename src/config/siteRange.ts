@@ -14,6 +14,7 @@ const SITE_RANGE: Record<string, string> = {
   convertibles: "2-seat and 4-seat convertibles, and automatic and manual convertibles",
   vans: "medium and long wheelbase vans, cargo and passenger vans, and diesel and electric vans",
   "4x4": "4x4 SUVs, utes, wagons and vans, and diesel and petrol 4x4s",
+  "4wd": "AWD and 4WD SUVs, wagons and people movers, 7 and 8 seat 4WDs, and 4WDs that tow 2,000 kg or more",
   electric: "electric SUVs, hatchbacks, sedans and vans, with a range of battery sizes and driving ranges",
   hybrid: "hybrid and plug-in hybrid cars, including hybrid SUVs, hatchbacks, sedans, wagons and utes",
 };
