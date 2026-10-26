@@ -90,6 +90,17 @@ def asset_images(site: dict[str, str]) -> list[Image.Image]:
         folder / "home-banner.jpg",
     ]
     existing = [path for path in candidates if path.exists()]
+    # AWD shares the same broad vehicle class as 4WD; use those photos until
+    # dedicated AWD marketing photography is added.
+    if not existing and site["key"] == "awd":
+        fallback = PUBLIC / "sites" / "4wd"
+        existing = [
+            fallback / "seller-card.jpg",
+            fallback / "buyer-guide.jpg",
+            fallback / "details-banner.jpg",
+            fallback / "home-banner.jpg",
+        ]
+        existing = [path for path in existing if path.exists()]
     if not existing:
         return [Image.new("RGB", (320, 180), "#e9eaed")] * 4
     return [cover(existing[index % len(existing)], (320, 180)) for index in range(4)]
