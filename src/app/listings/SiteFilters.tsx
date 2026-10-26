@@ -112,7 +112,8 @@ export function useSiteFacets(filters: FilterState): Facets {
   const [facets, setFacets] = useState<Facets>({});
   const params = new URLSearchParams();
   for (const k of ["state", "condition", "make", "model", "from_price", "to_price"]) {
-    if (present(filters[k])) params.set(k, String(filters[k]).toLowerCase());
+    // The API wants slugs ("western-australia"); filter state holds "western australia".
+    if (present(filters[k])) params.set(k, String(filters[k]).trim().toLowerCase().replace(/\s+/g, "-"));
   }
   appendFilterParams(params, filters);
   const qs = params.toString();
