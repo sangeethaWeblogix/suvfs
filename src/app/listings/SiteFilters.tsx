@@ -222,8 +222,8 @@ function RangeSelects({ item, from, to, onChange }: {
 }
 
 /* ── One filter's controls (shared by the button modals and the All-filters modal) ── */
-function FilterControl({ item, values, onChange, facets }: {
-  item: SchemaItem; values: Values; onChange: (patch: Values) => void; facets: Facets;
+function FilterControl({ item, values, applied, onChange, facets }: {
+  item: SchemaItem; values: Values; applied: Values; onChange: (patch: Values) => void; facets: Facets;
 }) {
   if (item.control === "multi") {
     const selected = splitMulti(values[item.param]).map((v) => v.toLowerCase());
@@ -233,8 +233,11 @@ function FilterControl({ item, values, onChange, facets }: {
     };
     // Like CFS: no counts shown, and options with no active listings are hidden
     // (kept while selected so they can be unticked; all shown until counts load).
-    const options = multiOptions(item).filter((o) =>
+    const visible = multiOptions(item).filter((o) =>
       selected.includes(o.value) || (countFor(facets, item, o.value, o.label) ?? 1) > 0);
+    // Applied options move to the top (like the make list); ticking in the modal doesn't reorder.
+    const pinned = splitMulti(applied[item.param]).map((v) => v.toLowerCase());
+    const options = [...visible.filter((o) => pinned.includes(o.value)), ...visible.filter((o) => !pinned.includes(o.value))];
     return (
       <ul className="loc-state-list">
         {options.map((o) => {
@@ -288,8 +291,15 @@ const CloseIcon = ({ onClick }: { onClick: () => void }) => (
 /** Filters shown only inside the "Filters" (all filters) modal, not as toolbar buttons. */
 const MODAL_ONLY_FIELDS = new Set(["odometer", "transmission", "braked_towing_capacity"]);
 
+/** Whether this filter has its own toolbar button (and modal). */
+export const hasOwnButton = (item: SchemaItem) => !MODAL_ONLY_FIELDS.has(item.field);
+
 /* ── Toolbar buttons + one modal per filter ── */
-export function SiteFilterButtons({ filters, onApply }: { filters: FilterState; onApply: (updates: Values) => void }) {
+export function SiteFilterButtons({ filters, onApply, openRequest, onOpenRequestHandled }: {
+  filters: FilterState; onApply: (updates: Values) => void;
+  /** Field whose modal to open (set when its active chip is clicked). */
+  openRequest?: string | null; onOpenRequestHandled?: () => void;
+}) {
   const schema = useSiteFilterSchema();
   const facets = useSiteFacets(filters);
   const [open, setOpen] = useState<SchemaItem | null>(null);
@@ -305,6 +315,13 @@ export function SiteFilterButtons({ filters, onApply }: { filters: FilterState; 
     setTemp(Object.fromEntries(keysOf(item).map((k) => [k, filters[k]])));
     setOpen(item);
   };
+
+  useEffect(() => {
+    if (!openRequest) return;
+    const item = schema.find((i) => i.field === openRequest);
+    if (item) openItem(item);
+    onOpenRequestHandled?.();
+  }, [openRequest]);
   const apply = (values: Values) => { onApply(normalise(open!, values)); setOpen(null); };
   const tempActive = open ? hasValue(open, temp) : false;
 
@@ -327,7 +344,7 @@ export function SiteFilterButtons({ filters, onApply }: { filters: FilterState; 
             <div className="filter-header"><h3>{open.label}</h3><CloseIcon onClick={() => setOpen(null)} /></div>
             <div className="filter-body">
               <div className="filter-item">
-                <FilterControl item={open} values={temp} facets={facets} onChange={(patch) => setTemp((t) => ({ ...t, ...patch }))} />
+                <FilterControl item={open} values={temp} applied={filters} facets={facets} onChange={(patch) => setTemp((t) => ({ ...t, ...patch }))} />
               </div>
             </div>
             <div className="filter-footer">
@@ -345,14 +362,14 @@ export function SiteFilterButtons({ filters, onApply }: { filters: FilterState; 
 
 /* ── Active chips ── */
 export function SiteFilterChips({ filters, onRemove, onOpen }: {
-  filters: FilterState; onRemove: (updates: Values) => void; onOpen: () => void;
+  filters: FilterState; onRemove: (updates: Values) => void; onOpen: (item: SchemaItem) => void;
 }) {
   const schema = useSiteFilterSchema();
   return (
     <>
       {schema.filter((item) => hasValue(item, filters)).map((item) => (
         <span key={item.field} className="active-chip">
-          <span className="chip-label" onClick={onOpen}>{describe(item, filters)}</span>
+          <span className="chip-label" onClick={() => onOpen(item)}>{describe(item, filters)}</span>
           <span className="chip-close" onClick={() => onRemove(Object.fromEntries(keysOf(item).map((k) => [k, undefined])))}>×</span>
         </span>
       ))}
@@ -379,9 +396,9 @@ export function SiteFilterSections({ filters, values, onChange }: {
   return (
     <>
       {schema.map((item) => (
-        <div key={item.field} className="filter-item">
+        <div key={item.field} className="filter-item" data-filter-field={item.field}>
           <h4>{item.label}</h4>
-          <FilterControl item={item} values={values} facets={facets} onChange={onChange} />
+          <FilterControl item={item} values={values} applied={filters} facets={facets} onChange={onChange} />
         </div>
       ))}
     </>
