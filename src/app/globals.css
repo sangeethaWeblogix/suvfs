@@ -782,3 +782,12 @@ small {
         display: none !important
     }
 }
+
+/* Signup/login links shown but not clickable until the seller/dealer modules are live */
+a.is-disabled,
+a.is-disabled:hover {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: auto;
+  transform: none;
+}

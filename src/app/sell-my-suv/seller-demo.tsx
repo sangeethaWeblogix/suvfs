@@ -155,11 +155,10 @@ import { site, sitePaths } from "@/config/sites";
            </div>
  
            {/* CTA — inside wrapper so it attaches seamlessly to card bottom */}
-           {/* Seller signup not ready yet — re-enable when the seller module is live
-           <a href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" className="demo-hero__cta">
+           {/* Seller signup not ready yet — disabled; restore the href when the seller module is live */}
+           <a /* href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" */ className="demo-hero__cta is-disabled" aria-disabled="true">
              List Your {site.singular} Now <i className="fa-solid fa-arrow-right" />
            </a>
-           */}
            </div>{/* end demo-price-wrapper */}
  
            
@@ -274,11 +273,10 @@ import { site, sitePaths } from "@/config/sites";
                    </li>
                  ))}
                </ul>
-               {/* Seller signup not ready yet — re-enable when the seller module is live
-               <a href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" className="demo-reach-card__cta">
+               {/* Seller signup not ready yet — disabled; restore the href when the seller module is live */}
+               <a /* href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" */ className="demo-reach-card__cta is-disabled" aria-disabled="true">
                  List My {site.singular} Now <i className="fa-solid fa-arrow-right" />
                </a>
-               */}
              </div>
  
              {/* Divider */}
@@ -479,11 +477,10 @@ import { site, sitePaths } from "@/config/sites";
              Start selling your {site.noun} today for just{" "}
              <strong>$49 (Inc. GST)</strong> — Live until sold!
            </p>
-           {/* Seller signup not ready yet — re-enable when the seller module is live
-           <a href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" className="btn white_btn">
+           {/* Seller signup not ready yet — disabled; restore the href when the seller module is live */}
+           <a /* href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" */ className="btn white_btn is-disabled" aria-disabled="true">
              List Your {site.singular} Now
            </a>
-           */}
          </div>
        </section>
 
