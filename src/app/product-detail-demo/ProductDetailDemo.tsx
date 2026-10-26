@@ -11,6 +11,7 @@ import ExploreOtherVehicles from "@/app/components/ExploreOtherVehicles";
 import { siteRange } from "@/config/siteRange";
 import "./demo.css";
 import { trackListingView } from "@/utils/engagement";
+import { getTrackingSessionId } from "@/utils/trackingSession";
 
 // WP blog titles come HTML-entity-encoded (e.g. "&#038;" for "&") — decode
 // before rendering as plain text, or entities show up literally on screen.
@@ -454,7 +455,7 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
     if (!product.slug) return;
     navigator.sendBeacon(
       "/api/track-product/",
-      new Blob([JSON.stringify({ slug: product.slug })], { type: "application/json" })
+      new Blob([JSON.stringify({ slug: product.slug, session_id: getTrackingSessionId() })], { type: "application/json" })
     );
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product.slug]);

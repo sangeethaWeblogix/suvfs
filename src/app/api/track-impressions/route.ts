@@ -6,7 +6,7 @@ const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
 // single-slug version this replaces on the listings grid).
 export async function POST(req: Request) {
   try {
-    const { ids } = await req.json();
+    const { ids, session_id } = await req.json();
     const cleanIds = Array.isArray(ids)
       ? ids.map((id) => Number(id)).filter((id) => Number.isFinite(id) && id > 0)
       : [];
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
         ...(visitorIp && { "X-Forwarded-For": visitorIp, "X-Real-IP": visitorIp }),
         ...(userAgent && { "User-Agent": userAgent }),
       },
-      body: JSON.stringify({ ids: cleanIds }),
+      body: JSON.stringify({ ids: cleanIds, ...(session_id && { session_id: String(session_id) }) }),
     });
 
     return Response.json({ success: true });

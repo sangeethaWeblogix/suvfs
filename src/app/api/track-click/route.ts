@@ -3,8 +3,9 @@ const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
 
 export async function POST(req: Request) {
   try {
-    const { slug } = await req.json();
+    const { slug, session_id } = await req.json();
     if (!slug) return Response.json({ success: false });
+    const sessionParam = session_id ? `&session_id=${encodeURIComponent(String(session_id))}` : "";
 
     // Forward the real visitor's IP/UA — without this WP records our own
     // server's IP/location instead of the actual visitor's (same fix as
@@ -16,7 +17,7 @@ export async function POST(req: Request) {
       "";
     const userAgent = req.headers.get("user-agent") || "";
 
-    await fetch(`${API_BASE}/click?slug=${encodeURIComponent(slug)}`, {
+    await fetch(`${API_BASE}/click?slug=${encodeURIComponent(slug)}${sessionParam}`, {
       method: "POST",
       headers: {
         ...(API_KEY && { "X-Secret-Key": API_KEY }),

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEnquiryForm } from "@/app/components/ListContent/enquiryform";
 import { Listing, SeoV2, buildFeaturedOrder, bucketPoolResponseCombined } from "./listingShared";
 import { useListingSpecs } from "./useListingSpecs";
+import { getTrackingSessionId } from "@/utils/trackingSession";
 
 export type { Listing, SeoV2 };
 export { buildFeaturedOrder };
@@ -28,7 +29,7 @@ function flushImpressions() {
   try {
     navigator.sendBeacon(
       "/api/track-impressions/",
-      new Blob([JSON.stringify({ ids })], { type: "application/json" })
+      new Blob([JSON.stringify({ ids, session_id: getTrackingSessionId() })], { type: "application/json" })
     );
   } catch {}
 }
@@ -284,8 +285,8 @@ export function ListingCard({
  const postTrackClick = (slug: string) => {
     try {
       navigator.sendBeacon(
-        "/api/track-click",
-        new Blob([JSON.stringify({ slug })], { type: "application/json" })
+        "/api/track-click/",
+        new Blob([JSON.stringify({ slug, session_id: getTrackingSessionId() })], { type: "application/json" })
       );
    } catch {}
    };

@@ -4,8 +4,9 @@ const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
 
 export async function POST(req: Request) {
   try {
-    const { slug } = await req.json();
+    const { slug, session_id } = await req.json();
     if (!slug) return NextResponse.json({ success: false });
+    const query = `slug=${encodeURIComponent(slug)}${session_id ? `&session_id=${encodeURIComponent(String(session_id))}` : ""}`;
 
     // Without this, WP sees the outbound request coming from our own server
     // (this route calls WP server-side) and records OUR server's IP/location
@@ -26,8 +27,8 @@ export async function POST(req: Request) {
     };
 
     await Promise.all([
-      fetch(`${API_BASE}/click?slug=${encodeURIComponent(slug)}`, { method: "POST", headers }),
-      fetch(`${API_BASE}/impression?slug=${encodeURIComponent(slug)}`, { method: "POST", headers }),
+      fetch(`${API_BASE}/click?${query}`, { method: "POST", headers }),
+      fetch(`${API_BASE}/impression?${query}`, { method: "POST", headers }),
     ]);
 
     return NextResponse.json({ success: true });
