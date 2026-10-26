@@ -13,7 +13,8 @@ const RELATED_SITE_KEYS: Record<string, [string, string, string]> = {
   convertibles: ["coupes", "sedans", "electric"],
   vans: ["utes", "peoplemovers", "suv"],
   "4x4": ["suv", "utes", "4wd"],
-  "4wd": ["4x4", "suv", "peoplemovers"],
+  "4wd": ["4x4", "awd", "peoplemovers"],
+  awd: ["suv", "4wd", "wagons"],
   electric: ["hybrid", "hatchbacks", "suv"],
   hybrid: ["electric", "suv", "sedans"],
 };
@@ -31,6 +32,7 @@ export const RELATED_SITE_BENEFITS: Record<string, string> = {
   vans: "business and cargo versatility",
   "4x4": "off-road capability",
   "4wd": "family touring and towing",
+  awd: "all-weather road confidence",
   electric: "efficient electric driving",
   hybrid: "improved fuel efficiency",
 };

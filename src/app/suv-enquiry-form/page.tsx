@@ -17,6 +17,7 @@ const TYPE_FIELD: Record<string, string> = {
   vans: "wheelbase",
   "4x4": "body_type",
   "4wd": "body_type",
+  awd: "body_type",
   electric: "body_type",
   hybrid: "body_type",
 };

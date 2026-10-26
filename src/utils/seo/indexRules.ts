@@ -40,12 +40,24 @@ const FOUR_BY_FOUR_INDEX_RULES: SiteIndexRules = {
 };
 
 // 4wdforsale.com.au (touring / family 4WDs, added 24 Oct 2026): "7 seater
-// 4wd", "awd/4wd suv", "4wd wagon", "diesel 4wd", "cheap 4wd". Seats and
-// drive type are already shared subjects.
+// 4wd", "4wd suv", "4wd wagon", "diesel 4wd", "cheap 4wd". Seats are
+// already a shared subject. Since 26 Oct 2026 the site is 4WD only (AWD has
+// its own site) and has no drive type filter.
 const FOUR_WD_INDEX_RULES: SiteIndexRules = {
   subjects: {
     body_type: ["suv", "wagon", "people-mover"],
     fuel_type: ["diesel", "petrol", "hybrid"],
+  },
+  priceBands: ["under-15000", "under-25000"],
+};
+
+// awdforsale.com.au (every AWD car, added 26 Oct 2026): "awd suv", "awd
+// wagon", "awd hatchback", "awd sedan", "awd hybrid", "electric awd",
+// "cheap awd". Body size and seats are already shared subjects.
+const AWD_INDEX_RULES: SiteIndexRules = {
+  subjects: {
+    body_type: ["suv", "wagon", "hatchback", "sedan", "ute"],
+    fuel_type: ["petrol", "diesel", "hybrid", "plug-in-hybrid", "electric"],
   },
   priceBands: ["under-15000", "under-25000"],
 };
@@ -133,6 +145,7 @@ const HYBRID_INDEX_RULES: SiteIndexRules = {
 const SITE_INDEX_RULES: Record<string, SiteIndexRules> = {
   "4x4": FOUR_BY_FOUR_INDEX_RULES,
   "4wd": FOUR_WD_INDEX_RULES,
+  awd: AWD_INDEX_RULES,
   utes: UTES_INDEX_RULES,
   vans: VANS_INDEX_RULES,
   sedans: SEDANS_INDEX_RULES,

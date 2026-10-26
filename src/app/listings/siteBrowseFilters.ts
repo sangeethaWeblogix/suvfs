@@ -93,7 +93,8 @@ export const SITE_FILTER_PRIORITIES: Record<string, string[]> = {
   convertibles: ["drive_type", "seats", "make"],
   vans: ["fuel_type", "seats", "make"],
   "4x4": ["body_type", "make", "fuel_type", "seats"],
-  "4wd": ["seats", "body_type", "drive_type", "make"],
+  "4wd": ["seats", "body_type", "make"],
+  awd: ["body_type", "fuel_type", "seats", "make"],
   electric: ["body_type", "body_size", "drive_type", "make"],
   hybrid: ["body_type", "fuel_type", "drive_type", "seats", "make"],
 };

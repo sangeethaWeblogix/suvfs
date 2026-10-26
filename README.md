@@ -1,6 +1,6 @@
 # Car sites (multi-site)
 
-Next.js app that serves all 13 car marketplace sites (SuvForSale, UtesForSale,
+Next.js app that serves all 14 car marketplace sites (SuvForSale, UtesForSale,
 4x4ForSale, …). Each site is its own Vercel project building from the
 `multi-site` branch; the site is chosen by `NEXT_PUBLIC_SITE_KEY`
 (see [src/config/sites.ts](src/config/sites.ts)).
@@ -9,17 +9,17 @@ Run one site locally: `npm run site -- <key>` (e.g. `npm run site -- utes`).
 
 ## Deploying: choose which sites rebuild
 
-Every push to `multi-site` would otherwise rebuild **all 13 sites**. To build
+Every push to `multi-site` would otherwise rebuild **all 14 sites**. To build
 only the sites your change is for, put a `[sites: …]` tag in the commit message:
 
 | Commit message                          | Sites that rebuild |
 |-----------------------------------------|--------------------|
 | `Fix banner text [sites: suv]`          | SUV only           |
 | `Update filters [sites: utes, 4x4]`     | Utes and 4x4       |
-| `Footer fix [sites: all]` *or no tag*   | All 13             |
+| `Footer fix [sites: all]` *or no tag*   | All 14             |
 
 Site keys: `suv` `utes` `peoplemovers` `sedans` `hatchbacks` `wagons` `coupes`
-`convertibles` `vans` `4x4` `4wd` `electric` `hybrid`
+`convertibles` `vans` `4x4` `4wd` `awd` `electric` `hybrid`
 
 - Put the tag on the **last commit** of the push. Only that message is checked.
 - With no tag, all sites build. The only exception is a push that changes only
