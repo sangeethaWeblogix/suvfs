@@ -208,8 +208,8 @@ export default function StateSeller({ state }: StateSellerProps) {
           <div className="demo-reach-row">
             {/* Device image */}
             <div className="demo-reach-device">
-              <img src="/images/sell-mockup-desktop.jpg" className="img-fluid d-none d-lg-block" alt={`${site.singular} For Sale Desktop`} />
-              <img src="/images/sell-mockup-mobile.jpg" className="img-fluid d-block d-lg-none" alt={`${site.singular} For Sale Mobile`} />
+              <img src={site.sellMockupDesktop} className="img-fluid d-none d-lg-block" alt={`${site.singular} For Sale Desktop`} />
+              <img src={site.sellMockupMobile} className="img-fluid d-block d-lg-none" alt={`${site.singular} For Sale Mobile`} />
             </div>
 
             {/* Pricing + FAQ card */}
@@ -365,7 +365,7 @@ export default function StateSeller({ state }: StateSellerProps) {
         <div className="container">
           <div className="row align-items-center g-4">
             <div className="col-md-6">
-              <img src="/images/sell-mockup-desktop.jpg" className="img-fluid demo-why-img" alt={`${demonym} ${site.noun} buyers`} />
+              <img src={site.sellMockupDesktop} className="img-fluid demo-why-img" alt={`${demonym} ${site.noun} buyers`} />
             </div>
             <div className="col-md-6">
               <h2>Why {demonym} {site.singular} Buyers Visit {site.brand} Every Month</h2>

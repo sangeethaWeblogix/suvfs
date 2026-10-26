@@ -276,12 +276,12 @@ const DealerLandingPage = () => {
           <div className="row">
             <div className="col-lg-7 images-box">
               <img
-                src="/images/dealer-mockup-desktop.jpg"
+                src={site.dealerMockupDesktop}
                 className="img-fluid d-none d-lg-block desktop-img"
                 alt={`${site.title} Desktop`}
               />
               <img
-                src="/images/dealer-mockup-mobile.png"
+                src={site.dealerMockupMobile}
                 className="img-fluid d-block d-lg-none mobile-img"
                 alt={`${site.title} Mobile`}
               />

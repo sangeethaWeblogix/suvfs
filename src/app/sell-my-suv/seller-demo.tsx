@@ -245,8 +245,8 @@ import { site, sitePaths } from "@/config/sites";
            <div className="demo-reach-row">
            {/* Device image */}
            <div className="demo-reach-device">
-             <img src="/images/sell-mockup-desktop.jpg" className="img-fluid d-none d-lg-block" alt={`${site.singular} For Sale Desktop`} />
-             <img src="/images/sell-mockup-mobile.jpg" className="img-fluid d-block d-lg-none" alt={`${site.singular} For Sale Mobile`} />
+             <img src={site.sellMockupDesktop} className="img-fluid d-none d-lg-block" alt={`${site.singular} For Sale Desktop`} />
+             <img src={site.sellMockupMobile} className="img-fluid d-block d-lg-none" alt={`${site.singular} For Sale Mobile`} />
            </div>
  
            {/* Pricing + FAQ card */}
@@ -410,7 +410,7 @@ import { site, sitePaths } from "@/config/sites";
          <div className="container">
            <div className="row align-items-center g-4">
              <div className="col-md-6">
-               <img src="/images/sell-mockup-desktop.jpg" className="img-fluid demo-why-img" alt={`${site.singular} buyers`} />
+               <img src={site.sellMockupDesktop} className="img-fluid demo-why-img" alt={`${site.singular} buyers`} />
              </div>
              <div className="col-md-6">
                <h2>Why Thousands of {site.singular} Buyers Visit our website Every Month</h2>

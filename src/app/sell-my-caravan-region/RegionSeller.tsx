@@ -171,8 +171,8 @@ export default function RegionSeller({ region }: RegionSellerProps) {
           <div className="demo-reach-row">
           {/* Device image */}
           <div className="demo-reach-device">
-            <img src="/images/sell-mockup-desktop.jpg" className="img-fluid d-none d-lg-block" alt={`${site.singular} For Sale Desktop`} />
-            <img src="/images/sell-mockup-mobile.jpg" className="img-fluid d-block d-lg-none" alt={`${site.singular} For Sale Mobile`} />
+            <img src={site.sellMockupDesktop} className="img-fluid d-none d-lg-block" alt={`${site.singular} For Sale Desktop`} />
+            <img src={site.sellMockupMobile} className="img-fluid d-block d-lg-none" alt={`${site.singular} For Sale Mobile`} />
           </div>
 
           {/* Pricing + FAQ card */}
@@ -333,7 +333,7 @@ export default function RegionSeller({ region }: RegionSellerProps) {
         <div className="container">
           <div className="row align-items-center g-4">
             <div className="col-md-6">
-              <img src="/images/sell-mockup-desktop.jpg" className="img-fluid demo-why-img" alt={`${regionLabel} ${site.noun} buyers`} />
+              <img src={site.sellMockupDesktop} className="img-fluid demo-why-img" alt={`${regionLabel} ${site.noun} buyers`} />
             </div>
             <div className="col-md-6">
               <h2>Why {regionLabel} {site.singular} Buyers Visit {site.brand} Every Month</h2>

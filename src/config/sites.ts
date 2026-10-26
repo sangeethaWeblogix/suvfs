@@ -51,6 +51,11 @@ export type SiteConfig = {
   detailsBannerImage: string;
   /** Solid side-profile vehicle glyph (square SVG) for feature icons, under /public. */
   vehicleIcon: string;
+  /** Branded marketplace device mockups used on seller and dealer landing pages. */
+  sellMockupDesktop: string;
+  sellMockupMobile: string;
+  dealerMockupDesktop: string;
+  dealerMockupMobile: string;
   /** 1200×630 social share image and PNG logo for schema.org, under /public
    * (made from `logo` by scripts/generate-site-seo-images.mjs). */
   ogImage: string;
@@ -111,6 +116,10 @@ export const SITES: Record<string, SiteConfig> = Object.fromEntries(
       sellerCardImage: s.sellerCardImage ?? `/sites/${s.key}/seller-card.jpg`,
       detailsBannerImage: s.detailsBannerImage ?? `/sites/${s.key}/details-banner.jpg`,
       vehicleIcon: s.vehicleIcon ?? `/sites/${s.key}/vehicle-icon.svg`,
+      sellMockupDesktop: `/sites/${s.key}/sell-mockup-desktop.jpg`,
+      sellMockupMobile: `/sites/${s.key}/sell-mockup-mobile.jpg`,
+      dealerMockupDesktop: `/sites/${s.key}/dealer-mockup-desktop.jpg`,
+      dealerMockupMobile: `/sites/${s.key}/dealer-mockup-mobile.jpg`,
       ogImage: `/sites/${s.key}/og-image.png`,
       schemaLogo: `/sites/${s.key}/logo.png`,
       avatar: `/sites/${s.key}/avatar.png`,
