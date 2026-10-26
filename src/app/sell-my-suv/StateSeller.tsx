@@ -142,9 +142,11 @@ export default function StateSeller({ state }: StateSellerProps) {
             </div>
 
             {/* CTA */}
+            {/* Seller signup not ready yet — re-enable when the seller module is live
             <a href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" className="demo-hero__cta">
               List Your {site.singular} Now <i className="fa-solid fa-arrow-right" />
             </a>
+            */}
           </div>{/* end demo-price-wrapper */}
 
         </div>
@@ -234,9 +236,11 @@ export default function StateSeller({ state }: StateSellerProps) {
                     </li>
                   ))}
                 </ul>
+                {/* Seller signup not ready yet — re-enable when the seller module is live
                 <a href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" className="demo-reach-card__cta">
                   List Your {site.singular} Now <i className="fa-solid fa-arrow-right" />
                 </a>
+                */}
               </div>
 
               <div className="demo-reach-card__divider" />
@@ -424,9 +428,11 @@ export default function StateSeller({ state }: StateSellerProps) {
             Start selling your {site.noun} in {stateLabel} today for just{" "}
             <strong>$49 (Inc. GST)</strong> — live until sold.
           </p>
+          {/* Seller signup not ready yet — re-enable when the seller module is live
           <a href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" className="btn white_btn">
             List Your {site.singular} Now
           </a>
+          */}
           <p className="demo-cta-strip__alt-link">
             Not in {abbr}? Sell your {site.noun} across Australia <a href={sitePaths.sell}>here</a>.
           </p>

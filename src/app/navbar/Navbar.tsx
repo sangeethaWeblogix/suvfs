@@ -106,12 +106,14 @@ export default function Navbar() {
                 <li className="nav-item">
                   <a className="nav-link" href="/dealer-advertising/">Dealer Advertising</a>
                 </li>
-                
+
+                {/* Login hidden until the seller/dealer modules are live
                 <li className="nav-item login">
                   <a className="nav-link" href="https://cars.marketplacenetwork.com.au/seller-login/">
                     <i className="bi bi-person-fill"></i> Login
                   </a>
                 </li>
+                */}
               </ul>
 
               <div className="ham-menu-wrapper" ref={hamRef}>
@@ -196,9 +198,11 @@ export default function Navbar() {
               <div className="sidenav-cta">
                 <a href={sitePaths.sell} className="sidenav-cta-link" onClick={closeNav}>Sell My {site.singular}</a>
                 <a href="/dealer-advertising/" className="sidenav-cta-link" onClick={closeNav}>Dealer Advertising</a>
+                {/* Login hidden until the seller/dealer modules are live
                 <a href="https://cars.marketplacenetwork.com.au/seller-login/" className="sidenav-cta-login" onClick={closeNav}>
                   <i className="bi bi-person-fill"></i> Login
                 </a>
+                */}
               </div>
             </div>
           </div>

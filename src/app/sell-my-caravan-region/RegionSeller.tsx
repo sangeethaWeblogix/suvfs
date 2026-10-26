@@ -129,9 +129,11 @@ export default function RegionSeller({ region }: RegionSellerProps) {
           </div>
 
           {/* CTA — inside wrapper so it attaches seamlessly to card bottom */}
+          {/* Seller signup not ready yet — re-enable when the seller module is live
           <a href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" className="demo-hero__cta">
             List Your {site.singular} Now <i className="fa-solid fa-arrow-right" />
           </a>
+          */}
           </div>{/* end demo-price-wrapper */}
 
         </div>
@@ -198,9 +200,11 @@ export default function RegionSeller({ region }: RegionSellerProps) {
                   </li>
                 ))}
               </ul>
+              {/* Seller signup not ready yet — re-enable when the seller module is live
               <a href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" className="demo-reach-card__cta">
                 List Your {site.singular} Now <i className="fa-solid fa-arrow-right" />
               </a>
+              */}
             </div>
 
             {/* Divider */}
@@ -394,9 +398,11 @@ export default function RegionSeller({ region }: RegionSellerProps) {
             Start selling your {site.noun} in {regionLabel} today for just{" "}
             <strong>$49 (Inc. GST)</strong> — live until sold.
           </p>
+          {/* Seller signup not ready yet — re-enable when the seller module is live
           <a href="https://seller.marketplacenetwork.com.au/caravan-seller-subscription/" className="btn white_btn">
             List Your {site.singular} Now
           </a>
+          */}
           <p className="demo-cta-strip__alt-link">
             Not in {regionLabel}? Sell your {site.noun} across {stateLabel} <a href={`${sitePaths.sell}${stateSlug}/`}>here</a>.
           </p>

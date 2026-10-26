@@ -86,12 +86,14 @@ const DealerLandingPage = () => {
                   enquiries from high-intent {site.noun} buyers.
                 </p>
 
+                {/* Dealer signup not ready yet — re-enable when the dealer module is live
                 <a
                   href="https://cars.marketplacenetwork.com.au/car-dealer-subscription/"
                   className="btn white_btn"
                 >
                   Start Dealer Signup
                 </a>
+                */}
               </div>
             </div>
           </div>
@@ -304,12 +306,14 @@ const DealerLandingPage = () => {
                     <li>No contracts</li>
                   </ul>
 
+                  {/* Dealer signup not ready yet — re-enable when the dealer module is live
                   <a
                     href="https://cars.marketplacenetwork.com.au/car-dealer-subscription/"
                     className="btn white_btn"
                   >
                     Start Dealer Signup
                   </a>
+                  */}
                 </div>
               </div>
             </div>

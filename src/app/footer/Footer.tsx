@@ -52,13 +52,15 @@ const POPULAR_LOCATIONS = [
 const SELLER_LINKS = [
   { label: `Sell My ${site.singular}`, href: sitePaths.sell },
   { label: "Sell by Location", href: "#footer-sell-by-location" },
-  { label: "Seller Login", href: "https://cars.marketplacenetwork.com.au/seller-login/" },
+  // Hidden until the seller module is live
+  // { label: "Seller Login", href: "https://cars.marketplacenetwork.com.au/seller-login/" },
 ];
 
 const DEALER_LINKS = [
-  { label: "Dealer Login", href: "https://cars.marketplacenetwork.com.au/seller-login/" },
+  // Hidden until the dealer module is live
+  // { label: "Dealer Login", href: "https://cars.marketplacenetwork.com.au/seller-login/" },
   { label: "Dealer Advertising", href: "/dealer-advertising/" },
-  { label: "Dealer Sign Up", href: "https://cars.marketplacenetwork.com.au/car-dealer-subscription/" },
+  // { label: "Dealer Sign Up", href: "https://cars.marketplacenetwork.com.au/car-dealer-subscription/" },
 ];
 
 const GUIDE_LINKS = [
