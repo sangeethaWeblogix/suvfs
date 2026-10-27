@@ -41,7 +41,7 @@ export async function generateMetadata({
       description: "Your enquiry was submitted successfully.",
       robots: "noindex, nofollow",
       verification: {
-        google: "6tT6MT6AJgGromLaqvdnyyDQouJXq0VHS-7HC194xEo", // ✅ Google site verification
+        google: site.googleVerification, // ✅ Google site verification
       },
       alternates: {
         canonical: `${site.url}/${slug}/`,
@@ -74,7 +74,7 @@ export async function generateMetadata({
       canonical: canonicalUrl, // ✅ canonical link
     },
     verification: {
-      google: "6tT6MT6AJgGromLaqvdnyyDQouJXq0VHS-7HC194xEo", // ✅ this auto generates <meta name="google-site-verification" />
+      google: site.googleVerification, // ✅ this auto generates <meta name="google-site-verification" />
     },
     openGraph: {
       title,

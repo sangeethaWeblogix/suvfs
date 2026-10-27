@@ -62,11 +62,17 @@ export type SiteConfig = {
   schemaLogo: string;
   /** 400×400 initials tile for the author avatar, under /public (same script). */
   avatar: string;
+  /** Google Search Console HTML-tag verification token for this site. */
+  googleVerification: string;
 };
 
 // Network-wide brand colours; a site can override them in its SEEDS entry.
 const PRIMARY_COLOR = "#4736FE";
 const SECONDARY_COLOR = "#252525";
+
+// Network-wide Search Console token (copied from CFS); a site with its own
+// Search Console property overrides it in its SEEDS entry.
+const GOOGLE_VERIFICATION = "6tT6MT6AJgGromLaqvdnyyDQouJXq0VHS-7HC194xEo";
 
 /** "#4736FE" → "71, 54, 254" */
 function hexToRgb(hex: string): string {
@@ -78,7 +84,7 @@ function hexToRgb(hex: string): string {
 // `color` / `secondaryColor` / `logo` / `favicon` override the defaults
 // (see public/sites/README.md).
 type SiteSeed = Pick<SiteConfig, "key" | "domain" | "brand" | "singular" | "plural" | "noun" | "nounPlural" | "homeIntro" | "article" | "slug"> &
-  Partial<Pick<SiteConfig, "color" | "secondaryColor" | "logo" | "favicon" | "homeBanner" | "homeBannerMobile" | "buyerGuideImage" | "sellerCardImage" | "detailsBannerImage" | "vehicleIcon">>;
+  Partial<Pick<SiteConfig, "color" | "secondaryColor" | "logo" | "favicon" | "homeBanner" | "homeBannerMobile" | "buyerGuideImage" | "sellerCardImage" | "detailsBannerImage" | "vehicleIcon" | "googleVerification">>;
 
 const SEEDS: SiteSeed[] = [
   { key: "suv",          domain: "suvforsale.com.au",          brand: "SuvForSale.com.au",          singular: "SUV",          plural: "SUVs",          noun: "SUV",          nounPlural: "SUVs",          homeIntro: "Browse thousands of new and used SUVs for sale across Australia from trusted dealers and private sellers. Compare compact, family, off-road, hybrid and luxury SUVs to find the right vehicle for your lifestyle.", article: "an", slug: "suv" },
@@ -94,7 +100,7 @@ const SEEDS: SiteSeed[] = [
   { key: "4wd",          domain: "4wdforsale.com.au",          brand: "4wdForSale.com.au",          singular: "4WD",          plural: "4WDs",          noun: "4WD",          nounPlural: "4WDs",          homeIntro: "Browse new and used 4WDs for sale across Australia from trusted dealers and private sellers. Compare large 4WD SUVs, wagons and 7-seat people movers with strong towing capacity to find the right vehicle for family touring and towing.", article: "a",  slug: "4wd" },
   { key: "awd",          domain: "awdforsale.com.au",          brand: "awdForSale.com.au",          singular: "AWD",          plural: "AWDs",          noun: "AWD",          nounPlural: "AWDs",          homeIntro: "Browse new and used all-wheel-drive vehicles for sale across Australia from trusted dealers and private sellers. Compare AWD SUVs, wagons, hatchbacks and performance cars to find confident traction, everyday comfort and the right vehicle for every road.", article: "an", slug: "awd" },
   { key: "electric",     domain: "electriccarsforsale.au",    brand: "ElectricCarsForSale.au",     singular: "Electric Car", plural: "Electric Cars", noun: "electric car", nounPlural: "electric cars", homeIntro: "Browse new and used electric cars for sale across Australia from trusted dealers and private sellers. Compare hatchbacks, sedans, SUVs and performance EVs by range, charging and features to find the right electric car for you.", article: "an", slug: "electric-car" },
-  { key: "hybrid",       domain: "hybridcarsforsale.com.au",   brand: "HybridCarsForSale.com.au",   singular: "Hybrid Car",   plural: "Hybrid Cars",   noun: "hybrid car",   nounPlural: "hybrid cars",   homeIntro: "Browse new and used hybrid cars for sale across Australia from trusted dealers and private sellers. Compare mild hybrid, full hybrid and plug-in hybrid models to find the right balance of efficiency and performance.", article: "a",  slug: "hybrid-car" },
+  { key: "hybrid",       domain: "hybridcarsforsale.com.au",   brand: "HybridCarsForSale.com.au",   singular: "Hybrid Car",   plural: "Hybrid Cars",   noun: "hybrid car",   nounPlural: "hybrid cars",   homeIntro: "Browse new and used hybrid cars for sale across Australia from trusted dealers and private sellers. Compare mild hybrid, full hybrid and plug-in hybrid models to find the right balance of efficiency and performance.", article: "a",  slug: "hybrid-car", googleVerification: "bc2L5Uoz_kZ1xXahenqp7R7oHro9aXm2Z9c2afSxVKY" },
 ];
 
 export const SITES: Record<string, SiteConfig> = Object.fromEntries(
@@ -124,6 +130,7 @@ export const SITES: Record<string, SiteConfig> = Object.fromEntries(
       ogImage: `/sites/${s.key}/og-image.png`,
       schemaLogo: `/sites/${s.key}/logo.png`,
       avatar: `/sites/${s.key}/avatar.png`,
+      googleVerification: s.googleVerification ?? GOOGLE_VERIFICATION,
     } satisfies SiteConfig,
   ]),
 );

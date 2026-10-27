@@ -82,7 +82,7 @@
      description,
      robots: seo.index === "noindex" ? "noindex, nofollow" : "index, follow",
      alternates: { canonical: canonicalUrl },
-     verification: { google: "6tT6MT6AJgGromLaqvdnyyDQouJXq0VHS-7HC194xEo" },
+     verification: { google: site.googleVerification },
      openGraph: {
        title,
        description,

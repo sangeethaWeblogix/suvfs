@@ -14,7 +14,7 @@ import { ReactNode } from "react";
    icons: { icon: site.favicon },
    robots: "index",
    verification: {
-     google: "6tT6MT6AJgGromLaqvdnyyDQouJXq0VHS-7HC194xEo", // ✅ this auto generates <meta name="google-site-verification" />
+     google: site.googleVerification, // ✅ this auto generates <meta name="google-site-verification" />
    },
    alternates: {
     canonical: `${site.url}/privacy-policy/`,

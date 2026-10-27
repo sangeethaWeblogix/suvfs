@@ -61,7 +61,7 @@ const Article = site.article === "an" ? "An" : "A";
     icons: { icon: site.favicon },
     // robots: "index, follow",
     verification: {
-      google: "6tT6MT6AJgGromLaqvdnyyDQouJXq0VHS-7HC194xEo", // ✅ this auto generates <meta name="google-site-verification" />
+      google: site.googleVerification, // ✅ this auto generates <meta name="google-site-verification" />
     },
     other: {
       "google-adsense-account": "ca-pub-7836481431078711",

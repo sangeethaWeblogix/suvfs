@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   icons: { icon: site.favicon },
   robots: "index, follow",
   verification: {
-    google: "6tT6MT6AJgGromLaqvdnyyDQouJXq0VHS-7HC194xEo",
+    google: site.googleVerification,
   },
   alternates: {
     canonical: site.url,
