@@ -216,7 +216,7 @@ const DealerLandingPage = () => {
                       <tr>
                         <th className="text-start">Comparison Table</th>
                         <th className="brand-col">
-                          {site.brand.replace(/\.com\.au$/, "")}<wbr />.com.au
+                          {site.brand.slice(0, site.brand.indexOf("."))}<wbr />{site.brand.slice(site.brand.indexOf("."))}
                         </th>
                         <th>Other Marketplaces</th>
                       </tr>
