@@ -1,6 +1,6 @@
 'use client'
 
-import { site } from "@/config/sites";
+import { SITES } from "@/config/sites";
 
 export default function CookiePolicy() {
   return (
@@ -26,7 +26,9 @@ export default function CookiePolicy() {
               </p>
 
               <ul>
-                <li>{site.domain}</li>
+                {Object.values(SITES).map((s) => (
+                  <li key={s.key}>{s.domain}</li>
+                ))}
                 
               </ul>
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { site } from "@/config/sites";
+import { SITES } from "@/config/sites";
 
 export default function PrivacyPolicy() {
   return (
@@ -27,7 +27,9 @@ export default function PrivacyPolicy() {
               <p>These websites may include, but are not limited to:</p>
 
               <ul>
-                <li>{site.domain}</li>
+                {Object.values(SITES).map((s) => (
+                  <li key={s.key}>{s.domain}</li>
+                ))}
                 
               </ul>
 

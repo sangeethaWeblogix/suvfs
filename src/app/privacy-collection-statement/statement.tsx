@@ -1,6 +1,6 @@
 'use client'
 
-import { site } from "@/config/sites";
+import { SITES } from "@/config/sites";
 
 import Link from 'next/link'
 
@@ -34,7 +34,9 @@ export default function PrivacyCollectionStatement() {
               <p>These platforms may include, but are not limited to:</p>
 
               <ul>
-                <li>{site.domain}</li>
+                {Object.values(SITES).map((s) => (
+                  <li key={s.key}>{s.domain}</li>
+                ))}
                 
               </ul>
 
