@@ -1,5 +1,6 @@
    import { NextResponse } from "next/server";
 import { site } from "@/config/sites";
+import { canonicalSitemapPaths } from "@/utils/seo/sitemapPaths";
  
  const SITE_URL =
    process.env.NEXT_PUBLIC_SITE_URL ||
@@ -29,7 +30,7 @@ import { site } from "@/config/sites";
  
      
  
-     const urls = data.paths
+     const urls = canonicalSitemapPaths(data.paths)
        .map(
          (path: string) => `
    <url>

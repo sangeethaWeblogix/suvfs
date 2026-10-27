@@ -149,11 +149,12 @@ export function parseSlugToFilters(
       }
     }
 
-    // make / model fallback – only if safe and no search is present
+    // make / model fallback – only if safe and no search is present.
+    // A numeric segment is accepted only as a model ("polestar/2").
     if (
       !hasReservedSuffix(part) &&
       !part.includes("=") &&
-      isNaN(Number(part)) &&
+      (isNaN(Number(part)) || !!filters.make) &&
       !filters.search // prevent make/model if search is there
     ) {
       if (!filters.make) {
