@@ -122,7 +122,9 @@ export function buildCarPageJsonLd(
         })),
       },
       {
-        "@type": "Car",
+        // Google only reads a bare Car for its (US-only) vehicle listings —
+        // the Product type makes it eligible for product snippets / merchant listings.
+        "@type": ["Product", "Car"],
         "@id": vehicleId,
         name,
         ...(shortText(raw.description) && { description: shortText(raw.description) }),

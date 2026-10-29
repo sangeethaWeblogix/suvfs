@@ -179,7 +179,9 @@ function buildCarListItem(item: Item, position: number) {
     position,
     url,
     item: {
-      "@type": "Car",
+      // Google only reads a bare Car for its (US-only) vehicle listings —
+      // the Product type makes it eligible for product snippets / merchant listings.
+      "@type": ["Product", "Car"],
       "@id": `${url}#vehicle`,
       name: item.title,
       url,
