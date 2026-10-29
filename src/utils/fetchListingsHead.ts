@@ -10,6 +10,10 @@ import { websiteLd, organizationLd, WEBSITE_ID } from "@/utils/seo/siteSchema";
 type Item = {
   title: string;
   slug?: string;
+  condition?: string;
+  regular_price?: number | string | null;
+  sale_price?: number | string | null;
+  r2_thumbnails?: string[];
 };
 
 type ApiResponse = {
@@ -157,10 +161,45 @@ function parseFaq(raw?: string | Faq[]): Faq[] {
   }
 }
 
+/** A car on the listings page: name, photos, price and condition — only what
+ * /pool returns, so no per-car API calls. The @id is the product page's
+ * vehicle node, where the full Car schema (brand, model, specs) lives. */
+function buildCarListItem(item: Item, position: number) {
+  const url = `${BASE_URL}/product/${item.slug}/`;
+  const rawPrice = item.sale_price != null && item.sale_price !== "" ? item.sale_price : item.regular_price;
+  const price = String(rawPrice ?? "").replace(/[^0-9.]/g, "");
+  const images = (item.r2_thumbnails ?? []).slice(0, 5);
+  const condition =
+    item.condition?.toLowerCase() === "new"
+      ? "https://schema.org/NewCondition"
+      : "https://schema.org/UsedCondition";
+
+  return {
+    "@type": "ListItem",
+    position,
+    url,
+    item: {
+      "@type": "Car",
+      "@id": `${url}#vehicle`,
+      name: item.title,
+      url,
+      ...(images.length > 0 && { image: images }),
+      itemCondition: condition,
+      offers: {
+        "@type": "Offer",
+        url,
+        ...(price && { price }),
+        priceCurrency: "AUD",
+        availability: "https://schema.org/InStock",
+        itemCondition: condition,
+      },
+    },
+  };
+}
+
 /** One @graph for the listings page: site, organisation, the page itself,
  * its breadcrumb, the cars shown on it and its FAQ (only when the page has
- * one), linked by @id. Cars are links only — their full Car schema is on
- * each product page. */
+ * one), linked by @id. */
 export function buildListingsJsonLd(
   response: ApiResponse,
   pageUrl: string,
@@ -168,7 +207,6 @@ export function buildListingsJsonLd(
 ) {
   const seo = response?.seo_v2;
   const pageTitle = seo?.h1 || seo?.meta_title || `${site.plural} for Sale in Australia`;
-  const totalProducts = response?.pagination?.total_products ?? 0;
 
   // Exclusive listings can also appear in the main buckets — list each car once.
   const seen = new Set<string>();
@@ -200,7 +238,6 @@ export function buildListingsJsonLd(
         name: pageTitle,
         ...(pageDescription && { description: pageDescription }),
         inLanguage: "en-AU",
-        ...(totalProducts > 0 && { numberOfItems: totalProducts }),
         isPartOf: { "@id": WEBSITE_ID },
         breadcrumb: { "@id": breadcrumbId },
         ...(allProducts.length > 0 && { mainEntity: { "@id": listId } }),
@@ -222,11 +259,7 @@ export function buildListingsJsonLd(
               "@id": listId,
               itemListOrder: "https://schema.org/ItemListUnordered",
               numberOfItems: allProducts.length,
-              itemListElement: allProducts.map((item, idx) => ({
-                "@type": "ListItem",
-                position: idx + 1,
-                url: `${BASE_URL}/product/${item.slug}/`,
-              })),
+              itemListElement: allProducts.map((item, idx) => buildCarListItem(item, idx + 1)),
             },
           ]
         : []),
