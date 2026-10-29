@@ -5,7 +5,7 @@ import { SiteSchemaProvider } from "./SiteFilters";
 
 export const metadata: Metadata = {
   title: `${site.plural} for Sale in Victoria | ${site.brand}`,
-  description: `Browse new and used ${site.nounPlural} for sale in Victoria from dealers and private sellers.`,
+  description: site.metaDescription,
 };
 
 export default async function Layout({ children }: { children: React.ReactNode }) {

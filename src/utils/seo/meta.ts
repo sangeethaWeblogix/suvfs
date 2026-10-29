@@ -2,6 +2,7 @@
 import { site } from "@/config/sites";
 import type { Metadata } from "next";
 import { isIndexableListingPath } from "./indexRules";
+import fetchListingsForHead from "@/utils/fetchListingsHead";
 
 // ─── Title generation from parsed filters (no API call needed) ───
 const STATE_NAMES: Record<string, string> = {
@@ -63,12 +64,15 @@ export function generateTitleFromFilters(
 
   if (parsed.make) parts.push(titleCase(parsed.make));
   if (parsed.model) parts.push(titleCase(parsed.model));
+  // Same rules as the API formula: a model page names the model alone, and
+  // a page without a condition filter ends in "| New & Used".
+  else parts.push(site.homeTitleTerm);
 
-  const baseNoun = parts.length > 0 ? `${parts.join(" ")} ${site.plural}` : site.plural;
   const price = getPriceText(parsed);
   const pricePart = price ? ` ${price}` : "";
+  const newAndUsed = parsed.condition ? "" : " | New & Used";
 
-  return `${baseNoun} for Sale${pricePart}${locationSuffix}`;
+  return `${parts.join(" ")} for Sale${pricePart}${locationSuffix}${newAndUsed}`;
 }
 
 export async function metaFromSlug(
@@ -118,9 +122,12 @@ export async function metaFromSlug(
     canonical += `?${qs}`;
   }
 
-  const title = generateTitleFromFilters(parsed);
-  const description =
-    `Browse new and used ${site.nounPlural} for sale across Australia. Compare prices, makes and models from dealers and private sellers.`;
+  // The API's formula title ("Toyota Sedan Cars for Sale in Australia | New & Used")
+  // matches the page's H1; the root layout fetches the same pool response for
+  // its JSON-LD, so this is a cache hit. Local formula only if the API fails.
+  const head = await fetchListingsForHead(urlPath);
+  const title = head?.seo_v2?.meta_title || generateTitleFromFilters(parsed);
+  const description = site.metaDescription;
 
   return {
     title: { absolute: title },

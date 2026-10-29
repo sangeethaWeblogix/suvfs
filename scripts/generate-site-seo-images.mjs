@@ -16,8 +16,8 @@ const ROOT = resolve(import.meta.dirname, "..");
 
 // Initials shown on each site's favicon; the avatar repeats them.
 const INITIALS = {
-  suv: "SFS", utes: "UFS", peoplemovers: "PFS", sedans: "SCS", hatchbacks: "HCS", wagons: "WCS",
-  coupes: "CCS", convertibles: "CCFS", vans: "VFS", "4x4": "4X4", "4wd": "4WD", awd: "AWD", electric: "ECS", hybrid: "HCFS",
+  suv: "SFS", utes: "UFS", peoplemovers: "PFS", sedans: "SFS", hatchbacks: "HFS", wagons: "WFS",
+  coupes: "COS", convertibles: "CFS", vans: "VFS", "4x4": "4X4", "4wd": "4WD", awd: "AWD", electric: "ECS", hybrid: "HCFS",
 };
 const keys = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(SITES);
 

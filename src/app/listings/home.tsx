@@ -163,25 +163,18 @@ export default function StateHome({
   //   </div>
   // );
 
-  // Push the API's seo_v2 into the browser tab title + meta description.
+  // Push the API's seo_v2 title into the browser tab. The meta description is
+  // the same on every page of the site (site.metaDescription), so the API's
+  // per-filter meta_description is not used.
   useEffect(() => {
     if (!seo) {
       // Filter changed and the new page's SEO hasn't loaded yet — fall back
       // to the generic title instead of leaving the previous page's title
       // showing (stale tab title while the new fetch is in flight).
-      document.title = `${site.title} – Australia's Marketplace for New & Used ${site.plural}`;
+      document.title = site.homeTitle;
       return;
     }
     if (seo.meta_title) document.title = seo.meta_title;
-    if (seo.meta_description) {
-      let tag = document.querySelector('meta[name="description"]');
-      if (!tag) {
-        tag = document.createElement("meta");
-        tag.setAttribute("name", "description");
-        document.head.appendChild(tag);
-      }
-      tag.setAttribute("content", seo.meta_description);
-    }
   }, [seo]);
 
   // Restore page from ?clickid= on mount (hard refresh / shared link) before

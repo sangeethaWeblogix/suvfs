@@ -288,7 +288,7 @@ const Article = site.article === "an" ? "An" : "A";
       if (isListingSlug && xRobots === "noindex") {
         slugRobots = "noindex";
         slugCanonical = `${site.url}/listings/${slugParts.join("/")}/`;
-        slugDescription = `Browse new and used ${site.nounPlural} for sale across Australia. Compare prices, makes and models from dealers and private sellers.`;
+        slugDescription = site.metaDescription;
       } else {
         // try {
           // All SEO from metaFromSlug — pure computation, no API call
@@ -302,7 +302,7 @@ const Article = site.article === "an" ? "An" : "A";
           if (meta.title && typeof meta.title === "object" && "absolute" in meta.title) {
             slugTitle = (meta.title as { absolute: string }).absolute;
           }
-          slugDescription = `Browse new and used ${site.nounPlural} for sale across Australia. Compare prices, makes and models from dealers and private sellers.`;
+          slugDescription = site.metaDescription;
         // } catch {
         //   const parts = slugParts
         //     .map((p: string) =>

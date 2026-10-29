@@ -3,8 +3,8 @@ import { ReactNode } from "react";
 import { site } from "@/config/sites";
  
 export const metadata: Metadata = {
-  title: `${site.title} – Australia’s Marketplace for New & Used ${site.plural}`,
-  description: `Browse new and used ${site.nounPlural} for sale across Australia. Compare prices, makes and models from dealers and private sellers.`,
+  title: site.homeTitle,
+  description: site.metaDescription,
   robots: "noindex, nofollow",
   alternates: {
     canonical: `${site.url}/home-demo/`,

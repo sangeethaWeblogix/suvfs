@@ -15,8 +15,8 @@ const FEATURED_SEED_MAX = 15;
 
 export const dynamic = "force-dynamic";
 
-const HOME_TITLE = `${site.title} – New & Used ${site.singular} Marketplace in Australia`;
-const HOME_DESCRIPTION = `Browse new and used ${site.nounPlural} for sale across Australia. Compare prices, makes and models from dealers and private sellers.`;
+const HOME_TITLE = site.homeTitle;
+const HOME_DESCRIPTION = site.metaDescription;
 
 export const metadata: Metadata = {
   title: {

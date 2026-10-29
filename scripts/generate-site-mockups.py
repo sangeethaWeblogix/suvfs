@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import sys
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont, ImageOps
@@ -293,7 +294,9 @@ def save_jpeg(image: Image.Image, path: Path):
 
 
 def main():
-    sites = load_sites()
+    # Optional site keys narrow the run: python scripts/generate-site-mockups.py sedans coupes
+    only = set(sys.argv[1:])
+    sites = [s for s in load_sites() if not only or s["key"] in only]
     for site in sites:
         images = asset_images(site)
         folder = PUBLIC / "sites" / site["key"]

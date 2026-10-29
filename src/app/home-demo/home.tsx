@@ -144,7 +144,7 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
       <section className="hd-banner">
         <div className="container">
           <h1 className="hd-banner__title">
-            {site.plural} for Sale <span className="hd-banner__title--orange">Across Australia</span>
+            {site.plural} for Sale <span className="hd-banner__title--orange">in Australia</span>
           </h1>
           <div className="hd-banner__divider">
             <span className="hd-banner__divider-line" />
