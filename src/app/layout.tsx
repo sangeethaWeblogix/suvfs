@@ -293,21 +293,14 @@ const Article = site.article === "an" ? "An" : "A";
 
     // Listings JSON-LD — fetched here so both schemas render inside <head>
     // Second call hits Next.js data cache (revalidate: 3600), no extra network round-trip.
-    let listingsCollectionLd: object | null = null;
-    let listingsSearchResultsLd: object | null = null;
+    let listingsJsonLd: object | null = null;
     if (isMainListings || isListingSlug) {
       const normalizedPath = pathname.endsWith("/") ? pathname : pathname + "/";
       const listingsData = await fetchListingsForHead(normalizedPath);
       if (listingsData) {
         const crumbs = buildBreadcrumbs(pathname);
         const pageUrl = `${site.url}${normalizedPath}`;
-        const { collectionPageLd, searchResultsLd } = buildListingsJsonLd(
-          listingsData,
-          pageUrl,
-          crumbs
-        );
-        listingsCollectionLd = collectionPageLd;
-        listingsSearchResultsLd = searchResultsLd;
+        listingsJsonLd = await buildListingsJsonLd(listingsData, pageUrl, crumbs);
       }
     }
 
@@ -757,18 +750,11 @@ const Article = site.article === "an" ? "An" : "A";
               }}
             />
           )}
-          {/* Listings page JSON-LD — CollectionPage + BreadcrumbList */}
-          {listingsCollectionLd && (
+          {/* Listings page JSON-LD — one @graph: WebSite, Organization, CollectionPage, BreadcrumbList, ItemList of cars, FAQPage */}
+          {listingsJsonLd && (
             <script
               type="application/ld+json"
-              dangerouslySetInnerHTML={{ __html: JSON.stringify(listingsCollectionLd) }}
-            />
-          )}
-          {/* Listings page JSON-LD — SearchResultsPage with product list */}
-          {listingsSearchResultsLd && (
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{ __html: JSON.stringify(listingsSearchResultsLd) }}
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(listingsJsonLd) }}
             />
           )}
           {/* ✅ Google Tag Manager (Head) */}
