@@ -3,7 +3,7 @@ import { getLocationLabel } from "@/app/home-demo/locationUtils";
 import { websiteLd, organizationLd, WEBSITE_ID } from "@/utils/seo/siteSchema";
 
 // JSON-LD for a product (car) details page, built from the raw product detail
-// API record: ItemPage + BreadcrumbList + Car, plus the shared WebSite and
+// API record: ItemPage + BreadcrumbList + Vehicle, plus the shared WebSite and
 // Organization. Fields the API leaves empty are omitted.
 
 type RawProduct = Record<string, any>;
@@ -122,9 +122,11 @@ export function buildCarPageJsonLd(
         })),
       },
       {
-        // Google only reads a bare Car for its (US-only) vehicle listings —
-        // the Product type makes it eligible for product snippets / merchant listings.
-        "@type": ["Product", "Car"],
+        // Vehicle, not Car: Google's Rich Results Test gives a Vehicle both
+        // product snippets and merchant listings, but a Car (even typed
+        // ["Product", "Car"]) only product snippets. Every property used here
+        // is a Vehicle property.
+        "@type": "Vehicle",
         "@id": vehicleId,
         name,
         ...(shortText(raw.description) && { description: shortText(raw.description) }),

@@ -10,6 +10,7 @@ import { websiteLd, organizationLd, WEBSITE_ID } from "@/utils/seo/siteSchema";
 type Item = {
   title: string;
   slug?: string;
+  sku?: string;
   condition?: string;
   regular_price?: number | string | null;
   sale_price?: number | string | null;
@@ -179,12 +180,14 @@ function buildCarListItem(item: Item, position: number) {
     position,
     url,
     item: {
-      // Google only reads a bare Car for its (US-only) vehicle listings —
-      // the Product type makes it eligible for product snippets / merchant listings.
-      "@type": ["Product", "Car"],
+      // Vehicle, not Car: Google's Rich Results Test gives a Vehicle both
+      // product snippets and merchant listings, but a Car (even typed
+      // ["Product", "Car"]) only product snippets.
+      "@type": "Vehicle",
       "@id": `${url}#vehicle`,
       name: item.title,
       url,
+      ...(item.sku && { sku: item.sku }),
       ...(images.length > 0 && { image: images }),
       itemCondition: condition,
       offers: {
