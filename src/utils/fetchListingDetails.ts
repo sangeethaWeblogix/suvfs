@@ -1,7 +1,6 @@
 // Per-listing vehicle details from the product detail API. The /pool listings
 // API only returns title/price/condition/location, so listing cards (via
-// /api/listing-specs) and the listings JSON-LD both fill the rest from here.
-// Server-side only; both callers share this in-memory cache.
+// /api/listing-specs) fill the rest from here. Server-side only, cached in memory.
 
 const API_BASE = process.env.MPN_API_BASE || process.env.NEXT_PUBLIC_CFS_API_BASE;
 const API_KEY = process.env.MPN_API_KEY;

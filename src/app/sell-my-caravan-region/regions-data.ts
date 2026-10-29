@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { site, sitePaths } from "@/config/sites";
+import { websiteLd, organizationLd, ORGANIZATION_ID, WEBSITE_ID } from "@/utils/seo/siteSchema";
 
 export interface StateInfo {
   slug: string;
@@ -135,6 +136,8 @@ export function buildRegionJsonLd(region: RegionInfo) {
   return {
     "@context": "https://schema.org",
     "@graph": [
+      websiteLd(),
+      organizationLd(),
       {
         "@type": "WebPage",
         "@id": `${pageUrl}#webpage`,
@@ -142,7 +145,7 @@ export function buildRegionJsonLd(region: RegionInfo) {
         name: `Sell My ${site.singular} in ${region.label} | List Until Sold for $49`,
         description: `Sell your ${site.noun} in ${region.label}, ${region.state.label} with ${site.brand}. List your ${site.noun} for a one-time $49 fee, keep 100% of the sale price, and stay live until sold.`,
         inLanguage: "en-AU",
-        isPartOf: { "@id": `${BASE_URL}/#website` },
+        isPartOf: { "@id": WEBSITE_ID },
       },
       {
         "@type": "Service",
@@ -150,11 +153,7 @@ export function buildRegionJsonLd(region: RegionInfo) {
         name: `Private ${site.singular} Listing Service`,
         url: pageUrl,
         description: `List your ${site.noun} for sale on ${site.brand} for a one-time $49 fee. No commissions, no subscriptions, live until sold.`,
-        provider: {
-          "@type": "Organization",
-          name: site.title,
-          url: BASE_URL,
-        },
+        provider: { "@id": ORGANIZATION_ID },
         areaServed: {
           "@type": "Place",
           name: `${region.label}, ${region.state.label}`,

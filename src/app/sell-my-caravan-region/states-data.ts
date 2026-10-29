@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { site, sitePaths } from "@/config/sites";
+import { websiteLd, organizationLd, ORGANIZATION_ID, WEBSITE_ID } from "@/utils/seo/siteSchema";
 
 const BASE_URL = site.url;
 
@@ -79,6 +80,8 @@ export function buildStateJsonLd(state: StateData) {
   return {
     "@context": "https://schema.org",
     "@graph": [
+      websiteLd(),
+      organizationLd(),
       {
         "@type": "WebPage",
         "@id": `${pageUrl}#webpage`,
@@ -86,7 +89,7 @@ export function buildStateJsonLd(state: StateData) {
         name: `Sell My ${site.singular} in ${state.label} | List Until Sold for $49`,
         description: `Sell your ${site.noun} in ${state.label} with ${site.brand}. List for a one-time $49 fee, keep 100% of the sale price, and stay live until sold.`,
         inLanguage: "en-AU",
-        isPartOf: { "@id": `${BASE_URL}/#website` },
+        isPartOf: { "@id": WEBSITE_ID },
       },
       {
         "@type": "Service",
@@ -95,11 +98,7 @@ export function buildStateJsonLd(state: StateData) {
         url: pageUrl,
         description:
           `List your ${site.noun} for sale on ${site.brand} for a one-time $49 fee. No commissions, no subscriptions, live until sold.`,
-        provider: {
-          "@type": "Organization",
-          name: site.title,
-          url: BASE_URL,
-        },
+        provider: { "@id": ORGANIZATION_ID },
         areaServed: {
           "@type": "State",
           name: state.label,

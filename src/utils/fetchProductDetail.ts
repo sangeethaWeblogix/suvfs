@@ -99,6 +99,8 @@ function normalizeMpnProduct(raw: any) {
       metatitle: raw.seo_title || "",
       metadescription: raw.seo_description || "",
     },
+    // Unmodified API record — the root layout builds the Car JSON-LD from it.
+    raw,
   };
 }
 

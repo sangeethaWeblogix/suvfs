@@ -31,6 +31,8 @@ import { getRegionByStateAndPageSlug, buildRegionJsonLd } from "./sell-my-carava
 import { fetchBlogDetail } from "./[slug]/fetchBlogDetail";
 import { isNonBlogSlug } from "@/utils/isNonBlogSlug";
 import { fetchProductDetail } from "@/utils/fetchProductDetail";
+import { buildCarPageJsonLd } from "@/utils/seo/carSchema";
+import { websiteLd, organizationLd, ORGANIZATION_ID } from "@/utils/seo/siteSchema";
 
 // Top-level route segments that are NOT handled by the [slug] blog-details
 // catch-all — used to avoid firing a wasted fetchBlogDetail() call for them.
@@ -106,6 +108,8 @@ const Article = site.article === "an" ? "An" : "A";
     if (isBlogPage) {
       const data = await fetchBlogs(1);
       blogPageJsonLd = [
+        { "@context": "https://schema.org", ...websiteLd() },
+        { "@context": "https://schema.org", ...organizationLd() },
         {
           "@context": "https://schema.org",
           "@type": "Blog",
@@ -113,11 +117,7 @@ const Article = site.article === "an" ? "An" : "A";
           description:
             `Latest news, in-depth reviews, and expert advice on the latest in the ${site.noun} market.`,
           url: `${site.url}/blog/`,
-          publisher: {
-            "@type": "Organization",
-            name: `${site.plural} for Sale`,
-            url: `${site.url}`,
-          },
+          publisher: { "@id": ORGANIZATION_ID },
         },
         {
           "@context": "https://schema.org",
@@ -177,6 +177,8 @@ const Article = site.article === "an" ? "An" : "A";
         };
 
         blogDetailJsonLd = [
+          { "@context": "https://schema.org", ...websiteLd() },
+          { "@context": "https://schema.org", ...organizationLd() },
           {
             "@context": "https://schema.org",
             "@type": "BlogPosting",
@@ -185,7 +187,7 @@ const Article = site.article === "an" ? "An" : "A";
             description: blogDescription,
             image: bannerImage,
             author: { "@type": "Person", name: "Tom" },
-            publisher: { "@type": "Organization", name: `${site.plural} for Sale` },
+            publisher: { "@id": ORGANIZATION_ID },
             datePublished: safeIso(post.date),
             dateModified: safeIso(post.date),
           },
@@ -253,41 +255,10 @@ const Article = site.article === "an" ? "An" : "A";
       // fetchProductDetail is React-cache()'d, so this reuses the same call
       // product/[slug]/page.tsx makes for its own render — no extra network round-trip.
       const data = await fetchProductDetail(slug);
-      const pd = (data as any)?.data?.product_details ?? {};
-      const seo = (data as any)?.seo ?? (data as any)?.product?.seo ?? {};
-      const pdName = seo.metatitle || seo.meta_title || pd.name || (data as any)?.name || "";
-      const pdDesc = seo.metadescription || seo.meta_description || pd.short_description || (data as any)?.short_description || "";
-      const canonicalUrl = `${site.url}/product/${slug}/`;
-
-      const rawImages = pd.image_url ?? pd.images ?? [];
-      const images: string[] = (Array.isArray(rawImages) ? rawImages : [rawImages]).filter(Boolean);
-
-      const rawPrice = pd.sale_price || pd.regular_price || pd.price;
-      const priceStr = rawPrice ? String(rawPrice).replace(/[^0-9.]/g, "") : null;
-
-      if (pdName) {
-        productJsonLd = {
-          "@context": "https://schema.org",
-          "@type": "Product",
-          name: pdName,
-          ...(pdDesc && { description: pdDesc }),
-          ...(images.length > 0 && { image: images }),
-          ...(pd.make && { brand: { "@type": "Brand", name: pd.make } }),
-          ...(pd.condition && {
-            itemCondition:
-              String(pd.condition).toLowerCase() === "new"
-                ? "https://schema.org/NewCondition"
-                : "https://schema.org/UsedCondition",
-          }),
-          offers: {
-            "@type": "Offer",
-            priceCurrency: "AUD",
-            ...(priceStr && { price: priceStr }),
-            availability: "https://schema.org/InStock",
-            url: canonicalUrl,
-            seller: { "@type": "Organization", name: `${site.title}` },
-          },
-        };
+      const raw = (data as any)?.raw;
+      if (raw?.slug && raw?.title) {
+        const seo = (data as any)?.seo ?? {};
+        productJsonLd = buildCarPageJsonLd(raw, { title: seo.metatitle, description: seo.metadescription });
       }
     }
 
@@ -300,7 +271,7 @@ const Article = site.article === "an" ? "An" : "A";
       if (listingsData) {
         const crumbs = buildBreadcrumbs(pathname);
         const pageUrl = `${site.url}${normalizedPath}`;
-        listingsJsonLd = await buildListingsJsonLd(listingsData, pageUrl, crumbs);
+        listingsJsonLd = buildListingsJsonLd(listingsData, pageUrl, crumbs);
       }
     }
 
@@ -391,40 +362,7 @@ const Article = site.article === "an" ? "An" : "A";
               dangerouslySetInnerHTML={{
                 __html: JSON.stringify({
                   "@context": "https://schema.org",
-                  "@graph": [
-                    {
-                      "@type": "WebSite",
-                      "@id": `${site.url}/#website`,
-                      "url": `${site.url}`,
-                      "name": `${site.title}`,
-                      "description": `Australia's Marketplace for New & Used ${site.plural}`,
-                      "inLanguage": "en-AU",
-                      "potentialAction": {
-                        "@type": "SearchAction",
-                        "target": {
-                          "@type": "EntryPoint",
-                          "urlTemplate": `${site.url}/listings/{search_term_string}-search/`,
-                        },
-                        "query-input": "required name=search_term_string",
-                      },
-                    },
-                    {
-                      "@type": "Organization",
-                      "@id": `${site.url}/#organization`,
-                      "name": `${site.title}`,
-                      "url": `${site.url}`,
-                      "logo": {
-                        "@type": "ImageObject",
-                        "url": `${site.url}${site.schemaLogo}`,
-                      },
-                      "contactPoint": {
-                        "@type": "ContactPoint",
-                        "contactType": "customer support",
-                        "areaServed": "AU",
-                        "availableLanguage": "English",
-                      },
-                    },
-                  ],
+                  "@graph": [websiteLd(), organizationLd()],
                 }),
               }}
             />
@@ -437,6 +375,8 @@ const Article = site.article === "an" ? "An" : "A";
                 __html: JSON.stringify({
                   "@context": "https://schema.org",
                   "@graph": [
+                    websiteLd(),
+                    organizationLd(),
                     {
                       "@type": "WebPage",
                       "@id": `${site.url}${sitePaths.sell}#webpage`,
@@ -454,11 +394,7 @@ const Article = site.article === "an" ? "An" : "A";
                       "url": `${site.url}${sitePaths.sell}`,
                       "description":
                         `List your ${site.noun} for sale on ${site.brand} for a one-time $49 fee. No commissions, no subscriptions, live until sold.`,
-                      "provider": {
-                        "@type": "Organization",
-                        "name": `${site.title}`,
-                        "url": `${site.url}`,
-                      },
+                      "provider": { "@id": ORGANIZATION_ID },
                       "areaServed": {
                         "@type": "Country",
                         "name": "Australia",
@@ -565,6 +501,8 @@ const Article = site.article === "an" ? "An" : "A";
               dangerouslySetInnerHTML={{
                 __html: JSON.stringify(
                   [
+                    { "@context": "https://schema.org", ...websiteLd() },
+                    { "@context": "https://schema.org", ...organizationLd() },
                     {
                       "@context": "https://schema.org",
                       "@type": "WebPage",
@@ -588,11 +526,7 @@ const Article = site.article === "an" ? "An" : "A";
                       "@context": "https://schema.org",
                       "@type": "Service",
                       "name": `${site.singular} Dealer Advertising`,
-                      "provider": {
-                        "@type": "Organization",
-                        "name": `${site.title}`,
-                        "url": `${site.url}/`,
-                      },
+                      "provider": { "@id": ORGANIZATION_ID },
                       "description": `Unlimited ${site.noun} listings on ${site.brand} for $299/month (inc. GST). Zero lead fees, no lock-in contracts, automatic inventory sync.`,
                       "url": `${site.url}/dealer-advertising/`,
                       "areaServed": { "@type": "Country", "name": "Australia" },
@@ -690,33 +624,8 @@ const Article = site.article === "an" ? "An" : "A";
                 __html: JSON.stringify({
                   "@context": "https://schema.org",
                   "@graph": [
-                    {
-                      "@type": "WebSite",
-                      "@id": `${site.url}/#website`,
-                      "url": `${site.url}/`,
-                      "name": `${site.title}`,
-                      "alternateName": `${site.title} by Marketplace Network`,
-                    },
-                    {
-                      "@type": "Organization",
-                      "@id": `${site.url}/#organization`,
-                      "name": "Marketplace Network Pty Ltd",
-                      "legalName": "Marketplace Network Pty Ltd",
-                      "taxID": "ABN 70 694 987 052",
-                      "url": `${site.url}/`,
-                      "logo": {
-                        "@type": "ImageObject",
-                        "url": `${site.url}${site.schemaLogo}`,
-                        "caption": `${site.title} by Marketplace Network`,
-                      },
-                      "contactPoint": {
-                        "@type": "ContactPoint",
-                        "contactType": "customer service",
-                        "url": `${site.url}/contact/`,
-                        "availableLanguage": "en",
-                        "areaServed": "AU",
-                      },
-                    },
+                    websiteLd(),
+                    organizationLd(),
                     {
                       "@type": "ContactPage",
                       "@id": `${site.url}/contact/#webpage`,

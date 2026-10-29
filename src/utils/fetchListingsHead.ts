@@ -3,19 +3,13 @@ import { site } from "@/config/sites";
 import { parseSlugToFilters } from "@/app/components/urlBuilder";
 import { appendFilterParams } from "@/config/filterDefs";
 import { poolUrl } from "@/lib/apiBase";
-import { fetchListingDetails, type ListingDetail } from "@/utils/fetchListingDetails";
-import { getLocationLabel } from "@/app/home-demo/locationUtils";
+import { websiteLd, organizationLd, WEBSITE_ID } from "@/utils/seo/siteSchema";
 
 /** Local shapes for the /pool response fields this file actually reads —
  * kept here instead of importing from the (removed) old listings API module. */
 type Item = {
   title: string;
   slug?: string;
-  condition?: string;
-  state?: string;
-  regular_price?: number | string | null;
-  sale_price?: number | string | null;
-  r2_thumbnails?: string[];
 };
 
 type ApiResponse = {
@@ -135,10 +129,6 @@ async function fetchPoolListingsForHead(
   return data;
 }
 
-function cleanPrice(raw: string): string {
-  return raw.replace(/[$,]/g, "").trim();
-}
-
 function stripHtml(raw: string): string {
   return raw
     .replace(/<\/(h[1-6]|p|div|li|br)\s*>/gi, ". ")
@@ -167,103 +157,17 @@ function parseFaq(raw?: string | Faq[]): Faq[] {
   }
 }
 
-/** How long the JSON-LD waits on the product detail API per listing before
- * falling back to the /pool fields alone — it holds up the page's <head>. */
-const DETAIL_TIMEOUT_MS = 3000;
-
-const DRIVE_WHEEL_CONFIG: Record<string, string> = {
-  FWD: "https://schema.org/FrontWheelDriveConfiguration",
-  RWD: "https://schema.org/RearWheelDriveConfiguration",
-  AWD: "https://schema.org/AllWheelDriveConfiguration",
-  "4WD": "https://schema.org/FourWheelDriveConfiguration",
-  "4X4": "https://schema.org/FourWheelDriveConfiguration",
-};
-
-const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
-/** Leading integer of a spec like "89300 km" / "5 Seats" / "89,300 km". */
-function specNumber(raw?: string): number | undefined {
-  const m = raw?.replace(/,/g, "").match(/\d+/);
-  return m ? Number(m[0]) : undefined;
-}
-
-function buildProductListItem(item: Item, position: number, d: ListingDetail | null | undefined) {
-  const rawPrice = item.sale_price != null && item.sale_price !== "" ? item.sale_price : item.regular_price;
-  const price = cleanPrice(String(rawPrice ?? ""));
-  const url = `${BASE_URL}/product/${item.slug}/`;
-  const images = (item.r2_thumbnails ?? [])
-    .slice(0, 5)
-    .map((src) => ({ "@type": "ImageObject", url: src }));
-
-  // Titles are free text from the feed ("Byd Atto 3", "Mg Qs") — use the
-  // make's canonical spelling so name and brand agree.
-  const name = d?.make
-    ? item.title.replace(new RegExp(`\\b${escapeRegExp(d.make)}\\b`, "i"), d.make)
-    : item.title;
-  const condition =
-    item.condition?.toLowerCase() === "new"
-      ? "https://schema.org/NewCondition"
-      : "https://schema.org/UsedCondition";
-  const odometer = specNumber(d?.odometer);
-  const seats = specNumber(d?.seats);
-  const driveConfig = d?.drive_type ? DRIVE_WHEEL_CONFIG[d.drive_type.toUpperCase()] : undefined;
-  const region = item.state ? getLocationLabel({ state: item.state }) : "";
-
-  return {
-    "@type": "ListItem",
-    position,
-    item: {
-      "@type": "Car",
-      url,
-      name,
-      ...(d?.make && { brand: { "@type": "Brand", name: d.make } }),
-      ...(d?.model && { model: d.model }),
-      ...(d?.variant && { vehicleConfiguration: d.variant }),
-      ...(d?.year && { vehicleModelDate: d.year }),
-      ...(d?.body_type && { bodyType: d.body_type }),
-      itemCondition: condition,
-      ...(odometer != null && {
-        mileageFromOdometer: { "@type": "QuantitativeValue", value: odometer, unitCode: "KMT" },
-      }),
-      ...(d?.fuel_type && { fuelType: d.fuel_type }),
-      // "Automatic (AT)" → "Automatic"
-      ...(d?.transmission && { vehicleTransmission: d.transmission.replace(/\s*\(.*\)\s*$/, "") }),
-      ...(driveConfig && { driveWheelConfiguration: driveConfig }),
-      ...(seats && { vehicleSeatingCapacity: seats }),
-      ...(images.length > 0 && { image: images }),
-      offers: {
-        "@type": "Offer",
-        url,
-        priceCurrency: "AUD",
-        ...(price && { price }),
-        itemCondition: condition,
-        availability: "https://schema.org/InStock",
-        ...(region && {
-          availableAtOrFrom: {
-            "@type": "Place",
-            address: {
-              "@type": "PostalAddress",
-              ...(d?.suburb && { addressLocality: d.suburb.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) }),
-              addressRegion: region,
-              addressCountry: "AU",
-            },
-          },
-        }),
-      },
-    },
-  };
-}
-
 /** One @graph for the listings page: site, organisation, the page itself,
- * its breadcrumb, the cars shown on it and its FAQ, linked by @id. */
-export async function buildListingsJsonLd(
+ * its breadcrumb, the cars shown on it and its FAQ (only when the page has
+ * one), linked by @id. Cars are links only — their full Car schema is on
+ * each product page. */
+export function buildListingsJsonLd(
   response: ApiResponse,
   pageUrl: string,
   breadcrumbs: { name: string; url: string }[]
 ) {
   const seo = response?.seo_v2;
   const pageTitle = seo?.h1 || seo?.meta_title || `${site.plural} for Sale in Australia`;
-  const listTitle = (seo?.meta_title || pageTitle).split(" | ")[0];
   const totalProducts = response?.pagination?.total_products ?? 0;
 
   // Exclusive listings can also appear in the main buckets — list each car once.
@@ -273,11 +177,6 @@ export async function buildListingsJsonLd(
     ...(response.data?.emp_exclusive_products || []),
   ].filter((p) => p.slug && !seen.has(p.slug) && seen.add(p.slug));
 
-  const details = await fetchListingDetails(
-    allProducts.map((p) => p.slug as string),
-    DETAIL_TIMEOUT_MS
-  );
-
   // The hero text shown on the page — first paragraph of the short description.
   const shortDescription = seo?.short_description
     ? stripHtml(seo.short_description.split(/\n\s*\n/)[0])
@@ -286,43 +185,23 @@ export async function buildListingsJsonLd(
 
   const faqItems = parseFaq(seo?.faq);
 
-  const websiteId = `${BASE_URL}/#website`;
-  const organizationId = `${BASE_URL}/#organization`;
   const breadcrumbId = `${pageUrl}#breadcrumb`;
   const listId = `${pageUrl}#listings`;
 
   return {
     "@context": "https://schema.org",
     "@graph": [
-      {
-        "@type": "WebSite",
-        "@id": websiteId,
-        url: `${BASE_URL}/`,
-        name: site.brand,
-        inLanguage: "en-AU",
-        publisher: { "@id": organizationId },
-      },
-      {
-        "@type": "Organization",
-        "@id": organizationId,
-        name: "Marketplace Network Pty Ltd",
-        url: `${BASE_URL}/`,
-        logo: {
-          "@type": "ImageObject",
-          url: `${BASE_URL}${site.schemaLogo}`,
-          caption: `${site.title} by Marketplace Network`,
-        },
-      },
+      websiteLd(),
+      organizationLd(),
       {
         "@type": "CollectionPage",
         "@id": pageUrl,
         url: pageUrl,
         name: pageTitle,
-        inLanguage: "en-AU",
         ...(pageDescription && { description: pageDescription }),
+        inLanguage: "en-AU",
         ...(totalProducts > 0 && { numberOfItems: totalProducts }),
-        audience: { "@type": "Audience", audienceType: `${site.singular} buyers` },
-        isPartOf: { "@id": websiteId },
+        isPartOf: { "@id": WEBSITE_ID },
         breadcrumb: { "@id": breadcrumbId },
         ...(allProducts.length > 0 && { mainEntity: { "@id": listId } }),
       },
@@ -341,12 +220,13 @@ export async function buildListingsJsonLd(
             {
               "@type": "ItemList",
               "@id": listId,
-              name: listTitle,
               itemListOrder: "https://schema.org/ItemListUnordered",
               numberOfItems: allProducts.length,
-              itemListElement: allProducts.map((item, idx) =>
-                buildProductListItem(item, idx + 1, details[item.slug as string])
-              ),
+              itemListElement: allProducts.map((item, idx) => ({
+                "@type": "ListItem",
+                position: idx + 1,
+                url: `${BASE_URL}/product/${item.slug}/`,
+              })),
             },
           ]
         : []),
