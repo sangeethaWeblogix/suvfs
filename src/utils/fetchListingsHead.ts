@@ -2,7 +2,8 @@ import { cache } from "react";
 import { site } from "@/config/sites";
 import { parseSlugToFilters } from "@/app/components/urlBuilder";
 import { appendFilterParams } from "@/config/filterDefs";
-import { poolUrl } from "@/lib/apiBase";
+import { poolUrl, API_BASE } from "@/lib/apiBase";
+import { parseCarTitle, type NameItem } from "@/utils/seo/parseCarTitle";
 import { websiteLd, organizationLd, WEBSITE_ID } from "@/utils/seo/siteSchema";
 import { getLocationLabel } from "@/app/home-demo/locationUtils";
 
@@ -168,11 +169,47 @@ function parseFaq(raw?: string | Faq[]): Faq[] {
   }
 }
 
+const DRIVE_WHEEL_CONFIG: Record<string, string> = {
+  FWD: "https://schema.org/FrontWheelDriveConfiguration",
+  RWD: "https://schema.org/RearWheelDriveConfiguration",
+  AWD: "https://schema.org/AllWheelDriveConfiguration",
+  "4WD": "https://schema.org/FourWheelDriveConfiguration",
+};
+
+const nameListCache = new Map<string, { data: NameItem[]; expires: number }>();
+
+/** params-count group_by list (makes/models with listings on this site), same
+ * manual 1h cache as headPoolCache. Empty on failure — the title parser then
+ * just finds no make/model. */
+async function fetchNameList(groupBy: "make" | "model"): Promise<NameItem[]> {
+  const cached = nameListCache.get(groupBy);
+  if (cached && cached.expires > Date.now()) return cached.data;
+  let data: NameItem[] = [];
+  try {
+    const res = await fetch(`${API_BASE}/params-count?group_by=${groupBy}`, {
+      headers: { Accept: "application/json", ...(API_KEY && { "X-Secret-Key": API_KEY }) },
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const raw = await res.text();
+      const json = JSON.parse(raw.substring(Math.max(0, raw.indexOf("{"))));
+      data = Array.isArray(json?.data) ? json.data : [];
+    }
+  } catch {
+    // fall through with []
+  }
+  // Don't hold an empty result for an hour — retry on the next render.
+  if (data.length) nameListCache.set(groupBy, { data, expires: Date.now() + HEAD_POOL_CACHE_TTL });
+  return data;
+}
+
 /** A car on the listings page, built only from what /pool returns (no per-car
- * API calls): name, SKU, photos, condition, price, location, seller type, and
- * weight/length when the listing has them. The @id is the product page's
- * vehicle node, where the full schema (brand, model, specs) lives. */
-function buildCarListItem(item: Item, position: number) {
+ * API calls): name, SKU, photos, condition, price, location, seller type,
+ * weight/length when the listing has them, and year/make/model/fuel/
+ * transmission/drive/engine read from the title (see parseCarTitle). The @id
+ * is the product page's vehicle node, where the full schema lives. */
+function buildCarListItem(item: Item, position: number, makes: NameItem[], models: NameItem[]) {
+  const parsed = parseCarTitle(item.title, makes, models);
   const url = `${BASE_URL}/product/${item.slug}/`;
   const rawPrice = item.sale_price != null && item.sale_price !== "" ? item.sale_price : item.regular_price;
   const price = String(rawPrice ?? "").replace(/[^0-9.]/g, "");
@@ -204,6 +241,18 @@ function buildCarListItem(item: Item, position: number) {
       name: item.title,
       url,
       ...(item.sku && { sku: item.sku }),
+      ...(parsed.make && { brand: { "@type": "Brand", name: parsed.make } }),
+      ...(parsed.model && { model: parsed.model }),
+      ...(parsed.year && { vehicleModelDate: parsed.year }),
+      ...(parsed.fuelType && { fuelType: parsed.fuelType }),
+      ...(parsed.transmission && { vehicleTransmission: parsed.transmission }),
+      ...(parsed.drive && { driveWheelConfiguration: DRIVE_WHEEL_CONFIG[parsed.drive] }),
+      ...(parsed.engineDisplacementLtr && {
+        vehicleEngine: {
+          "@type": "EngineSpecification",
+          engineDisplacement: { "@type": "QuantitativeValue", value: parsed.engineDisplacementLtr, unitCode: "LTR" },
+        },
+      }),
       ...(images.length > 0 && { image: images }),
       itemCondition: condition,
       ...(item.gvm && { weight: { "@type": "QuantitativeValue", value: item.gvm, unitCode: "KGM" } }),
@@ -234,11 +283,12 @@ function buildCarListItem(item: Item, position: number) {
 /** One @graph for the listings page: site, organisation, the page itself,
  * its breadcrumb, the cars shown on it and its FAQ (only when the page has
  * one), linked by @id. */
-export function buildListingsJsonLd(
+export async function buildListingsJsonLd(
   response: ApiResponse,
   pageUrl: string,
   breadcrumbs: { name: string; url: string }[]
 ) {
+  const [makes, models] = await Promise.all([fetchNameList("make"), fetchNameList("model")]);
   const seo = response?.seo_v2;
   const pageTitle = seo?.h1 || seo?.meta_title || `${site.plural} for Sale in Australia`;
 
@@ -293,7 +343,7 @@ export function buildListingsJsonLd(
               "@id": listId,
               itemListOrder: "https://schema.org/ItemListUnordered",
               numberOfItems: allProducts.length,
-              itemListElement: allProducts.map((item, idx) => buildCarListItem(item, idx + 1)),
+              itemListElement: allProducts.map((item, idx) => buildCarListItem(item, idx + 1, makes, models)),
             },
           ]
         : []),

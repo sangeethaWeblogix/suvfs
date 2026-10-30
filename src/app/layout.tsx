@@ -271,7 +271,7 @@ const Article = site.article === "an" ? "An" : "A";
       if (listingsData) {
         const crumbs = buildBreadcrumbs(pathname);
         const pageUrl = `${site.url}${normalizedPath}`;
-        listingsJsonLd = buildListingsJsonLd(listingsData, pageUrl, crumbs);
+        listingsJsonLd = await buildListingsJsonLd(listingsData, pageUrl, crumbs);
       }
     }
 
