@@ -12,7 +12,6 @@ import { getLocationLabel } from "@/app/home-demo/locationUtils";
 type Item = {
   title: string;
   slug?: string;
-  sku?: string;
   condition?: string;
   state?: string;
   region?: string;
@@ -240,7 +239,6 @@ function buildCarListItem(item: Item, position: number, makes: NameItem[], model
       "@id": `${url}#vehicle`,
       name: item.title,
       url,
-      ...(item.sku && { sku: item.sku }),
       ...(parsed.make && { brand: { "@type": "Brand", name: parsed.make } }),
       ...(parsed.model && { model: parsed.model }),
       ...(parsed.year && { vehicleModelDate: parsed.year }),

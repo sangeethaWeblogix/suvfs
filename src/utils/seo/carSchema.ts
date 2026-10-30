@@ -132,7 +132,6 @@ export function buildCarPageJsonLd(
         ...(shortText(raw.description) && { description: shortText(raw.description) }),
         url: pageUrl,
         ...(images.length > 0 && { image: images }),
-        ...(str(raw.sku) && { sku: str(raw.sku) }),
         ...(make && { brand: { "@type": "Brand", name: make } }),
         ...(model && { model }),
         ...(str(raw.variant) && { vehicleConfiguration: str(raw.variant) }),
