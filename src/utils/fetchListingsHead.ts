@@ -4,6 +4,7 @@ import { parseSlugToFilters } from "@/app/components/urlBuilder";
 import { appendFilterParams } from "@/config/filterDefs";
 import { poolUrl } from "@/lib/apiBase";
 import { websiteLd, organizationLd, WEBSITE_ID } from "@/utils/seo/siteSchema";
+import { getLocationLabel } from "@/app/home-demo/locationUtils";
 
 /** Local shapes for the /pool response fields this file actually reads —
  * kept here instead of importing from the (removed) old listings API module. */
@@ -12,6 +13,11 @@ type Item = {
   slug?: string;
   sku?: string;
   condition?: string;
+  state?: string;
+  region?: string;
+  seller_type?: string;
+  gvm?: number | null;
+  length?: number | null;
   regular_price?: number | string | null;
   sale_price?: number | string | null;
   r2_thumbnails?: string[];
@@ -162,9 +168,10 @@ function parseFaq(raw?: string | Faq[]): Faq[] {
   }
 }
 
-/** A car on the listings page: name, photos, price and condition — only what
- * /pool returns, so no per-car API calls. The @id is the product page's
- * vehicle node, where the full Car schema (brand, model, specs) lives. */
+/** A car on the listings page, built only from what /pool returns (no per-car
+ * API calls): name, SKU, photos, condition, price, location, seller type, and
+ * weight/length when the listing has them. The @id is the product page's
+ * vehicle node, where the full schema (brand, model, specs) lives. */
 function buildCarListItem(item: Item, position: number) {
   const url = `${BASE_URL}/product/${item.slug}/`;
   const rawPrice = item.sale_price != null && item.sale_price !== "" ? item.sale_price : item.regular_price;
@@ -174,6 +181,15 @@ function buildCarListItem(item: Item, position: number) {
     item.condition?.toLowerCase() === "new"
       ? "https://schema.org/NewCondition"
       : "https://schema.org/UsedCondition";
+  // "sunshine-coast" → "Sunshine Coast"; state slug → "QLD".
+  const region = item.region?.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  const state = item.state ? getLocationLabel({ state: item.state }) : "";
+  const sellerType =
+    item.seller_type === "dealer" ? "Dealer" : item.seller_type ? "Private seller" : "";
+  const properties = [
+    ...(sellerType ? [{ "@type": "PropertyValue", name: "Seller type", value: sellerType }] : []),
+    ...(item.length ? [{ "@type": "PropertyValue", name: "Length", value: item.length }] : []),
+  ];
 
   return {
     "@type": "ListItem",
@@ -190,6 +206,8 @@ function buildCarListItem(item: Item, position: number) {
       ...(item.sku && { sku: item.sku }),
       ...(images.length > 0 && { image: images }),
       itemCondition: condition,
+      ...(item.gvm && { weight: { "@type": "QuantitativeValue", value: item.gvm, unitCode: "KGM" } }),
+      ...(properties.length > 0 && { additionalProperty: properties }),
       offers: {
         "@type": "Offer",
         url,
@@ -197,6 +215,17 @@ function buildCarListItem(item: Item, position: number) {
         priceCurrency: "AUD",
         availability: "https://schema.org/InStock",
         itemCondition: condition,
+        ...((region || state) && {
+          availableAtOrFrom: {
+            "@type": "Place",
+            address: {
+              "@type": "PostalAddress",
+              ...(region && { addressLocality: region }),
+              ...(state && { addressRegion: state }),
+              addressCountry: "AU",
+            },
+          },
+        }),
       },
     },
   };
