@@ -15,3 +15,12 @@ export function poolUrl(query = ""): string {
   if (!m) return `${API_BASE}/pool${q ? `?${q}` : ""}`;
   return `${API_BASE.slice(0, m.index)}/cars/pool?site=${m[1]}${q ? `&${q}` : ""}`;
 }
+
+/** Click/impression beacon URL: /cars/<endpoint>?site=<key>&…, so the backend
+ * records stats per site (e.g. /cars/impression?slug=…&site=4x4). */
+export function statsUrl(endpoint: "click" | "impression" | "impressions", query = ""): string {
+  const q = query.replace(/^\?/, "");
+  const m = API_BASE.match(/\/car-sites\/([^/]+)\/?$/);
+  if (!m) return `${API_BASE}/${endpoint}${q ? `?${q}` : ""}`;
+  return `${API_BASE.slice(0, m.index)}/cars/${endpoint}?site=${m[1]}${q ? `&${q}` : ""}`;
+}

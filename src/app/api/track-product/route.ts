@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
+import { statsUrl } from "@/lib/apiBase";
 const API_KEY = process.env.MPN_API_KEY;
-const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
 
 export async function POST(req: Request) {
   try {
@@ -27,8 +27,8 @@ export async function POST(req: Request) {
     };
 
     await Promise.all([
-      fetch(`${API_BASE}/click?${query}`, { method: "POST", headers }),
-      fetch(`${API_BASE}/impression?${query}`, { method: "POST", headers }),
+      fetch(statsUrl("click", query), { method: "POST", headers }),
+      fetch(statsUrl("impression", query), { method: "POST", headers }),
     ]);
 
     return NextResponse.json({ success: true });

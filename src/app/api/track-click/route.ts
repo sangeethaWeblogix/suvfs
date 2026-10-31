@@ -1,5 +1,6 @@
+import { statsUrl } from "@/lib/apiBase";
+
 const API_KEY = process.env.MPN_API_KEY;
-const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
 
 export async function POST(req: Request) {
   try {
@@ -17,7 +18,7 @@ export async function POST(req: Request) {
       "";
     const userAgent = req.headers.get("user-agent") || "";
 
-    await fetch(`${API_BASE}/click?slug=${encodeURIComponent(slug)}${sessionParam}`, {
+    await fetch(statsUrl("click", `slug=${encodeURIComponent(slug)}${sessionParam}`), {
       method: "POST",
       headers: {
         ...(API_KEY && { "X-Secret-Key": API_KEY }),

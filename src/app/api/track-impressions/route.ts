@@ -1,5 +1,6 @@
+import { statsUrl } from "@/lib/apiBase";
+
 const API_KEY = process.env.MPN_API_KEY;
-const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
 
 // Bulk impression endpoint — takes an array of numeric product ids in one
 // call instead of one request per product (see /api/track for the old
@@ -23,7 +24,7 @@ export async function POST(req: Request) {
       "";
     const userAgent = req.headers.get("user-agent") || "";
 
-    await fetch(`${API_BASE}/impressions`, {
+    await fetch(statsUrl("impressions"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
