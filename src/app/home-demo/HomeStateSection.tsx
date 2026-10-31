@@ -7,11 +7,13 @@ import "swiper/css";
 import "swiper/css/navigation";
 import CaravansByStateSkeleton from "../components/Caravansbystateskeleton";
 import { site } from "@/config/sites";
+import { isLinkableListingPath } from "@/app/listings/siteBrowseFilters";
 
 interface Item {
   state: string;
   display_text: string;
   permalink: string;
+  car_count?: number;
 }
 
 interface Props {
@@ -39,8 +41,13 @@ function buildStateHref(permalink: string): string {
 }
 
 export default function HomeStateSection({ stateBands }: Props) {
+  // States with no listings (or a link that would 410) are left out; they
+  // return by themselves once the API counts stock there.
   const visibleStateBands = stateBands.filter(
-    (item) => !HIDDEN_STATES.has(item.state.toLowerCase())
+    (item) =>
+      !HIDDEN_STATES.has(item.state.toLowerCase()) &&
+      (item.car_count === undefined || Number(item.car_count) > 0) &&
+      isLinkableListingPath(buildStateHref(item.permalink))
   );
   const loading = visibleStateBands.length === 0;
 

@@ -1,6 +1,7 @@
 import { normalizeCountItems } from "@/lib/countItems";
 import { fetchSiteSchema } from "@/lib/siteSchema";
 import { loadBrowseCounts, subjectFieldsFor, type CountItem, type BrowseSectionData } from "./browseSectionShared";
+import { BUDGET_BAND_PARAMS } from "./siteBrowseFilters";
 
 // params-count (make/state/region counts) uses the MPN key/base.
 const MPN_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
@@ -54,4 +55,21 @@ export async function fetchBrowseSectionData(
 ): Promise<BrowseSectionData> {
   const schema = await fetchSiteSchema();
   return loadBrowseCounts(fetchGroupCountsServer, fetchTotalServer, filters, subjectFieldsFor(schema.map((s) => s.field)));
+}
+
+export interface HomeLinkCounts {
+  /** Listings per region Australia-wide; empty when unknown. */
+  regionCounts: CountItem[];
+  /** Listings per budget band (BUDGET_BANDS order); null = unknown. */
+  priceCounts: (number | null)[];
+}
+
+/** Counts behind the home page's city and budget links, so none lead to an
+ * empty page — links reappear by themselves once stock arrives. */
+export async function fetchHomeLinkCounts(): Promise<HomeLinkCounts> {
+  const [regionCounts, priceCounts] = await Promise.all([
+    fetchGroupCountsServer("region", {}),
+    Promise.all(BUDGET_BAND_PARAMS.map((band) => fetchTotalServer(band))),
+  ]);
+  return { regionCounts, priceCounts };
 }

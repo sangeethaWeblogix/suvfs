@@ -10,6 +10,7 @@ import { fetchHomePage } from "@/api/home/api";
 import { fetchHomeFeatured } from "@/api/homeApi/featured/api";
 import { fetchBlogs } from "@/api/blog/api";
 import { fetchSiteFacets, fetchSiteSchema } from "@/lib/siteSchema";
+import { fetchHomeLinkCounts } from "@/app/listings/fetchBrowseSectionData";
 
 const FEATURED_SEED_MAX = 15;
 
@@ -73,6 +74,7 @@ export default async function Page() {
     blogPosts,
     siteFilterSchema,
     siteFacets,
+    linkCounts,
   ] = await Promise.all([
     fetchStateBasedCaravans(),
     fetchRequirements(),
@@ -83,6 +85,7 @@ export default async function Page() {
     fetchBlogs(1),
     fetchSiteSchema(),
     fetchSiteFacets(),
+    fetchHomeLinkCounts(),
   ]);
 
   return (
@@ -97,6 +100,7 @@ export default async function Page() {
       visitorIp={visitorIp}
       siteFilterSchema={siteFilterSchema}
       siteFacets={siteFacets}
+      linkCounts={linkCounts}
     />
   );
 }

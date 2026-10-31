@@ -1,5 +1,7 @@
 import { buildFilterSegments } from "@/config/filterDefs";
 import { site } from "@/config/sites";
+import { parseSlugToFilters } from "@/app/components/urlBuilder";
+import { buildSlugFromFilters } from "@/app/components/slugBuilter";
 import { SINGLE_VALUE_SUBJECTS, isIndexableListingPath } from "@/utils/seo/indexRules";
 import type { SchemaItem } from "./SiteFilters";
 import {
@@ -30,6 +32,20 @@ export type BrowseFilterRow = {
 /** Facet counts from GET /car-sites/{site}/filters:
  *  { years: {year: n}, price: {min, max}, <multi field>: {value: n}, <range field>: {min, max}, buckets: {field: {value: n}} }. */
 export type SiteFacets = Record<string, any>;
+
+/** True when a /listings/ href is safe to link: indexable, and already in the
+ * canonical segment order — the middleware answers 410 to any other order. */
+export function isLinkableListingPath(href: string): boolean {
+  if (!isIndexableListingPath(href)) return false;
+  const slugParts = href.split("?")[0].replace(/^\/listings/, "").split("/").filter(Boolean);
+  if (slugParts.length === 0) return true;
+  try {
+    const norm = (p: string) => p.replace(/\/$/, "").toLowerCase();
+    return norm(buildSlugFromFilters(parseSlugToFilters(slugParts))) === norm(`/listings/${slugParts.join("/")}`);
+  } catch {
+    return false;
+  }
+}
 
 // The indexable price bands (INDEXABLE_PRICE_BANDS in utils/seo/indexRules.ts),
 // so budget links only ever lead to indexed pages.
@@ -227,7 +243,7 @@ export function buildSiteFilterRows(schema: SchemaItem[], facets?: SiteFacets | 
     .filter((row): row is BrowseFilterRow => Boolean(row))
     // Link indexed pages only (e.g. 4x4 body type: ute/SUV/wagon/van, not
     // hatchback) — internal links should pass weight to pages Google keeps.
-    .map((row) => ({ ...row, items: row.items.filter((i) => isIndexableListingPath(i.href)) }))
+    .map((row) => ({ ...row, items: row.items.filter((i) => isLinkableListingPath(i.href)) }))
     .filter((row) => row.items.length >= MIN_ROW_ITEMS);
 
   return [toRow(year, facets), ...rows].filter((row) => row.items.length > 0);

@@ -3,11 +3,11 @@
 import { site } from "@/config/sites";
 import { Fragment, useEffect, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
-import { isIndexableListingPath } from "@/utils/seo/indexRules";
 import { useSiteFacets, useSiteFilterSchema } from "./SiteFilters";
 import {
   budgetRow,
   buildIndexableBrowseRows,
+  isLinkableListingPath,
   scopeBrowseHref,
   type BrowseFilterRow,
   type SiteFacets,
@@ -87,9 +87,9 @@ export default function StateBrowseSection({ state, region, make, currentPath, i
   const regionMode = !!state && !!region;
   const currentMake = make?.toLowerCase();
   const normPath = (p: string) => p.split("?")[0].replace(/\/$/, "").toLowerCase();
-  // A link worth showing: indexable, and not the page being viewed.
+  // A link worth showing: indexable, canonical (never a 410), and not the page being viewed.
   const linkable = (href: string) =>
-    isIndexableListingPath(href) && (!currentPath || normPath(href) !== normPath(currentPath));
+    isLinkableListingPath(href) && (!currentPath || normPath(href) !== normPath(currentPath));
 
   // Seeded from server-fetched initialData when available (SSR), so the
   // first render already has real data instead of null/skeleton.

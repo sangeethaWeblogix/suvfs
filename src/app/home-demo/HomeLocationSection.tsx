@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { site } from "@/config/sites";
 import type { SchemaItem } from "@/app/listings/SiteFilters";
-import { budgetRow, buildSiteFilterRows, type SiteFacets } from "@/app/listings/siteBrowseFilters";
+import { budgetRow, buildSiteFilterRows, isLinkableListingPath, type SiteFacets } from "@/app/listings/siteBrowseFilters";
+import type { HomeLinkCounts } from "@/app/listings/fetchBrowseSectionData";
 
 const MAJOR_CITIES = [
   { name: "Adelaide",   href: "/listings/south-australia-state/adelaide-region/",    imgSrc: "/images/Adelaide.png"   },
@@ -27,21 +28,34 @@ const MINOR_CITIES = [
   { name: "Ballarat",       href: "/listings/victoria-state/ballarat-region/" },
 ];
 
-/** False when the site's facets show no listings in the city's state — its
- * page would be empty, and empty listings pages are noindex. */
-function hasStateListings(href: string, facets?: SiteFacets | null): boolean {
+/** False when the city's page would be empty (empty listings pages are noindex):
+ * no listings in its region, or — when region counts are unknown — in its state.
+ * Counts are live, so a city comes back by itself once it has stock. */
+function hasCityListings(href: string, facets?: SiteFacets | null, linkCounts?: HomeLinkCounts | null): boolean {
+  const regionCounts = linkCounts?.regionCounts;
+  if (regionCounts?.length) {
+    return regionCounts.some((c) => c.count > 0 && href.endsWith(`/${c.slug}-region/`));
+  }
   const states = facets?.states;
   if (!states || typeof states !== "object") return true;
   const state = href.match(/^\/listings\/([a-z-]+)-state\//)?.[1];
   return !state || Number(states[state] ?? 0) > 0;
 }
 
-export default function HomeLocationSection({ schema, facets }: { schema: SchemaItem[]; facets?: SiteFacets | null }) {
+export default function HomeLocationSection({ schema, facets, linkCounts }: {
+  schema: SchemaItem[];
+  facets?: SiteFacets | null;
+  linkCounts?: HomeLinkCounts | null;
+}) {
   // No year row here — the listings footer still links single years.
-  const filterRows = [{ ...budgetRow(facets), label: "By Your Budget" }, ...buildSiteFilterRows(schema, facets)]
+  // Every chip must lead to an indexed, non-empty page (never a 410).
+  const filterRows = [{ ...budgetRow(facets, linkCounts?.priceCounts), label: "By Your Budget" }, ...buildSiteFilterRows(schema, facets)]
+    .map((row) => ({ ...row, items: row.items.filter((item) => isLinkableListingPath(item.href)) }))
     .filter((row) => row.field !== "year" && row.items.length > 0);
-  const majorCities = MAJOR_CITIES.filter((city) => hasStateListings(city.href, facets));
-  const minorCities = MINOR_CITIES.filter((city) => hasStateListings(city.href, facets));
+  const showCity = (city: { href: string }) =>
+    isLinkableListingPath(city.href) && hasCityListings(city.href, facets, linkCounts);
+  const majorCities = MAJOR_CITIES.filter(showCity);
+  const minorCities = MINOR_CITIES.filter(showCity);
   return (
     <section className="hloc-section">
       <div className="container">

@@ -5,6 +5,10 @@ import FooterNav from "./FooterNav";
 import FooterPopularLocations from "./FooterPopularLocations";
 import SellByLocationLink from "./SellByLocationLink";
 import { SITES, site, sitePaths } from "@/config/sites";
+import { fetchSiteFacets } from "@/lib/siteSchema";
+import { fetchGroupCountsServer } from "@/app/listings/fetchBrowseSectionData";
+import { isLinkableListingPath } from "@/app/listings/siteBrowseFilters";
+import type { CountItem } from "@/app/listings/browseSectionShared";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- social links temporarily hidden
 const SOCIAL_LINKS = [
@@ -109,8 +113,38 @@ const LEGAL_LINKS = [
   { label: "Cookie Policy", href: "/cookie-policy/" },
 ];
 
-const Footer = () => {
+type FooterLink = { label: string; href: string };
+
+/** Drops listings links that would 410 or land on an empty page: unknown
+ * counts keep the link (API down), so links come back once stock arrives. */
+function withListings(
+  links: FooterLink[],
+  facets: Record<string, any> | null,
+  regionCounts: CountItem[],
+): FooterLink[] {
+  const states = facets?.states && typeof facets.states === "object" ? facets.states : null;
+  const conditions = facets?.conditions && typeof facets.conditions === "object" ? facets.conditions : null;
+  return links.filter(({ href }) => {
+    if (href === "/listings/") return true;
+    const condition = href.match(/^\/listings\/([a-z]+)-condition\/$/)?.[1];
+    if (condition) {
+      return !conditions || Object.entries(conditions).some(([k, n]) => k.toLowerCase() === condition && Number(n) > 0);
+    }
+    if (!isLinkableListingPath(href)) return false;
+    if (/-region\/$/.test(href) && regionCounts.length) {
+      return regionCounts.some((c) => c.count > 0 && href.endsWith(`/${c.slug}-region/`));
+    }
+    const state = href.match(/^\/listings\/([a-z-]+)-state\//)?.[1];
+    return !state || !states || Number(states[state] ?? 0) > 0;
+  });
+}
+
+const Footer = async () => {
   const currentYear = new Date().getFullYear();
+  const [facets, regionCounts] = await Promise.all([fetchSiteFacets(), fetchGroupCountsServer("region", {})]);
+  const browseLinks = withListings(BROWSE_LINKS, facets, regionCounts);
+  const locationLinks = withListings(LOCATION_LINKS, facets, regionCounts);
+  const popularLocations = withListings(POPULAR_LOCATIONS, facets, regionCounts);
 
   return (
     <>
@@ -121,7 +155,7 @@ const Footer = () => {
             <div className="cfs-footer__col">
               <h4 className="cfs-footer__col-title">Browse {site.plural}</h4>
               <ul>
-                {BROWSE_LINKS.map((l) => (
+                {browseLinks.map((l) => (
                   <li key={l.label}><a href={l.href}>{l.label}</a></li>
                 ))}
               </ul>
@@ -130,7 +164,7 @@ const Footer = () => {
             <div className="cfs-footer__col">
               <h4 className="cfs-footer__col-title">Browse by State</h4>
               <ul>
-                {LOCATION_LINKS.map((l) => (
+                {locationLinks.map((l) => (
                   <li key={l.label}><a href={l.href}>{l.label}</a></li>
                 ))}
               </ul>
@@ -138,7 +172,7 @@ const Footer = () => {
 
             <div className="cfs-footer__col">
               <h4 className="cfs-footer__col-title">Popular Locations</h4>
-              <FooterPopularLocations locations={POPULAR_LOCATIONS} initialCount={7} />
+              <FooterPopularLocations locations={popularLocations} initialCount={7} />
             </div>
 
             <div className="cfs-footer__col">
