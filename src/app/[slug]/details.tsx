@@ -62,7 +62,7 @@
        { text: "Newcastle",     href: "/listings/new-south-wales-state/newcastle-region/" },
        { text: "Sunshine Coast",href: "/listings/queensland-state/sunshine-coast-region/" },
        { text: "Townsville",    href: "/listings/queensland-state/townsville-region/" },
-       { text: "Wollongong",    href: "/listings/new-south-wales-state/illawarra-region/" },
+       { text: "Illawarra",     href: "/listings/new-south-wales-state/illawarra-region/" },
        { text: "Ballarat",      href: "/listings/victoria-state/ballarat-region/" },
      ],
    },

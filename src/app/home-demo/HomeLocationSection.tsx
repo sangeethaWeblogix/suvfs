@@ -24,7 +24,7 @@ const MINOR_CITIES = [
   { name: "Newcastle",      href: "/listings/new-south-wales-state/newcastle-region/" },
   { name: "Sunshine Coast", href: "/listings/queensland-state/sunshine-coast-region/" },
   { name: "Townsville",     href: "/listings/queensland-state/townsville-region/" },
-  { name: "Wollongong",     href: "/listings/new-south-wales-state/illawarra-region/" },
+  { name: "Illawarra",      href: "/listings/new-south-wales-state/illawarra-region/" },
   { name: "Ballarat",       href: "/listings/victoria-state/ballarat-region/" },
 ];
 

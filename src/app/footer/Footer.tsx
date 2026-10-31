@@ -49,7 +49,7 @@ const POPULAR_LOCATIONS = [
   { label: "Newcastle", href: "/listings/new-south-wales-state/newcastle-region/" },
   { label: "Sunshine Coast", href: "/listings/queensland-state/sunshine-coast-region/" },
   { label: "Townsville", href: "/listings/queensland-state/townsville-region/" },
-  { label: "Wollongong", href: "/listings/new-south-wales-state/illawarra-region/" },
+  { label: "Illawarra", href: "/listings/new-south-wales-state/illawarra-region/" },
   { label: "Ballarat", href: "/listings/victoria-state/ballarat-region/" },
 ];
 
