@@ -126,14 +126,24 @@ export function bucketPoolResponse(json: any): {
   const featured = buildFeaturedOrder(featuredRaw, premiums, exclusives);
   const featuredIds = new Set(featured.map((p) => p.id));
 
-  const newItems = (json?.new_products ?? [])
+  // Split by each listing's own condition, not by the API's new_products /
+  // used_products buckets: the car-sites API puts Used listings in new_products
+  // (e.g. a "New" grid of used cars whose "View all" → /new-condition/… is a 410).
+  // New grid = New; Used grid = everything else (Used, Demo), so nothing is dropped.
+  const seen = new Set<number>(featuredIds);
+  const rest = [...(json?.new_products ?? []), ...(json?.used_products ?? [])]
     .map(normalizePoolProduct)
-    .filter((p: Listing) => !featuredIds.has(p.id));
-  const usedItems = (json?.used_products ?? [])
-    .map(normalizePoolProduct)
-    .filter((p: Listing) => !featuredIds.has(p.id));
+    .filter((p: Listing) => !seen.has(p.id) && seen.add(p.id));
+  const newItems = rest.filter((p: Listing) => hasCondition([p], "new"));
+  const usedItems = rest.filter((p: Listing) => !hasCondition([p], "new"));
 
   return { featured, new: newItems, used: usedItems, seo, totalPages };
+}
+
+/** True when at least one listing has exactly this condition ("new" / "used").
+ * A grid's "View all" → /{condition}-condition/… only has listings in that case. */
+export function hasCondition(items: Listing[], condition: "new" | "used"): boolean {
+  return items.some((p) => (p.condition ?? "").trim().toLowerCase() === condition);
 }
 
 /** Same as bucketPoolResponse but for non-indexed pages, which render one

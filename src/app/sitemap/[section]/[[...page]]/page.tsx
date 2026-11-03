@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return withSocial(
     {
       title: `${section.title}${pageText} | ${site.brand}`,
-      description: `${section.description} Browse the full list on ${site.brand}${n > 1 ? `, page ${n}` : ""}.`,
+      description: `${section.description} Browse the complete, up-to-date list on ${site.brand}${n > 1 ? ` (page ${n})` : ""} and open any link to see the ${site.nounPlural} for sale.`,
       robots: "index, follow",
       alternates: { canonical: `${site.url}${path}` },
     },

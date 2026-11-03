@@ -15,7 +15,7 @@ import ExploreOtherVehicles from "@/app/components/ExploreOtherVehicles";
 
 const EXPLORE_CLASSES = { title: "lsd-explore-cta__title", body: "lsd-explore-cta__body", link: "lsd-explore-cta__link" };
 import { buildApiUrl, buildListingsSlug, buildFilterBreadcrumbs, buildExploreTravelTarget, parseDemoFilters } from "./urlUtils";
-import { bucketPoolResponse, bucketPoolResponseCombined } from "./listingShared";
+import { bucketPoolResponse, bucketPoolResponseCombined, hasCondition } from "./listingShared";
 import { FILTER_PARAM_KEYS } from "@/config/filterDefs";
 import { trackEngagement } from "@/utils/engagement";
 // import { useBanners } from "@/components/BannerHandler";
@@ -502,7 +502,7 @@ export default function StateHome({
                 viewAllHref={buildListingsSlug(filters, "New")}
                 items={ip.new}
                 loading={false}
-                hideViewAll={page > 1}
+                hideViewAll={page > 1 || !hasCondition(ip.new, "new")}
                 hideBanners={!!filters.make}
               />
               <StateListingGrid
@@ -510,7 +510,7 @@ export default function StateHome({
                 viewAllHref={buildListingsSlug(filters, "Used")}
                 items={ip.used}
                 loading={false}
-                hideViewAll={page > 1}
+                hideViewAll={page > 1 || !hasCondition(ip.used, "used")}
                 hideBanners={!!filters.make}
               />
             </>
@@ -654,6 +654,7 @@ export default function StateHome({
               title={newSeo?.meta_title || (seo?.meta_title ? `New ${seo.meta_title}` : `New ${site.plural}`)}
               viewAllHref={buildListingsSlug(filters, "New")}
               items={pool.new}
+              hideViewAll={!hasCondition(pool.new, "new")}
               loading={poolLoading}
               hideBanners={!!filters.make}
             />
@@ -662,6 +663,7 @@ export default function StateHome({
               title={usedSeo?.meta_title || (seo?.meta_title ? `Used ${seo.meta_title}` : `Used ${site.plural}`)}
               viewAllHref={buildListingsSlug(filters, "Used")}
               items={pool.used}
+              hideViewAll={!hasCondition(pool.used, "used")}
               loading={poolLoading}
               hideBanners={!!filters.make}
             />

@@ -19,7 +19,7 @@ import {
   buildAllRegionsForState,
   loadBrowseCounts,
   subjectFieldsFor,
-  findRegionBySlug,
+  findRegionsBySlug,
   type CountItem,
   type BrowseSectionData,
 } from "./browseSectionShared";
@@ -48,13 +48,21 @@ async function fetchTotal(scope: Record<string, string>): Promise<number | null>
   }
 }
 
-/** Overrides the state-wide facets with this location's own counts for the
- * indexable filters, so region pages don't link to values with no listings. */
-function withSubjectCounts(facets: SiteFacets, subjectCounts?: Record<string, CountItem[]> | null): SiteFacets {
+/** Overrides the facets with this location's own counts for the indexable
+ * filters and model years, so state/region pages don't link to values with no
+ * listings there — those pages are 410s. An empty count list
+ * means "none here" (e.g. no listing in the region has a body size), not
+ * "unknown", so it must not fall back to the state-wide counts. */
+function withLocationCounts(
+  facets: SiteFacets,
+  subjectCounts?: Record<string, CountItem[]> | null,
+  yearCounts?: Record<string, number> | null,
+): SiteFacets {
   const merged = { ...facets };
   for (const [field, items] of Object.entries(subjectCounts ?? {})) {
-    if (items?.length) merged[field] = Object.fromEntries(items.map((item) => [item.slug, item.count]));
+    if (Array.isArray(items)) merged[field] = Object.fromEntries(items.map((item) => [item.slug, item.count]));
   }
+  if (yearCounts) merged.years = yearCounts;
   return merged;
 }
 
@@ -116,7 +124,7 @@ export default function StateBrowseSection({ state, region, make, currentPath, i
   }, [state, region, make]);
 
   const makeCounts = counts?.makeCounts ?? null;
-  const facets = withSubjectCounts(siteFacets, counts?.subjectCounts);
+  const facets = withLocationCounts(siteFacets, counts?.subjectCounts, counts?.yearCounts);
   const subjectRows = buildIndexableBrowseRows(schema, facets);
 
   // Scope a row's links to this page's location and drop any that would lead
@@ -275,6 +283,14 @@ export default function StateBrowseSection({ state, region, make, currentPath, i
   const makeName = makeSlug
     ? makeCounts?.find((m) => m.slug === makeSlug)?.name ?? stateLabel(makeSlug.replace(/-/g, " "))
     : "";
+  // A region slug shared by several states ("north-west": Victoria and Tasmania)
+  // is resolved through the states this make has listings in; still ambiguous →
+  // no link (guessing the wrong state links a 410 page).
+  const makeStates = new Set((counts?.makeStateCounts ?? []).filter((c) => c.count > 0).map((c) => c.slug));
+  const makeRegion = (slug: string) => {
+    const candidates = findRegionsBySlug(slug).filter((r) => makeStates.size === 0 || makeStates.has(r.state.slug));
+    return candidates.length === 1 ? candidates[0] : undefined;
+  };
   const makePanels = makeSlug
     ? [
         {
@@ -291,7 +307,7 @@ export default function StateBrowseSection({ state, region, make, currentPath, i
           counts: counts?.makeRegionCounts,
           links: (counts?.makeRegionCounts ?? [])
             .filter((c) => c.count > 0)
-            .map((c) => ({ text: c.name, region: findRegionBySlug(c.slug) }))
+            .map((c) => ({ text: c.name, region: makeRegion(c.slug) }))
             .filter((c) => c.region)
             .map(({ text, region: r }) => ({ text, href: `/listings/${makeSlug}/${r!.state.slug}-state/${r!.pageSlug}-region/` })),
         },

@@ -22,7 +22,6 @@ import GlobalErrorTracker from "@/components/GlobalErrorTracker";
 import { headers } from "next/headers";
 import { site, sitePaths } from "@/config/sites";
 import { metaFromSlug } from "@/utils/seo/meta";
-import { fetchProductMeta } from "@/utils/fetchProductMeta";
 import fetchListingsForHead, { buildListingsJsonLd, buildBreadcrumbs } from "@/utils/fetchListingsHead";
 import GlobalImageFallback from "@/components/GlobalImageFallback";
 import { getStateBySlug, buildStateJsonLd } from "./sell-my-caravan-region/states-data";
@@ -236,12 +235,10 @@ const Article = site.article === "an" ? "An" : "A";
     };
     const staticMeta = STATIC_META[pathname] ?? null;
 
-    let productMeta = { title: "", description: "", canonical: "", ogImage: "" };
     let productJsonLd: Record<string, unknown> | null = null;
 
     if (isProductPage) {
       const slug = pathname.replace(/^\/product\//, "").replace(/\/$/, "");
-      productMeta = await fetchProductMeta(slug);
 
       // fetchProductDetail is React-cache()'d, so this reuses the same call
       // product/[slug]/page.tsx makes for its own render — no extra network round-trip.
@@ -325,17 +322,9 @@ const Article = site.article === "an" ? "An" : "A";
           {staticMeta && <meta property="og:url" content={staticMeta.canonical} />}
           {staticMeta && <meta name="twitter:title" content={staticMeta.title} />}
           {staticMeta && <meta name="twitter:description" content={staticMeta.description} />}
-          {/* Product page SEO — injected here to avoid metadata-in-body streaming issue */}
-          {isProductPage && productMeta.title && <title>{productMeta.title}</title>}
-          {isProductPage && productMeta.description && <meta name="description" content={productMeta.description} />}
-          {isProductPage && productMeta.canonical && <link rel="canonical" href={productMeta.canonical} />}
-          {isProductPage && <meta name="robots" content="index, follow" />}
-          {isProductPage && productMeta.title && <meta property="og:title" content={productMeta.title} />}
-          {isProductPage && productMeta.description && <meta property="og:description" content={productMeta.description} />}
-          {isProductPage && productMeta.ogImage && <meta property="og:image" content={productMeta.ogImage} />}
-          {isProductPage && productMeta.canonical && <meta property="og:url" content={productMeta.canonical} />}
-          {isProductPage && productMeta.title && <meta name="twitter:title" content={productMeta.title} />}
-          {isProductPage && productMeta.description && <meta name="twitter:description" content={productMeta.description} />}
+          {/* Product page SEO tags (title, description, canonical, robots, og, twitter) come
+              only from generateMetadata in product/[slug]/page.tsx — writing them here too
+              gave every product page two of each (Ahrefs: multiple title/description tags). */}
           {/* Per-slug SEO tags for /listings/* (incl. bare /listings/) — rendered before streaming starts */}
           {/* <title> is set by generateMetadata in [...slug]/page.tsx via fast metaFromSlug (no API call) */}
           {hasSlugMeta && slugDescription && <meta name="description" content={slugDescription} />}
