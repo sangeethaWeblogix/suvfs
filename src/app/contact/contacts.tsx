@@ -103,7 +103,8 @@ export default function ContactSection() {
       <section className="community contact_top section-padding style-5">
         <div className="container">
           <div className="section-head text-center style-4">
-            <h2 className="text-center mb-20">Get in Touch</h2>
+            {/* Page's main heading: <h1> for SEO, styled exactly like the old <h2> */}
+            <h1 className="h2 text-center mb-20">Get in Touch</h1>
           </div>
         </div>
       </section>

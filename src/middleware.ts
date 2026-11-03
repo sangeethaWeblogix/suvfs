@@ -7,6 +7,7 @@ import { parseSlugToFilters, type Filters } from "@/app/components/urlBuilder";
 import { buildSlugFromFilters } from "@/app/components/slugBuilter";
 import { isIndexableListingPath } from "@/utils/seo/indexRules";
 import { site } from "@/config/sites";
+import { RESERVED_TOP_LEVEL_SLUGS } from "@/config/reservedSlugs";
 import { appendFilterParams, FILTER_PARAM_KEYS } from "@/config/filterDefs";
 const API_KEY = process.env.MPN_API_KEY;
 const SERVER_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36';
@@ -340,10 +341,51 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
     '410', '404', '410-new', 'images', 'fonts', 'icons', 'sites',
     'demo', 'product-detail-demo',
     'sell-my-suv', `sell-my-${site.slug}`,
+    'sitemap', // HTML sitemap: /sitemap/{section}/{n}/
   ]);
   const pathSegments = url.pathname.split('/').filter(Boolean);
   if (pathSegments.length >= 2 && !KNOWN_MULTI_SEGMENT.has(pathSegments[0])) {
     return render410(request);
+  }
+
+  /* 🚫 Unknown single-segment URLs → 410. They fall to the [slug] blog route,
+     which has already streamed a 200 by the time it finds no post (soft 404:
+     indexable "Product - … for Sale" page). Check the blog API here first —
+     before the bot early-return, so crawlers get the real status too. */
+  if (pathSegments.length === 1) {
+    const segment = pathSegments[0];
+    const lower = segment.toLowerCase();
+    if (!RESERVED_TOP_LEVEL_SLUGS.has(lower) && !lower.includes('.') && !lower.startsWith('thank-you-')) {
+      const cacheKey = `blog:${lower}`;
+      const cached = productCache.get(cacheKey);
+      if (cached && cached.expires > Date.now()) {
+        if (!cached.exists) return render410(request);
+      } else {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 5000);
+          const apiRes = await fetch(
+            `${process.env.NEXT_PUBLIC_CFS_API_BASE}/blog/${encodeURIComponent(segment)}`,
+            {
+              headers: {
+                'User-Agent': SERVER_UA,
+                ...(API_KEY && { 'X-Secret-Key': API_KEY }),
+              },
+              signal: controller.signal,
+            }
+          );
+          clearTimeout(timeoutId);
+          if (apiRes.status === 404) {
+            productCache.set(cacheKey, { exists: false, expires: Date.now() + CACHE_TTL });
+            return render410(request);
+          }
+          if (apiRes.ok) productCache.set(cacheKey, { exists: true, expires: Date.now() + CACHE_TTL });
+          // Other statuses (5xx, auth, rate limit) are backend problems — let the page handle it.
+        } catch (error: any) {
+          if (error?.name !== 'AbortError') console.error('Middleware blog 410 check error:', error);
+        }
+      }
+    }
   }
 
   /* 🙈 listings-demo is a reference/backup copy of the old listings system —
@@ -373,11 +415,13 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
         if (!cached.exists) return render410(request);
       } else {
         try {
-          const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
+          // {base}/{slug} is the product detail endpoint (404 "Listing not found" when
+          // the product is gone). The old /product-detail-new/ endpoint now returns 500.
+          const API_BASE = process.env.MPN_API_BASE || process.env.NEXT_PUBLIC_CFS_API_BASE;
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 5000);
           const apiRes = await fetch(
-            `${API_BASE}/product-detail-new/?slug=${encodeURIComponent(slug)}`,
+            `${API_BASE}/${encodeURIComponent(slug)}`,
             {
               headers: {
                 'User-Agent': SERVER_UA,
@@ -387,19 +431,23 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
             }
           );
           clearTimeout(timeoutId);
-          if (!apiRes.ok) {
+          if (apiRes.status === 404) {
             productCache.set(cacheKey, { exists: false, expires: Date.now() + CACHE_TTL });
             return render410(request);
           }
-          const rawText = await apiRes.text();
+          // Any other non-OK (5xx, auth, rate limit) is a backend problem, not a missing
+          // product — don't 410 the whole catalogue; let the page component handle it.
+          const rawText = apiRes.ok ? await apiRes.text() : '';
           const isChallenge = rawText.includes('sgcaptcha') || rawText.includes('well-known') || !rawText.includes('{"');
           if (isChallenge) {
-            // WP origin bot-challenge (HTML page returned with 200 OK) — not a real
+            // WP origin bot-challenge (HTML page returned with 200 OK) or error — not a real
             // "product missing" signal, don't cache/410 off it; let the page component handle it.
           } else {
             const jsonIdx = rawText.indexOf('{"');
             const data = JSON.parse(jsonIdx >= 0 ? rawText.substring(jsonIdx) : rawText);
-            if (!data || Object.keys(data).length === 0) {
+            // A slug that matches another API route (e.g. "pool") returns other JSON —
+            // only a response for this exact slug counts as the product.
+            if (data?.slug !== slug) {
               productCache.set(cacheKey, { exists: false, expires: Date.now() + CACHE_TTL });
               return render410(request);
             }

@@ -35,17 +35,8 @@ import { buildCarPageJsonLd } from "@/utils/seo/carSchema";
 import { websiteLd, organizationLd, ORGANIZATION_ID } from "@/utils/seo/siteSchema";
 
 // Top-level route segments that are NOT handled by the [slug] blog-details
-// catch-all — used to avoid firing a wasted fetchBlogDetail() call for them.
-const RESERVED_TOP_LEVEL_SLUGS = new Set([
-  "about-us", "api", "author", "blog", "buyer-safety-guide", sitePaths.enquiry.replace(/\//g, ""),
-  "caravan-homepage-takeover", "caravan-manufacturers", "caravan-sales", "contact",
-  "cookie-policy", "dealer-advertising", "family-caravan-category-sponsorship",
-  "hybrid-caravan-category-sponsorship", "listings", "login",
-  "luxury-caravan-category-sponsorship", "pop-top-caravan-category-sponsorship",
-  "privacy-collection-statement", "privacy-policy", "product", "product-detail-demo",
-  sitePaths.sell.replace(/\//g, ""), "store", "terms-conditions", "touring-caravan-category-sponsorship",
-  "404", "410", "sitemap.xml", "robots.txt", "favicon.ico",
-]);
+// catch-all (shared with middleware) — skips a wasted fetchBlogDetail() for them.
+import { RESERVED_TOP_LEVEL_SLUGS } from "@/config/reservedSlugs";
 
 // Capitalised indefinite article for sentence-start use ("An SUV", "A ute").
 const Article = site.article === "an" ? "An" : "A";
@@ -353,8 +344,15 @@ const Article = site.article === "an" ? "An" : "A";
           {hasSlugMeta && slugTitle && <meta property="og:title" content={slugTitle} />}
           {hasSlugMeta && slugDescription && <meta property="og:description" content={slugDescription} />}
           {hasSlugMeta && slugCanonical && <meta property="og:url" content={slugCanonical} />}
+          {hasSlugMeta && <meta property="og:type" content="website" />}
+          {hasSlugMeta && <meta property="og:site_name" content={`${site.plural} for Sale`} />}
+          {hasSlugMeta && <meta property="og:image" content={`${site.url}${site.ogImage}`} />}
+          {hasSlugMeta && <meta property="og:image:width" content="1200" />}
+          {hasSlugMeta && <meta property="og:image:height" content="630" />}
+          {hasSlugMeta && <meta name="twitter:card" content="summary_large_image" />}
           {hasSlugMeta && slugTitle && <meta name="twitter:title" content={slugTitle} />}
           {hasSlugMeta && slugDescription && <meta name="twitter:description" content={slugDescription} />}
+          {hasSlugMeta && <meta name="twitter:image" content={`${site.url}${site.ogImage}`} />}
           {/* Home page JSON-LD */}
           {isHomePage && (
             <script

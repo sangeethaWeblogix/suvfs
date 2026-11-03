@@ -111,6 +111,9 @@ const LEGAL_LINKS = [
   { label: "Privacy Policy", href: "/privacy-policy/" },
   { label: "Privacy Collection Statement", href: "/privacy-collection-statement/" },
   { label: "Cookie Policy", href: "/cookie-policy/" },
+  // HTML sitemap — must stay a followed link: it's how crawlers reach every
+  // product and listings page (otherwise they're "orphan pages").
+  { label: "Sitemap", href: "/sitemap/", follow: true },
 ];
 
 type FooterLink = { label: string; href: string };
@@ -247,7 +250,7 @@ const Footer = async () => {
           <div className="cfs-footer__bottom">
             <ul className="cfs-footer__legal">
               {LEGAL_LINKS.map((l) => (
-                <li key={l.label}><a href={l.href} rel="nofollow">{l.label}</a></li>
+                <li key={l.label}><a href={l.href} rel={"follow" in l && l.follow ? undefined : "nofollow"}>{l.label}</a></li>
               ))}
             </ul>
             <div className="cfs-footer__bottom-right">

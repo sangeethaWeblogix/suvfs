@@ -29,7 +29,8 @@
   background-color: #f2f2f2;  
 }
 
-.contact_top h2 {
+.contact_top h2,
+.contact_top h1 {
     font-weight: 600;
 }
 

@@ -1,0 +1,78 @@
+.sitemap-page {
+  padding: 32px 15px 60px;
+}
+.sitemap-page h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.sitemap-crumbs {
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.sitemap-crumbs a {
+  color: var(--brand);
+}
+.sitemap-intro {
+  color: #444;
+  margin-bottom: 8px;
+}
+.sitemap-group {
+  margin-top: 36px;
+}
+.sitemap-group > h2 {
+  font-size: 22px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+  color: var(--brand);
+}
+.sitemap-block {
+  margin-top: 22px;
+}
+.sitemap-block h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.sitemap-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  columns: 3 220px;
+  column-gap: 24px;
+}
+.sitemap-links li {
+  break-inside: avoid;
+  padding: 3px 0;
+  font-size: 14px;
+}
+.sitemap-links a {
+    color: #005cc8;
+}
+.sitemap-links a:hover {
+  text-decoration: underline;
+}
+.sitemap-pager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 28px;
+}
+.sitemap-pager a,
+.sitemap-pager span {
+  min-width: 36px;
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 14px;
+  color: #222;
+}
+.sitemap-pager span[aria-current="page"] {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}

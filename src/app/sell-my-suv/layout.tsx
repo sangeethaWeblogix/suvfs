@@ -1,8 +1,9 @@
 import { Metadata } from "next";
 import { ReactNode } from "react";
 import { site, sitePaths } from "@/config/sites";
+import { withSocial } from "@/lib/socialMeta";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocial({
   title: `Sell My ${site.singular} Online Australia | List Until Sold for $49`,
   description:
     `Sell your ${site.noun} online across Australia for just $49. List until sold, edit anytime, pay no commission and connect directly with genuine ${site.noun} buyers.`,
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: `${site.url}${sitePaths.sell}`,
   },
-};
+}, sitePaths.sell);
 
 export default function Layout({ children }: { children: ReactNode }) {
   return <div>{children}</div>;

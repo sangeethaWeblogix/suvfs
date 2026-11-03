@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { site } from "@/config/sites";
 import Statement from "./statement";
 import "./statement.css?=123";
+import { withSocial } from "@/lib/socialMeta";
 
 export async function generateMetadata(): Promise<Metadata> {
   const metaTitle = "Cookie Policy - Marketplace Network";
@@ -10,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const robots = "index";
 
-  return {
+  return withSocial({
     title: metaTitle,
     description: metaDescription,
     robots: robots,
@@ -30,7 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: metaTitle,
       description: metaDescription,
     },
-  };
+  }, "/cookie-policy/");
 }
 
 export default function Home() {

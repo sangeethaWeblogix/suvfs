@@ -117,9 +117,10 @@ const loading = !data || !blogPosts || blogPosts.length === 0 && data.totalPages
             style={{ margin: "30px 0px" }}
           >
             <div className="section-head mb-60 style-5">
-              <h2>
-                Valuable News, Reviews &amp; Advice From Marketplace Network 
-              </h2>
+              {/* Page's main heading: <h1> for SEO, styled exactly like the old <h2> */}
+              <h1 className="h2">
+                Valuable News, Reviews &amp; Advice From Marketplace Network
+              </h1>
             </div>
 
           </div>

@@ -107,7 +107,9 @@ function normalizeMpnProduct(raw: any) {
 // React cache() dedupes identical slug calls within a single request, so the
 // root layout's JSON-LD lookup and the page's own render share one network call.
 export const fetchProductDetail = cache(async (slug: string) => {
-  const MPN_BASE = process.env.MPN_API_BASE;
+  // {base}/{slug} works on NEXT_PUBLIC_CFS_API_BASE too, so use it when
+  // MPN_API_BASE isn't set (the old /product-detail-new/ fallback now returns 500).
+  const MPN_BASE = process.env.MPN_API_BASE || process.env.NEXT_PUBLIC_CFS_API_BASE;
   const CFS_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
   const API_KEY  = process.env.MPN_API_KEY;
 
@@ -126,7 +128,7 @@ export const fetchProductDetail = cache(async (slug: string) => {
       );
       if (res.ok) {
         const raw = await res.json();
-        if (raw?.slug) return normalizeMpnProduct(raw);
+        if (raw?.slug === slug) return normalizeMpnProduct(raw);
       }
     } catch {
       // fall through to CFS fallback

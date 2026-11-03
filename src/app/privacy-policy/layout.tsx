@@ -1,10 +1,11 @@
  import { Metadata } from "next";
 import { site } from "@/config/sites";
 import { ReactNode } from "react";
+import { withSocial } from "@/lib/socialMeta";
 
 
 
- export const metadata: Metadata = {
+ export const metadata: Metadata = withSocial({
    title: {
      default: "Privacy Policy – Marketplace Network",
      template: "%s ",
@@ -28,7 +29,7 @@ import { ReactNode } from "react";
      `Learn about ${site.singular} Marketplace's privacy policy on data collection, usage, security measures, and your rights regarding your information.`,
      
    },
- };
+ }, "/privacy-policy/");
  
    export default function Layout({ children }: { children: ReactNode }) {
     return <div>{children}</div>;

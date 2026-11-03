@@ -1,10 +1,11 @@
  import { Metadata } from "next";
 import { site } from "@/config/sites";
 import { ReactNode } from "react";
+import { withSocial } from "@/lib/socialMeta";
 
 
 
- export const metadata: Metadata = {
+ export const metadata: Metadata = withSocial({
    title: {
      default: `Terms of Use – ${site.brand} | Marketplace Network`,
      template: "%s ",
@@ -28,7 +29,7 @@ import { ReactNode } from "react";
      `Read the Terms of Use for ${site.brand}, a marketplace platform operated by Marketplace Network Pty Ltd (ABN 70 694 987 052). Learn about listings, user responsibilities, and platform policies.`,
      
    },
- };
+ }, "/terms-conditions/");
  
    export default function Layout({ children }: { children: ReactNode }) {
     return <div>{children}</div>;

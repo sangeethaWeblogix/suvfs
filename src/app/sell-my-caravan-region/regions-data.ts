@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { site, sitePaths } from "@/config/sites";
 import { websiteLd, organizationLd, ORGANIZATION_ID, WEBSITE_ID } from "@/utils/seo/siteSchema";
+import { withSocial } from "@/lib/socialMeta";
 
 export interface StateInfo {
   slug: string;
@@ -120,14 +121,14 @@ export function getRegionsByState(stateSlug: string): RegionInfo[] {
 const BASE_URL = site.url;
 
 export function buildRegionMetadata(region: RegionInfo): Metadata {
-  return {
+  return withSocial({
     title: `Sell My ${site.singular} in ${region.label} | List Until Sold for $49`,
     description: `Sell your ${site.noun} in ${region.label} for just $49. List until sold, pay no commission and connect directly with ${site.noun} buyers across ${region.label} and ${region.state.label}.`,
     robots: "index, follow",
     alternates: {
       canonical: `${BASE_URL}${sitePaths.sell}${region.state.slug}/${region.pageSlug}/`,
     },
-  };
+  }, `${sitePaths.sell}${region.state.slug}/${region.pageSlug}/`);
 }
 
 export function buildRegionJsonLd(region: RegionInfo) {

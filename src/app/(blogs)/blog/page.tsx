@@ -3,8 +3,9 @@ import "./blog.css?=3";
 import { Metadata } from "next";
 import { fetchBlogs } from "@/api/blog/api";
 import { site } from "@/config/sites";
+import { withSocial } from "@/lib/socialMeta";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocial({
   title: { default: "Latest News, Reviews & Advice", template: "%s " },
   description:
     `Latest news, in-depth reviews, and expert advice on the latest in the ${site.noun} market. Stay informed and make smarter decisions.`,
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
     canonical: `${site.url}/blog/`,
 
    },
-};
+}, "/blog/");
 
 export const dynamic = "force-dynamic";
 

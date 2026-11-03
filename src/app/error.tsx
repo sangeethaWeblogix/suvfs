@@ -107,7 +107,7 @@ export default function RootError({ error, reset }: ErrorProps) {
 
         <p style={{ marginTop: "24px", fontSize: "13px", color: "#adb5bd" }}>
           If this keeps happening,{" "}
-          <Link href="/contact" style={{ color: "#007bff", textDecoration: "none" }}>
+          <Link href="/contact/" style={{ color: "#007bff", textDecoration: "none" }}>
             contact support
           </Link>
         </p>

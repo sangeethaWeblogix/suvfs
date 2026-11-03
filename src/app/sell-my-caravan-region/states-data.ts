@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { site, sitePaths } from "@/config/sites";
 import { websiteLd, organizationLd, ORGANIZATION_ID, WEBSITE_ID } from "@/utils/seo/siteSchema";
+import { withSocial } from "@/lib/socialMeta";
 
 const BASE_URL = site.url;
 
@@ -64,14 +65,14 @@ export function getStateBySlug(slug: string): StateData | undefined {
 }
 
 export function buildStateMetadata(state: StateData): Metadata {
-  return {
+  return withSocial({
     title: `Sell My ${site.singular} in ${state.label} | List Until Sold for $49`,
     description: `Sell your ${site.noun} in ${state.label} for just $49. List until sold, pay no commission and connect directly with ${site.noun} buyers across ${state.capital} and regional ${state.label}.`,
     robots: "index, follow",
     alternates: {
       canonical: `${BASE_URL}${sitePaths.sell}${state.slug}/`,
     },
-  };
+  }, `${sitePaths.sell}${state.slug}/`);
 }
 
 export function buildStateJsonLd(state: StateData) {

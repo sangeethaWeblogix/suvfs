@@ -65,14 +65,16 @@
    const { slug } = await params;
    const data = await Promise.race([
      fetchProductDetail(slug),
-     new Promise<null>((resolve) => setTimeout(() => resolve(null), 1500)),
+     // The page awaits the same React-cached fetch, so waiting here costs nothing extra;
+     // a short timeout only produced slug-based titles and a 44-char fallback description.
+     new Promise<null>((resolve) => setTimeout(() => resolve(null), 8000)),
    ]);
    const pd = data?.data?.product_details ?? {};
    const seo = data?.seo ?? data?.product?.seo ?? {};
    const slugTitle = slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
  
    const title = seo.metatitle || seo.meta_title || pd.name || data?.name || slugTitle || `${site.singular} for Sale`;
-   const description = seo.metadescription || seo.meta_description || pd.short_description || `View ${site.noun} details on ${site.title} Australia.`;
+   const description = seo.metadescription || seo.meta_description || pd.short_description || `${title} for sale on ${site.brand}. View the price, photos and full specs, and contact the seller today.`;
    const canonicalUrl = `${site.url}/product/${slug}/`;
    const rawImages = pd.image_url ?? pd.images ?? [];
    const images: string[] = (Array.isArray(rawImages) ? rawImages : [rawImages]).filter(Boolean);

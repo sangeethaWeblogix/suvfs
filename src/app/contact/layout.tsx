@@ -2,10 +2,11 @@
 import { Metadata } from "next";
 import { site } from "@/config/sites";
 import { ReactNode } from "react";
+import { withSocial } from "@/lib/socialMeta";
 
 
 
- export const metadata: Metadata = {
+ export const metadata: Metadata = withSocial({
    title: {
      default: `Contact ${site.title} | Australia’s ${site.singular} Marketplace`,
      template: "%s ",
@@ -22,7 +23,7 @@ import { ReactNode } from "react";
    },
    
  
- };
+ }, "/contact/");
  
    export default function Layout({ children }: { children: ReactNode }) {
     return <div>{children}</div>;

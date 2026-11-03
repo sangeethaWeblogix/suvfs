@@ -193,7 +193,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
               >
                 Need help?{" "}
                 <a
-                  href="/contact"
+                  href="/contact/"
                   style={{
                     color: "#007bff",
                     textDecoration: "none",
