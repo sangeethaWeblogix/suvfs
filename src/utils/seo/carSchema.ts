@@ -3,18 +3,10 @@ import { getLocationLabel } from "@/app/home-demo/locationUtils";
 import { websiteLd, organizationLd, WEBSITE_ID } from "@/utils/seo/siteSchema";
 
 // JSON-LD for a product (car) details page, built from the raw product detail
-// API record: ItemPage + BreadcrumbList + Vehicle, plus the shared WebSite and
+// API record: ItemPage + BreadcrumbList + Product, plus the shared WebSite and
 // Organization. Fields the API leaves empty are omitted.
 
 type RawProduct = Record<string, any>;
-
-const DRIVE_WHEEL_CONFIG: Record<string, string> = {
-  FWD: "https://schema.org/FrontWheelDriveConfiguration",
-  RWD: "https://schema.org/RearWheelDriveConfiguration",
-  AWD: "https://schema.org/AllWheelDriveConfiguration",
-  "4WD": "https://schema.org/FourWheelDriveConfiguration",
-  "4X4": "https://schema.org/FourWheelDriveConfiguration",
-};
 
 const DESCRIPTION_MAX = 300;
 
@@ -73,8 +65,26 @@ export function buildCarPageJsonLd(
   const displacement = specNumber(raw.engine_capacity);
   const power = specNumber(raw.engine_power);
   const drive = str(raw.drive_type ?? raw.drivetrain);
-  const driveConfig = drive ? DRIVE_WHEEL_CONFIG[drive.toUpperCase()] : undefined;
   const transmission = str(raw.transmission)?.replace(/\s*\(.*\)\s*$/, ""); // "Automatic (AT)" → "Automatic"
+
+  // Car specs as Product additionalProperty (PropertyValue) entries.
+  const spec = (name: string, value: string | number | undefined, unitCode?: string) =>
+    value == null || value === "" ? null : { "@type": "PropertyValue", name, value, ...(unitCode && { unitCode }) };
+  const vehicleSpecs = [
+    spec("Year", str(raw.year)),
+    spec("Variant", str(raw.variant)),
+    spec("Body Type", str(raw.body_type)),
+    spec("Odometer", odometer, "KMT"),
+    spec("Fuel Type", str(raw.fuel_type)),
+    spec("Transmission", transmission),
+    spec("Drive Type", drive),
+    spec("Engine Capacity", displacement, "LTR"),
+    spec("Engine Power", power, "KWT"),
+    spec("Seats", seats),
+    spec("Doors", doors),
+    // Private sellers: no VIN (same rule as before).
+    isDealer ? spec("VIN", str(raw.vin)) : null,
+  ].filter(Boolean);
 
   // Private sellers: suburb and state only — no postcode, VIN or seller name.
   const address = {
@@ -122,11 +132,10 @@ export function buildCarPageJsonLd(
         })),
       },
       {
-        // Vehicle, not Car: Google's Rich Results Test gives a Vehicle both
-        // product snippets and merchant listings, but a Car (even typed
-        // ["Product", "Car"]) only product snippets. Every property used here
-        // is a Vehicle property.
-        "@type": "Vehicle",
+        // Product (was Vehicle): Ahrefs only accepts a literal "Product" type on
+        // product pages. Vehicle-only properties (year, VIN, odometer, fuel, …)
+        // aren't valid on Product, so they go in additionalProperty instead.
+        "@type": "Product",
         "@id": vehicleId,
         name,
         ...(shortText(raw.description) && { description: shortText(raw.description) }),
@@ -134,29 +143,10 @@ export function buildCarPageJsonLd(
         ...(images.length > 0 && { image: images }),
         ...(make && { brand: { "@type": "Brand", name: make } }),
         ...(model && { model }),
-        ...(str(raw.variant) && { vehicleConfiguration: str(raw.variant) }),
-        ...(str(raw.year) && { vehicleModelDate: str(raw.year) }),
-        ...(str(raw.body_type) && { bodyType: str(raw.body_type) }),
+        ...(str(raw.body_type) && { category: str(raw.body_type) }),
         ...(str(raw.colour) && { color: str(raw.colour) }),
-        ...(doors && { numberOfDoors: doors }),
-        ...(seats && { vehicleSeatingCapacity: seats }),
-        ...(isDealer && str(raw.vin) && { vehicleIdentificationNumber: str(raw.vin) }),
         itemCondition: condition,
-        ...(odometer != null && {
-          mileageFromOdometer: { "@type": "QuantitativeValue", value: odometer, unitCode: "KMT" },
-        }),
-        ...(str(raw.fuel_type) && { fuelType: str(raw.fuel_type) }),
-        ...(transmission && { vehicleTransmission: transmission }),
-        ...(driveConfig && { driveWheelConfiguration: driveConfig }),
-        ...((displacement || power) && {
-          vehicleEngine: {
-            "@type": "EngineSpecification",
-            ...(displacement && {
-              engineDisplacement: { "@type": "QuantitativeValue", value: displacement, unitCode: "LTR" },
-            }),
-            ...(power && { enginePower: { "@type": "QuantitativeValue", value: power, unitCode: "KWT" } }),
-          },
-        }),
+        ...(vehicleSpecs.length > 0 && { additionalProperty: vehicleSpecs }),
         offers: {
           "@type": "Offer",
           url: pageUrl,
