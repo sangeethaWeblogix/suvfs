@@ -4,7 +4,7 @@
 import "./navbar.css?=70";
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { site, sitePaths } from "@/config/sites";
+import { site, portalLinks } from "@/config/sites";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -101,10 +101,10 @@ export default function Navbar() {
                 </li>
 
                 <li className="nav-item">
-                  <a className="nav-link" href={sitePaths.sell}>Sell My {site.singular}</a>
+                  <a className="nav-link" href={portalLinks.sell}>Sell My {site.singular}</a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/dealer-advertising/">Dealer Advertising</a>
+                  <a className="nav-link" href={portalLinks.dealer}>Dealer Advertising</a>
                 </li>
 
                 {/* Login hidden until the seller/dealer modules are live
@@ -123,8 +123,8 @@ export default function Navbar() {
                 {hamOpen && (
                   <div className="ham-dropdown">
                     <a href="/listings/" className="ham-item">{site.singular} Listings</a>
-                    <a href={sitePaths.sell} className="ham-item">Sell My {site.singular}</a>
-                    <a href="/dealer-advertising/" className="ham-item">Dealer Advertising</a>
+                    <a href={portalLinks.sell} className="ham-item">Sell My {site.singular}</a>
+                    <a href={portalLinks.dealer} className="ham-item">Dealer Advertising</a>
                     <a href="/blog/" className="ham-item">Blog</a>
                     <a href="/about-us/" className="ham-item">About</a>
                     <a href="/contact/" className="ham-item">Contact</a>
@@ -196,8 +196,8 @@ export default function Navbar() {
                 </ul>
               </div>
               <div className="sidenav-cta">
-                <a href={sitePaths.sell} className="sidenav-cta-link" onClick={closeNav}>Sell My {site.singular}</a>
-                <a href="/dealer-advertising/" className="sidenav-cta-link" onClick={closeNav}>Dealer Advertising</a>
+                <a href={portalLinks.sell} className="sidenav-cta-link" onClick={closeNav}>Sell My {site.singular}</a>
+                <a href={portalLinks.dealer} className="sidenav-cta-link" onClick={closeNav}>Dealer Advertising</a>
                 {/* Login hidden until the seller/dealer modules are live
                 <a href="https://cars.marketplacenetwork.com.au/seller-login/" className="sidenav-cta-login" onClick={closeNav}>
                   <i className="bi bi-person-fill"></i> Login

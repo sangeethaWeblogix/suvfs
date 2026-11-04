@@ -1,4 +1,4 @@
-import { site, sitePaths } from "@/config/sites";
+import { site, portalLinks } from "@/config/sites";
 export default function NavbarSkeleton() {
   return (
     <nav className="navbar navbar-expand-lg navbar-light style-4 header-white">
@@ -25,10 +25,10 @@ export default function NavbarSkeleton() {
           <div className="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
             <ul className="navbar-nav mb-2 mb-lg-0">
               <li className="nav-item">
-                <a className="nav-link" href={sitePaths.sell}>Sell My {site.singular}</a>
+                <a className="nav-link" href={portalLinks.sell}>Sell My {site.singular}</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/dealer-advertising/">Dealer Advertising</a>
+                <a className="nav-link" href={portalLinks.dealer}>Dealer Advertising</a>
               </li>
               {/* Login hidden until the seller/dealer modules are live
               <li className="nav-item login">

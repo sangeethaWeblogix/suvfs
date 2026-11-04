@@ -10,11 +10,11 @@ import { sitePaths } from "@/config/sites";
 export const RESERVED_TOP_LEVEL_SLUGS = new Set([
   "about-us", "api", "author", "blog", "buyer-safety-guide", sitePaths.enquiry.replace(/\//g, ""),
   "caravan-homepage-takeover", "caravan-manufacturers", "caravan-sales", "contact",
-  "cookie-policy", "dealer-advertising", "family-caravan-category-sponsorship",
+  "cookie-policy", "family-caravan-category-sponsorship",
   "hybrid-caravan-category-sponsorship", "listings", "login",
   "luxury-caravan-category-sponsorship", "pop-top-caravan-category-sponsorship",
   "privacy-collection-statement", "privacy-policy", "product", "product-detail-demo",
-  sitePaths.sell.replace(/\//g, ""), "store", "terms-conditions", "touring-caravan-category-sponsorship",
+  "store", "terms-conditions", "touring-caravan-category-sponsorship",
   "404", "410", "sitemap", "sitemap.xml", "robots.txt", "favicon.ico",
   "home-demo", "footer", "navbar", "images",
 ]);

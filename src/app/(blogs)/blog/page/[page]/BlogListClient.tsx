@@ -12,7 +12,7 @@ import { toSlug } from "@/utils/seo/slug";
 import BlogCardSkelton from "../../../../components/blogCardSkeleton";
 import { useBanners } from "@/components/BannerHandler";
 import { useBannerTracking } from "@/hooks/useBannerTracking";
-import { site, sitePaths } from "@/config/sites";
+import { site, portalLinks } from "@/config/sites";
 
 // Build compact page list like [1, '…', 8, 9, 10, 11, 12, '…', 35]
 function buildPageList(current: number, total: number, delta = 2) {
@@ -249,7 +249,7 @@ const loading = !data || !blogPosts || blogPosts.length === 0 && data.totalPages
                 </div>
                 <div className="blog-sidebar-cta blog-sidebar-cta--sell">
                   <h3 className="blog-sidebar-cta__heading">Sell Your {site.singular} Faster with Australia&apos;s Growing {site.singular} Marketplace</h3>
-                  <a href={sitePaths.sell} className="blog-sidebar-cta__btn">
+                  <a href={portalLinks.sell} className="blog-sidebar-cta__btn">
                     List Your {site.singular} Now <i className="bi bi-arrow-right" />
                   </a>
                 </div>

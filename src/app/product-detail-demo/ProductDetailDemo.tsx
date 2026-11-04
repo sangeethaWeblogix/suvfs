@@ -1,6 +1,6 @@
 "use client";
 
-import { site, sitePaths } from "@/config/sites";
+import { site, portalLinks } from "@/config/sites";
 import { useState, useEffect, useRef, useMemo, useCallback, memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -498,7 +498,7 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
         {/* Subtitle */}
         <div className="pdd-subtitle">
           <span>Have a similar {site.noun} to sell?</span>
-          <a href={sitePaths.sell} className="pdd-subtitle__link">List Your {site.singular}</a>
+          <a href={portalLinks.sell} className="pdd-subtitle__link">List Your {site.singular}</a>
           <span className="pdd-subtitle__badge">$49 Until Sold</span>
         </div>
 
@@ -656,7 +656,7 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
             <div className="pdd-sidebar__sell">
               <strong>Thinking of selling?</strong>
               <p>Get more eyes on your {site.noun} today.</p>
-              <a href={sitePaths.sell} className="pdd-btn-sell">Sell My {site.singular}</a>
+              <a href={portalLinks.sell} className="pdd-btn-sell">Sell My {site.singular}</a>
             </div>
           </aside>
         </div>

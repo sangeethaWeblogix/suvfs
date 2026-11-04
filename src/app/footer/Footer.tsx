@@ -1,10 +1,8 @@
-import "./footer.css?=22";
+import "./footer.css?=23";
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import BackToTopButton from "./BackToTopButton";
-import FooterNav from "./FooterNav";
 import FooterPopularLocations from "./FooterPopularLocations";
-import SellByLocationLink from "./SellByLocationLink";
-import { SITES, site, sitePaths } from "@/config/sites";
+import { SITES, site, portalLinks } from "@/config/sites";
 import { fetchSiteFacets } from "@/lib/siteSchema";
 import { fetchGroupCountsServer } from "@/app/listings/fetchBrowseSectionData";
 import { isLinkableListingPath } from "@/app/listings/siteBrowseFilters";
@@ -54,8 +52,7 @@ const POPULAR_LOCATIONS = [
 ];
 
 const SELLER_LINKS = [
-  { label: `Sell My ${site.singular}`, href: sitePaths.sell },
-  { label: "Sell by Location", href: "#footer-sell-by-location" },
+  { label: `Sell My ${site.singular}`, href: portalLinks.sell },
   // disabled: not clickable until the seller module is live
   { label: "Seller Login", href: "https://cars.marketplacenetwork.com.au/seller-login/", disabled: true },
 ];
@@ -63,7 +60,7 @@ const SELLER_LINKS = [
 const DEALER_LINKS = [
   // disabled: not clickable until the dealer module is live
   { label: "Dealer Login", href: "https://cars.marketplacenetwork.com.au/seller-login/", disabled: true },
-  { label: "Dealer Advertising", href: "/dealer-advertising/" },
+  { label: "Dealer Advertising", href: portalLinks.dealer },
   { label: "Dealer Sign Up", href: "https://cars.marketplacenetwork.com.au/car-dealer-subscription/", disabled: true },
 ];
 
@@ -183,9 +180,7 @@ const Footer = async () => {
               <ul>
                 {SELLER_LINKS.map((l) => (
                   <li key={l.label}>
-                    {l.href === "#footer-sell-by-location" ? (
-                      <SellByLocationLink label={l.label} />
-                    ) : l.disabled ? (
+                    {l.disabled ? (
                       <a className="is-disabled" aria-disabled="true">{l.label}</a>
                     ) : (
                       <a href={l.href} target={l.href.startsWith("http") ? "_blank" : undefined} rel={l.href.startsWith("http") ? "noopener noreferrer" : undefined}>
@@ -240,11 +235,6 @@ const Footer = async () => {
           </div>
 
           <hr className="cfs-footer__hr" />
-
-          {/* ── Sell my {site} by location (accordion) ── */}
-          <div id="footer-sell-by-location">
-            <FooterNav />
-          </div>
 
           {/* ── Bottom bar ── */}
           <div className="cfs-footer__bottom">

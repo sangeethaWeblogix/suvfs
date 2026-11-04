@@ -13,7 +13,7 @@
  import { formatPostDate } from "@/utils/date";
  import { useBanners } from "@/components/BannerHandler";
  import { useBannerTracking } from "@/hooks/useBannerTracking";
- import { site, sitePaths } from "@/config/sites";
+ import { site, portalLinks } from "@/config/sites";
  
  // WP occasionally stores an image URL with a doubled protocol
  // (e.g. "https://https://...") from a bad admin copy-paste — that malformed
@@ -596,7 +596,7 @@
                  </div>
                  <div className="blog-sidebar-cta blog-sidebar-cta--sell">
                    <h3 className="blog-sidebar-cta__heading">Sell Your {site.singular} Faster with Australia's Growing {site.singular} Marketplace</h3>
-                   <a href={sitePaths.sell} className="blog-sidebar-cta__btn">
+                   <a href={portalLinks.sell} className="blog-sidebar-cta__btn">
                      List Your {site.singular} Now <i className="bi bi-arrow-right" />
                    </a>
                  </div>
@@ -622,7 +622,7 @@
            </p>
            <p className="bds-cta-body">
              <strong>Looking to sell?</strong> If you&apos;re upgrading to a newer {site.noun} or no longer need your current one,{" "}
-             <a href={sitePaths.sell} className="bds-cta-link">sell your {site.noun}</a>{" "}
+             <a href={portalLinks.sell} className="bds-cta-link">sell your {site.noun}</a>{" "}
              by creating a listing on {site.brand}. Your advertisement stays online until it&apos;s sold for a one-time fee of $49.
            </p>
          </div>

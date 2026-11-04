@@ -8,7 +8,7 @@ const sanitizeImageUrl = (url: string): string =>
   url.replace(/^(https?:\/\/)+(?=https?:\/\/)/i, "");
 import dynamic from "next/dynamic";
 import { WP_ORIGIN } from "@/lib/apiBase";
-import { site, sitePaths } from "@/config/sites";
+import { site, portalLinks } from "@/config/sites";
 
 import { type HomeBlogPost } from "@/api/home/api";
 import { type FeaturedListing } from "@/api/homeApi/featured/api";
@@ -273,8 +273,8 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
               <p className="subtitle">Reach thousands of buyers looking for new and used {site.nounPlural} every day.</p>
               <p className="desc">List your {site.noun} on Australia&apos;s trusted {site.noun} marketplace and connect with interested buyers nationwide.</p>
               <div className="btns_two">
-                <a href="/dealer-advertising/" className="btn primary-btn">Dealer Sign Up</a>
-                <a href={sitePaths.sell} className="btn secondary-btn">Private Seller - Click Here</a>
+                <a href={portalLinks.dealer} className="btn primary-btn">Dealer Sign Up</a>
+                <a href={portalLinks.sell} className="btn secondary-btn">Private Seller - Click Here</a>
               </div>
             </div>
           </div>

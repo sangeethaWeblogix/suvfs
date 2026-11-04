@@ -35,7 +35,7 @@ export type SiteConfig = {
   metaDescription: string;
   /** Indefinite article for `noun`: "an SUV", "a ute". */
   article: "a" | "an";
-  /** URL slug for per-site pages: /sell-my-<slug>/, /<slug>-enquiry-form/. */
+  /** URL slug for per-site pages: /<slug>-enquiry-form/. */
   slug: string;
   /** Primary brand colour as "#RRGGBB": buttons, links, filter highlights. */
   color: string;
@@ -59,11 +59,6 @@ export type SiteConfig = {
   detailsBannerImage: string;
   /** Solid side-profile vehicle glyph (square SVG) for feature icons, under /public. */
   vehicleIcon: string;
-  /** Branded marketplace device mockups used on seller and dealer landing pages. */
-  sellMockupDesktop: string;
-  sellMockupMobile: string;
-  dealerMockupDesktop: string;
-  dealerMockupMobile: string;
   /** 1200×630 social share image and PNG logo for schema.org, under /public
    * (made from `logo` by scripts/generate-site-seo-images.mjs). */
   ogImage: string;
@@ -135,10 +130,6 @@ export const SITES: Record<string, SiteConfig> = Object.fromEntries(
       sellerCardImage: s.sellerCardImage ?? `/sites/${s.key}/seller-card.jpg`,
       detailsBannerImage: s.detailsBannerImage ?? `/sites/${s.key}/details-banner.jpg`,
       vehicleIcon: s.vehicleIcon ?? `/sites/${s.key}/vehicle-icon.svg`,
-      sellMockupDesktop: `/sites/${s.key}/sell-mockup-desktop.jpg`,
-      sellMockupMobile: `/sites/${s.key}/sell-mockup-mobile.jpg`,
-      dealerMockupDesktop: `/sites/${s.key}/dealer-mockup-desktop.jpg`,
-      dealerMockupMobile: `/sites/${s.key}/dealer-mockup-mobile.jpg`,
       ogImage: `/sites/${s.key}/og-image.png`,
       schemaLogo: `/sites/${s.key}/logo.png`,
       avatar: `/sites/${s.key}/avatar.png`,
@@ -168,6 +159,12 @@ export const sitePromos = promoPaths(site);
 
 /** Per-site page paths, always with a trailing slash. */
 export const sitePaths = {
-  sell: `/sell-my-${site.slug}/`,
   enquiry: `/${site.slug}-enquiry-form/`,
+};
+
+/** Unified seller/dealer portal shared by every car site — all "Sell My …"
+ * and "Dealer Advertising" links point here instead of the per-site pages. */
+export const portalLinks = {
+  sell: "https://www.sellmycaronline.au/",
+  dealer: "https://www.sellmycaronline.au/dealer-advertising/",
 };

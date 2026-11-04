@@ -1,7 +1,7 @@
 
 "use client";
 
-import { site, sitePaths } from "@/config/sites";
+import { site, portalLinks } from "@/config/sites";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Link from "next/link";
@@ -534,7 +534,7 @@ export default function StateHome({
                 <h2 className="lsd-sell-cta__title">Looking to Sell Your {site.singular}?</h2>
                 <p className="lsd-sell-cta__body">
                   If you&apos;re upgrading or no longer need your current {site.noun},{" "}
-                  <a href={sitePaths.sell} className="lsd-sell-cta__link">sell your {site.noun}</a>{" "}
+                  <a href={portalLinks.sell} className="lsd-sell-cta__link">sell your {site.noun}</a>{" "}
                   by creating a listing on {site.brand} and connect with active buyers across Australia. Your advertisement stays online until it&apos;s sold for a one-time fee of $49.
                 </p>
               </div>
@@ -580,7 +580,7 @@ export default function StateHome({
               <h2 className="lsd-sell-cta__title">Looking to Sell Your {site.singular}?</h2>
               <p className="lsd-sell-cta__body">
                 If you&apos;re upgrading or no longer need your current {site.noun},{" "}
-                <a href={sitePaths.sell} className="lsd-sell-cta__link">sell your {site.noun}</a>{" "}
+                <a href={portalLinks.sell} className="lsd-sell-cta__link">sell your {site.noun}</a>{" "}
                 by creating a listing on {site.brand} and connect with active buyers across Australia. Your advertisement stays online until it&apos;s sold for a one-time fee of $49.
               </p>
             </div>
@@ -692,7 +692,7 @@ export default function StateHome({
               <h2 className="lsd-sell-cta__title">Looking to Sell Your {site.singular}?</h2>
               <p className="lsd-sell-cta__body">
                 If you&apos;re upgrading or no longer need your current {site.noun},{" "}
-                <a href={sitePaths.sell} className="lsd-sell-cta__link">sell your {site.noun}</a>{" "}
+                <a href={portalLinks.sell} className="lsd-sell-cta__link">sell your {site.noun}</a>{" "}
                 by creating a listing on {site.brand} and connect with active buyers across Australia. Your advertisement stays online until it&apos;s sold for a one-time fee of $49.
               </p>
             </div>
@@ -757,7 +757,7 @@ export default function StateHome({
             <h2 className="lsd-sell-cta__title">Looking to Sell Your {site.singular}?</h2>
             <p className="lsd-sell-cta__body">
               If you&apos;re upgrading or no longer need your current {site.noun},{" "}
-              <a href={sitePaths.sell} className="lsd-sell-cta__link">sell your {site.noun}</a>{" "}
+              <a href={portalLinks.sell} className="lsd-sell-cta__link">sell your {site.noun}</a>{" "}
               by creating a listing on {site.brand} and connect with active buyers across Australia. Your advertisement stays online until it&apos;s sold for a one-time fee of $49.
             </p>
           </div>

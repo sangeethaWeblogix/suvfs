@@ -1,25 +1,30 @@
 import type { NextConfig } from "next";
-import { site } from "./src/config/sites";
+import { site, portalLinks } from "./src/config/sites";
 
-// The sell / enquiry page folders are named after the SUV site (/sell-my-suv/,
-// /suv-enquiry-form/). Other sites serve them under their own slug
-// (/sell-my-ute/, /ute-enquiry-form/) and 301 the SUV URLs to it.
+// The enquiry page folder is named after the SUV site (/suv-enquiry-form/).
+// Other sites serve it under their own slug (/ute-enquiry-form/) and 301 the
+// SUV URL to it.
 const siteSlugRewrites =
   site.slug === "suv"
     ? []
-    : [
-        { source: `/sell-my-${site.slug}/`, destination: "/sell-my-suv/" },
-        { source: `/sell-my-${site.slug}/:path*/`, destination: "/sell-my-suv/:path*/" },
-        { source: `/${site.slug}-enquiry-form/`, destination: "/suv-enquiry-form/" },
-      ];
+    : [{ source: `/${site.slug}-enquiry-form/`, destination: "/suv-enquiry-form/" }];
 const siteSlugRedirects =
   site.slug === "suv"
     ? []
-    : [
-        { source: "/sell-my-suv/", destination: `/sell-my-${site.slug}/`, permanent: true },
-        { source: "/sell-my-suv/:path*/", destination: `/sell-my-${site.slug}/:path*/`, permanent: true },
-        { source: "/suv-enquiry-form/", destination: `/${site.slug}-enquiry-form/`, permanent: true },
-      ];
+    : [{ source: "/suv-enquiry-form/", destination: `/${site.slug}-enquiry-form/`, permanent: true }];
+
+// Selling and dealer pages moved to the unified portal — every old per-site
+// URL (current and legacy, any depth) 301s there.
+const portalRedirects = [
+  ...[...new Set(["suv", site.slug, "caravan"])].flatMap((slug) => [
+    { source: `/sell-my-${slug}/`, destination: portalLinks.sell, permanent: true },
+    { source: `/sell-my-${slug}/:path*/`, destination: portalLinks.sell, permanent: true },
+  ]),
+  // Legacy flat state pages and /sell-my-caravan-region/{region}/ pages.
+  { source: "/sell-my-caravan-:state/", destination: portalLinks.sell, permanent: true },
+  { source: "/sell-my-caravan-region/:path*/", destination: portalLinks.sell, permanent: true },
+  { source: "/dealer-advertising/", destination: portalLinks.dealer, permanent: true },
+];
 
 const farFuture = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString();
 
@@ -56,7 +61,6 @@ const nextConfig: NextConfig = {
         destination:
           "https://wb79vudhmjvv4ng6.public.blob.vercel-storage.com/:path*",
       },
-      // NOTE: old /sell-my-caravan-:slug rewrite removed — replaced by 301 redirects below.
       ...siteSlugRewrites,
       // Browsers and crawlers that ask for /favicon.ico get this site's own icon.
       { source: "/favicon.ico", destination: site.favicon },
@@ -78,10 +82,11 @@ const nextConfig: NextConfig = {
   //   },
   // },
 
-  // ✅ Redirects: malformed URLs + old sell-my-suv URL structure → new nested URLs
+  // ✅ Redirects: malformed URLs, old enquiry URL, sell/dealer pages → portal
   async redirects() {
     return [
       ...siteSlugRedirects,
+      ...portalRedirects,
 
       // ── Malformed feed URLs ──────────────────────────────────────────────
       {
@@ -102,97 +107,6 @@ const nextConfig: NextConfig = {
 
       // ── /caravan-enquiry-form/ → /suv-enquiry-form/ ──
       { source: "/caravan-enquiry-form/", destination: "/suv-enquiry-form/", permanent: true },
-
-      // ── /sell-my-caravan/* → /sell-my-suv/* ──
-      { source: "/sell-my-caravan/", destination: "/sell-my-suv/", permanent: true },
-      { source: "/sell-my-caravan/:path*/", destination: "/sell-my-suv/:path*/", permanent: true },
-
-      // ── Old flat state pages → new nested state pages ────────────────────
-      {
-        source: "/sell-my-caravan-victoria/",
-        destination: "/sell-my-suv/victoria/",
-        permanent: true,
-      },
-      {
-        source: "/sell-my-caravan-new-south-wales/",
-        destination: "/sell-my-suv/new-south-wales/",
-        permanent: true,
-      },
-      {
-        source: "/sell-my-caravan-queensland/",
-        destination: "/sell-my-suv/queensland/",
-        permanent: true,
-      },
-      {
-        source: "/sell-my-caravan-south-australia/",
-        destination: "/sell-my-suv/south-australia/",
-        permanent: true,
-      },
-      {
-        source: "/sell-my-caravan-tasmania/",
-        destination: "/sell-my-suv/tasmania/",
-        permanent: true,
-      },
-      {
-        source: "/sell-my-caravan-western-australia/",
-        destination: "/sell-my-suv/western-australia/",
-        permanent: true,
-      },
-
-      // ── Old region pages (/sell-my-caravan-region/[slug]/) → new nested ──
-      // Victoria
-      { source: "/sell-my-caravan-region/melbourne-region/", destination: "/sell-my-suv/victoria/melbourne/", permanent: true },
-      { source: "/sell-my-caravan-region/geelong-region/", destination: "/sell-my-suv/victoria/geelong/", permanent: true },
-      { source: "/sell-my-caravan-region/ballarat-region/", destination: "/sell-my-suv/victoria/ballarat/", permanent: true },
-      { source: "/sell-my-caravan-region/latrobe-gippsland-region/", destination: "/sell-my-suv/victoria/latrobe-gippsland/", permanent: true },
-      { source: "/sell-my-caravan-region/mornington-peninsula-region/", destination: "/sell-my-suv/victoria/mornington-peninsula/", permanent: true },
-      { source: "/sell-my-caravan-region/shepparton-region/", destination: "/sell-my-suv/victoria/shepparton/", permanent: true },
-      { source: "/sell-my-caravan-region/hume-region/", destination: "/sell-my-suv/victoria/hume/", permanent: true },
-      { source: "/sell-my-caravan-region/bendigo-region/", destination: "/sell-my-suv/victoria/bendigo/", permanent: true },
-      { source: "/sell-my-caravan-region/north-west-region/", destination: "/sell-my-suv/victoria/north-west/", permanent: true },
-      { source: "/sell-my-caravan-region/warrnambool-and-south-west-region/", destination: "/sell-my-suv/victoria/warrnambool-and-south-west/", permanent: true },
-      // New South Wales
-      { source: "/sell-my-caravan-region/sydney-region/", destination: "/sell-my-suv/new-south-wales/sydney/", permanent: true },
-      { source: "/sell-my-caravan-region/hunter-region/", destination: "/sell-my-suv/new-south-wales/hunter/", permanent: true },
-      { source: "/sell-my-caravan-region/coffs-harbour-region/", destination: "/sell-my-suv/new-south-wales/coffs-harbour/", permanent: true },
-      { source: "/sell-my-caravan-region/newcastle-region/", destination: "/sell-my-suv/new-south-wales/newcastle/", permanent: true },
-      { source: "/sell-my-caravan-region/southern-highlands-region/", destination: "/sell-my-suv/new-south-wales/southern-highlands/", permanent: true },
-      { source: "/sell-my-caravan-region/richmond-tweed-region/", destination: "/sell-my-suv/new-south-wales/richmond-tweed/", permanent: true },
-      { source: "/sell-my-caravan-region/central-coast-region/", destination: "/sell-my-suv/new-south-wales/central-coast/", permanent: true },
-      { source: "/sell-my-caravan-region/central-west-region/", destination: "/sell-my-suv/new-south-wales/central-west/", permanent: true },
-      { source: "/sell-my-caravan-region/mid-north-coast-region/", destination: "/sell-my-suv/new-south-wales/mid-north-coast/", permanent: true },
-      { source: "/sell-my-caravan-region/murray-region/", destination: "/sell-my-suv/new-south-wales/murray/", permanent: true },
-      { source: "/sell-my-caravan-region/new-england-region/", destination: "/sell-my-suv/new-south-wales/new-england/", permanent: true },
-      { source: "/sell-my-caravan-region/riverina-region/", destination: "/sell-my-suv/new-south-wales/riverina/", permanent: true },
-      { source: "/sell-my-caravan-region/capital-region/", destination: "/sell-my-suv/new-south-wales/capital/", permanent: true },
-      { source: "/sell-my-caravan-region/orana-region/", destination: "/sell-my-suv/new-south-wales/orana/", permanent: true },
-      { source: "/sell-my-caravan-region/illawarra-region/", destination: "/sell-my-suv/new-south-wales/illawarra/", permanent: true },
-      { source: "/sell-my-caravan-region/canberra-region/", destination: "/sell-my-suv/new-south-wales/canberra/", permanent: true },
-      // Queensland
-      { source: "/sell-my-caravan-region/moreton-bay-north-region/", destination: "/sell-my-suv/queensland/moreton-bay-north/", permanent: true },
-      { source: "/sell-my-caravan-region/wide-bay-region/", destination: "/sell-my-suv/queensland/wide-bay/", permanent: true },
-      { source: "/sell-my-caravan-region/gold-coast-region/", destination: "/sell-my-suv/queensland/gold-coast/", permanent: true },
-      { source: "/sell-my-caravan-region/brisbane-region/", destination: "/sell-my-suv/queensland/brisbane/", permanent: true },
-      { source: "/sell-my-caravan-region/sunshine-coast-region/", destination: "/sell-my-suv/queensland/sunshine-coast/", permanent: true },
-      { source: "/sell-my-caravan-region/logan-beaudesert-region/", destination: "/sell-my-suv/queensland/logan-beaudesert/", permanent: true },
-      { source: "/sell-my-caravan-region/moreton-bay-south-region/", destination: "/sell-my-suv/queensland/moreton-bay-south/", permanent: true },
-      { source: "/sell-my-caravan-region/townsville-region/", destination: "/sell-my-suv/queensland/townsville/", permanent: true },
-      { source: "/sell-my-caravan-region/mackay-isaac-whitsunday-region/", destination: "/sell-my-suv/queensland/mackay-isaac-whitsunday/", permanent: true },
-      { source: "/sell-my-caravan-region/ipswich-region/", destination: "/sell-my-suv/queensland/ipswich/", permanent: true },
-      { source: "/sell-my-caravan-region/toowoomba-region/", destination: "/sell-my-suv/queensland/toowoomba/", permanent: true },
-      { source: "/sell-my-caravan-region/cairns-region/", destination: "/sell-my-suv/queensland/cairns/", permanent: true },
-      // Tasmania
-      { source: "/sell-my-caravan-region/tasmania-north-west-region/", destination: "/sell-my-suv/tasmania/north-west/", permanent: true },
-      { source: "/sell-my-caravan-region/hobart-region/", destination: "/sell-my-suv/tasmania/hobart/", permanent: true },
-      { source: "/sell-my-caravan-region/launceston-region/", destination: "/sell-my-suv/tasmania/launceston/", permanent: true },
-      // South Australia
-      { source: "/sell-my-caravan-region/adelaide-region/", destination: "/sell-my-suv/south-australia/adelaide/", permanent: true },
-      { source: "/sell-my-caravan-region/south-australia-south-east-region/", destination: "/sell-my-suv/south-australia/south-east/", permanent: true },
-      // Western Australia
-      { source: "/sell-my-caravan-region/perth-region/", destination: "/sell-my-suv/western-australia/perth/", permanent: true },
-      { source: "/sell-my-caravan-region/mandurah-region/", destination: "/sell-my-suv/western-australia/mandurah/", permanent: true },
-      { source: "/sell-my-caravan-region/western-australia-outback-south-region/", destination: "/sell-my-suv/western-australia/outback-south/", permanent: true },
-      { source: "/sell-my-caravan-region/bunbury-region/", destination: "/sell-my-suv/western-australia/bunbury/", permanent: true },
     ];
   },
   async headers() {

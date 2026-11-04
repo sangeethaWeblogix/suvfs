@@ -20,13 +20,11 @@ import NavigationHistory from "@/components/NavigationHistory";
 import { BannerProvider } from "@/components/BannerHandler";
 import GlobalErrorTracker from "@/components/GlobalErrorTracker";
 import { headers } from "next/headers";
-import { site, sitePaths } from "@/config/sites";
+import { site } from "@/config/sites";
 import { metaFromSlug } from "@/utils/seo/meta";
 import fetchListingsForHead, { buildListingsJsonLd, buildBreadcrumbs } from "@/utils/fetchListingsHead";
 import GlobalImageFallback from "@/components/GlobalImageFallback";
-import { getStateBySlug, buildStateJsonLd } from "./sell-my-caravan-region/states-data";
 import { fetchBlogs } from "@/api/blog/api";
-import { getRegionByStateAndPageSlug, buildRegionJsonLd } from "./sell-my-caravan-region/regions-data";
 import { fetchBlogDetail } from "./[slug]/fetchBlogDetail";
 import { isNonBlogSlug } from "@/utils/isNonBlogSlug";
 import { fetchProductDetail } from "@/utils/fetchProductDetail";
@@ -36,9 +34,6 @@ import { websiteLd, organizationLd, ORGANIZATION_ID } from "@/utils/seo/siteSche
 // Top-level route segments that are NOT handled by the [slug] blog-details
 // catch-all (shared with middleware) — skips a wasted fetchBlogDetail() for them.
 import { RESERVED_TOP_LEVEL_SLUGS } from "@/config/reservedSlugs";
-
-// Capitalised indefinite article for sentence-start use ("An SUV", "A ute").
-const Article = site.article === "an" ? "An" : "A";
 
   const montserrat = Montserrat({
     subsets: ["latin"],
@@ -90,8 +85,6 @@ const Article = site.article === "an" ? "An" : "A";
     const isContactPage = pathname === "/contact/" || pathname === "/contact";
     const isMainListings = pathname === "/listings/" || pathname === "/listings";
     const isHomePage = pathname === "/" || pathname === "";
-    const isSellMyCaravanPage = pathname === sitePaths.sell || pathname === sitePaths.sell.slice(0, -1);
-    const isDealerAdvertisingPage = pathname === "/dealer-advertising/" || pathname === "/dealer-advertising";
     const isBlogPage = pathname === "/blog/" || pathname === "/blog";
 
     let blogPageJsonLd: object | null = null;
@@ -207,21 +200,6 @@ const Article = site.article === "an" ? "An" : "A";
               ]
             : []),
         ];
-      }
-    }
-
-    // {sitePaths.sell}{state}/ and {sitePaths.sell}{state}/{region}/ — JSON-LD is
-    // data-driven per slug, so look it up here instead of hardcoding like the other pages.
-    let sellMyCaravanStateJsonLd: object | null = null;
-    let sellMyCaravanRegionJsonLd: object | null = null;
-    if (pathname.startsWith(sitePaths.sell) && !isSellMyCaravanPage) {
-      const segments = pathname.slice(sitePaths.sell.length).replace(/\/$/, "").split("/").filter(Boolean);
-      if (segments.length === 1) {
-        const state = getStateBySlug(segments[0]);
-        if (state) sellMyCaravanStateJsonLd = buildStateJsonLd(state);
-      } else if (segments.length === 2) {
-        const region = getRegionByStateAndPageSlug(segments[0], segments[1]);
-        if (region) sellMyCaravanRegionJsonLd = buildRegionJsonLd(region);
       }
     }
 
@@ -351,234 +329,6 @@ const Article = site.article === "an" ? "An" : "A";
                   "@context": "https://schema.org",
                   "@graph": [websiteLd(), organizationLd()],
                 }),
-              }}
-            />
-          )}
-          {/* Sell My Caravan page JSON-LD */}
-          {isSellMyCaravanPage && (
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: JSON.stringify({
-                  "@context": "https://schema.org",
-                  "@graph": [
-                    websiteLd(),
-                    organizationLd(),
-                    {
-                      "@type": "WebPage",
-                      "@id": `${site.url}${sitePaths.sell}#webpage`,
-                      "url": `${site.url}${sitePaths.sell}`,
-                      "name": `Sell My ${site.singular} Online Australia | List Until Sold for $49`,
-                      "description":
-                        `Sell your ${site.noun} online across Australia for just $49. List until sold, edit anytime, pay no commission and connect directly with genuine ${site.noun} buyers.`,
-                      "inLanguage": "en-AU",
-                      "isPartOf": { "@id": `${site.url}/#website` },
-                    },
-                    {
-                      "@type": "Service",
-                      "@id": `${site.url}${sitePaths.sell}#service`,
-                      "name": `Private ${site.singular} Listing Service`,
-                      "url": `${site.url}${sitePaths.sell}`,
-                      "description":
-                        `List your ${site.noun} for sale on ${site.brand} for a one-time $49 fee. No commissions, no subscriptions, live until sold.`,
-                      "provider": { "@id": ORGANIZATION_ID },
-                      "areaServed": {
-                        "@type": "Country",
-                        "name": "Australia",
-                      },
-                      "offers": {
-                        "@type": "Offer",
-                        "price": "49",
-                        "priceCurrency": "AUD",
-                        "description": "One-time listing fee, live until sold, no commissions",
-                      },
-                    },
-                    {
-                      "@type": "FAQPage",
-                      "@id": `${site.url}${sitePaths.sell}#faqpage`,
-                      "mainEntity": [
-                        {
-                          "@type": "Question",
-                          "name": `How do I sell my ${site.noun} online in Australia?`,
-                          "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": `You can sell your ${site.noun} online by creating a private seller listing on ${site.brand}. Add your ${site.noun} details, upload clear photos, set your asking price and publish your ad so buyers across Australia can contact you directly.`,
-                          },
-                        },
-                        {
-                          "@type": "Question",
-                          "name": `How much does it cost to list my ${site.noun}?`,
-                          "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": `It costs $49 inc. GST to list your ${site.noun} on ${site.brand}. This is a one-time listing fee with no monthly subscription, no hidden charges and no commission when your ${site.noun} sells.`,
-                          },
-                        },
-                        {
-                          "@type": "Question",
-                          "name": `How long does my ${site.noun} listing stay live?`,
-                          "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": `Your ${site.noun} listing stays live until sold. You do not need to keep paying monthly fees to keep your ad active. Once your ${site.noun} is sold, you can remove the listing from the website.`,
-                          },
-                        },
-                        {
-                          "@type": "Question",
-                          "name": `Can I edit my ${site.noun} listing after publishing?`,
-                          "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": `Yes. After your listing is published, you can update your ${site.noun} details, change the asking price, add or replace photos and improve your description if needed.`,
-                          },
-                        },
-                        {
-                          "@type": "Question",
-                          "name": "How do buyers contact me?",
-                          "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": `Interested buyers can contact you directly through your ${site.noun} listing. This allows you to answer questions, arrange inspections, negotiate the price and manage the sale privately.`,
-                          },
-                        },
-                        {
-                          "@type": "Question",
-                          "name": `Do I pay commission when my ${site.noun} sells?`,
-                          "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": `No. ${site.brand} does not charge commission when your ${site.noun} sells. You pay the one-time listing fee and keep 100% of the agreed sale price.`,
-                          },
-                        },
-                        {
-                          "@type": "Question",
-                          "name": `How should I price my ${site.noun}?`,
-                          "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": `Check similar ${site.nounPlural} for sale before setting your price. Compare by make, model, year, kilometres, condition, features and location. A realistic asking price can help attract more genuine buyers.`,
-                          },
-                        },
-                        {
-                          "@type": "Question",
-                          "name": `Is it safe to sell my ${site.noun} privately online?`,
-                          "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": "Yes, but you should take normal precautions. Speak with buyers directly, meet in a safe location, confirm payment has cleared before handover and complete any required transfer paperwork for your state or territory.",
-                          },
-                        },
-                      ],
-                    },
-                  ],
-                }),
-              }}
-            />
-          )}
-          {/* Sell My Caravan state/region sub-pages JSON-LD */}
-          {sellMyCaravanStateJsonLd && (
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{ __html: JSON.stringify(sellMyCaravanStateJsonLd) }}
-            />
-          )}
-          {sellMyCaravanRegionJsonLd && (
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{ __html: JSON.stringify(sellMyCaravanRegionJsonLd) }}
-            />
-          )}
-          {/* Dealer Advertising page JSON-LD */}
-          {isDealerAdvertisingPage && (
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: JSON.stringify(
-                  [
-                    { "@context": "https://schema.org", ...websiteLd() },
-                    { "@context": "https://schema.org", ...organizationLd() },
-                    {
-                      "@context": "https://schema.org",
-                      "@type": "WebPage",
-                      "@id": `${site.url}/dealer-advertising/#webpage`,
-                      "url": `${site.url}/dealer-advertising/`,
-                      "name": `${site.singular} Dealer Advertising | Unlimited Listings $299/Month | ${site.brand}`,
-                      "description": `Advertise your ${site.noun} dealership on ${site.brand}. Unlimited listings, zero lead fees, $299/month (inc. GST). Cancel anytime.`,
-                      "isPartOf": { "@id": `${site.url}/#website` },
-                      "breadcrumb": { "@id": `${site.url}/dealer-advertising/#breadcrumb` },
-                    },
-                    {
-                      "@context": "https://schema.org",
-                      "@type": "BreadcrumbList",
-                      "@id": `${site.url}/dealer-advertising/#breadcrumb`,
-                      "itemListElement": [
-                        { "@type": "ListItem", "position": 1, "name": "Home", "item": `${site.url}/` },
-                        { "@type": "ListItem", "position": 2, "name": "Dealer Advertising", "item": `${site.url}/dealer-advertising/` },
-                      ],
-                    },
-                    {
-                      "@context": "https://schema.org",
-                      "@type": "Service",
-                      "name": `${site.singular} Dealer Advertising`,
-                      "provider": { "@id": ORGANIZATION_ID },
-                      "description": `Unlimited ${site.noun} listings on ${site.brand} for $299/month (inc. GST). Zero lead fees, no lock-in contracts, automatic inventory sync.`,
-                      "url": `${site.url}/dealer-advertising/`,
-                      "areaServed": { "@type": "Country", "name": "Australia" },
-                      "offers": {
-                        "@type": "Offer",
-                        "price": "299",
-                        "priceCurrency": "AUD",
-                        "priceSpecification": {
-                          "@type": "UnitPriceSpecification",
-                          "price": "299",
-                          "priceCurrency": "AUD",
-                          "unitText": "MONTH",
-                        },
-                      },
-                    },
-                    {
-                      "@context": "https://schema.org",
-                      "@type": "FAQPage",
-                      "mainEntity": [
-                        {
-                          "@type": "Question",
-                          "name": "How much does the dealer subscription cost, and what's included?",
-                          "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": `The dealer subscription is $299 per month (including GST). This flat monthly fee allows your dealership to list unlimited ${site.nounPlural} on ${site.brand}. There are no per-listing charges, and we never charge per lead or take success commissions – no matter how many inquiries or sales you get, $299/month covers it all.`,
-                          },
-                        },
-                        {
-                          "@type": "Question",
-                          "name": `How are my ${site.noun} listings added and kept up-to-date automatically?`,
-                          "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": "We sync directly with your dealership's website. Your listings are pulled automatically and refreshed weekly to match your current inventory.",
-                          },
-                        },
-                        {
-                          "@type": "Question",
-                          "name": `What kind of audience will my ${site.nounPlural} reach?`,
-                          "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": `${site.brand} is ${site.article} ${site.noun}-only marketplace with a focused, nationwide audience of serious buyers.`,
-                          },
-                        },
-                        {
-                          "@type": "Question",
-                          "name": "Do I have to commit to a long-term contract?",
-                          "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": "No. The subscription is month-to-month with no lock-in contracts. You can cancel anytime.",
-                          },
-                        },
-                        {
-                          "@type": "Question",
-                          "name": "How do I get started, and what support can I expect?",
-                          "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": "Getting started is fast and easy. Our team assists with onboarding, website feed integration, and ongoing dealer support.",
-                          },
-                        },
-                      ],
-                    },
-                  ],
-                  null,
-                  2
-                ).replace(/</g, "\\u003c"),
               }}
             />
           )}

@@ -1,6 +1,6 @@
 // src/app/general-sitemap.xml/route.ts
 import { NextResponse } from "next/server";
-import { site, sitePaths } from "@/config/sites";
+import { site } from "@/config/sites";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || site.url;
@@ -11,8 +11,6 @@ const staticUrls = [
   "blog",
   "about-us",
   "contact",
-  "dealer-advertising",
-  sitePaths.sell.replace(/^\/|\/$/g, ""),
 ];
 
 export async function GET() {

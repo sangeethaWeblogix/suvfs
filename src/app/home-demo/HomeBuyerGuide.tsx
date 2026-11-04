@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { site, sitePaths } from "@/config/sites";
+import { site, portalLinks } from "@/config/sites";
 import ExploreOtherVehicles from "@/app/components/ExploreOtherVehicles";
 
 export default function HomeBuyerGuide() {
@@ -76,7 +76,7 @@ export default function HomeBuyerGuide() {
             <h2 className="hbg-sell-title">Looking to Sell Your {site.singular}?</h2>
             <p className="hbg-sell-body">
               If you&apos;re upgrading or no longer need your current {site.noun},{" "}
-              <a href={sitePaths.sell} className="hbg-sell-link">sell your {site.noun}</a>{" "}
+              <a href={portalLinks.sell} className="hbg-sell-link">sell your {site.noun}</a>{" "}
               by creating a listing on {site.brand} and connect with active buyers across Australia. Your advertisement stays online until it&apos;s sold for a one-time fee of $49.
             </p>
 

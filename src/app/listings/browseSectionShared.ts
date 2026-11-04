@@ -1,6 +1,6 @@
 import { SINGLE_VALUE_SUBJECTS } from "@/utils/seo/indexRules";
 import { BUDGET_BAND_PARAMS } from "./siteBrowseFilters";
-import { ALL_REGIONS, getRegionsByState } from "../sell-my-caravan-region/regions-data";
+import { ALL_REGIONS, getRegionsByState } from "./regions-data";
 
 export function toStateSlug(state: string): string {
   return state.trim().toLowerCase().replace(/ /g, "-");

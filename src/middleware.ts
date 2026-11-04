@@ -6,7 +6,6 @@ import {
 import { parseSlugToFilters, type Filters } from "@/app/components/urlBuilder";
 import { buildSlugFromFilters } from "@/app/components/slugBuilter";
 import { isIndexableListingPath } from "@/utils/seo/indexRules";
-import { site } from "@/config/sites";
 import { RESERVED_TOP_LEVEL_SLUGS } from "@/config/reservedSlugs";
 import { appendFilterParams, FILTER_PARAM_KEYS } from "@/config/filterDefs";
 const API_KEY = process.env.MPN_API_KEY;
@@ -340,7 +339,6 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
     'listings', 'listings-demo', 'product', 'api', '_next', 'blog', 'author',
     '410', '404', '410-new', 'images', 'fonts', 'icons', 'sites',
     'demo', 'product-detail-demo',
-    'sell-my-suv', `sell-my-${site.slug}`,
     'sitemap', // HTML sitemap: /sitemap/{section}/{n}/
   ]);
   const pathSegments = url.pathname.split('/').filter(Boolean);
