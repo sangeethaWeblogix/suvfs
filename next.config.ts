@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-import { site, portalLinks } from "./src/config/sites";
+import { site, SITES, portalLinks } from "./src/config/sites";
 
 // The enquiry page folder is named after the SUV site (/suv-enquiry-form/).
 // Other sites serve it under their own slug (/ute-enquiry-form/) and 301 the
@@ -48,6 +48,10 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "caravansforsale.b-cdn.net", pathname: "/**" },
       { protocol: "https", hostname: "caravansforsale.imagestack.net", pathname: "/**" },
       { protocol: "https", hostname: "wb79vudhmjvv4ng6.public.blob.vercel-storage.com", pathname: "/**" },
+      // Every car site's own image CDN (images.<domain> — listing and blog images).
+      // Without these, next/image throws on e.g. a blog featured image and the
+      // whole page falls back to client-side rendering (empty HTML for crawlers).
+      ...Object.values(SITES).map((s) => ({ protocol: "https" as const, hostname: `**.${s.domain}`, pathname: "/**" })),
     ],
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 3600,

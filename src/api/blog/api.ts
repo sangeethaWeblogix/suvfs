@@ -73,7 +73,9 @@ export const fetchBlogs = async (page: number = 1): Promise<BlogPageResult> => {
     return { items: [], currentPage: page, totalPages: 1, total_pages: 1, error: true };
   }
 
-  const url = `${API_BASE}/blog?vehicle_type=caravans&page=${page}`;
+  // {base} is this site's /car-sites/{site} API, so it returns this site's posts.
+  // (The old caravan-site `vehicle_type=caravans` filter hid every car post.)
+  const url = `${API_BASE}/blog?per_page=12&page=${page}`;
 
   let lastErr: unknown;
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
@@ -101,11 +103,14 @@ export const fetchBlogs = async (page: number = 1): Promise<BlogPageResult> => {
         image: p.featured_image ? sanitizeImageUrl(p.featured_image) : "",
       }));
 
+      // A site with no posts gets total_pages 0 — keep it at least 1, or the blog
+      // page treats "0 pages" as still loading and shows skeleton cards forever.
+      const totalPages = Math.max(1, data?.meta?.total_pages ?? 1);
       return {
         items,
         currentPage: data?.meta?.page ?? page,
-        totalPages: data?.meta?.total_pages ?? 1,
-        total_pages: data?.meta?.total_pages ?? 1,
+        totalPages,
+        total_pages: totalPages,
       };
     } catch (err) {
       console.error(`❌ fetchBlogs error (attempt ${attempt}/${MAX_ATTEMPTS}):`, err);
