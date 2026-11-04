@@ -111,8 +111,11 @@ export async function ipFingerprint(ip: string): Promise<string> {
 const RISK_THRESHOLD = 50;
 const RESIDENTIAL_PROXY_CONFIDENCE = 50;
 
+/* Car sites: visitor screening is switched OFF in code (2026-11-04) — it was inherited from CFS and was
+   using paid MaxMind lookups. No cfs_vid/cfs_scr cookies, no MaxMind, no Redis. To restore, use the env check below. */
 export function isScreeningDisabled(): boolean {
-  return process.env.VISITOR_CHECK_DISABLED === '1';
+  return true;
+  // return process.env.VISITOR_CHECK_DISABLED === '1';
 }
 
 /* Test mode: env VISITOR_CHECK_TEST_PATHS = comma-separated exact paths

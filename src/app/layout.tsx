@@ -15,8 +15,8 @@
   import UTMTracker from "./UTMTracker";
   // import NextTopLoader from "nextjs-toploader";
 import NavigationHistory from "@/components/NavigationHistory";
-import VisitorQualifier from "@/components/VisitorQualifier";
-import VisitorStatus from "@/components/VisitorStatus";
+// import VisitorQualifier from "@/components/VisitorQualifier";
+// import VisitorStatus from "@/components/VisitorStatus";
 import { BannerProvider } from "@/components/BannerHandler";
 import GlobalErrorTracker from "@/components/GlobalErrorTracker";
 import { headers } from "next/headers";
@@ -653,7 +653,8 @@ const Article = site.article === "an" ? "An" : "A";
               dangerouslySetInnerHTML={{ __html: JSON.stringify(listingsJsonLd) }}
             />
           )}
-          {/* ✅ Google Tag Manager (Head) */}
+          {/* Google Tag Manager removed from car sites (2026-11-04): GTM-N3362FGQ is the CFS container
+              and was sending car-site traffic into the CFS GA4 property. Add a per-site container later.
           <Script
             id="gtm-head"
             strategy="afterInteractive"
@@ -672,6 +673,7 @@ const Article = site.article === "an" ? "An" : "A";
               `,
             }}
           />
+          */}
 
 
 
@@ -679,7 +681,7 @@ const Article = site.article === "an" ? "An" : "A";
         <body
           className={`flex flex-col min-h-screen new_font ${montserrat.className}`}
         >
-          {/* ✅ Google Tag Manager (noscript) - right after body */}
+          {/* Google Tag Manager (noscript) removed from car sites (2026-11-04) — CFS container
          <noscript>
   <iframe
     src="https://www.googletagmanager.com/ns.html?id=GTM-N3362FGQ"
@@ -688,6 +690,7 @@ const Article = site.article === "an" ? "An" : "A";
     style={{ display: "none", visibility: "hidden" }}
   />
 </noscript>
+          */}
 
   
          <Suspense fallback={null}>
@@ -696,12 +699,14 @@ const Article = site.article === "an" ? "An" : "A";
 <Suspense fallback={null}>
   <NavigationHistory />
 </Suspense>
+{/* Visitor qualification / status tracking switched off on car sites (2026-11-04, inherited from CFS)
 <Suspense fallback={null}>
   <VisitorQualifier />
 </Suspense>
 <Suspense fallback={null}>
   <VisitorStatus />
 </Suspense>
+*/}
 <Suspense fallback={<NavbarSkeleton />}>
   <Navbar />
 </Suspense>
