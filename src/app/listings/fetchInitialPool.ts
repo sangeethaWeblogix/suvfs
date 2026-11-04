@@ -1,17 +1,51 @@
 /**
- * Server-side fetch of initial pool data for SSR/ISR, via /api/pool-listings/.
+ * Server-side fetch of initial pool data for SSR/ISR, straight from the
+ * backend /pool API (the same request /api/pool-listings/ forwards).
  *
  * The parsed result is passed as `initialPool` to StateHome so the SSR HTML
- * contains real product listings from the first byte.
+ * contains real product listings from the first byte. If this returns null the
+ * page renders an empty shell and only fills in client-side — crawlers then see
+ * no H1, products or browse links.
  */
 
-import { site } from "@/config/sites";
+import { unstable_rethrow } from "next/navigation";
 import { Listing, SeoV2, bucketPoolResponse, bucketPoolResponseCombined } from "./listingShared";
 import type { InitialPool } from "./home";
 import type { FilterState } from "./StateFilterBar";
 import { appendFilterParams } from "@/config/filterDefs";
+import { poolUrl } from "@/lib/apiBase";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || site.url;
+const API_KEY = process.env.MPN_API_KEY;
+const SERVER_UA =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36";
+
+/** GET the backend /pool directly. Previously this went through this site's own
+ * public URL (${site.url}/api/pool-listings/) with cache: "no-store" inside a
+ * try/catch: in production that request never produced data, so every
+ * listings page was served as an empty shell. A cached fetch (allowed in both
+ * ISR and dynamic renders) plus unstable_rethrow keeps Next's own render
+ * control errors from being swallowed into a silent null. */
+async function fetchPoolJson(params: URLSearchParams): Promise<any | null> {
+  try {
+    const res = await fetch(poolUrl(params.toString()), {
+      headers: {
+        Accept: "application/json",
+        "User-Agent": SERVER_UA,
+        ...(API_KEY ? { "X-Secret-Key": API_KEY } : {}),
+      },
+      next: { revalidate: 300 },
+      signal: AbortSignal.timeout(20000),
+    });
+    if (!res.ok) return null;
+    const raw = await res.text();
+    if (raw.includes("sgcaptcha") || raw.trimStart().startsWith("<html")) return null; // bot challenge page
+    const jsonStart = raw.indexOf("{");
+    return JSON.parse(jsonStart > 0 ? raw.slice(jsonStart) : raw);
+  } catch (err) {
+    unstable_rethrow(err);
+    return null;
+  }
+}
 
 /** Build the /api/pool-listings/ query string from the full FilterState. */
 function buildApiParams(filters: FilterState): URLSearchParams {
@@ -64,26 +98,12 @@ async function fetchConditionSeoV2(
 ): Promise<SeoV2 | null> {
   const params = buildApiParams({ ...filters, condition });
   params.set("per_page", "1");
-  try {
-    const res = await fetch(`${APP_URL}/api/pool-listings/?${params.toString()}`, { cache: "no-store" });
-    if (!res.ok) return null;
-    const json = await res.json();
-    return json?.data?.seo_v2 ?? json?.seo_v2 ?? null;
-  } catch {
-    return null;
-  }
+  const json = await fetchPoolJson(params);
+  return json?.data?.seo_v2 ?? json?.seo_v2 ?? null;
 }
 
-async function fetchFromApi(filters: FilterState): Promise<any | null> {
-  try {
-    const res = await fetch(`${APP_URL}/api/pool-listings/?${buildApiParams(filters).toString()}`, {
-      cache: "no-store",
-    });
-    if (!res.ok) return null;
-    return await res.json();
-  } catch {
-    return null;
-  }
+function fetchFromApi(filters: FilterState): Promise<any | null> {
+  return fetchPoolJson(buildApiParams(filters));
 }
 
 /** Fetch the initial pool for SSR/ISR rendering. */

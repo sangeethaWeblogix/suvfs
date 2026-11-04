@@ -57,6 +57,11 @@ export function parseSlugToFilters(
     const part = decoded.split("?")[0];
     if (!part) return;
 
+    // A 4-digit segment right after the make is the model (Peugeot 3008 / 2008 /
+    // 5008), not a postcode — the canonical builder only ever writes a postcode
+    // inside a "{suburb}-{pin}-suburb" segment, never on its own.
+    const isNumericModel = /^\d{4}$/.test(part) && !!filters.make && !filters.model;
+
     // --- Car-site filters (fuel-type, odometer, seats, …) ---
     const siteFilter = parseFilterSegment(part);
     if (siteFilter) {
@@ -108,7 +113,7 @@ export function parseSlugToFilters(
     }
 
     // Pincode only (rare case)
-    if (/^\d{4}$/.test(part)) {
+    if (/^\d{4}$/.test(part) && !isNumericModel) {
       filters.pincode = part;
       return;
     }
@@ -152,7 +157,7 @@ export function parseSlugToFilters(
     // make / model fallback – only if safe and no search is present.
     // A numeric segment is accepted only as a model ("polestar/2").
     if (
-      !hasReservedSuffix(part) &&
+      (!hasReservedSuffix(part) || isNumericModel) &&
       !part.includes("=") &&
       (isNaN(Number(part)) || !!filters.make) &&
       !filters.search // prevent make/model if search is there
