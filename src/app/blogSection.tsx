@@ -97,6 +97,9 @@ export default function HomeLatestBlogs({ posts: rawPosts }: Props) {
                             style={{ objectFit: "cover" }}
                             sizes="(max-width: 768px) 100vw, 33vw"
                             priority
+                            // The image CDN (Cloudflare) refuses Vercel's image optimizer
+                            // (502 OPTIMIZED_EXTERNAL_IMAGE_REQUEST_UNAUTHORIZED) — load direct.
+                            unoptimized
                           />
                         )}
                       </div>

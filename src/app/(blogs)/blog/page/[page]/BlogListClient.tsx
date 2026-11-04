@@ -159,6 +159,9 @@ const loading = !data || !blogPosts || blogPosts.length === 0 && data.totalPages
                                 width={1024}
                                 height={683}
                                 className="w-100 h-auto"
+                                // The image CDN (Cloudflare) refuses Vercel's image optimizer
+                                // (502 OPTIMIZED_EXTERNAL_IMAGE_REQUEST_UNAUTHORIZED) — load direct.
+                                unoptimized
                               />
                             </a>
                           </div>

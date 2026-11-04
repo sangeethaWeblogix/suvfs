@@ -66,6 +66,9 @@ export default function RelatedNews({ blogs }: { blogs: BlogPost[] }) {
                             alt={post.imageAlt || post.title}
                             fill
                             className=""
+                            // The image CDN (Cloudflare) refuses Vercel's image optimizer
+                            // (502 OPTIMIZED_EXTERNAL_IMAGE_REQUEST_UNAUTHORIZED) — load direct.
+                            unoptimized
                           />
                         </div>
                         <div className="product_de">
