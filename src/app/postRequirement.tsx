@@ -160,9 +160,20 @@ useEffect(() => {
                               {item.location}
                             </div>
                           </div>
-                          {/* Enquiry form sends "Label: value" lines - keep them on separate lines. */}
-                          <div className="requirements" style={{ whiteSpace: "pre-line" }}>
-                            {item.requirements}
+                          {/* Box grows with the text (no fixed height, so it can't run over
+                              the line below); long requests stop at 3 lines with "…". */}
+                          <div className="requirements" style={{ height: "auto", minHeight: 100 }}>
+                            <div
+                              style={{
+                                whiteSpace: "pre-line",
+                                display: "-webkit-box",
+                                WebkitLineClamp: 3,
+                                WebkitBoxOrient: "vertical",
+                                overflow: "hidden",
+                              }}
+                            >
+                              {item.requirements}
+                            </div>
                           </div>
                           <div className="budget">
                             <span className="slugn">Budget</span>
