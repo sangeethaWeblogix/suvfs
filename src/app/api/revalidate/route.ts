@@ -23,12 +23,21 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { slug, all } = body as { slug?: string; all?: boolean };
+    const { slug, all, tag } = body as { slug?: string; all?: boolean; tag?: string };
+
+    // Home "Recent Buyer Requests": expire now (not stale-while-revalidate).
+    if (tag === "home-enquiries") {
+      revalidateTag("home-enquiries", { expire: 0 });
+      revalidatePath("/");
+      return NextResponse.json({ revalidated: true, tag });
+    }
 
     if (all) {
       // Purge all product detail pages; mark listing data stale (stale-on-error via unstable_cache)
       revalidatePath("/[slug]", "page");
       revalidateTag("listings", "days");
+      revalidateTag("home-enquiries", { expire: 0 });
+      revalidatePath("/");
       return NextResponse.json({ revalidated: true, scope: "all pages" });
     }
 

@@ -26,7 +26,8 @@ export async function fetchRequirements(): Promise<Requirement[]> {
   const url = `${WP_ORIGIN}/wp-json/mpn/v1/cars/get-home-enquiries-list?site=${encodeURIComponent(site.key)}`;
   try {
     const res = await fetch(url, {
-      next: { revalidate: 86400 },
+      // Tagged so POST /api/revalidate {"tag":"home-enquiries"} clears it at once.
+      next: { revalidate: 86400, tags: ["home-enquiries"] },
       headers: {
         Accept: "application/json",
         ...(API_KEY && { "X-Secret-Key": API_KEY }),

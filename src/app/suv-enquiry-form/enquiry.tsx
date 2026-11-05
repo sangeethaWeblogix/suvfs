@@ -3,17 +3,17 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { site } from "@/config/sites";
-import {
-  CONDITION_OPTIONS,
-  PURCHASE_FIELDS,
-  budgetOptions,
-  getEnquiryForm,
-  type EnquirySelect,
-} from "@/config/enquiryForms";
+import { budgetOptions, type ResolvedSelect } from "@/config/enquiryForms";
 
-// One form for every site; the site's own questions come from config/enquiryForms.ts.
-const form = getEnquiryForm(site.key);
-const BUDGETS = budgetOptions(form.budgetSteps);
+// One form for every site; the site's own questions come from config/enquiryForms.ts,
+// resolved against the backend attributes in page.tsx. One answer per question.
+type Props = {
+  fields: ResolvedSelect[];
+  condition: ResolvedSelect;
+  purchase: ResolvedSelect[];
+  budgetSteps: number[];
+  messageHint: string;
+};
 
 type Values = Record<string, string>;
 type Errors = Record<string, string | undefined>;
@@ -35,22 +35,41 @@ const AU_PHONE = /^(?:\+?61|0)[2-478]\d{8}$/;
 /** Letters (any language), spaces, apostrophes, hyphens, full stops: "Siobhán O'Brien-Smith". */
 const NAME = /^\p{L}[\p{L}\s'.-]*$/u;
 
-type Detail = { key: string; label: string; value: string; group: "vehicle" | "purchase" };
+type Detail = {
+  key: string;
+  label: string;
+  value: string;
+  group: "vehicle" | "purchase";
+  /** Backend attribute and term slug, when the question maps to one. */
+  attr?: string;
+  slug?: string;
+};
+
+function detailOf(f: ResolvedSelect, value: string, group: Detail["group"]): Detail {
+  const slug = f.choices.find((c) => c.label === value)?.slug;
+  return {
+    key: f.name,
+    label: f.label.replace(/\?$/, ""),
+    value,
+    group,
+    ...(f.attr && slug && { attr: f.attr, slug }),
+  };
+}
 
 /**
  * The site's answers as structured `details` (saved in their own column by
  * admin-cars). Vehicle answers may show publicly on the home "Recent Buyer
  * Requests"; purchase answers (timeframe, payment, trade-in) stay admin-only.
  */
-function buildDetails(values: Values): Detail[] {
+function buildDetails(values: Values, fields: ResolvedSelect[], purchase: ResolvedSelect[]): Detail[] {
   const out: Detail[] = [];
-  for (const f of form.fields) {
-    if (values[f.name]) out.push({ key: f.name, label: f.label, value: values[f.name], group: "vehicle" });
+  for (const f of fields) {
+    if (values[f.name]) out.push(detailOf(f, values[f.name], "vehicle"));
   }
   const makeModel = [values.make.trim(), values.model.trim()].filter(Boolean).join(" ");
   if (makeModel) out.push({ key: "makeModel", label: "Preferred make/model", value: makeModel, group: "vehicle" });
-  for (const f of PURCHASE_FIELDS) {
-    if (values[f.name]) out.push({ key: f.name, label: f.label.replace(/\?$/, ""), value: values[f.name], group: "purchase" });
+  for (const f of purchase) {
+    if (values[f.name]) out.push(detailOf(f, values[f.name], "purchase"));
   }
   return out;
 }
@@ -71,7 +90,7 @@ function SelectField({
   onChange,
   wide,
 }: {
-  field: EnquirySelect;
+  field: ResolvedSelect;
   value: string;
   error?: string;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -95,9 +114,9 @@ function SelectField({
           aria-invalid={!!error}
         >
           <option value="">{field.placeholder ?? (field.required ? "Select…" : "Any")}</option>
-          {field.options.map((o) => (
-            <option key={o} value={o}>
-              {o}
+          {field.choices.map((c) => (
+            <option key={c.label} value={c.label}>
+              {c.label}
             </option>
           ))}
         </select>
@@ -107,7 +126,8 @@ function SelectField({
   );
 }
 
-export default function ContactSection() {
+export default function ContactSection({ fields, condition, purchase, budgetSteps, messageHint }: Props) {
+  const BUDGETS = budgetOptions(budgetSteps);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
@@ -139,7 +159,7 @@ export default function ContactSection() {
     if (!values.postcode.trim()) next.postcode = "Please enter your postcode.";
     else if (!/^\d{4}$/.test(values.postcode.trim())) next.postcode = "Postcode must be 4 digits.";
 
-    for (const f of form.fields) {
+    for (const f of fields) {
       if (f.required && !values[f.name]) next[f.name] = "Please choose an option.";
     }
     if (!values.condition) next.condition = "Please choose a condition.";
@@ -161,7 +181,7 @@ export default function ContactSection() {
 
     try {
       setLoading(true);
-      const details = buildDetails(values);
+      const details = buildDetails(values, fields, purchase);
       const notes = values.message.trim();
       const payload = {
         name: values.name.trim(),
@@ -226,14 +246,7 @@ export default function ContactSection() {
   );
 
   // Site questions fill a 2-column grid; an odd one out goes full width.
-  const siteFields = form.fields;
-  const conditionField: EnquirySelect = {
-    name: "condition",
-    label: "Vehicle condition",
-    options: CONDITION_OPTIONS,
-    required: true,
-  };
-  const prefFields = [...siteFields, conditionField];
+  const prefFields = [...fields, condition];
 
   return (
     <section className="contact section-padding style-6 enq">
@@ -322,7 +335,7 @@ export default function ContactSection() {
 
                   <h5 className="enq-section">About your purchase <span className="enq-optional">(optional)</span></h5>
                   <div className="row">
-                    {PURCHASE_FIELDS.map((f) => (
+                    {purchase.map((f) => (
                       <div key={f.name} className="col-lg-4">
                         <div className="form-group mb-20">
                           <label htmlFor={`enq-${f.name}`} className="enq-label">
@@ -330,9 +343,9 @@ export default function ContactSection() {
                           </label>
                           <select id={`enq-${f.name}`} name={f.name} className="form-control" value={values[f.name] ?? ""} onChange={handleChange}>
                             <option value="">Select</option>
-                            {f.options.map((o) => (
-                              <option key={o} value={o}>
-                                {o}
+                            {f.choices.map((c) => (
+                              <option key={c.label} value={c.label}>
+                                {c.label}
                               </option>
                             ))}
                           </select>
@@ -350,7 +363,7 @@ export default function ContactSection() {
                           id="enq-message"
                           name="message"
                           className="form-control"
-                          placeholder={form.messageHint}
+                          placeholder={messageHint}
                           value={values.message}
                           onChange={handleChange}
                           maxLength={1500}

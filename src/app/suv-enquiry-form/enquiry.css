@@ -166,10 +166,13 @@ p.terms_text {
 }
 
 /* ── Per-site enquiry form (2026-11) ───────────────────────────── */
+/* Title card: black, edge to edge across the card top (like the motorhome
+   form); the card's overflow:hidden + 15px radius round its top corners. */
 .enq .header_form {
-  border-radius: 12px;
-  margin: 0 0 24px;
-  padding: 28px 24px;
+  background: #000;
+  border-radius: 0;
+  margin: -30px -60px 32px;
+  padding: 36px 60px 30px;
 }
 .enq .content .commun-card .header_form h4 {
   margin-bottom: 10px;
@@ -216,7 +219,7 @@ p.terms_text {
   border-radius: 16px;
 }
 .contact.style-6.enq .form-group .form-control:focus {
-  border-color: var(--brand, #4736fe);
+  border-color: #000;
   outline: none;
 }
 .contact.style-6.enq .form-group .form-control[aria-invalid="true"] {
@@ -228,7 +231,49 @@ p.terms_text {
 }
 @media (max-width: 767px) {
   .enq .header_form {
-    margin: 0 0 20px;
-    padding: 20px 16px;
+    margin: -25px -25px 20px;
+    padding: 28px 20px 22px;
+  }
+}
+
+/* Rounded option list to match the inputs. Chrome/Edge 135+ (customizable
+   select); other browsers keep their native list. */
+@supports (appearance: base-select) {
+  .contact.style-6.enq .form-group select.form-control,
+  .contact.style-6.enq .form-group select.form-control::picker(select) {
+    appearance: base-select;
+  }
+  .contact.style-6.enq .form-group select.form-control {
+    display: flex;
+    align-items: center;
+  }
+  .contact.style-6.enq .form-group select.form-control::picker-icon {
+    display: none; /* the chevron is the background image */
+  }
+  .contact.style-6.enq .form-group select.form-control::picker(select) {
+    margin-top: 6px;
+    padding: 6px;
+    border: 1px solid #cfd3da;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  }
+  .contact.style-6.enq .form-group select.form-control option {
+    padding: 9px 14px;
+    border-radius: 12px;
+    font-size: 15px;
+    color: #000;
+  }
+  .contact.style-6.enq .form-group select.form-control option::checkmark {
+    display: none;
+  }
+  .contact.style-6.enq .form-group select.form-control option:hover,
+  .contact.style-6.enq .form-group select.form-control option:focus-visible {
+    background: #f1f2f4;
+    outline: none;
+  }
+  .contact.style-6.enq .form-group select.form-control option:checked {
+    background: #000;
+    color: #fff;
   }
 }
