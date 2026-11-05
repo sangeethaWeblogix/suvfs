@@ -7,7 +7,7 @@
 // always list the same URLs.
 import { site } from "@/config/sites";
 import { parseSlugToFilters } from "@/app/components/urlBuilder";
-import { generateTitleFromFilters } from "@/utils/seo/meta";
+import { generateHeadingFromFilters } from "@/utils/seo/meta";
 import { apiSitemapPaths, modelLocationPaths, pricePaths, subjectPaths, yearPaths } from "@/lib/listingSitemaps";
 
 const API_BASE = process.env.NEXT_PUBLIC_CFS_API_BASE;
@@ -23,8 +23,7 @@ export type SitemapSection = Source & { title: string; description: string };
 /** "toyota/prado/queensland-state/" -> "Toyota Prado for Sale in Queensland" (like that page's title). */
 function listingLink(path: string): SitemapLink {
   const segments = path.split("/").filter(Boolean);
-  const label = generateTitleFromFilters(parseSlugToFilters(segments))
-    .replace(/\s*\|\s*New & Used$/, "")
+  const label = generateHeadingFromFilters(parseSlugToFilters(segments))
     .replace(/(,| in) Australia$/, "");
   return { href: `/listings/${segments.join("/")}/`, label };
 }

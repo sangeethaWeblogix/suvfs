@@ -1,106 +1,149 @@
 "use client";
 
 import Link from "next/link";
-
 import React, { useState } from "react";
 import { site } from "@/config/sites";
+import {
+  CONDITION_OPTIONS,
+  PURCHASE_FIELDS,
+  budgetOptions,
+  getEnquiryForm,
+  type EnquirySelect,
+} from "@/config/enquiryForms";
 
-/** Site-specific "what type" question (see page.tsx); null hides the field. */
-export type TypeQuestion = { question: string; options: string[] };
+// One form for every site; the site's own questions come from config/enquiryForms.ts.
+const form = getEnquiryForm(site.key);
+const BUDGETS = budgetOptions(form.budgetSteps);
 
-type FormState = {
-  "your-name": string;
-  "your-email": string;
-  "your-phone": string;
-  "you-postcode": string; // keep as-is since your CF7 works with this key
-  "your-message": string;
-  "vehicle-type": string;
-  condition: string;
-  budget: string;
+type Values = Record<string, string>;
+type Errors = Record<string, string | undefined>;
+
+const EMPTY: Values = {
+  name: "",
+  email: "",
+  phone: "",
+  postcode: "",
+  condition: "",
+  budget: "",
+  make: "",
+  model: "",
+  message: "",
 };
 
-export default function ContactSection({ typeQuestion }: { typeQuestion: TypeQuestion | null }) {
+/** Australian landline or mobile, with or without +61 / spaces / brackets. */
+const AU_PHONE = /^(?:\+?61|0)[2-478]\d{8}$/;
+/** Letters (any language), spaces, apostrophes, hyphens, full stops: "Siobhán O'Brien-Smith". */
+const NAME = /^\p{L}[\p{L}\s'.-]*$/u;
+
+type Detail = { key: string; label: string; value: string; group: "vehicle" | "purchase" };
+
+/**
+ * The site's answers as structured `details` (saved in their own column by
+ * admin-cars). Vehicle answers may show publicly on the home "Recent Buyer
+ * Requests"; purchase answers (timeframe, payment, trade-in) stay admin-only.
+ */
+function buildDetails(values: Values): Detail[] {
+  const out: Detail[] = [];
+  for (const f of form.fields) {
+    if (values[f.name]) out.push({ key: f.name, label: f.label, value: values[f.name], group: "vehicle" });
+  }
+  const makeModel = [values.make.trim(), values.model.trim()].filter(Boolean).join(" ");
+  if (makeModel) out.push({ key: "makeModel", label: "Preferred make/model", value: makeModel, group: "vehicle" });
+  for (const f of PURCHASE_FIELDS) {
+    if (values[f.name]) out.push({ key: f.name, label: f.label.replace(/\?$/, ""), value: values[f.name], group: "purchase" });
+  }
+  return out;
+}
+
+/**
+ * Everything as text, for a backend without `details` support: it stores
+ * this as requirements. A current backend stores `notes` there instead.
+ */
+function requirementsText(details: Detail[], notes: string): string {
+  const lines = details.map((d) => `${d.label}: ${d.value}`).join("\n");
+  return notes ? `${lines}\n\n${notes}` : lines;
+}
+
+function SelectField({
+  field,
+  value,
+  error,
+  onChange,
+  wide,
+}: {
+  field: EnquirySelect;
+  value: string;
+  error?: string;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  wide?: boolean;
+}) {
+  const id = `enq-${field.name}`;
+  return (
+    <div className={wide ? "col-lg-12" : "col-lg-6"}>
+      <div className="form-group mb-20">
+        <label htmlFor={id} className="enq-label">
+          {field.label}
+          {field.required ? " *" : <>{" "}<span className="enq-optional">(optional)</span></>}
+        </label>
+        <select
+          id={id}
+          name={field.name}
+          className="form-control"
+          value={value}
+          onChange={onChange}
+          required={field.required}
+          aria-invalid={!!error}
+        >
+          <option value="">{field.placeholder ?? (field.required ? "Select…" : "Any")}</option>
+          {field.options.map((o) => (
+            <option key={o} value={o}>
+              {o}
+            </option>
+          ))}
+        </select>
+        {error && <small className="text-danger">{error}</small>}
+      </div>
+    </div>
+  );
+}
+
+export default function ContactSection() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [formData, setFormData] = useState<FormState>({
-    "your-name": "",
-    "your-email": "",
-    "your-phone": "",
-    "you-postcode": "",
-    "your-message": "",
-    "vehicle-type": "",
-    condition: "",
-    budget: "",
-  });
-  const [errors, setErrors] = useState<
-    Partial<Record<keyof FormState, string>>
-  >({});
+  const [sent, setSent] = useState(false);
+  const [values, setValues] = useState<Values>(EMPTY);
+  const [errors, setErrors] = useState<Errors>({});
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
-    // clear field error on change
-    if (errors[e.target.name as keyof FormState]) {
-      setErrors((prev) => ({ ...prev, [e.target.name]: undefined }));
-    }
+    const { name, value } = e.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
   const validate = () => {
-    const next: Partial<Record<keyof FormState, string>> = {};
+    const next: Errors = {};
+    const name = values.name.trim();
+    if (!name) next.name = "Please enter your name.";
+    else if (!NAME.test(name)) next.name = "Please use letters only.";
 
-    // Name validation (only letters, spaces allowed)
-    if (!formData["your-name"].trim()) {
-      next["your-name"] = "Name is required.";
-    } else if (!/^[A-Za-z\s]+$/.test(formData["your-name"])) {
-      next["your-name"] = "Name must contain only letters.";
-    }
+    const email = values.email.trim();
+    if (!email) next.email = "Please enter your email address.";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) next.email = "Please enter a valid email address.";
 
-    // Email validation
-    if (!formData["your-email"].trim()) {
-      next["your-email"] = "Email is required.";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData["your-email"])) {
-      next["your-email"] = "Enter a valid email.";
-    }
+    const phone = values.phone.replace(/[\s()-]/g, "");
+    if (!phone) next.phone = "Please enter your phone number.";
+    else if (!AU_PHONE.test(phone)) next.phone = "Please enter an Australian number, e.g. 0412 345 678.";
 
-    // Phone validation
-    if (!formData["your-phone"].trim()) {
-      next["your-phone"] = "Phone is required.";
-    } else if (!/^[0-9\s+\-()]{7,20}$/.test(formData["your-phone"])) {
-      next["your-phone"] = "Enter a valid phone number.";
-    }
+    if (!values.postcode.trim()) next.postcode = "Please enter your postcode.";
+    else if (!/^\d{4}$/.test(values.postcode.trim())) next.postcode = "Postcode must be 4 digits.";
 
-    // Postcode validation (exactly 4 digits)
-    if (!formData["you-postcode"].trim()) {
-      next["you-postcode"] = "Postcode is required.";
-    } else if (!/^\d{4}$/.test(formData["you-postcode"])) {
-      next["you-postcode"] = "Postcode must be 4 digits.";
+    for (const f of form.fields) {
+      if (f.required && !values[f.name]) next[f.name] = "Please choose an option.";
     }
-
-    // Vehicle type (only when this site asks it)
-    if (typeQuestion && !formData["vehicle-type"].trim()) {
-      next["vehicle-type"] = "Please choose an option.";
-    }
-
-    // Condition
-    if (!formData["condition"].trim()) {
-      next["condition"] = "Condition is required.";
-    }
-
-    // Requirements (the API requires it)
-    if (!formData["your-message"].trim()) {
-      next["your-message"] = "Please tell us what you're looking for.";
-    }
-
-    // Budget validation (only numbers)
-    if (!formData["budget"].trim()) {
-      next["budget"] = "Budget is required.";
-    } else if (!/^\d+$/.test(formData["budget"])) {
-      next["budget"] = "Budget must be a number.";
-    }
+    if (!values.condition) next.condition = "Please choose a condition.";
+    if (!values.budget) next.budget = "Please choose your maximum budget.";
 
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -109,308 +152,244 @@ export default function ContactSection({ typeQuestion }: { typeQuestion: TypeQue
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage("");
-
-    if (loading) return; // guard
+    setSent(false);
+    if (loading) return;
     if (!validate()) {
-      setMessage("⚠️ All fields are required.");
+      setMessage("Please check the highlighted fields.");
       return;
     }
 
     try {
       setLoading(true);
-
-      // The enquiry API has no field for the type answer, so it goes at the
-      // top of the requirements text the team receives.
-      const type = formData["vehicle-type"];
+      const details = buildDetails(values);
+      const notes = values.message.trim();
       const payload = {
-        name: formData["your-name"],
-        phone: formData["your-phone"],
-        email: formData["your-email"],
-        postcode: formData["you-postcode"],
-        condition: formData.condition,
-        budget: formData.budget,
-        requirements: type && typeQuestion
-          ? `${typeQuestion.question} ${type}
-
-${formData["your-message"]}`
-          : formData["your-message"],
+        name: values.name.trim(),
+        phone: values.phone.trim(),
+        email: values.email.trim(),
+        postcode: values.postcode.trim(),
+        condition: values.condition,
+        budget: values.budget,
+        requirements: requirementsText(details, notes),
+        details,
+        notes,
       };
 
       const res = await fetch("/api/caravan-enquiry", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(payload),
       });
-
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
 
       if (res.ok) {
-        setMessage("✅ Message sent successfully!");
-        // clear form + errors
-        setFormData({
-          "your-name": "",
-          "your-email": "",
-          "your-phone": "",
-          "you-postcode": "",
-          "your-message": "",
-          "vehicle-type": "",
-          condition: "",
-          budget: "",
-        });
+        setSent(true);
+        setMessage(
+          `Thanks! We've received your requirements and will be in touch with matching ${site.nounPlural}.`
+        );
+        setValues(EMPTY);
         setErrors({});
       } else {
-        setMessage("❌ Error: " + (data.message || "Failed to send message."));
+        setMessage(data.message || "Sorry, we couldn't send your enquiry. Please try again.");
       }
     } catch (err) {
       console.error(err);
-      setMessage("❌ Something went wrong.");
+      setMessage("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
   };
-  const hasAnyError = Object.values(errors).some(Boolean);
+
+  const textInput = (
+    name: string,
+    placeholder: string,
+    opts: { type?: string; inputMode?: "numeric" | "tel" | "email"; autoComplete?: string; maxLength?: number } = {}
+  ) => (
+    <div className="col-lg-6">
+      <div className="form-group mb-20">
+        <input
+          type={opts.type ?? "text"}
+          name={name}
+          className="form-control"
+          placeholder={placeholder}
+          aria-label={placeholder.replace(" *", "")}
+          value={values[name]}
+          onChange={handleChange}
+          inputMode={opts.inputMode}
+          autoComplete={opts.autoComplete}
+          maxLength={opts.maxLength}
+          aria-invalid={!!errors[name]}
+        />
+        {errors[name] && <small className="text-danger">{errors[name]}</small>}
+      </div>
+    </div>
+  );
+
+  // Site questions fill a 2-column grid; an odd one out goes full width.
+  const siteFields = form.fields;
+  const conditionField: EnquirySelect = {
+    name: "condition",
+    label: "Vehicle condition",
+    options: CONDITION_OPTIONS,
+    required: true,
+  };
+  const prefFields = [...siteFields, conditionField];
 
   return (
-    <>
-      <section className="contact section-padding style-6">
-        <div className="container">
-          <div className="content">
-            <div className="row justify-content-center">
-              <div className="col-lg-12">
-                <div className="commun-card">
-                  <form onSubmit={handleSubmit} className="form" method="post">
-                    <div className="text-center header_form">
-                      <h4>
-                        Exclusive Offers From Select Quality {site.singular}{" "}
-                        Manufacturers
-                      </h4>
-                    </div>
-                    <p className="required_txt">
-                      Fill out the form below, and we&apos;ll send you exclusive
-                      deals for the best {site.nounPlural} in the market.
+    <section className="contact section-padding style-6 enq">
+      <div className="container">
+        <div className="content">
+          <div className="row justify-content-center">
+            <div className="col-lg-12">
+              <div className="commun-card">
+                <form onSubmit={handleSubmit} className="form" method="post" noValidate>
+                  <div className="text-center header_form">
+                    <h4>Find the Right {site.singular} for You</h4>
+                    <p>
+                      Tell us what you&apos;re looking for and we&apos;ll help connect you with
+                      relevant {site.noun} options from participating sellers.
                     </p>
-                    <div className="row">
-                      {/* Name */}
-                      <div className="col-lg-6">
-                        <div className="form-group mb-20">
-                          <input
-                            type="text"
-                            name="your-name"
-                            className="form-control"
-                            placeholder="Name*"
-                            value={formData["your-name"]}
-                            onChange={handleChange}
-                            required
-                          />
-                          {errors["your-name"] && (
-                            <small className="text-danger">
-                              {errors["your-name"]}
-                            </small>
-                          )}
-                        </div>
+                  </div>
+
+                  <h5 className="enq-section">Your contact details</h5>
+                  <div className="row">
+                    {textInput("name", "Full name *", { autoComplete: "name", maxLength: 80 })}
+                    {textInput("email", "Email address *", { type: "email", inputMode: "email", autoComplete: "email" })}
+                    {textInput("phone", "Phone number *", { type: "tel", inputMode: "tel", autoComplete: "tel" })}
+                    {textInput("postcode", "Postcode *", { inputMode: "numeric", autoComplete: "postal-code", maxLength: 4 })}
+                  </div>
+
+                  <hr className="enq-divider" />
+
+                  <h5 className="enq-section">Your vehicle preferences</h5>
+                  <div className="row">
+                    {prefFields.map((f, i) => (
+                      <SelectField
+                        key={f.name}
+                        field={f}
+                        value={values[f.name] ?? ""}
+                        error={errors[f.name]}
+                        onChange={handleChange}
+                        wide={i === prefFields.length - 1 && prefFields.length % 2 === 1}
+                      />
+                    ))}
+
+                    {/* Budget */}
+                    <div className="col-lg-12">
+                      <div className="form-group mb-20">
+                        <label htmlFor="enq-budget" className="enq-label">
+                          Your maximum budget *
+                        </label>
+                        <select
+                          id="enq-budget"
+                          name="budget"
+                          className="form-control"
+                          value={values.budget}
+                          onChange={handleChange}
+                          aria-invalid={!!errors.budget}
+                        >
+                          <option value="">Select budget</option>
+                          {BUDGETS.map((b) => (
+                            <option key={b.value} value={b.value}>
+                              {b.label}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.budget && <small className="text-danger">{errors.budget}</small>}
                       </div>
+                    </div>
 
-                      {/* Email */}
-                      <div className="col-lg-6">
-                        <div className="form-group mb-20">
-                          <input
-                            type="text"
-                            name="your-email"
-                            className="form-control"
-                            placeholder="Email Address*"
-                            value={formData["your-email"]}
-                            onChange={handleChange}
-                            required
-                          />
-                          {errors["your-email"] && (
-                            <small className="text-danger">
-                              {errors["your-email"]}
-                            </small>
-                          )}
-                        </div>
+                    {/* Make / model */}
+                    <div className="col-lg-6">
+                      <div className="form-group mb-20">
+                        <label htmlFor="enq-make" className="enq-label">
+                          Preferred make <span className="enq-optional">(optional)</span>
+                        </label>
+                        <input id="enq-make" name="make" className="form-control" placeholder="Any make" value={values.make} onChange={handleChange} maxLength={40} />
                       </div>
-
-                      {/* Phone */}
-                      <div className="col-lg-6">
-                        <div className="form-group mb-20">
-                          <input
-                            type="text"
-                            name="your-phone"
-                            className="form-control"
-                            placeholder="Phone Number*"
-                            value={formData["your-phone"]}
-                            onChange={handleChange}
-                            required
-                          />
-                          {errors["your-phone"] && (
-                            <small className="text-danger">
-                              {errors["your-phone"]}
-                            </small>
-                          )}
-                        </div>
+                    </div>
+                    <div className="col-lg-6">
+                      <div className="form-group mb-20">
+                        <label htmlFor="enq-model" className="enq-label">
+                          Preferred model <span className="enq-optional">(optional)</span>
+                        </label>
+                        <input id="enq-model" name="model" className="form-control" placeholder="Any model" value={values.model} onChange={handleChange} maxLength={60} />
                       </div>
+                    </div>
+                  </div>
 
-                      {/* Postcode */}
-                      <div className="col-lg-6">
+                  <hr className="enq-divider" />
+
+                  <h5 className="enq-section">About your purchase <span className="enq-optional">(optional)</span></h5>
+                  <div className="row">
+                    {PURCHASE_FIELDS.map((f) => (
+                      <div key={f.name} className="col-lg-4">
                         <div className="form-group mb-20">
-                          <input
-                            type="text"
-                            name="you-postcode"
-                            className="form-control"
-                            placeholder="Postcode*"
-                            value={formData["you-postcode"]}
-                            onChange={handleChange}
-                            required
-                          />
-                          {errors["you-postcode"] && (
-                            <small className="text-danger">
-                              {errors["you-postcode"]}
-                            </small>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Vehicle type — site-specific question (page.tsx) */}
-                      {typeQuestion && (
-                        <div className="col-lg-6">
-                          <div className="form-group mb-20">
-                            <select
-                              name="vehicle-type"
-                              className="form-control"
-                              value={formData["vehicle-type"]}
-                              onChange={handleChange}
-                              required
-                            >
-                              <option value="">{typeQuestion.question}</option>
-                              {typeQuestion.options.map((o) => (
-                                <option key={o} value={o}>{o}</option>
-                              ))}
-                            </select>
-                            {errors["vehicle-type"] && (
-                              <small className="text-danger">
-                                {errors["vehicle-type"]}
-                              </small>
-                            )}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Condition */}
-                      <div className={typeQuestion ? "col-lg-6" : "col-lg-12"}>
-                        <div className="form-group mb-20">
-                          <select
-                            name="condition"
-                            className="form-control"
-                            value={formData.condition}
-                            onChange={handleChange}
-                            required
-                          >
-                            <option value="">Select Condition</option>
-                            <option value="New">New</option>
-                            
-                            <option value="Used">Used</option>
+                          <label htmlFor={`enq-${f.name}`} className="enq-label">
+                            {f.label}
+                          </label>
+                          <select id={`enq-${f.name}`} name={f.name} className="form-control" value={values[f.name] ?? ""} onChange={handleChange}>
+                            <option value="">Select</option>
+                            {f.options.map((o) => (
+                              <option key={o} value={o}>
+                                {o}
+                              </option>
+                            ))}
                           </select>
-                          {errors.condition && (
-                            <small className="text-danger">
-                              {errors.condition}
-                            </small>
-                          )}
                         </div>
                       </div>
+                    ))}
 
-                      {/* Budget */}
-                      <div className="col-lg-12">
-                        <div className="form-group mb-20">
-                          <input
-                            type="text"
-                            name="budget"
-                            className="form-control"
-                            placeholder="What is your budget?*"
-                            value={formData.budget}
-                            onChange={handleChange}
-                            required
-                          />
-                          {errors.budget && (
-                            <small className="text-danger">
-                              {errors.budget}
-                            </small>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Requirements */}
-                      <div className="col-lg-12">
-                        <div className="form-group mb-20">
-                          <textarea
-                            name="your-message"
-                            className="form-control"
-                            placeholder={`Tell us what you're after: preferred make and model, year, kilometres, must-have features and anything else that matters to you. This helps us find the right ${site.noun} for you.*`}
-                            value={formData["your-message"]}
-                            onChange={handleChange}
-                            required
-                          />
-                          {errors["your-message"] && (
-                            <small className="text-danger">
-                              {errors["your-message"]}
-                            </small>
-                          )}
-                        </div>
-                      </div>
-                      <div className="col-lg-12">
-                        <p className="terms_text">
-                          By clicking &apos;Submit&apos;, you agree to {site.singular}{" "}
-                          Marketplace{" "}
-                          <Link
-                            href="/privacy-collection-statement/"
-                            target="_blank"
-                          >
-                            Personal Information Collection Statement
-                          </Link>
-                          ,{" "}
-                          <Link href="/privacy-policy/" target="_blank">
-                            Privacy Policy
-                          </Link>{" "}
-                          and{" "}
-                          <Link href="/terms-conditions/" target="_blank">
-                            Terms and Conditions
-                          </Link>
-                          .
-                        </p>
-                      </div>
-
-                      {/* Submit Button */}
-                      <div className="col-lg-12 text-center">
-                        <input
-                          type="submit"
-                          value={loading ? "Submitting..." : "SUBMIT"}
-                          className="btn bg-blue4 fw-bold text-white text-light fs-12px"
-                          disabled={loading}
+                    {/* Additional requirements */}
+                    <div className="col-lg-12">
+                      <div className="form-group mb-20">
+                        <label htmlFor="enq-message" className="enq-label">
+                          Additional requirements <span className="enq-optional">(optional)</span>
+                        </label>
+                        <textarea
+                          id="enq-message"
+                          name="message"
+                          className="form-control"
+                          placeholder={form.messageHint}
+                          value={values.message}
+                          onChange={handleChange}
+                          maxLength={1500}
                         />
                       </div>
-
-                      {/* Message */}
-                      {message && (
-                        <div className="col-lg-12 mt-3 text-center">
-                          <p
-                            className={
-                              hasAnyError ? "text-danger" : "text-success"
-                            }
-                          >
-                            {message}
-                          </p>
-                        </div>
-                      )}
                     </div>
-                  </form>
-                </div>
+
+                    <div className="col-lg-12">
+                      <p className="terms_text">
+                        By submitting, you agree to our{" "}
+                        <Link href="/terms-conditions/" target="_blank">Terms</Link> and acknowledge our{" "}
+                        <Link href="/privacy-policy/" target="_blank">Privacy Policy</Link> and{" "}
+                        <Link href="/privacy-collection-statement/" target="_blank">Collection Statement</Link>.
+                        Your enquiry details may be shared with relevant participating sellers as described
+                        in the Collection Statement.
+                      </p>
+                    </div>
+
+                    <div className="col-lg-12 text-center">
+                      <input
+                        type="submit"
+                        value={loading ? "Submitting..." : `FIND MY ${site.singular.toUpperCase()}`}
+                        className="btn bg-blue4 fw-bold text-white text-light fs-12px"
+                        disabled={loading}
+                      />
+                    </div>
+
+                    {message && (
+                      <div className="col-lg-12 mt-3 text-center" role="status" aria-live="polite">
+                        <p className={sent ? "text-success" : "text-danger"}>{message}</p>
+                      </div>
+                    )}
+                  </div>
+                </form>
               </div>
             </div>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

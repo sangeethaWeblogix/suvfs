@@ -11,6 +11,12 @@ import { fetchRequirements, Requirement } from "@/api/postRquirements/api";
 import { site, sitePaths } from "@/config/sites";
    import '../app/home-demo/main.css'
 
+/** "40000" → "$40,000"; the enquiry form's top step "150000+" → "$150,000+"; other text as-is. */
+function formatBudget(budget: string): string {
+  const m = /^(\d+)(\+?)$/.exec(String(budget ?? "").trim());
+  return m ? `$${Number(m[1]).toLocaleString("en-AU")}${m[2]}` : budget;
+}
+
 interface Props {
   requirements: Requirement[];
 }
@@ -154,18 +160,13 @@ useEffect(() => {
                               {item.location}
                             </div>
                           </div>
-                          <div className="requirements">
+                          {/* Enquiry form sends "Label: value" lines - keep them on separate lines. */}
+                          <div className="requirements" style={{ whiteSpace: "pre-line" }}>
                             {item.requirements}
                           </div>
                           <div className="budget">
                             <span className="slugn">Budget</span>
-                            {Number.isNaN(Number(item.budget))
-                              ? item.budget
-                              : new Intl.NumberFormat("en-US", {
-                                  style: "currency",
-                                  currency: "USD",
-                                  minimumFractionDigits: 0,
-                                }).format(Number(item.budget))}
+                            {formatBudget(item.budget)}
                           </div>
                         </div>
                       </div>

@@ -33,9 +33,33 @@ function getPriceText(parsed: ReturnType<typeof parseSlugToFilters>): string {
   return "";
 }
 
+/** "Toyota SUVs for Sale in Queensland" - the page heading, no "| New & Used" part. */
+export function generateHeadingFromFilters(
+  parsed: ReturnType<typeof parseSlugToFilters>
+): string {
+  const { lead, location } = titleParts(parsed);
+  return `${lead}${location}`;
+}
+
+/**
+ * Fallback for the API's formula title (same rules): "Toyota SUVs for Sale |
+ * New & Used SUV Cars in Australia"; a model page uses the plural ("Toyota
+ * RAV4 for Sale | New & Used SUVs in Australia"); a condition page has no
+ * "| New & Used" part.
+ */
 export function generateTitleFromFilters(
   parsed: ReturnType<typeof parseSlugToFilters>
 ): string {
+  const { lead, location, namesNoun } = titleParts(parsed);
+  if (parsed.condition) return `${lead}${location}`;
+  return `${lead} | New & Used ${namesNoun ? site.homeTitleTerm : site.plural}${location}`;
+}
+
+function titleParts(parsed: ReturnType<typeof parseSlugToFilters>): {
+  lead: string;
+  location: string;
+  namesNoun: boolean;
+} {
   // Build location suffix (shared)
   const locationSuffix = parsed.state
     ? (() => {
@@ -51,7 +75,7 @@ export function generateTitleFromFilters(
   if (parsed.search) {
     const kw = titleCase(parsed.search);
     const noun = kw.toLowerCase().endsWith(site.plural.toLowerCase()) ? kw : `${kw} ${site.plural}`;
-    return `${noun} for Sale${locationSuffix}`;
+    return { lead: `${noun} for Sale`, location: locationSuffix, namesNoun: false };
   }
 
   const parts: string[] = [];
@@ -64,15 +88,13 @@ export function generateTitleFromFilters(
 
   if (parsed.make) parts.push(titleCase(parsed.make));
   if (parsed.model) parts.push(titleCase(parsed.model));
-  // Same rules as the API formula: a model page names the model alone, and
-  // a page without a condition filter ends in "| New & Used".
-  else parts.push(site.homeTitleTerm);
+  // Same rules as the API formula: a model page names the model alone.
+  else parts.push(site.plural);
 
   const price = getPriceText(parsed);
   const pricePart = price ? ` ${price}` : "";
-  const newAndUsed = parsed.condition ? "" : " | New & Used";
 
-  return `${parts.join(" ")} for Sale${pricePart}${locationSuffix}${newAndUsed}`;
+  return { lead: `${parts.join(" ")} for Sale${pricePart}`, location: locationSuffix, namesNoun: !parsed.model };
 }
 
 export async function metaFromSlug(
@@ -122,7 +144,7 @@ export async function metaFromSlug(
     canonical += `?${qs}`;
   }
 
-  // The API's formula title ("Toyota Sedan Cars for Sale in Australia | New & Used")
+  // The API's formula title ("Toyota Sedans for Sale | New & Used Sedan Cars in Australia")
   // matches the page's H1; the root layout fetches the same pool response for
   // its JSON-LD, so this is a cache hit. Local formula only if the API fails.
   const head = await fetchListingsForHead(urlPath);

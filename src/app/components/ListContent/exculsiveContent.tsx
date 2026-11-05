@@ -387,7 +387,7 @@ export default function ExculisiveContent({
                   No {site.nounPlural} match your filters
                 </h4>
                 <p className="text-gray-500 mt-1 max-w-md">
-                  Here are some Spotlight Vans that may interest you.
+                  Here are some Spotlight {site.spotlightNoun}s that may interest you.
                 </p>
               </div>
             </div>
@@ -437,7 +437,7 @@ export default function ExculisiveContent({
                               className="main_thumb position-relative"
                               onClick={(e) => e.stopPropagation()}
                             >
-                              <span className="lab">Spotlight Van</span>
+                              <span className="lab">Spotlight {site.spotlightNoun}</span>
 
                               <Swiper
                                 key={`${swiperKey}-${item.id}`}

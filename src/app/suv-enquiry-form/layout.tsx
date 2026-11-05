@@ -6,11 +6,11 @@ import { site, sitePaths } from "@/config/sites";
 
  export const metadata: Metadata = {
    title: {
-     default: `${site.singular} Enquiry Form | Exclusive ${site.singular} Deals & Offers`,
+     default: `${site.singular} Enquiry Form | Find the Right ${site.singular} for You`,
      template: "%s ",
    },
    description:
-     `Fill out our ${site.noun} enquiry form to receive exclusive offers from select quality ${site.noun} manufacturers. Get the best ${site.noun} deals sent directly to you.`,
+     `Tell us what ${site.noun} you're looking for, from size and features to budget, and we'll help connect you with relevant ${site.nounPlural} from participating sellers across Australia.`,
    icons: { icon: site.favicon },
    robots: "index, follow",
    verification: {

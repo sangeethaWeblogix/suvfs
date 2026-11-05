@@ -38,6 +38,11 @@ const readPage = (id: string): number | null => {
 
 const SEED_MAX = 15;
 
+// Section headings reuse the page's meta title, which carries a "| New & Used
+// … in Australia" SEO suffix — keep only the part before the pipe
+// ("Featured SUVs for Sale").
+const sectionTitle = (t: string) => t.split("|")[0].trim();
+
 
 /** Full pool data fetched server-side in page.tsx and passed as a prop so the
  *  SSR HTML contains real product listings from the first byte. */
@@ -489,7 +494,7 @@ export default function StateHome({
           {ip.isIndexed ? (
             <>
               <StateListingGrid
-                title={ip.seo?.meta_title ? `Featured ${ip.seo.meta_title}` : ""}
+                title={ip.seo?.meta_title ? sectionTitle(`Featured ${ip.seo.meta_title}`) : ""}
                 viewAllHref={`${buildListingsSlug(filters)}?featured=1`}
                 items={ip.featured}
                 loading={false}
@@ -565,7 +570,7 @@ export default function StateHome({
           onClearAll={handleClearAll}          initialStates={initialStates}          initialMakeCounts={initialMakeCounts}
         />
         <StateListingGrid
-          title={initialSeo.meta_title ? `Featured ${initialSeo.meta_title}` : ""}
+          title={initialSeo.meta_title ? sectionTitle(`Featured ${initialSeo.meta_title}`) : ""}
           viewAllHref=""
           items={[]}
           loading={true}
@@ -641,7 +646,7 @@ export default function StateHome({
         {isIndexed ? (
           <>
             <StateListingGrid
-              title={seo?.meta_title ? `Featured ${seo.meta_title}` : ""}
+              title={seo?.meta_title ? sectionTitle(`Featured ${seo.meta_title}`) : ""}
               viewAllHref={`${buildListingsSlug(filters)}?featured=1`}
               items={pool.featured}
               loading={poolLoading}
@@ -651,7 +656,7 @@ export default function StateHome({
             />
 
             <StateListingGrid
-              title={newSeo?.meta_title || (seo?.meta_title ? `New ${seo.meta_title}` : `New ${site.plural}`)}
+              title={sectionTitle(newSeo?.meta_title || (seo?.meta_title ? `New ${seo.meta_title}` : `New ${site.plural}`))}
               viewAllHref={buildListingsSlug(filters, "New")}
               items={pool.new}
               hideViewAll={!hasCondition(pool.new, "new")}
@@ -660,7 +665,7 @@ export default function StateHome({
             />
 
             <StateListingGrid
-              title={usedSeo?.meta_title || (seo?.meta_title ? `Used ${seo.meta_title}` : `Used ${site.plural}`)}
+              title={sectionTitle(usedSeo?.meta_title || (seo?.meta_title ? `Used ${seo.meta_title}` : `Used ${site.plural}`))}
               viewAllHref={buildListingsSlug(filters, "Used")}
               items={pool.used}
               hideViewAll={!hasCondition(pool.used, "used")}
