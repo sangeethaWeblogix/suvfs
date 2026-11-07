@@ -30,8 +30,6 @@ export type SiteConfig = {
    * Only for vehicles called cars - utes, vans, people movers, 4x4s and 4WDs stay plural.
    */
   homeTitleTerm: string;
-  /** Noun on the spotlight card badge ("Spotlight Car"); "Van" on the vans site. */
-  spotlightNoun: string;
   /** Home page meta title, e.g. "SUVs for Sale | New & Used SUV Cars in Australia". */
   homeTitle: string;
   /** Home page H1, e.g. "Convertibles for Sale in Australia". */
@@ -92,7 +90,7 @@ function hexToRgb(hex: string): string {
 // `color` / `secondaryColor` / `logo` / `favicon` override the defaults
 // (see public/sites/README.md).
 type SiteSeed = Pick<SiteConfig, "key" | "domain" | "brand" | "singular" | "plural" | "noun" | "nounPlural" | "homeIntro" | "article" | "slug"> &
-  Partial<Pick<SiteConfig, "homeTitleTerm" | "spotlightNoun" |"color" | "secondaryColor" | "logo" | "favicon" | "homeBanner" | "homeBannerMobile" | "buyerGuideImage" | "sellerCardImage" | "detailsBannerImage" | "vehicleIcon" | "googleVerification">>;
+  Partial<Pick<SiteConfig, "homeTitleTerm" | "color" | "secondaryColor" | "logo" | "favicon" | "homeBanner" | "homeBannerMobile" | "buyerGuideImage" | "sellerCardImage" | "detailsBannerImage" | "vehicleIcon" | "googleVerification">>;
 
 const SEEDS: SiteSeed[] = [
   { key: "suv",          domain: "suvforsale.com.au",          brand: "SuvForSale.com.au",          singular: "SUV",          plural: "SUVs",          noun: "SUV",          nounPlural: "SUVs",          homeIntro: "Browse thousands of new and used SUVs for sale across Australia from trusted dealers and private sellers. Compare compact, family, off-road, hybrid and luxury SUVs to find the right vehicle for your lifestyle.", article: "an", slug: "suv", homeTitleTerm: "SUV Cars" },
@@ -103,7 +101,7 @@ const SEEDS: SiteSeed[] = [
   { key: "wagons",       domain: "wagonsforsale.com.au",       brand: "WagonsForSale.com.au",       singular: "Wagon",        plural: "Wagons",        noun: "wagon",        nounPlural: "wagons",        homeIntro: "Browse new and used wagons for sale across Australia from trusted dealers and private sellers. Compare family, touring, performance and luxury wagons to find the right blend of comfort, space and practicality.", article: "a",  slug: "wagon", homeTitleTerm: "Wagon Cars", googleVerification: "BRSqrXzjVoxkkkad7ihvktU4zi4oX11cxMgGbgskWdU" },
   { key: "coupes",       domain: "coupesforsale.com.au",       brand: "CoupesForSale.com.au",       singular: "Coupe",        plural: "Coupes",        noun: "coupe",        nounPlural: "coupes",        homeIntro: "Browse new and used coupes for sale across Australia from trusted dealers and private sellers. Compare sporty, performance, grand touring and luxury coupes to find the right car for an engaging drive.", article: "a",  slug: "coupe", homeTitleTerm: "Coupe Cars" },
   { key: "convertibles", domain: "convertiblesforsale.com.au", brand: "ConvertiblesForSale.com.au", singular: "Convertible",  plural: "Convertibles",  noun: "convertible",  nounPlural: "convertibles",  homeIntro: "Browse new and used convertibles for sale across Australia from trusted dealers and private sellers. Compare soft-top, hard-top, sporty and luxury convertibles to find the right car for open-air driving.", article: "a",  slug: "convertible", homeTitleTerm: "Convertible Cars" },
-  { key: "vans",         domain: "vansforsale.au",             brand: "VansForSale.au",             singular: "Van",          plural: "Vans",          noun: "van",          nounPlural: "vans",          homeIntro: "Browse thousands of new and used vans for sale across Australia from trusted dealers and private sellers. Compare compact, cargo, passenger and large vans to find the right vehicle for your work, family or travels.", article: "a",  slug: "van", spotlightNoun: "Van" },
+  { key: "vans",         domain: "vansforsale.au",             brand: "VansForSale.au",             singular: "Van",          plural: "Vans",          noun: "van",          nounPlural: "vans",          homeIntro: "Browse thousands of new and used vans for sale across Australia from trusted dealers and private sellers. Compare compact, cargo, passenger and large vans to find the right vehicle for your work, family or travels.", article: "a",  slug: "van" },
   { key: "4x4",          domain: "4x4forsale.com.au",          brand: "4x4ForSale.com.au",          singular: "4x4",          plural: "4x4s",          noun: "4x4",          nounPlural: "4x4s",          homeIntro: "Browse thousands of new and used 4x4s for sale across Australia from trusted dealers and private sellers. Compare 4x4 utes, wagons and SUVs, from rugged tourers and work vehicles to family and luxury 4WDs, to find the right vehicle for your next adventure.", article: "a",  slug: "4x4" },
   { key: "4wd",          domain: "4wdforsale.com.au",          brand: "4wdForSale.com.au",          singular: "4WD",          plural: "4WDs",          noun: "4WD",          nounPlural: "4WDs",          homeIntro: "Browse new and used 4WDs for sale across Australia from trusted dealers and private sellers. Compare large 4WD SUVs, wagons and 7-seat people movers with strong towing capacity to find the right vehicle for family touring and towing.", article: "a",  slug: "4wd", googleVerification: "4pgT715RCCkhLDEKdgR3mPKHTGBwy9TB8QzK8Y78hw8" },
   { key: "awd",          domain: "awdforsale.com.au",          brand: "awdForSale.com.au",          singular: "AWD",          plural: "AWDs",          noun: "AWD",          nounPlural: "AWDs",          homeIntro: "Browse new and used all-wheel-drive vehicles for sale across Australia from trusted dealers and private sellers. Compare AWD SUVs, wagons, hatchbacks and performance cars to find confident traction, everyday comfort and the right vehicle for every road.", article: "an", slug: "awd", homeTitleTerm: "AWD Cars" },
@@ -121,7 +119,6 @@ export const SITES: Record<string, SiteConfig> = Object.fromEntries(
       url: `https://www.${s.domain}`,
       title: `${s.plural} For Sale`,
       homeTitleTerm: s.homeTitleTerm ?? s.plural,
-      spotlightNoun: s.spotlightNoun ?? "Car",
       homeTitle: `${s.plural} for Sale | New & Used ${s.homeTitleTerm ?? s.plural} in Australia`,
       homeH1: `${s.plural} for Sale in Australia`,
       metaDescription: `Browse new and used ${s.plural} for sale across Australia. Compare ${s.singular} prices, makes and models from dealers and private sellers to find your next vehicle.`,
