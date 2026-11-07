@@ -15,8 +15,8 @@
   import UTMTracker from "./UTMTracker";
   // import NextTopLoader from "nextjs-toploader";
 import NavigationHistory from "@/components/NavigationHistory";
-// import VisitorQualifier from "@/components/VisitorQualifier";
-// import VisitorStatus from "@/components/VisitorStatus";
+import VisitorQualifier from "@/components/VisitorQualifier";
+import VisitorStatus from "@/components/VisitorStatus";
 import { BannerProvider } from "@/components/BannerHandler";
 import GlobalErrorTracker from "@/components/GlobalErrorTracker";
 import { headers } from "next/headers";
@@ -454,14 +454,13 @@ const gtmId = getGtmId(site.key);
 <Suspense fallback={null}>
   <NavigationHistory />
 </Suspense>
-{/* Visitor qualification / status tracking switched off on car sites (2026-11-04, inherited from CFS)
+{/* Visitor screening + qualification (deferred MaxMind, per-site GTM container) */}
 <Suspense fallback={null}>
   <VisitorQualifier />
 </Suspense>
 <Suspense fallback={null}>
   <VisitorStatus />
 </Suspense>
-*/}
 <Suspense fallback={<NavbarSkeleton />}>
   <Navbar />
 </Suspense>

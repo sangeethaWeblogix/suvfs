@@ -2,7 +2,7 @@
    Stored in localStorage so it is shared across tabs and full page loads. */
 import type { QualifySignals } from "./qualifyRules";
 
-const STORAGE_KEY = "cfs_vq";
+const STORAGE_KEY = "car_vq";
 const INACTIVITY_RESET_MS = 30 * 60_000; // 30 min with no activity → engagement counters reset
 const QUALIFIED_TTL_MS = 30 * 86400_000;  // same 30 days as the server's eligibility — then re-qualify
 
@@ -45,7 +45,8 @@ export function resetQualification() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(fresh())); } catch {}
 }
 
-/* Applied a listings filter or submitted a search */
+/* Applied a listings filter or submitted a search (the type is for readability at call sites) */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function trackEngagement(_type: "filter" | "search") {
   updateEngagement(s => { s.filterUsed = true; });
 }

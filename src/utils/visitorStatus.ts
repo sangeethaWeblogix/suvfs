@@ -1,4 +1,3 @@
-import { site } from "@/config/sites";
 /* Visitor status (as | uk | ps) + entry source for the GTM dataLayer.
    Kept internally (storage + dataLayer) — the page URL is never changed.
    Read by <VisitorStatus /> (every page view) and <VisitorQualifier /> (on qualification). */
@@ -10,9 +9,9 @@ export interface EntrySource {
   medium: string;
 }
 
-const SOURCE_KEY = "cfs_src";             // localStorage: { source, medium, lastSeen }
-const STATUS_KEY = "cfs_vs";              // sessionStorage: { status, at }
-const SENT_KEY = "cfs_vs_sent";           // sessionStorage: last status+source sent as an event
+const SOURCE_KEY = "car_src";             // localStorage: { source, medium, lastSeen }
+const STATUS_KEY = "car_vs";              // sessionStorage: { status, at }
+const SENT_KEY = "car_vs_sent";           // sessionStorage: last status+source sent as an event
 const VISIT_TIMEOUT_MS = 30 * 60_000;     // same 30-min visit window as engagement tracking
 export const STATUS_CACHE_MS = 10 * 60_000;
 
@@ -47,7 +46,8 @@ function detectFromLanding(): EntrySource | null {
 
   let host = "";
   try { host = document.referrer ? new URL(document.referrer).hostname.toLowerCase() : ""; } catch {}
-  if (!host || host === window.location.hostname || host.endsWith(`.${site.domain}`)) return null;
+  const own = window.location.hostname.replace(/^www\./, "");
+  if (!host || host === own || host.endsWith(`.${own}`)) return null;   // our own site (any subdomain)
 
   const engine = SEARCH_ENGINES.find(([re]) => re.test(host));
   if (engine) return { source: engine[1], medium: "organic" };
