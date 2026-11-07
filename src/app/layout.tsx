@@ -21,6 +21,7 @@ import { BannerProvider } from "@/components/BannerHandler";
 import GlobalErrorTracker from "@/components/GlobalErrorTracker";
 import { headers } from "next/headers";
 import { site } from "@/config/sites";
+import { getGtmId } from "@/config/gtm";
 import { metaFromSlug } from "@/utils/seo/meta";
 import fetchListingsForHead, { buildListingsJsonLd, buildBreadcrumbs } from "@/utils/fetchListingsHead";
 import GlobalImageFallback from "@/components/GlobalImageFallback";
@@ -34,6 +35,9 @@ import { websiteLd, organizationLd, ORGANIZATION_ID } from "@/utils/seo/siteSche
 // Top-level route segments that are NOT handled by the [slug] blog-details
 // catch-all (shared with middleware) — skips a wasted fetchBlogDetail() for them.
 import { RESERVED_TOP_LEVEL_SLUGS } from "@/config/reservedSlugs";
+
+// This site's own Tag Manager container (undefined = no GTM)
+const gtmId = getGtmId(site.key);
 
   const montserrat = Montserrat({
     subsets: ["latin"],
@@ -403,8 +407,9 @@ import { RESERVED_TOP_LEVEL_SLUGS } from "@/config/reservedSlugs";
               dangerouslySetInnerHTML={{ __html: JSON.stringify(listingsJsonLd) }}
             />
           )}
-          {/* Google Tag Manager removed from car sites (2026-11-04): GTM-N3362FGQ is the CFS container
-              and was sending car-site traffic into the CFS GA4 property. Add a per-site container later.
+          {/* Google Tag Manager — each car site has its own container (src/config/gtm.ts) → its own GA4
+              property. Never GTM-N3362FGQ (the CFS container). */}
+          {gtmId && (
           <Script
             id="gtm-head"
             strategy="afterInteractive"
@@ -419,11 +424,11 @@ import { RESERVED_TOP_LEVEL_SLUGS } from "@/config/reservedSlugs";
                   j.async=true;
                   j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
                   f?f.parentNode.insertBefore(j,f):d.head.appendChild(j);
-                })(window,document,'script','dataLayer','GTM-N3362FGQ');
+                })(window,document,'script','dataLayer','${gtmId}');
               `,
             }}
           />
-          */}
+          )}
 
 
 
@@ -431,16 +436,16 @@ import { RESERVED_TOP_LEVEL_SLUGS } from "@/config/reservedSlugs";
         <body
           className={`flex flex-col min-h-screen new_font ${montserrat.className}`}
         >
-          {/* Google Tag Manager (noscript) removed from car sites (2026-11-04) — CFS container
+          {gtmId && (
          <noscript>
   <iframe
-    src="https://www.googletagmanager.com/ns.html?id=GTM-N3362FGQ"
+    src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
     height="0"
     width="0"
     style={{ display: "none", visibility: "hidden" }}
   />
 </noscript>
-          */}
+          )}
 
   
          <Suspense fallback={null}>
