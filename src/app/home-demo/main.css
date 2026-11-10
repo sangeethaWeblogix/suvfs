@@ -92,6 +92,14 @@
     height: 40px;
 }
 
+/* Per-site vehicle icons are wide (2:1) and multi-colour: give them more
+   width than the square icons and skip the purple silhouette filter. */
+.hd-banner__trust-icon--vehicle {
+    filter: none;
+    width: 54px;
+    height: 40px;
+}
+
 .hd-banner__trust-text strong {
     color: #000000;
     margin-bottom: 3px;
@@ -182,6 +190,7 @@
   .hd-banner__trust-item { flex: 1; padding: 14px 12px; gap: 10px; }
   .hd-banner__trust-icon-wrap { width: 52px; height: 52px; }
   .hd-banner__trust-icon { width: 28px; height: 28px; }
+  .hd-banner__trust-icon--vehicle { width: 40px; height: 28px; }
   /* Bottom bar: tighter text on iPad */
   .hd-banner__bottom-item { padding: 10px 10px; gap: 8px; }
   .hd-banner__bottom-item strong { font-size: 11px; }
@@ -3287,6 +3296,13 @@ main .section-head .category_icon li img {
     height: 38px;
     object-fit: contain;
     filter: brightness(0) saturate(100%) invert(24%) sepia(96%) saturate(6682%) hue-rotate(248deg) brightness(101%) contrast(99%);
+}
+
+/* Wide (2:1), multi-colour per-site vehicle icon: more width, no silhouette filter. */
+.hbg-why-icon img.hbg-why-icon__vehicle {
+    width: 55px;
+    height: 40px;
+    filter: none;
 }
 
 .hbg-why-card-title {

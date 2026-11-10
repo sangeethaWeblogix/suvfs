@@ -116,7 +116,7 @@ export default function HomeBuyerGuide() {
 
               <div className="hbg-why-card">
                 <div className="hbg-why-icon">
-                  <Image src={site.vehicleIcon} alt={`Dedicated ${site.singular} Marketplace`} width={34} height={34} style={{ filter: "none" }} />
+                  <Image src={site.vehicleIcon} alt={`Dedicated ${site.singular} Marketplace`} width={55} height={40} className="hbg-why-icon__vehicle" />
                 </div>
                 <h3 className="hbg-why-card-title">Dedicated {site.singular} Marketplace</h3>
                 <div className="hbg-why-card-sep" />

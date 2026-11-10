@@ -160,7 +160,7 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
           <div className="hd-banner__trust">
             <div className="hd-banner__trust-item">
               <div className="hd-banner__trust-icon-wrap">
-                <img src={site.vehicleIcon} alt="" className="hd-banner__trust-icon" width={26} height={26} style={{ filter: "none" }} />
+                <img src={site.vehicleIcon} alt="" className="hd-banner__trust-icon hd-banner__trust-icon--vehicle" width={54} height={40} />
               </div>
               <div className="hd-banner__trust-text">
                 <strong>Thousands of Listings</strong>
