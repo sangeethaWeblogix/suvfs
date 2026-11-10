@@ -68,7 +68,7 @@ export default function HomeBuyerGuide() {
             <div className="hbg-sell-icon-row">
               <span className="hbg-sell-line" />
               <div className="hbg-sell-icon-wrap">
-                <Image src="/images/category.svg" alt="" width={24} height={24} style={{ opacity: 0.4 }} />
+                <Image src={site.vehicleIcon} alt="" width={24} height={24} style={{ opacity: 0.4, objectFit: "contain" }} />
               </div>
               <span className="hbg-sell-line" />
             </div>
@@ -116,7 +116,7 @@ export default function HomeBuyerGuide() {
 
               <div className="hbg-why-card">
                 <div className="hbg-why-icon">
-                  <Image src="/images/category.svg" alt={`Dedicated ${site.singular} Marketplace`} width={34} height={34} />
+                  <Image src={site.vehicleIcon} alt={`Dedicated ${site.singular} Marketplace`} width={34} height={34} style={{ filter: "none" }} />
                 </div>
                 <h3 className="hbg-why-card-title">Dedicated {site.singular} Marketplace</h3>
                 <div className="hbg-why-card-sep" />

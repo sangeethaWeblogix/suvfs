@@ -347,7 +347,7 @@ export default function ProductDetailDemo({ data, similarData }: Props) {
     : location;
   // Headline specs for the bar above the gallery (each shown only when the car has it).
   const specBarItems = [
-    { label: "Body Type",    value: getAttr("Body Type"),    icon: <img src="/images/category.svg" width="20" height="20" alt="" /> },
+    { label: "Body Type",    value: getAttr("Body Type"),    icon: <img src={site.vehicleIcon} width="20" height="20" alt="" style={{ filter: "none", objectFit: "contain" }} /> },
     { label: "Odometer",     value: getAttr("Odometer"),     icon: <Gauge size={20} aria-hidden="true" /> },
     { label: "Transmission", value: getAttr("Transmission"), icon: <Settings2 size={20} aria-hidden="true" /> },
     { label: "Fuel Type",    value: getAttr("Fuel Type"),    icon: <Fuel size={20} aria-hidden="true" /> },
@@ -668,7 +668,7 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
               <div className="hbg-sell-icon-row">
                 <span className="hbg-sell-line" />
                 <div className="hbg-sell-icon-wrap">
-                  <Image src="/images/category.svg" alt="" width={24} height={24} style={{ opacity: 0.4 }} />
+                  <Image src={site.vehicleIcon} alt="" width={24} height={24} style={{ opacity: 0.4, objectFit: "contain" }} />
                 </div>
                 <span className="hbg-sell-line" />
               </div>

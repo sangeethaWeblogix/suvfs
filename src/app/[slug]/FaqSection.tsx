@@ -79,7 +79,7 @@ export default function FaqSection({
 
           {/* Right: CTA card */}
           <div className="blog-faq-cta">
-            <div className="blog-faq-cta__icon"><img src="/images/category.svg" alt="" width={36} height={36} /></div>
+            <div className="blog-faq-cta__icon"><img src={site.vehicleIcon} alt="" width={36} height={36} style={{ filter: "none", objectFit: "contain" }} /></div>
             <h3 className="blog-faq-cta__heading">
               {combinedLabel ? `Ready to Find Your Dream ${combinedLabel} ${site.singular}?` : `Ready to Find Your Dream ${site.singular}?`}
             </h3>

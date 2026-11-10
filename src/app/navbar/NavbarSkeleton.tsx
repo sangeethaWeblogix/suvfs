@@ -30,13 +30,11 @@ export default function NavbarSkeleton() {
               <li className="nav-item">
                 <a className="nav-link" href={portalLinks.dealer}>Dealer Advertising</a>
               </li>
-              {/* Login hidden until the seller/dealer modules are live
               <li className="nav-item login">
                 <a className="nav-link" href="https://cars.marketplacenetwork.com.au/seller-login/">
                   <i className="bi bi-person-fill"></i> Login
                 </a>
               </li>
-              */}
             </ul>
           </div>
           <div className="left_menu">

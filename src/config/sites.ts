@@ -60,7 +60,8 @@ export type SiteConfig = {
   sellerCardImage: string;
   /** Product details page banner photo (3:1, e.g. 1024×342), vehicle on the right, under /public. */
   detailsBannerImage: string;
-  /** Solid side-profile vehicle glyph (square SVG) for feature icons, under /public. */
+  /** This site's own vehicle icon (wide, coloured SVG from /images/car_icons/)
+   * for the car feature icons on home, product, blog and FAQ sections. */
   vehicleIcon: string;
   /** 1200×630 social share image and PNG logo for schema.org, under /public
    * (made from `logo` by scripts/generate-site-seo-images.mjs). */
@@ -75,6 +76,24 @@ export type SiteConfig = {
 // Network-wide brand colours; a site can override them in its SEEDS entry.
 const PRIMARY_COLOR = "#4736FE";
 const SECONDARY_COLOR = "#252525";
+
+// Each site's vehicle icon in public/images/car_icons/ (file name without .svg).
+const VEHICLE_ICONS: Record<string, string> = {
+  suv: "car-suv",
+  utes: "car-ute",
+  peoplemovers: "car-people-mover",
+  sedans: "car-sedan",
+  hatchbacks: "car-hatchback",
+  wagons: "car-wagon",
+  coupes: "car-coupe",
+  convertibles: "car-convertible",
+  vans: "car-van",
+  "4x4": "car-4x4",
+  "4wd": "car-4wd",
+  awd: "car-awd",
+  electric: "car-electric",
+  hybrid: "car-hybrid",
+};
 
 // Network-wide Search Console token (copied from CFS); a site with its own
 // Search Console property overrides it in its SEEDS entry.
@@ -132,7 +151,7 @@ export const SITES: Record<string, SiteConfig> = Object.fromEntries(
       buyerGuideImage: s.buyerGuideImage ?? `/sites/${s.key}/buyer-guide.jpg`,
       sellerCardImage: s.sellerCardImage ?? `/sites/${s.key}/seller-card.jpg`,
       detailsBannerImage: s.detailsBannerImage ?? `/sites/${s.key}/details-banner.jpg`,
-      vehicleIcon: s.vehicleIcon ?? `/sites/${s.key}/vehicle-icon.svg`,
+      vehicleIcon: s.vehicleIcon ?? `/images/car_icons/${VEHICLE_ICONS[s.key] ?? "car-suv"}.svg`,
       ogImage: `/sites/${s.key}/og-image.png`,
       schemaLogo: `/sites/${s.key}/logo.png`,
       avatar: `/sites/${s.key}/avatar.png`,

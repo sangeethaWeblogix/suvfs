@@ -469,7 +469,7 @@
                <div className="blog-browse-cta">
                  <div className="blog-browse-cta__text">
                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                   <img src="/images/category.svg" alt="" width={32} height={32} className="blog-browse-cta__icon-img" />
+                   <img src={site.vehicleIcon} alt="" width={32} height={32} className="blog-browse-cta__icon-img" style={{ filter: "none", objectFit: "contain" }} />
                    <div>
                      <h3 className="blog-browse-cta__heading">
                        {`Ready to Browse ${site.plural}?`}
