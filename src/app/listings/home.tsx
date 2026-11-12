@@ -536,11 +536,11 @@ export default function StateHome({
           <div className="lsd-sell-cta">
             <div className="container">
               <div className="lsd-sell-cta__inner">
-                <h2 className="lsd-sell-cta__title">Looking to Sell Your {site.singular}?</h2>
+                <h2 className="lsd-sell-cta__title">Looking to sell your car?</h2>
                 <p className="lsd-sell-cta__body">
-                  If you&apos;re upgrading or no longer need your current {site.noun},{" "}
-                  <a href={portalLinks.sell} className="lsd-sell-cta__link">sell your {site.noun}</a>{" "}
-                  by creating a listing on {site.brand} and connect with active buyers across Australia. Your advertisement stays online until it&apos;s sold for a one-time fee of $49.
+                  Whether you&apos;re upgrading or simply ready for a change,{" "}
+                  <a href={portalLinks.sell} className="lsd-sell-cta__link">sell your car online</a>{" "}
+                  for just $49 incl. GST. Your listing stays live until sold and is advertised across all relevant marketplaces within our network, helping you reach more potential buyers across Australia.
                 </p>
               </div>
             </div>
@@ -582,11 +582,11 @@ export default function StateHome({
         <div className="lsd-sell-cta">
           <div className="container">
             <div className="lsd-sell-cta__inner">
-              <h2 className="lsd-sell-cta__title">Looking to Sell Your {site.singular}?</h2>
+              <h2 className="lsd-sell-cta__title">Looking to sell your car?</h2>
               <p className="lsd-sell-cta__body">
-                If you&apos;re upgrading or no longer need your current {site.noun},{" "}
-                <a href={portalLinks.sell} className="lsd-sell-cta__link">sell your {site.noun}</a>{" "}
-                by creating a listing on {site.brand} and connect with active buyers across Australia. Your advertisement stays online until it&apos;s sold for a one-time fee of $49.
+                Whether you&apos;re upgrading or simply ready for a change,{" "}
+                <a href={portalLinks.sell} className="lsd-sell-cta__link">sell your car online</a>{" "}
+                for just $49 incl. GST. Your listing stays live until sold and is advertised across all relevant marketplaces within our network, helping you reach more potential buyers across Australia.
               </p>
             </div>
           </div>
@@ -694,11 +694,11 @@ export default function StateHome({
         <div className="lsd-sell-cta">
           <div className="container">
             <div className="lsd-sell-cta__inner">
-              <h2 className="lsd-sell-cta__title">Looking to Sell Your {site.singular}?</h2>
+              <h2 className="lsd-sell-cta__title">Looking to sell your car?</h2>
               <p className="lsd-sell-cta__body">
-                If you&apos;re upgrading or no longer need your current {site.noun},{" "}
-                <a href={portalLinks.sell} className="lsd-sell-cta__link">sell your {site.noun}</a>{" "}
-                by creating a listing on {site.brand} and connect with active buyers across Australia. Your advertisement stays online until it&apos;s sold for a one-time fee of $49.
+                Whether you&apos;re upgrading or simply ready for a change,{" "}
+                <a href={portalLinks.sell} className="lsd-sell-cta__link">sell your car online</a>{" "}
+                for just $49 incl. GST. Your listing stays live until sold and is advertised across all relevant marketplaces within our network, helping you reach more potential buyers across Australia.
               </p>
             </div>
           </div>
@@ -759,11 +759,11 @@ export default function StateHome({
       <div className="lsd-sell-cta">
         <div className="container">
           <div className="lsd-sell-cta__inner">
-            <h2 className="lsd-sell-cta__title">Looking to Sell Your {site.singular}?</h2>
+            <h2 className="lsd-sell-cta__title">Looking to sell your car?</h2>
             <p className="lsd-sell-cta__body">
-              If you&apos;re upgrading or no longer need your current {site.noun},{" "}
-              <a href={portalLinks.sell} className="lsd-sell-cta__link">sell your {site.noun}</a>{" "}
-              by creating a listing on {site.brand} and connect with active buyers across Australia. Your advertisement stays online until it&apos;s sold for a one-time fee of $49.
+              Whether you&apos;re upgrading or simply ready for a change,{" "}
+              <a href={portalLinks.sell} className="lsd-sell-cta__link">sell your car online</a>{" "}
+              for just $49 incl. GST. Your listing stays live until sold and is advertised across all relevant marketplaces within our network, helping you reach more potential buyers across Australia.
             </p>
           </div>
         </div>

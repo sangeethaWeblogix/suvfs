@@ -590,8 +590,8 @@
                  <div className="blog-sidebar-cta">
                    <h3 className="blog-sidebar-cta__heading">Ready to Find Your Next {site.singular}?</h3>
                    <p className="blog-sidebar-cta__desc">Browse thousands of new and used {site.nounPlural} from trusted dealers and private sellers across Australia.</p>
-                   <a href="/listings/" className="blog-sidebar-cta__btn">
-                     Search {site.plural} Now <i className="bi bi-arrow-right" />
+                   <a href="/" className="blog-sidebar-cta__btn">
+                     Search {site.plural} For Sale <i className="bi bi-arrow-right" />
                    </a>
                  </div>
                  <div className="blog-sidebar-cta blog-sidebar-cta--sell">
@@ -621,9 +621,10 @@
              from dealers and private sellers across Australia, with listings available by make, model, price, location and {site.noun} type.
            </p>
            <p className="bds-cta-body">
-             <strong>Looking to sell?</strong> If you&apos;re upgrading to a newer {site.noun} or no longer need your current one,{" "}
-             <a href={portalLinks.sell} className="bds-cta-link">sell your {site.noun}</a>{" "}
-             by creating a listing on {site.brand}. Your advertisement stays online until it&apos;s sold for a one-time fee of $49.
+             <strong>Looking to sell your car?</strong> Whether you&apos;re upgrading or simply ready for a change,{" "}
+             <a href={portalLinks.sell} className="bds-cta-link">sell your car online</a>{" "}
+             for just $49 incl. GST. Your listing stays live until sold and is advertised across all relevant marketplaces
+             within our network, helping you reach more potential buyers across Australia.
            </p>
          </div>
        </section>
