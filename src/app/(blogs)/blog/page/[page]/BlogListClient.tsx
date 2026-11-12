@@ -251,9 +251,9 @@ const loading = !data || !blogPosts || blogPosts.length === 0 && data.totalPages
                   </a>
                 </div>
                 <div className="blog-sidebar-cta blog-sidebar-cta--sell">
-                  <h3 className="blog-sidebar-cta__heading">Sell Your {site.singular} Faster with Australia&apos;s Growing {site.singular} Marketplace</h3>
+                  <h3 className="blog-sidebar-cta__heading">Sell Your Car Faster with Australia&apos;s Growing Car Marketplace Network</h3>
                   <a href={portalLinks.sell} className="blog-sidebar-cta__btn">
-                    List Your {site.singular} Now <i className="bi bi-arrow-right" />
+                    Sell My Car Now <i className="bi bi-arrow-right" />
                   </a>
                 </div>
                 {false &&

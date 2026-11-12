@@ -497,8 +497,8 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
 
         {/* Subtitle */}
         <div className="pdd-subtitle">
-          <span>Have a similar {site.noun} to sell?</span>
-          <a href={portalLinks.sell} className="pdd-subtitle__link">List Your {site.singular}</a>
+          <span>Have a similar car to sell?</span>
+          <a href={portalLinks.sell} className="pdd-subtitle__link">Sell My Car</a>
           <span className="pdd-subtitle__badge">$49 Until Sold</span>
         </div>
 
@@ -655,8 +655,8 @@ const priceUpperIdx = !isPOA ? PRICE_STEPS.findIndex(s => s >= displayPrice) : -
 
             <div className="pdd-sidebar__sell">
               <strong>Thinking of selling?</strong>
-              <p>Get more eyes on your {site.noun} today.</p>
-              <a href={portalLinks.sell} className="pdd-btn-sell">Sell My {site.singular}</a>
+              <p>Get more eyes on your car today.</p>
+              <a href={portalLinks.sell} className="pdd-btn-sell">Sell My Car</a>
             </div>
           </aside>
         </div>

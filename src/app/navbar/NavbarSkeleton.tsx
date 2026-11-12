@@ -25,7 +25,7 @@ export default function NavbarSkeleton() {
           <div className="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
             <ul className="navbar-nav mb-2 mb-lg-0">
               <li className="nav-item">
-                <a className="nav-link" href={portalLinks.sell}>Sell My {site.singular}</a>
+                <a className="nav-link" href={portalLinks.sell}>Sell My Car</a>
               </li>
               <li className="nav-item">
                 <a className="nav-link" href={portalLinks.dealer}>Dealer Advertising</a>
