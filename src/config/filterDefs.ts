@@ -6,7 +6,10 @@
 // to API query params, so middleware/edge code can parse URLs without an API call.
 //
 // URL segments (all lower-case, one per filter, emitted in FILTER_DEFS order):
-//   multi        {value}[-or-{value}…]-{slug}   diesel-or-hybrid-fuel-type, 7-or-8-seats
+//   multi        {value}-{slug}                 diesel-fuel-type, 7-seats
+//                One value only: the filter bar is single-choice, like Location
+//                and Make. Old multi-value segments (diesel-or-hybrid-fuel-type)
+//                rebuild to a different canonical path, so middleware answers 410.
 //   range        under-{n}-{slug} | over-{n}-{slug} | between-{a}-{b}-{slug}
 //   min_dropdown over-{n}-{slug}
 // Decimals use "_" instead of "." (7_5-cargo-volume) so paths never look like file names.
@@ -82,8 +85,10 @@ export function parseFilterSegment(segment: string): FilterValues | null {
     if (!body) continue;
 
     if (def.control === "multi") {
-      const values = body.split("-or-").map(slugToValue).filter(Boolean);
-      return values.length ? { [def.param]: values.join(",") } : null;
+      // An old "a-or-b" segment still parses as this filter (never as a make),
+      // keeping only its first value.
+      const value = slugToValue(body.split("-or-")[0]);
+      return value ? { [def.param]: value } : null;
     }
 
     const between = body.match(new RegExp(`^between-(${NUM})-(${NUM})$`));
@@ -112,8 +117,8 @@ export function buildFilterSegments(filters: object): string[] {
   const segments: string[] = [];
   for (const def of FILTER_DEFS) {
     if (def.control === "multi") {
-      const values = splitMulti(f[def.param]).map(valueToSlug).sort();
-      if (values.length) segments.push(`${values.join("-or-")}-${def.slug}`);
+      const value = splitMulti(f[def.param]).map(valueToSlug)[0];
+      if (value) segments.push(`${value}-${def.slug}`);
     } else if (def.control === "min_dropdown") {
       if (present(f[def.param])) segments.push(`over-${toUrlNum(f[def.param])}-${def.slug}`);
     } else {

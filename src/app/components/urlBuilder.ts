@@ -71,13 +71,11 @@ export function parseSlugToFilters(
 
     // --- Typed segments ---
     if (part.endsWith("-condition")) {
-      // Multi-select: new-or-demo-condition → "New,demo"
-      filters.condition = part
-        .replace("-condition", "")
-        .toLowerCase()
-        .split("-or-")
-        .map((slug) => conditionMap[slug] || slug)
-        .join(",");
+      // One condition per URL (used-condition → "Used"). An old multi-value
+      // segment (new-or-demo-condition) keeps only its first value, so the
+      // rebuilt canonical path differs and middleware answers 410.
+      const slug = part.replace("-condition", "").toLowerCase().split("-or-")[0];
+      filters.condition = conditionMap[slug] || slug;
       return;
     }
 

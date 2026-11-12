@@ -227,24 +227,23 @@ function FilterControl({ item, values, applied, onChange, facets }: {
   item: SchemaItem; values: Values; applied: Values; onChange: (patch: Values) => void; facets: Facets;
 }) {
   if (item.control === "multi") {
-    const selected = splitMulti(values[item.param]).map((v) => v.toLowerCase());
-    const toggle = (value: string) => {
-      const next = selected.includes(value) ? selected.filter((v) => v !== value) : [...selected, value];
-      onChange({ [item.param]: next.length ? next.join(",") : undefined });
-    };
+    // Single choice, like Location and Make: picking an option replaces the
+    // current one, picking it again clears it (one value per URL segment).
+    const selected = splitMulti(values[item.param])[0]?.toLowerCase();
+    const pick = (value: string) => onChange({ [item.param]: value === selected ? undefined : value });
     // Like CFS: no counts shown, and options with no active listings are hidden
-    // (kept while selected so they can be unticked; all shown until counts load).
+    // (kept while selected so it can be cleared; all shown until counts load).
     const visible = multiOptions(item).filter((o) =>
-      selected.includes(o.value) || (countFor(facets, item, o.value, o.label) ?? 1) > 0);
-    // Applied options move to the top (like the make list); ticking in the modal doesn't reorder.
-    const pinned = splitMulti(applied[item.param]).map((v) => v.toLowerCase());
-    const options = [...visible.filter((o) => pinned.includes(o.value)), ...visible.filter((o) => !pinned.includes(o.value))];
+      o.value === selected || (countFor(facets, item, o.value, o.label) ?? 1) > 0);
+    // The applied option moves to the top (like the make list); picking in the modal doesn't reorder.
+    const pinned = splitMulti(applied[item.param])[0]?.toLowerCase();
+    const options = [...visible.filter((o) => o.value === pinned), ...visible.filter((o) => o.value !== pinned)];
     return (
       <ul className="loc-state-list">
         {options.map((o) => {
-          const isOn = selected.includes(o.value);
+          const isOn = o.value === selected;
           return (
-            <li key={o.value} className="loc-state-item" onClick={() => toggle(o.value)}>
+            <li key={o.value} className={`loc-state-item${isOn ? " selected" : ""}`} onClick={() => pick(o.value)}>
               <span className={`loc-checkbox${isOn ? " checked" : ""}`}>
                 {isOn && <i className="bi bi-check" style={{ color: "#fff", fontSize: 14, lineHeight: 1 }} />}
               </span>

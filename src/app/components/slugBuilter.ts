@@ -31,12 +31,9 @@ export function buildSlugFromFilters(f: Filters): string {
   if (f.make) segments.push(toSlug(f.make));
   if (f.model) segments.push(modelSlug(f.model));
 
-  // 2) Condition (display -> slug)
-  // Multi-select: "new,demo" → new-or-demo-condition
-  const conditions = splitMulti(f.condition)
-    .map((c) => conditionToSlug[c.toLowerCase()] || toSlug(c))
-    .sort();
-  if (conditions.length) segments.push(`${conditions.join("-or-")}-condition`);
+  // 2) Condition (display -> slug), one value: "used" → used-condition
+  const condition = splitMulti(f.condition)[0];
+  if (condition) segments.push(`${conditionToSlug[condition.toLowerCase()] || toSlug(condition)}-condition`);
 
   // 3) Location
    const state = cleanSlug(f.state);
