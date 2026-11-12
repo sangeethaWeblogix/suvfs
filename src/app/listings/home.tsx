@@ -18,6 +18,7 @@ import { buildApiUrl, buildListingsSlug, buildFilterBreadcrumbs, buildExploreTra
 import { bucketPoolResponse, bucketPoolResponseCombined, hasCondition } from "./listingShared";
 import { FILTER_PARAM_KEYS } from "@/config/filterDefs";
 import { trackEngagement } from "@/utils/engagement";
+import { listingMetaTitle } from "@/utils/seo/listingTitle";
 // import { useBanners } from "@/components/BannerHandler";
 // import { useBannerTracking } from "@/hooks/useBannerTracking";
 import "./main.css?=7";
@@ -171,16 +172,12 @@ export default function StateHome({
   // Push the API's seo_v2 title into the browser tab. The meta description is
   // the same on every page of the site (site.metaDescription), so the API's
   // per-filter meta_description is not used.
+  // No API title (filter just changed and the new fetch is in flight, or the
+  // API failed): build it from the current filters with the API's formula,
+  // so the tab never shows the previous page's title.
   useEffect(() => {
-    if (!seo) {
-      // Filter changed and the new page's SEO hasn't loaded yet — fall back
-      // to the generic title instead of leaving the previous page's title
-      // showing (stale tab title while the new fetch is in flight).
-      document.title = site.homeTitle;
-      return;
-    }
-    if (seo.meta_title) document.title = seo.meta_title;
-  }, [seo]);
+    document.title = seo?.meta_title || listingMetaTitle(filters);
+  }, [seo, filters]);
 
   // Restore page from ?clickid= on mount (hard refresh / shared link) before
   // the grids below fetch anything, so they fetch the right page just once.

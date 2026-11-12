@@ -3,6 +3,7 @@ import { site } from "@/config/sites";
 import type { Metadata } from "next";
 import { isIndexableListingPath } from "./indexRules";
 import fetchListingsForHead from "@/utils/fetchListingsHead";
+import { listingMetaTitle } from "./listingTitle";
 
 // ─── Title generation from parsed filters (no API call needed) ───
 const STATE_NAMES: Record<string, string> = {
@@ -41,24 +42,9 @@ export function generateHeadingFromFilters(
   return `${lead}${location}`;
 }
 
-/**
- * Fallback for the API's formula title (same rules): "Toyota SUVs for Sale |
- * New & Used SUV Cars in Australia"; a model page uses the plural ("Toyota
- * RAV4 for Sale | New & Used SUVs in Australia"); a condition page has no
- * "| New & Used" part.
- */
-export function generateTitleFromFilters(
-  parsed: ReturnType<typeof parseSlugToFilters>
-): string {
-  const { lead, location, namesNoun } = titleParts(parsed);
-  if (parsed.condition) return `${lead}${location}`;
-  return `${lead} | New & Used ${namesNoun ? site.homeTitleTerm : site.plural}${location}`;
-}
-
 function titleParts(parsed: ReturnType<typeof parseSlugToFilters>): {
   lead: string;
   location: string;
-  namesNoun: boolean;
 } {
   // Build location suffix (shared)
   const locationSuffix = parsed.state
@@ -75,7 +61,7 @@ function titleParts(parsed: ReturnType<typeof parseSlugToFilters>): {
   if (parsed.search) {
     const kw = titleCase(parsed.search);
     const noun = kw.toLowerCase().endsWith(site.plural.toLowerCase()) ? kw : `${kw} ${site.plural}`;
-    return { lead: `${noun} for Sale`, location: locationSuffix, namesNoun: false };
+    return { lead: `${noun} for Sale`, location: locationSuffix };
   }
 
   const parts: string[] = [];
@@ -94,7 +80,7 @@ function titleParts(parsed: ReturnType<typeof parseSlugToFilters>): {
   const price = getPriceText(parsed);
   const pricePart = price ? ` ${price}` : "";
 
-  return { lead: `${parts.join(" ")} for Sale${pricePart}`, location: locationSuffix, namesNoun: !parsed.model };
+  return { lead: `${parts.join(" ")} for Sale${pricePart}`, location: locationSuffix };
 }
 
 export async function metaFromSlug(
@@ -144,11 +130,12 @@ export async function metaFromSlug(
     canonical += `?${qs}`;
   }
 
-  // The API's formula title ("Toyota Sedans for Sale | New & Used Sedan Cars in Australia")
-  // matches the page's H1; the root layout fetches the same pool response for
-  // its JSON-LD, so this is a cache hit. Local formula only if the API fails.
+  // The API's meta_title ("SUVs for Sale in Australia", "Toyota SUVs for Sale
+  // in Queensland"); the root layout fetches the same pool response for its
+  // JSON-LD, so this is a cache hit. If the API fails, listingMetaTitle builds
+  // the same title with the API's formula.
   const head = await fetchListingsForHead(urlPath);
-  const title = head?.seo_v2?.meta_title || generateTitleFromFilters(parsed);
+  const title = head?.seo_v2?.meta_title || listingMetaTitle(parsed);
   const description = site.metaDescription;
 
   return {
