@@ -1,4 +1,5 @@
-import { portalLinks } from "@/config/sites";
+import { portalLinks, site } from "@/config/sites";
+import { WEBSITE_ID } from "@/utils/seo/siteSchema";
 
 /** One FAQ tab on the home page. */
 export interface FaqCategory {
@@ -313,12 +314,14 @@ function stripHtml(html: string): string {
     .replace(/&amp;/g, "&");
 }
 
-/** FAQPage JSON-LD for the home page's FAQ section — every tab's questions in
- * one mainEntity list, with answers reduced to the plain text schema.org expects. */
+/** FAQPage node for the home page's JSON-LD @graph (layout.tsx) — every tab's
+ * questions in one mainEntity list, with answers reduced to the plain text
+ * schema.org expects. */
 export function buildHomeFaqJsonLd(categories: FaqCategory[]) {
   return {
-    "@context": "https://schema.org",
     "@type": "FAQPage",
+    "@id": `${site.url}/#faq`,
+    isPartOf: { "@id": WEBSITE_ID },
     mainEntity: categories.flatMap((c) => c.items).map((item) => ({
       "@type": "Question",
       name: item.question,

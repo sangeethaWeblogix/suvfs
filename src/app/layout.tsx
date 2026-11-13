@@ -31,6 +31,10 @@ import { isNonBlogSlug } from "@/utils/isNonBlogSlug";
 import { fetchProductDetail } from "@/utils/fetchProductDetail";
 import { buildCarPageJsonLd } from "@/utils/seo/carSchema";
 import { websiteLd, organizationLd, ORGANIZATION_ID } from "@/utils/seo/siteSchema";
+import { HOME_FAQS, buildHomeFaqJsonLd } from "./home-demo/homeFaqData";
+
+// This site's home page FAQ (undefined = no FAQ section, no FAQPage node)
+const homeFaqs = HOME_FAQS[site.key];
 
 // Top-level route segments that are NOT handled by the [slug] blog-details
 // catch-all (shared with middleware) — skips a wasted fetchBlogDetail() for them.
@@ -324,15 +328,19 @@ const gtmId = getGtmId(site.key);
           {hasSlugMeta && slugTitle && <meta name="twitter:title" content={slugTitle} />}
           {hasSlugMeta && slugDescription && <meta name="twitter:description" content={slugDescription} />}
           {hasSlugMeta && <meta name="twitter:image" content={`${site.url}${site.ogImage}`} />}
-          {/* Home page JSON-LD */}
+          {/* Home page JSON-LD — one @graph: WebSite, Organization, plus FAQPage on sites with a home FAQ */}
           {isHomePage && (
             <script
               type="application/ld+json"
               dangerouslySetInnerHTML={{
                 __html: JSON.stringify({
                   "@context": "https://schema.org",
-                  "@graph": [websiteLd(), organizationLd()],
-                }),
+                  "@graph": [
+                    websiteLd(),
+                    organizationLd(),
+                    ...(homeFaqs ? [buildHomeFaqJsonLd(homeFaqs)] : []),
+                  ],
+                }).replace(/</g, "\\u003c"),
               }}
             />
           )}

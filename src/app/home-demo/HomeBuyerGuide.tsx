@@ -4,7 +4,7 @@ import { site, portalLinks } from "@/config/sites";
 import ExploreOtherVehicles from "@/app/components/ExploreOtherVehicles";
 import type { ReactNode } from "react";
 import HomeFaq from "./HomeFaq";
-import { HOME_FAQS, buildHomeFaqJsonLd } from "./homeFaqData";
+import { HOME_FAQS } from "./homeFaqData";
 
 const faqs = HOME_FAQS[site.key];
 
@@ -89,16 +89,8 @@ export default function HomeBuyerGuide() {
         </div>
       </section>
 
-      {/* ── FAQ (only sites with their own questions) ── */}
-      {faqs && (
-        <>
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(buildHomeFaqJsonLd(faqs)) }}
-          />
-          <HomeFaq categories={faqs} />
-        </>
-      )}
+      {/* ── FAQ (only sites with their own questions; its FAQPage schema is in layout.tsx's home @graph) ── */}
+      {faqs && <HomeFaq categories={faqs} />}
 
       {/* ── Sell CTA Card ── */}
       <section className="hbg-sell-section">
