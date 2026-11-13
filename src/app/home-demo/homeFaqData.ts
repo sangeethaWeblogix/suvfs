@@ -304,6 +304,288 @@ export const HOME_FAQS: Partial<Record<string, FaqCategory[]>> = {
       ],
     },
   ],
+  suv: [
+    {
+      label: "New, Used & Prices",
+      items: [
+        {
+          question: "Where can I buy new SUVs in Australia?",
+          answer: `Browse <a href="/listings/new-condition/">new SUVs for sale</a> on SUVForSale.com.au. Compare available models from Australian dealerships by make, price, seating capacity, fuel type and location.`,
+        },
+        {
+          question: "Where can I find used SUVs for sale?",
+          answer: `Explore <a href="/listings/used-condition/">used SUVs for sale</a> across Australia. Compare second-hand vehicles from dealerships and private sellers by price, age, condition, kilometres and features.`,
+        },
+        {
+          question: "Should I buy a new or used SUV?",
+          answer: `New SUVs offer current technology and applicable manufacturer warranties, while used SUVs generally cost less. Compare purchase prices, vehicle condition, features and ongoing expenses before deciding.`,
+        },
+        {
+          question: "How much does a new SUV cost in Australia?",
+          answer: `New SUV prices vary from under $30,000 for some entry-level models to over $100,000 for premium and luxury vehicles. Prices depend on brand, size, drivetrain and features.`,
+        },
+        {
+          question: "How much does a used SUV cost?",
+          answer: `Used SUV prices range from under $10,000 for some older vehicles to over $80,000 for newer luxury models. Age, kilometres, condition, brand and features influence asking prices.`,
+        },
+        {
+          question: "Where can I find SUVs under $20,000?",
+          answer: `Browse <a href="/listings/between-10000-20000/">SUVs between $10,000 and $20,000</a> and lower price ranges on SUVForSale.com.au. Compare affordable used models by condition, age and kilometres.`,
+        },
+        {
+          question: "Where can I find SUVs under $30,000?",
+          answer: `Explore <a href="/listings/between-20000-30000/">SUVs between $20,000 and $30,000</a> or select a lower budget. Compare compact, medium and family SUVs from different manufacturers.`,
+        },
+        {
+          question: "What factors affect SUV resale value?",
+          answer: `Resale value depends on brand, model, age, kilometres, condition, service history and buyer demand. Fuel economy, safety features, warranty coverage and accident history can also influence value.`,
+        },
+      ],
+    },
+    {
+      label: "SUV Brands",
+      items: [
+        {
+          question: "What are the most popular SUV brands in Australia?",
+          answer: `Popular SUV brands include Toyota, Mazda, Hyundai, Kia, Mitsubishi, Nissan, Subaru, BMW and Mercedes-Benz. Compare available models, specifications and prices to find a suitable SUV.`,
+        },
+        {
+          question: "Where can I find Toyota SUVs for sale?",
+          answer: `Browse <a href="/listings/toyota/">Toyota SUVs for sale</a>, including available RAV4, Corolla Cross, Kluger, Yaris Cross, Prado and LandCruiser models.`,
+        },
+        {
+          question: "Where can I find Mazda SUVs for sale?",
+          answer: `Explore <a href="/listings/mazda/">Mazda SUVs for sale</a>, including popular models such as the CX-3, CX-5, CX-30, CX-60 and CX-90.`,
+        },
+        {
+          question: "Where can I find Hyundai SUVs for sale?",
+          answer: `Browse <a href="/listings/hyundai/">Hyundai SUVs for sale</a>, including the Kona, Tucson, Santa Fe, Palisade and electric SUV options.`,
+        },
+        {
+          question: "Where can I find Kia SUVs for sale?",
+          answer: `Find <a href="/listings/kia/">Kia SUVs for sale</a>, including the Seltos, Sportage, Sorento, EV3, EV5 and EV9. Compare available petrol, diesel, hybrid and electric models.`,
+        },
+        {
+          question: "Where can I find BMW SUVs for sale?",
+          answer: `Browse available BMW SUVs on SUVForSale.com.au, including models such as the X1, X3, X5, X6 and electric iX range. Compare prices, condition and features.`,
+        },
+        {
+          question: "Where can I find Mercedes-Benz SUVs for sale?",
+          answer: `Explore Mercedes-Benz SUV listings on SUVForSale.com.au, including GLA, GLB, GLC, GLE and GLS models. Compare available luxury, family and electric options.`,
+        },
+      ],
+    },
+    {
+      label: "SUV Sizes, Seating & Features",
+      items: [
+        {
+          question: "Where can I find compact SUVs for sale?",
+          answer: `Browse <a href="/listings/small-body-size/">small SUVs for sale</a>, including available Toyota Yaris Cross, Mazda CX-3, Hyundai Kona and Kia Stonic models.`,
+        },
+        {
+          question: "What are the best midsize SUVs in Australia?",
+          answer: `Popular medium SUVs include the Toyota RAV4, Mazda CX-5, Hyundai Tucson, Kia Sportage and Honda CR-V. Browse <a href="/listings/medium-body-size/">medium SUVs for sale</a> to compare.`,
+        },
+        {
+          question: "Where can I find large SUVs for sale?",
+          answer: `Explore <a href="/listings/large-body-size/">large SUVs for sale</a>, including models suited to families needing additional seating, boot space and towing capability.`,
+        },
+        {
+          question: "What is a crossover SUV?",
+          answer: `A crossover SUV generally combines SUV styling and practicality with a passenger-car-based platform. Crossovers are often designed for everyday road driving rather than demanding off-road conditions.`,
+        },
+        {
+          question: "Where can I find coupe SUVs for sale?",
+          answer: `Coupe-style SUVs feature a more sloping roofline and sportier appearance. Examples include the BMW X4, BMW X6 and Mercedes-Benz GLC Coupe, subject to availability.`,
+        },
+        {
+          question: "What are the best luxury SUVs in Australia?",
+          answer: `Luxury SUVs include models from BMW, Mercedes-Benz, Audi, Lexus, Volvo and Porsche. Compare comfort, technology, interior space, performance and running costs before choosing.`,
+        },
+        {
+          question: "Where can I find 7-seater SUVs for sale?",
+          answer: `Browse <a href="/listings/7-seats/">7-seater SUVs for sale</a>, including available Kia Sorento, Hyundai Santa Fe, Toyota Kluger, Mazda CX-90 and Ford Everest models.`,
+        },
+        {
+          question: "What are the best 5-seater SUVs for families?",
+          answer: `Popular family options include the Toyota RAV4, Mazda CX-5, Hyundai Tucson and Kia Sportage. Compare rear-seat comfort, child-seat compatibility, boot space and safety features.`,
+        },
+        {
+          question: "What safety features should I look for in an SUV?",
+          answer: `Look for autonomous emergency braking, blind-spot monitoring, lane-keeping assistance, reversing cameras and suitable child-seat anchors. Check the model's applicable ANCAP safety rating and assessment year.`,
+        },
+      ],
+    },
+    {
+      label: "Hybrid & Electric SUVs",
+      items: [
+        {
+          question: "Where can I find hybrid SUVs for sale?",
+          answer: `SUVForSale.com.au features hybrid SUVs from brands such as Toyota, Hyundai, Kia, Honda and GWM. Use the Fuel Type filter to browse available hybrid models.`,
+        },
+        {
+          question: "Where can I find electric SUVs for sale?",
+          answer: `Browse electric SUVs on SUVForSale.com.au using the Electric fuel-type filter. Compare models from Tesla, BYD, Hyundai, Kia, BMW and other manufacturers.`,
+        },
+        {
+          question: "Where can I find plug-in hybrid SUVs for sale?",
+          answer: `Use the Plug-in Hybrid fuel-type filter on SUVForSale.com.au to explore models such as the Mitsubishi Outlander PHEV, Kia Sorento PHEV and BYD Sealion 6.`,
+        },
+        {
+          question: "What is the difference between hybrid and plug-in hybrid SUVs?",
+          answer: `Conventional hybrids recharge their batteries through the engine and regenerative braking. Plug-in hybrids have larger batteries that can also be charged externally, allowing more electric-only driving.`,
+        },
+        {
+          question: "What are the benefits of owning a hybrid SUV?",
+          answer: `Hybrid SUVs can reduce fuel consumption, particularly in stop-start traffic. They offer petrol-engine flexibility with electric assistance, although savings depend on the model and driving conditions.`,
+        },
+        {
+          question: "Are electric SUVs suitable for long-distance driving?",
+          answer: `Yes. Many electric SUVs support long-distance travel, provided their range and charging needs suit your route. Consider battery range, charging speed and charger availability.`,
+        },
+        {
+          question: "Which SUV manufacturers offer electric and hybrid models?",
+          answer: `Toyota, Hyundai, Kia, BYD, BMW, Mercedes-Benz, MG and several other manufacturers offer hybrid or electric SUVs. Compare available models by fuel type, range, features and price.`,
+        },
+      ],
+    },
+    {
+      label: "AWD, 4WD & Towing",
+      items: [
+        {
+          question: "Where can I find 4WD SUVs for sale?",
+          answer: `Browse <a href="/listings/four-wheel-drive-drive-type/">4WD SUVs for sale</a>, including available Toyota LandCruiser Prado, Ford Everest, Isuzu MU-X and Mitsubishi Pajero Sport models.`,
+        },
+        {
+          question: "Where can I find AWD SUVs for sale?",
+          answer: `Explore <a href="/listings/all-wheel-drive-drive-type/">AWD SUVs for sale</a>, including models designed to provide additional traction across varying road conditions.`,
+        },
+        {
+          question: "What is the difference between 4WD and AWD SUVs?",
+          answer: `AWD systems generally distribute power automatically between wheels, while traditional 4WD systems often offer selectable driving modes or low-range gearing. Actual capabilities vary by vehicle.`,
+        },
+        {
+          question: "Which SUVs are suitable for off-road driving?",
+          answer: `Models such as the Toyota LandCruiser Prado, Ford Everest, Isuzu MU-X and Mitsubishi Pajero Sport offer off-road-focused variants. Check ground clearance, tyres, suspension and 4WD specifications.`,
+        },
+        {
+          question: "What are the best SUVs for towing caravans?",
+          answer: `SUVs such as the Ford Everest, Toyota LandCruiser Prado and Isuzu MU-X are commonly considered for caravan towing. Check braked towing capacity, towball download, GVM and GCM limits.`,
+        },
+        {
+          question: "Which SUVs offer the highest towing capacity?",
+          answer: `Some larger SUVs offer braked towing capacities around 3,000–3,500kg, depending on model and variant. Always check manufacturer ratings and the vehicle's permitted combined weight.`,
+        },
+        {
+          question: "Are diesel SUVs suitable for towing?",
+          answer: `Diesel SUVs can suit towing because many offer strong low-speed torque and practical touring range. Check the specific vehicle's towing limits, payload and service requirements.`,
+        },
+      ],
+    },
+    {
+      label: "SUVs for Sale by Location",
+      items: [
+        {
+          question: "Where can I find SUVs for sale in Sydney?",
+          answer: `Browse <a href="/listings/new-south-wales-state/sydney-region/">SUVs for sale in Sydney</a> on SUVForSale.com.au. Compare new, used and demo models from dealers and private sellers.`,
+        },
+        {
+          question: "Where can I find SUVs for sale in Melbourne?",
+          answer: `Explore <a href="/listings/victoria-state/melbourne-region/">SUVs for sale in Melbourne</a> and filter available vehicles by make, price, condition, fuel type and seating capacity.`,
+        },
+        {
+          question: "Where can I find SUVs for sale in Brisbane?",
+          answer: `Browse <a href="/listings/queensland-state/brisbane-region/">SUVs for sale in Brisbane</a> and compare available small, medium, large, hybrid and electric SUVs.`,
+        },
+        {
+          question: "Where can I find SUVs for sale in Perth?",
+          answer: `Find <a href="/listings/western-australia-state/perth-region/">SUVs for sale in Perth</a> and compare available models, prices, features and specifications.`,
+        },
+        {
+          question: "Where can I find SUVs for sale in Adelaide?",
+          answer: `Browse <a href="/listings/south-australia-state/adelaide-region/">SUVs for sale in Adelaide</a> and compare new, used and demo vehicles advertised by dealers and private sellers.`,
+        },
+        {
+          question: "How can I find SUVs for sale near me?",
+          answer: `Use the location filters on SUVForSale.com.au to search by state, city or region. Narrow results by price, make, condition and features.`,
+        },
+      ],
+    },
+    {
+      label: "Selling an SUV",
+      items: [
+        {
+          question: "How do I sell my SUV online in Australia?",
+          answer: `You can <a href="${SELL}">sell your car online</a> through our unified marketplace for $49 including GST. Your SUV is advertised across relevant automotive marketplaces until sold.`,
+        },
+        {
+          question: "Can private owners advertise SUVs for sale?",
+          answer: `Yes. Private owners can create an advertisement through SellMyCarOnline.au, allowing eligible SUVs to appear on SUVForSale.com.au and other relevant marketplace websites.`,
+        },
+        {
+          question: "How much does it cost to advertise an SUV?",
+          answer: `Private sellers pay a one-time fee of $49 including GST through SellMyCarOnline.au. Your advertisement stays live until sold, with no monthly listing charges or sales commission.`,
+        },
+        {
+          question: "Will my SUV be advertised across multiple marketplaces?",
+          answer: `Yes. When you list through SellMyCarOnline.au, your SUV is automatically advertised on relevant websites within our automotive network based on its vehicle attributes.`,
+        },
+        {
+          question: "Can dealerships advertise their SUV inventory?",
+          answer: `Yes. Dealerships can advertise eligible SUV stock through our unified marketplace network, allowing vehicles to appear on relevant websites through a single dealer account.`,
+        },
+        {
+          question: "What information should I include in my SUV advertisement?",
+          answer: `Include the make, model, year, kilometres, condition, asking price, fuel type, transmission and features. Add clear interior and exterior photos, plus available service history.`,
+        },
+        {
+          question: "How do I determine the resale price of my SUV?",
+          answer: `Compare similar SUVs by make, model, year, kilometres, condition and features. Review current asking prices on SUVForSale.com.au to estimate a competitive selling price.`,
+        },
+      ],
+    },
+    {
+      label: "General & Buying",
+      items: [
+        {
+          question: "Where can I find SUVs for sale in Australia?",
+          answer: `Browse <a href="/listings/">new and used SUVs for sale</a> on SUVForSale.com.au. Compare vehicles from dealerships and private sellers across Australia by price, make, model, location and specifications.`,
+        },
+        {
+          question: "What are the most popular SUVs in Australia?",
+          answer: `Popular SUVs include the Toyota RAV4, Mazda CX-5, Hyundai Tucson, Kia Sportage, Mitsubishi Outlander and Toyota Kluger. Compare available models based on size, features, fuel economy and budget.`,
+        },
+        {
+          question: "What types of SUVs are available in Australia?",
+          answer: `SUVs are available in small, medium and large sizes, including family, luxury, crossover, hybrid, electric and 4WD models. Each offers different seating, storage and driving capabilities.`,
+        },
+        {
+          question: "What is the difference between an SUV and an ordinary car?",
+          answer: `SUVs generally offer higher seating positions, increased ground clearance and more versatile cargo space than conventional sedans or hatchbacks. However, size and driving capabilities vary between models.`,
+        },
+        {
+          question: "Which SUVs are best for everyday driving?",
+          answer: `Compact and medium SUVs such as the Toyota Corolla Cross, Mazda CX-5, Hyundai Kona and Kia Sportage can suit everyday driving. Consider fuel economy, comfort, parking and safety features.`,
+        },
+        {
+          question: "What should I consider before buying an SUV?",
+          answer: `Consider your budget, passenger requirements, boot space, fuel type, safety features and running costs. For used SUVs, also check service history, kilometres travelled and mechanical condition.`,
+        },
+        {
+          question: "How can I compare different SUVs for sale?",
+          answer: `Compare SUVs by make, model, year, price, kilometres, fuel type, transmission, drivetrain, seating capacity and features. Use the search filters on SUVForSale.com.au to narrow your choices.`,
+        },
+        {
+          question: "Are SUVs available from private sellers and dealers?",
+          answer: `Yes. SUVForSale.com.au features new, used and demo SUVs advertised by Australian dealerships and private sellers, allowing buyers to compare options and contact advertisers directly.`,
+        },
+        {
+          question: "How do I contact an SUV seller?",
+          answer: `Select an SUV listing on SUVForSale.com.au and use the available enquiry options to contact the dealership or private seller directly about inspections, availability and purchasing.`,
+        },
+      ],
+    },
+  ],
 };
 
 function stripHtml(html: string): string {

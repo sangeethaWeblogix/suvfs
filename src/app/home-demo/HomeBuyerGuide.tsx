@@ -24,7 +24,24 @@ const SITE_COPY: Partial<Record<string, ReactNode>> = {
         Use our search filters to find utes by location, price, condition, make, model, cab type, fuel type and drivetrain. Compare key specifications including year, kilometres travelled, transmission, engine type, payload and towing capacity, along with features such as safety technology, four-wheel drive systems and accessories.
       </p>
       <p className="hbg-body">
-        When buying a used ute, check its service history, mechanical condition, registration and signs of heavy commercial use. Whether you need a reliable workhorse or a comfortable family vehicle, browse our <Link href="/listings/" className="hbg-link">utes for sale</Link>, compare available listings and contact dealers or private sellers directly.
+        When buying a used ute, check its service history, mechanical condition, registration and signs of heavy commercial use. Whether you need a reliable workhorse or a comfortable family vehicle, <Link href="/listings/" className="hbg-link">browse our Ute listings</Link>, compare available listings and contact dealers or private sellers directly.
+      </p>
+    </>
+  ),
+  suv: (
+    <>
+      <h2 className="hbg-title">SUVs for Sale in Australia – Buy with Confidence</h2>
+      <p className="hbg-body">
+        Looking to buy an SUV in Australia? SUVForSale.com.au helps you browse and compare new and used SUVs for sale from dealerships and private sellers nationwide. Whether you&apos;re buying your first SUV, upgrading your family vehicle or searching for an affordable second-hand model, find an SUV that suits your budget and driving needs.
+      </p>
+      <p className="hbg-body">
+        Explore SUVs from popular brands such as Toyota, Mazda, Hyundai, Kia, Mitsubishi, Nissan, BMW and Mercedes-Benz. From compact SUVs for city driving to spacious 5-seater and 7-seater family models, luxury SUVs, hybrid and electric vehicles, and capable AWD and 4WD SUVs, compare options suited to everyday commuting, family adventures and long-distance travel.
+      </p>
+      <p className="hbg-body">
+        Use our search filters to find SUVs by location, price, condition, make, model, body size, fuel type, drivetrain and seating capacity. Compare key specifications including year, kilometres travelled, transmission, fuel efficiency, boot space, safety features and towing capacity.
+      </p>
+      <p className="hbg-body">
+        When buying a used SUV, check its service history, mechanical condition, registration and safety features. Whether you need a practical family SUV, an economical hybrid or a capable 4WD for weekend adventures, <Link href="/listings/" className="hbg-link">browse our suv listings</Link> and contact dealers or private sellers directly.
       </p>
     </>
   ),
