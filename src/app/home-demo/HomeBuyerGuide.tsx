@@ -1,6 +1,34 @@
 import Image from "next/image";
+import Link from "next/link";
 import { site, portalLinks } from "@/config/sites";
 import ExploreOtherVehicles from "@/app/components/ExploreOtherVehicles";
+import type { ReactNode } from "react";
+import HomeFaq from "./HomeFaq";
+import { HOME_FAQS, buildHomeFaqJsonLd } from "./homeFaqData";
+
+const faqs = HOME_FAQS[site.key];
+
+/** Buyer Guide text written for one site, keyed by site key. Sites without an
+ * entry use the shared copy in HomeBuyerGuide below. */
+const SITE_COPY: Partial<Record<string, ReactNode>> = {
+  utes: (
+    <>
+      <h2 className="hbg-title">Utes for Sale in Australia – Buy with Confidence</h2>
+      <p className="hbg-body">
+        Looking to buy a ute in Australia? UtesForSale.com helps you browse and compare new and used utes for sale from dealerships and private sellers nationwide. Whether you&apos;re buying your first ute, upgrading your work vehicle or searching for an affordable second-hand model, find a ute that suits your budget and driving needs.
+      </p>
+      <p className="hbg-body">
+        Explore utes from popular brands such as Toyota, Ford, Isuzu, Mitsubishi, Mazda, Nissan, GWM and LDV. From practical single cab and tray-back utes for tradies to versatile dual cab models for families, 4x4 utes for off-road adventures and electric or hybrid options, compare vehicles designed for work, towing, everyday driving and recreation.
+      </p>
+      <p className="hbg-body">
+        Use our search filters to find utes by location, price, condition, make, model, cab type, fuel type and drivetrain. Compare key specifications including year, kilometres travelled, transmission, engine type, payload and towing capacity, along with features such as safety technology, four-wheel drive systems and accessories.
+      </p>
+      <p className="hbg-body">
+        When buying a used ute, check its service history, mechanical condition, registration and signs of heavy commercial use. Whether you need a reliable workhorse or a comfortable family vehicle, browse our <Link href="/listings/" className="hbg-link">utes for sale</Link>, compare available listings and contact dealers or private sellers directly.
+      </p>
+    </>
+  ),
+};
 
 export default function HomeBuyerGuide() {
   return (
@@ -31,19 +59,21 @@ export default function HomeBuyerGuide() {
               </div>
             </div>
 
-            {/* Right: Text */}
+            {/* Right: Text — a site's own copy when it has one, else the shared copy */}
             <div className="hbg-text-col">
-              <h2 className="hbg-title">
-                {site.plural} for Sale Australia: <span className="hbg-title-accent">Buyer Guide</span>
-              </h2>
-              
-              <p className="hbg-body">
-                {site.brand} makes it easy to browse new and used {site.nounPlural} for sale across Australia from dealers and private sellers. Compare affordable pre-owned vehicles, the latest new models and options suited to different budgets and driving needs. Review important details such as make, model, year, odometer, fuel type, transmission, drivetrain, seating, safety features, condition and service history before contacting a seller or visiting a dealership.
-              </p>
-              <p className="hbg-body">
-                Compare popular makes, models and variants from reputable dealers and private sellers across Australia. Consider running costs, fuel efficiency, warranty coverage, finance options, trade-ins and after-sales support before making your decision. Use our buyer&apos;s guide and convenient search filters to browse listings by state, location, budget, year, odometer and key specifications, helping you find the right {site.noun} for your lifestyle.
-              </p>
-              
+              {SITE_COPY[site.key] ?? (
+                <>
+                  <h2 className="hbg-title">
+                    {site.plural} for Sale Australia: <span className="hbg-title-accent">Buyer Guide</span>
+                  </h2>
+                  <p className="hbg-body">
+                    {site.brand} makes it easy to browse new and used {site.nounPlural} for sale across Australia from dealers and private sellers. Compare affordable pre-owned vehicles, the latest new models and options suited to different budgets and driving needs. Review important details such as make, model, year, odometer, fuel type, transmission, drivetrain, seating, safety features, condition and service history before contacting a seller or visiting a dealership.
+                  </p>
+                  <p className="hbg-body">
+                    Compare popular makes, models and variants from reputable dealers and private sellers across Australia. Consider running costs, fuel efficiency, warranty coverage, finance options, trade-ins and after-sales support before making your decision. Use our buyer&apos;s guide and convenient search filters to browse listings by state, location, budget, year, odometer and key specifications, helping you find the right {site.noun} for your lifestyle.
+                  </p>
+                </>
+              )}
             </div>
 
           </div>
@@ -58,6 +88,17 @@ export default function HomeBuyerGuide() {
           </div>
         </div>
       </section>
+
+      {/* ── FAQ (only sites with their own questions) ── */}
+      {faqs && (
+        <>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(buildHomeFaqJsonLd(faqs)) }}
+          />
+          <HomeFaq categories={faqs} />
+        </>
+      )}
 
       {/* ── Sell CTA Card ── */}
       <section className="hbg-sell-section">
