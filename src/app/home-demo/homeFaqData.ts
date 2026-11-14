@@ -14,6 +14,7 @@ export interface FaqItem {
 }
 
 const SELL = portalLinks.sell;
+const DEALER = portalLinks.dealer;
 
 /** Home page FAQ tabs, keyed by site key. Sites without an entry show no FAQ
  * section. Links are relative so they stay on the site being viewed. */
@@ -582,6 +583,575 @@ export const HOME_FAQS: Partial<Record<string, FaqCategory[]>> = {
         {
           question: "How do I contact an SUV seller?",
           answer: `Select an SUV listing on SUVForSale.com.au and use the available enquiry options to contact the dealership or private seller directly about inspections, availability and purchasing.`,
+        },
+      ],
+    },
+  ],
+  "4wd": [
+    {
+      label: "New, Used & Prices",
+      items: [
+        {
+          question: "Where can I buy new 4WD vehicles in Australia?",
+          answer: `Browse <a href="/listings/new-condition/">new 4WDs for sale</a> on 4WDForSale.com.au. Compare available models from Australian dealerships by make, price, seating and specifications.`,
+        },
+        {
+          question: "Where can I find used 4WDs for sale?",
+          answer: `Explore <a href="/listings/used-condition/">used 4WDs for sale</a> across Australia. Compare second-hand SUVs and wagons from dealerships and private sellers by price, age, condition and kilometres.`,
+        },
+        {
+          question: "Is it better to buy a new or used 4WD?",
+          answer: `New 4WDs offer current features and applicable manufacturer warranties, while used 4WDs generally cost less. Compare vehicle condition, reliability, capabilities and running costs before deciding.`,
+        },
+        {
+          question: "How much does a new 4WD cost in Australia?",
+          answer: `Some new 4WD SUVs are advertised from around $45,000, while premium off-road wagons can exceed $100,000. Prices vary by brand, model, drivetrain and features.`,
+        },
+        {
+          question: "How much does a used 4WD cost?",
+          answer: `Used 4WDs can cost under $20,000 for some older models, while newer premium vehicles may exceed $80,000. Age, condition, kilometres and modifications influence asking prices.`,
+        },
+        {
+          question: "Where can I find 4WDs under $20,000?",
+          answer: `Browse <a href="/listings/between-10000-20000/">4WDs between $10,000 and $20,000</a> and lower price ranges. Compare affordable used models by age, condition and mechanical history.`,
+        },
+        {
+          question: "Where can I find 4WDs under $30,000?",
+          answer: `Explore <a href="/listings/between-20000-30000/">4WDs between $20,000 and $30,000</a> or select a lower budget. Compare available SUVs and wagons from different manufacturers.`,
+        },
+        {
+          question: "What should I check before buying a used 4WD?",
+          answer: `Inspect the engine, transmission, transfer case, differential, suspension, chassis and underbody. Check for off-road damage, review service records and conduct a PPSR search before purchasing.`,
+        },
+      ],
+    },
+    {
+      label: "4WD Brands",
+      items: [
+        {
+          question: "What are the most popular 4WD brands in Australia?",
+          answer: `Well-known 4WD brands include Toyota, Nissan, Ford, Mitsubishi, Isuzu, Land Rover, Suzuki and GWM. Compare individual models for reliability, off-road capability and towing requirements.`,
+        },
+        {
+          question: "Where can I find Toyota 4WDs for sale?",
+          answer: `Browse <a href="/listings/toyota/">Toyota 4WDs for sale</a>, including available LandCruiser, Prado and other four-wheel-drive models from dealerships and private sellers.`,
+        },
+        {
+          question: "Where can I find Nissan 4WDs for sale?",
+          answer: `Explore <a href="/listings/nissan/">Nissan 4WDs for sale</a>, including available Patrol, Pathfinder and X-TRAIL models. Compare drivetrain, seating, price and specifications.`,
+        },
+        {
+          question: "Where can I find Ford 4WDs for sale?",
+          answer: `Browse <a href="/listings/ford/">Ford 4WDs for sale</a>, including available Everest models suited to family travel, towing and selected off-road conditions.`,
+        },
+        {
+          question: "Where can I find Mitsubishi 4WDs for sale?",
+          answer: `Explore <a href="/listings/mitsubishi/">Mitsubishi 4WDs for sale</a>, including Pajero and Pajero Sport models. Compare available vehicles by condition, price and features.`,
+        },
+        {
+          question: "Where can I find Isuzu 4WDs for sale?",
+          answer: `Browse <a href="/listings/isuzu/">Isuzu 4WDs for sale</a>, including available MU-X models designed for family transport, towing and recreational travel.`,
+        },
+        {
+          question: "Are GWM 4WDs suitable for off-road driving?",
+          answer: `GWM offers off-road-focused models such as the Tank 300 and Tank 500. Compare <a href="/listings/gwm/">GWM 4WDs for sale</a> by drivetrain, ground clearance, features and price.`,
+        },
+      ],
+    },
+    {
+      label: "4WD Types & Seating",
+      items: [
+        {
+          question: "Where can I find 4WD SUVs for sale?",
+          answer: `Browse <a href="/listings/suv-body-type/">4WD SUVs for sale</a> on 4WDForSale.com.au. Compare available models by make, price, condition, seating capacity and features.`,
+        },
+        {
+          question: "Where can I find 4WD wagons for sale?",
+          answer: `Explore <a href="/listings/wagon-body-type/">4WD wagons for sale</a>, including available models suited to family travel, long-distance touring and off-road adventures.`,
+        },
+        {
+          question: "Where can I find 4WD utes for sale?",
+          answer: `Browse <a href="https://www.4x4forsale.com.au/">4x4s for sale</a> across Australia to compare four-wheel-drive utes, SUVs and other vehicle types within our automotive marketplace network.`,
+        },
+        {
+          question: "What is the difference between a 4WD SUV and a 4WD ute?",
+          answer: `4WD SUVs generally provide enclosed passenger and cargo space, while 4WD utes have a separate tub or tray. Both can offer towing and off-road capability, depending on the model.`,
+        },
+        {
+          question: "Where can I find 7-seater 4WDs for sale?",
+          answer: `Browse <a href="/listings/7-seats/">7-seater 4WDs for sale</a>, including available Ford Everest, Toyota Prado, Isuzu MU-X and other family-oriented models.`,
+        },
+        {
+          question: "What are the best small 4WD vehicles in Australia?",
+          answer: `The Suzuki Jimny is a popular compact off-road 4WD. When choosing a smaller vehicle, compare ground clearance, low-range capability, passenger space, payload and everyday comfort.`,
+        },
+      ],
+    },
+    {
+      label: "Fuel Types & Powertrains",
+      items: [
+        {
+          question: "Where can I find diesel 4WDs for sale?",
+          answer: `Browse <a href="/listings/diesel-fuel-type/">diesel 4WDs for sale</a> on 4WDForSale.com.au. Compare available models by price, age, seating, condition and specifications.`,
+        },
+        {
+          question: "Where can I find petrol 4WDs for sale?",
+          answer: `Explore <a href="/listings/petrol-fuel-type/">petrol 4WDs for sale</a>, including available SUVs and wagons suited to everyday driving, family travel and touring.`,
+        },
+        {
+          question: "Where can I find hybrid 4WDs for sale?",
+          answer: `Browse <a href="/listings/hybrid-fuel-type/">hybrid 4WDs for sale</a> and compare available models combining petrol engines with electric assistance. Check the drivetrain and off-road capabilities of individual vehicles.`,
+        },
+        {
+          question: "Are electric 4WD vehicles available in Australia?",
+          answer: `Yes. Some electric SUVs use dual-motor or other four-wheel-drive systems. However, electric all-wheel traction does not necessarily provide the low-range gearing or clearance needed for demanding off-road driving.`,
+        },
+        {
+          question: "What is the difference between petrol and diesel 4WDs?",
+          answer: `Diesel 4WDs often provide strong low-speed torque and practical touring range, while petrol models may offer smoother performance. Compare fuel consumption, servicing costs and towing requirements.`,
+        },
+      ],
+    },
+    {
+      label: "Off-Road, Touring & Towing",
+      items: [
+        {
+          question: "What is the difference between a 4WD and an AWD vehicle?",
+          answer: `Both can distribute power to four wheels. Traditional 4WD systems often provide additional off-road features such as low-range gearing, while AWD systems commonly prioritise road traction. Capabilities vary by model.`,
+        },
+        {
+          question: "What is the difference between high-range and low-range 4WD?",
+          answer: `High-range 4WD provides additional traction for normal-speed driving on suitable surfaces. Low-range gearing increases torque multiplication for slow, controlled driving over steep or challenging terrain.`,
+        },
+        {
+          question: "Which 4WDs are best for off-road driving?",
+          answer: `Models such as the Toyota LandCruiser, Nissan Patrol, Ford Everest and Mitsubishi Pajero Sport offer off-road-capable variants. Compare ground clearance, low-range gearing, traction systems and tyres.`,
+        },
+        {
+          question: "What are the best 4WDs for Australian outback adventures?",
+          answer: `Choose a 4WD with suitable ground clearance, reliability, payload, fuel range and off-road capability. Toyota LandCruiser, Nissan Patrol and other touring-focused models are popular options.`,
+        },
+        {
+          question: "Which 4WDs are suitable for long-distance touring?",
+          answer: `A touring 4WD should offer comfortable seating, practical storage, adequate payload and reliable performance. Consider fuel range, servicing availability and towing needs for remote travel.`,
+        },
+        {
+          question: "Which 4WDs offer the best ground clearance?",
+          answer: `Ground clearance varies by model, variant, tyres and suspension. Dedicated off-road 4WDs generally offer more clearance than road-focused SUVs. Check manufacturer specifications before choosing.`,
+        },
+        {
+          question: "What are the best 4WDs for towing caravans?",
+          answer: `The Toyota LandCruiser, Nissan Patrol, Ford Everest and Isuzu MU-X are commonly considered for towing. Compare braked towing capacity, towball download, GVM and GCM limits.`,
+        },
+        {
+          question: "What features improve 4WD off-road performance?",
+          answer: `Useful features include low-range gearing, differential locks, suitable tyres, ground clearance, underbody protection and traction-control systems. Driving technique and vehicle weight also affect off-road performance.`,
+        },
+      ],
+    },
+    {
+      label: "Accessories & Ownership",
+      items: [
+        {
+          question: "What accessories are essential for a 4WD?",
+          answer: `Useful accessories may include all-terrain tyres, recovery equipment, a tyre compressor, underbody protection and additional storage. Choose equipment that suits your destinations and vehicle.`,
+        },
+        {
+          question: "What recovery equipment should every 4WD owner carry?",
+          answer: `Recovery equipment may include rated recovery points, suitable recovery gear, a tyre compressor and a shovel. Use equipment compatible with your vehicle and obtain proper recovery training.`,
+        },
+        {
+          question: "Are bull bars and snorkels useful for off-road driving?",
+          answer: `Bull bars can provide frontal protection, while properly installed snorkels may help protect the engine's air intake in dusty conditions. Check compatibility, legal requirements and installation quality.`,
+        },
+        {
+          question: "Are 4WD suspension upgrades worth considering?",
+          answer: `Suspension upgrades may improve load handling or ground clearance when properly selected. However, modifications can affect ride comfort, handling, vehicle compliance and warranty coverage.`,
+        },
+        {
+          question: "What accessories are useful for 4WD camping and touring?",
+          answer: `Popular touring accessories include roof racks, drawers, portable refrigerators, awnings, dual-battery systems and camping equipment. Consider payload limits and weight distribution when adding accessories.`,
+        },
+      ],
+    },
+    {
+      label: "4WDs for Sale by Location",
+      items: [
+        {
+          question: "Where can I find 4WDs for sale in Sydney?",
+          answer: `Browse <a href="/listings/new-south-wales-state/sydney-region/">4WDs for sale in Sydney</a> on 4WDForSale.com.au. Compare new, used and demo vehicles from dealers and private sellers.`,
+        },
+        {
+          question: "Where can I find 4WDs for sale in Melbourne?",
+          answer: `Explore <a href="/listings/victoria-state/melbourne-region/">4WDs for sale in Melbourne</a> and compare available SUVs and wagons by make, model, price and condition.`,
+        },
+        {
+          question: "Where can I find 4WDs for sale in Brisbane?",
+          answer: `Browse <a href="/listings/queensland-state/brisbane-region/">4WDs for sale in Brisbane</a> and compare available models suited to everyday driving, family use and touring.`,
+        },
+        {
+          question: "Where can I find 4WDs for sale in Perth?",
+          answer: `Find <a href="/listings/western-australia-state/perth-region/">4WDs for sale in Perth</a> and compare vehicles by price, make, condition, seating and specifications.`,
+        },
+        {
+          question: "Where can I find 4WDs for sale in Adelaide?",
+          answer: `Browse <a href="/listings/south-australia-state/adelaide-region/">4WDs for sale in Adelaide</a> on 4WDForSale.com.au, including available new and used models.`,
+        },
+        {
+          question: "How can I find 4WDs for sale near me?",
+          answer: `Use the location filters on 4WDForSale.com.au to browse vehicles in your state, city or region. Narrow results by price, make, condition and features.`,
+        },
+      ],
+    },
+    {
+      label: "Selling a 4WD",
+      items: [
+        {
+          question: "How do I sell my 4WD online in Australia?",
+          answer: `You can <a href="${SELL}">sell your car online</a> through our unified marketplace for $49 including GST. Your eligible 4WD is advertised across relevant automotive marketplaces until sold.`,
+        },
+        {
+          question: "Where can I advertise my 4WD for sale?",
+          answer: `Advertise through SellMyCarOnline.au. Create one listing and your 4WD can appear on 4WDForSale.com.au and other relevant automotive marketplaces.`,
+        },
+        {
+          question: "How much does it cost to advertise a 4WD?",
+          answer: `Private sellers pay a one-time fee of $49 including GST through SellMyCarOnline.au. Your advertisement stays live until sold, with no monthly listing fees or sales commission.`,
+        },
+        {
+          question: "Can private owners advertise 4WDs for sale?",
+          answer: `Yes. Private owners can list eligible vehicles through SellMyCarOnline.au and receive enquiries directly from interested buyers without using a dealership.`,
+        },
+        {
+          question: "Can dealerships advertise their 4WD inventory?",
+          answer: `Yes. Dealerships can <a href="${DEALER}">advertise across our automotive marketplace network</a>, with eligible 4WD stock automatically displayed on relevant websites through a single dealer account.`,
+        },
+        {
+          question: "How do I determine the resale price of my 4WD?",
+          answer: `Compare similar 4WDs by make, model, year, kilometres, condition and modifications. Review current asking prices on 4WDForSale.com.au to estimate a competitive selling price.`,
+        },
+        {
+          question: "What information should I include in a 4WD advertisement?",
+          answer: `Include the make, model, year, kilometres, condition, price, drivetrain and service history. Highlight towing capacity, accessories and modifications, with clear interior, exterior and underbody photographs.`,
+        },
+      ],
+    },
+    {
+      label: "General & Buying",
+      items: [
+        {
+          question: "Where can I find 4WD vehicles for sale in Australia?",
+          answer: `Browse <a href="/listings/">new and used 4WDs for sale</a> on 4WDForSale.com.au. Compare available SUVs and wagons from dealerships and private sellers across Australia.`,
+        },
+        {
+          question: "What are the most popular 4WDs in Australia?",
+          answer: `Popular 4WD models include the Toyota LandCruiser Prado, Nissan Patrol, Ford Everest, Isuzu MU-X and Mitsubishi Pajero Sport. Compare available models by price, features and capability.`,
+        },
+        {
+          question: "What types of 4WD vehicles are available in Australia?",
+          answer: `4WD vehicles include SUVs, wagons and utes, ranging from family-focused models to dedicated off-road vehicles. 4WDForSale.com.au primarily features 4WD SUVs and wagons.`,
+        },
+        {
+          question: "What are the best 4WD vehicles for Australian conditions?",
+          answer: `The best 4WD depends on your destinations and driving needs. Consider ground clearance, low-range gearing, reliability, towing capacity and comfort for Australian roads and off-road conditions.`,
+        },
+        {
+          question: "Which 4WDs are suitable for everyday driving?",
+          answer: `Models such as the Ford Everest, Toyota Prado, Isuzu MU-X and Mitsubishi Pajero Sport can combine everyday comfort with touring capability. Compare fuel economy, safety and parking practicality.`,
+        },
+        {
+          question: "What should I consider before buying a 4WD?",
+          answer: `Consider your budget, intended use, drivetrain, ground clearance, towing capacity, seating and running costs. For used 4WDs, check service history, mechanical condition and previous off-road use.`,
+        },
+        {
+          question: "How can I compare different 4WDs for sale?",
+          answer: `Compare 4WDs by make, model, year, price, kilometres, fuel type, transmission, seating and features. Use the search filters on 4WDForSale.com.au to narrow your options.`,
+        },
+        {
+          question: "Are 4WDs available from private sellers and dealers?",
+          answer: `Yes. 4WDForSale.com.au features new, used and demo 4WDs advertised by Australian dealerships and private sellers. Buyers can compare available vehicles and contact advertisers directly.`,
+        },
+      ],
+    },
+  ],
+  "4x4": [
+    {
+      label: "New, Used & Prices",
+      items: [
+        {
+          question: "Where can I find new 4x4s for sale in Australia?",
+          answer: `Browse <a href="/listings/new-condition/">new 4x4s for sale</a> on 4x4ForSale.com.au. Compare available utes, SUVs and wagons from Australian dealerships.`,
+        },
+        {
+          question: "Where can I find used 4x4s for sale?",
+          answer: `Explore <a href="/listings/used-condition/">used 4x4s for sale</a> across Australia. Compare second-hand vehicles from dealerships and private sellers by price, condition, age and kilometres.`,
+        },
+        {
+          question: "Is it better to buy a new or used 4x4?",
+          answer: `New 4x4s offer current features and applicable manufacturer warranties, while used models generally cost less. Compare condition, reliability, off-road capability and running costs before deciding.`,
+        },
+        {
+          question: "How much does a 4x4 cost in Australia?",
+          answer: `4x4 prices vary from under $20,000 for some older used vehicles to over $100,000 for premium models. Brand, age, condition, specifications and modifications influence prices.`,
+        },
+        {
+          question: "Where can I find 4x4s under $20,000?",
+          answer: `Browse <a href="/listings/between-10000-20000/">4x4s between $10,000 and $20,000</a> or lower price ranges. Compare affordable used vehicles by age, condition, kilometres and service history.`,
+        },
+        {
+          question: "Where can I find cheap 4x4s for sale?",
+          answer: `Explore <a href="/listings/under-10000/">4x4s under $10,000</a> and other budget categories on 4x4ForSale.com.au. Consider servicing, mechanical condition and potential repair costs before purchasing.`,
+        },
+        {
+          question: "What should I check before buying a used 4x4?",
+          answer: `Inspect the engine, transmission, transfer case, suspension, chassis and underbody. Check for corrosion, off-road damage, accident history and modifications. Review service records and conduct a PPSR search.`,
+        },
+        {
+          question: "Are second-hand 4x4s worth buying?",
+          answer: `Used 4x4s can offer good value, particularly when properly maintained. Check their mechanical condition, previous use, service history and any modifications before purchasing.`,
+        },
+        {
+          question: "Can I get finance to buy a new or used 4x4?",
+          answer: `Yes. Banks and specialist vehicle lenders may offer finance for new and used 4x4s, subject to eligibility. Compare interest rates, fees, loan terms and repayments.`,
+        },
+      ],
+    },
+    {
+      label: "4x4 Brands & Models",
+      items: [
+        {
+          question: "Where can I find Toyota 4x4s for sale?",
+          answer: `Browse <a href="/listings/toyota/">Toyota 4x4s for sale</a>, including available HiLux, LandCruiser, Prado and other four-wheel-drive models from Australian dealerships and private sellers.`,
+        },
+        {
+          question: "Where can I find Ford 4x4s for sale?",
+          answer: `Explore <a href="/listings/ford/">Ford 4x4s for sale</a>, including Ranger, Ranger Raptor and Everest models suited to work, towing, touring and recreation.`,
+        },
+        {
+          question: "Where can I find Mitsubishi 4x4s for sale?",
+          answer: `Browse <a href="/listings/mitsubishi/">Mitsubishi 4x4s for sale</a>, including available Triton, Pajero and Pajero Sport models. Compare prices, condition and specifications.`,
+        },
+        {
+          question: "Where can I find Nissan 4x4s for sale?",
+          answer: `Explore <a href="/listings/nissan/">Nissan 4x4s for sale</a>, including Patrol, Navara and other available models. Compare drivetrain, towing capacity, seating and features.`,
+        },
+        {
+          question: "Where can I find Suzuki 4x4s for sale?",
+          answer: `Browse <a href="/listings/suzuki/">Suzuki 4x4s for sale</a>, including the compact Jimny and other available four-wheel-drive models suited to different driving needs.`,
+        },
+        {
+          question: "Where can I find Jeep 4x4s for sale?",
+          answer: `Explore <a href="/listings/jeep/">Jeep 4x4s for sale</a>, including available Wrangler, Gladiator and Grand Cherokee models. Compare prices, features and off-road specifications.`,
+        },
+        {
+          question: "Where can I find Isuzu 4x4s for sale?",
+          answer: `Browse <a href="/listings/isuzu/">Isuzu 4x4s for sale</a>, including available D-MAX utes and MU-X SUVs suited to work, towing and family touring.`,
+        },
+        {
+          question: "Are GWM 4x4s worth considering?",
+          answer: `GWM offers 4x4 models such as the Cannon ute and Tank SUV range. Compare <a href="/listings/gwm/">GWM 4x4s for sale</a> by price, warranty, features and off-road capabilities.`,
+        },
+      ],
+    },
+    {
+      label: "4x4 Types & Sizes",
+      items: [
+        {
+          question: "Where can I find 4x4 utes for sale?",
+          answer: `Browse <a href="/listings/ute-body-type/">4x4 utes for sale</a>, including available Toyota HiLux, Ford Ranger, Mitsubishi Triton, Isuzu D-MAX and Nissan Navara models.`,
+        },
+        {
+          question: "Where can I find 4x4 SUVs for sale?",
+          answer: `Explore <a href="/listings/suv-body-type/">4x4 SUVs for sale</a>, including models suited to family driving, towing, long-distance touring and recreational adventures.`,
+        },
+        {
+          question: "Where can I find 4x4 wagons for sale?",
+          answer: `Browse <a href="/listings/wagon-body-type/">4x4 wagons for sale</a>, including available Toyota LandCruiser, Ford Everest and other touring-focused models.`,
+        },
+        {
+          question: "What are the best small 4x4s in Australia?",
+          answer: `The Suzuki Jimny is a popular compact off-road 4x4. When comparing smaller vehicles, consider ground clearance, low-range gearing, passenger space, payload and everyday comfort.`,
+        },
+        {
+          question: "Which 4x4s are suitable for families?",
+          answer: `Models such as the Toyota Prado, Ford Everest, Isuzu MU-X and Mitsubishi Pajero Sport offer family-oriented configurations. Compare seating capacity, safety features, boot space and comfort.`,
+        },
+        {
+          question: "Where can I find luxury 4x4s for sale?",
+          answer: `Browse premium 4x4s from brands such as Toyota, Land Rover, Mercedes-Benz and Jeep. Compare available models by price, comfort, towing capacity and off-road features.`,
+        },
+      ],
+    },
+    {
+      label: "Fuel, Off-Road & Performance",
+      items: [
+        {
+          question: "What is the difference between petrol and diesel 4x4s?",
+          answer: `Diesel 4x4s often offer strong low-speed torque and practical touring range, while petrol models may provide smoother performance. Compare fuel consumption, servicing costs and towing requirements.`,
+        },
+        {
+          question: "Are hybrid and electric 4x4 vehicles available in Australia?",
+          answer: `Yes. Some hybrid and electric vehicles offer four-wheel-drive or AWD systems. However, not all have the low-range gearing or clearance associated with traditional off-road 4x4s.`,
+        },
+        {
+          question: "Are electric 4x4s suitable for off-road driving?",
+          answer: `Some electric 4x4s can handle selected off-road conditions. Check ground clearance, traction systems, battery protection, water-crossing limits and available driving range before travelling.`,
+        },
+        {
+          question: "What is the difference between high-range and low-range 4x4?",
+          answer: `High-range 4x4 is suited to higher-speed driving where additional traction is needed. Low-range gearing helps provide greater torque multiplication and control over steep or difficult terrain.`,
+        },
+        {
+          question: "Which 4x4s are best for off-road driving?",
+          answer: `Popular options include the Toyota LandCruiser, Jeep Wrangler, Suzuki Jimny, Nissan Patrol and Ford Ranger. Compare ground clearance, low-range gearing, differential locks and tyres.`,
+        },
+        {
+          question: "What are the best 4x4s for towing caravans?",
+          answer: `The Toyota LandCruiser, Ford Everest, Isuzu MU-X and selected 4x4 utes are commonly considered for towing. Check braked towing capacity, towball download, GVM and GCM.`,
+        },
+        {
+          question: "What features improve 4x4 off-road performance?",
+          answer: `Low-range gearing, differential locks, suitable tyres, ground clearance, underbody protection and traction-control systems can improve off-road capability. Vehicle weight and driver experience also matter.`,
+        },
+        {
+          question: "Are automatic or manual 4x4s better for off-road driving?",
+          answer: `Both can perform well off-road. Automatics often provide easier low-speed control, while manuals give drivers direct gear selection. The best choice depends on vehicle design and preference.`,
+        },
+        {
+          question: "Are 4x4s suitable for everyday driving?",
+          answer: `Yes. Many modern 4x4s offer comfortable interiors, safety technology and practical everyday features. Consider vehicle size, fuel economy, parking requirements and running costs.`,
+        },
+      ],
+    },
+    {
+      label: "Classic & Modified 4x4s",
+      items: [
+        {
+          question: "Where can I find classic 4x4s for sale in Australia?",
+          answer: `Older Toyota LandCruiser, Nissan Patrol, Jeep and Land Rover models are popular with classic 4x4 enthusiasts. Browse used 4x4 listings and filter by make and year.`,
+        },
+        {
+          question: "Are older 4x4s worth buying?",
+          answer: `Older 4x4s can offer value and straightforward mechanical designs, but may require additional maintenance. Check corrosion, service history, parts availability and previous modifications.`,
+        },
+        {
+          question: "Where can I find modified 4x4s for sale?",
+          answer: `Some used 4x4 listings include vehicles with suspension lifts, upgraded tyres, bull bars and touring equipment. Check each advertisement for modifications and supporting documentation.`,
+        },
+        {
+          question: "What are the benefits of buying a lifted 4x4?",
+          answer: `A properly designed suspension lift may improve ground clearance and accommodate suitable tyres. However, lifts can affect handling, vehicle stability, legal compliance and maintenance requirements.`,
+        },
+        {
+          question: "Are modified 4x4s legal in Australia?",
+          answer: `Many 4x4 modifications are permitted when they meet applicable state or territory requirements. Suspension lifts, larger tyres and structural changes may require inspection or engineering approval.`,
+        },
+        {
+          question: "Which modifications improve 4x4 off-road performance?",
+          answer: `Suitable all-terrain tyres, suspension upgrades, differential locks and underbody protection can improve capability. Choose modifications based on your vehicle's specifications and intended terrain.`,
+        },
+        {
+          question: "What should I check before buying a classic or modified 4x4?",
+          answer: `Inspect the chassis, rust, driveline, suspension, tyres and electrical systems. Check modification approvals, service records, roadworthiness and parts availability before purchasing.`,
+        },
+      ],
+    },
+    {
+      label: "4x4s for Sale by Location",
+      items: [
+        {
+          question: "Where can I find 4x4s for sale in Sydney?",
+          answer: `Browse <a href="/listings/new-south-wales-state/sydney-region/">4x4s for sale in Sydney</a> on 4x4ForSale.com.au. Compare new and used utes, SUVs and wagons from dealers and private sellers.`,
+        },
+        {
+          question: "Where can I find 4x4s for sale in Melbourne?",
+          answer: `Explore <a href="/listings/victoria-state/melbourne-region/">4x4s for sale in Melbourne</a> and compare available models by price, make, body type, condition and features.`,
+        },
+        {
+          question: "Where can I find 4x4s for sale in Brisbane?",
+          answer: `Browse <a href="/listings/queensland-state/brisbane-region/">4x4s for sale in Brisbane</a> and compare available vehicles suited to work, family use, touring and off-road recreation.`,
+        },
+        {
+          question: "Where can I find 4x4s for sale in Perth?",
+          answer: `Find <a href="/listings/western-australia-state/perth-region/">4x4s for sale in Perth</a> and compare available utes, SUVs and wagons by price, condition and specifications.`,
+        },
+        {
+          question: "Where can I find 4x4s for sale in Adelaide?",
+          answer: `Browse <a href="/listings/south-australia-state/adelaide-region/">4x4s for sale in Adelaide</a> on 4x4ForSale.com.au. Compare available vehicles from dealers and private sellers.`,
+        },
+        {
+          question: "Can I buy a 4x4 from another state in Australia?",
+          answer: `Yes. You can contact interstate sellers and arrange inspections or transport. Check registration transfer requirements, roadworthy certificates, delivery costs and vehicle condition before purchasing.`,
+        },
+      ],
+    },
+    {
+      label: "Selling & Our Marketplace",
+      items: [
+        {
+          question: "How do I sell my 4x4 online in Australia?",
+          answer: `You can <a href="${SELL}">sell your car online</a> through our unified marketplace for $49 including GST. Your eligible 4x4 is advertised across relevant automotive marketplaces until sold.`,
+        },
+        {
+          question: "How much does it cost to advertise a 4x4?",
+          answer: `Private sellers pay a one-time fee of $49 including GST through SellMyCarOnline.au, with no monthly listing fees or commission on the sale.`,
+        },
+        {
+          question: "How long will my 4x4 advertisement stay online?",
+          answer: `Your private seller advertisement remains live until your vehicle is sold. There are no recurring monthly listing charges.`,
+        },
+        {
+          question: "Will my 4x4 be advertised across multiple marketplaces?",
+          answer: `Yes. When you list through SellMyCarOnline.au, eligible vehicles are automatically advertised across relevant automotive marketplaces within our network, based on their attributes.`,
+        },
+        {
+          question: "How do I determine the resale price of my 4x4?",
+          answer: `Compare similar vehicles by make, model, year, kilometres, condition and modifications. Review advertised prices on 4x4ForSale.com.au to estimate a competitive asking price.`,
+        },
+        {
+          question: "What information should I include in a 4x4 advertisement?",
+          answer: `Include the make, model, year, kilometres, condition, price, drivetrain and service history. Highlight towing capacity, accessories and modifications, supported by clear photographs.`,
+        },
+        {
+          question: "Can private sellers and dealerships advertise 4x4s?",
+          answer: `Yes. Private sellers can list through SellMyCarOnline.au, while dealerships can <a href="${DEALER}">advertise eligible stock</a> across relevant marketplaces through a unified dealer account.`,
+        },
+      ],
+    },
+    {
+      label: "General & Buying",
+      items: [
+        {
+          question: "Where can I find 4x4s for sale in Australia?",
+          answer: `Browse <a href="/listings/">new and used 4x4s for sale</a> on 4x4ForSale.com.au. Compare utes, SUVs and wagons from dealerships and private sellers across Australia.`,
+        },
+        {
+          question: "What does 4x4 mean in a vehicle?",
+          answer: `4x4 refers to a four-wheel-drive vehicle capable of delivering power to all four wheels. Systems vary, with some designed for demanding off-road conditions and others primarily for road traction.`,
+        },
+        {
+          question: "What are the most popular 4x4 vehicles in Australia?",
+          answer: `Popular 4x4s include the Toyota HiLux, Ford Ranger, Toyota LandCruiser, Nissan Patrol, Mitsubishi Triton, Isuzu D-MAX and Suzuki Jimny. Compare models based on your driving needs.`,
+        },
+        {
+          question: "What types of 4x4 vehicles are available in Australia?",
+          answer: `4x4s include dual-cab utes, single-cab work vehicles, SUVs, wagons and compact off-road models. Each offers different passenger space, towing capability, cargo capacity and off-road features.`,
+        },
+        {
+          question: "What are the benefits of owning a 4x4?",
+          answer: `A 4x4 can provide additional traction, off-road capability and versatility for work, touring and recreation. Suitability depends on the vehicle's drivetrain, clearance, tyres and specifications.`,
+        },
+        {
+          question: "What is the difference between a 4x4 and an AWD vehicle?",
+          answer: `Traditional 4x4 systems often include selectable driving modes and low-range gearing, while AWD commonly focuses on distributing traction automatically. Actual off-road capabilities vary between vehicles.`,
+        },
+        {
+          question: "What should I consider before buying a 4x4?",
+          answer: `Consider your budget, intended use, ground clearance, drivetrain, towing capacity, fuel consumption and running costs. For used 4x4s, check service history, mechanical condition and previous off-road use.`,
+        },
+        {
+          question: "How can I compare different 4x4s for sale?",
+          answer: `Compare 4x4s by make, model, year, price, kilometres, body type, fuel type, transmission and features. Use the search filters on 4x4ForSale.com.au to narrow your options.`,
         },
       ],
     },

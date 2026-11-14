@@ -45,6 +45,40 @@ const SITE_COPY: Partial<Record<string, ReactNode>> = {
       </p>
     </>
   ),
+  "4wd": (
+    <>
+      <h2 className="hbg-title">4WDs for Sale in Australia – Buy with Confidence</h2>
+      <p className="hbg-body">
+        Looking to buy a 4WD in Australia? 4WDForSale.com.au helps you browse and compare new and used 4WDs for sale from dealerships and private sellers nationwide. Whether you&apos;re buying your first 4WD, upgrading your family vehicle or searching for an affordable second-hand model, find a 4WD that suits your budget and driving needs.
+      </p>
+      <p className="hbg-body">
+        Explore popular 4WD models such as the Toyota LandCruiser and Prado, Nissan Patrol, Ford Everest, Isuzu MU-X, Mitsubishi Pajero Sport and Suzuki Jimny. From compact off-road vehicles to spacious 7-seater 4WD SUVs and wagons, compare options suited to everyday driving, family adventures, caravan towing and Australian outback touring.
+      </p>
+      <p className="hbg-body">
+        Use our search filters to find 4WDs by location, price, condition, make, model, fuel type, transmission and seating capacity. Compare important specifications such as ground clearance, low-range gearing, towing capacity, drivetrain, safety features and off-road capabilities.
+      </p>
+      <p className="hbg-body">
+        When buying a used 4WD, check its service history, mechanical condition, registration and signs of previous off-road damage. Whether you&apos;re planning weekend adventures or long-distance touring, <Link href="/listings/" className="hbg-link">browse our 4wd listings</Link> and find a vehicle that best matches your requirements and contact dealers or private sellers directly.
+      </p>
+    </>
+  ),
+  "4x4": (
+    <>
+      <h2 className="hbg-title">4x4s for Sale in Australia – Buy with Confidence</h2>
+      <p className="hbg-body">
+        Looking to buy a 4x4 in Australia? 4x4ForSale.com.au helps you browse and compare new and used 4x4s for sale from dealerships and private sellers nationwide. Whether you&apos;re buying your first 4x4, upgrading your off-road vehicle or searching for an affordable second-hand model, find a 4x4 that suits your budget and driving needs.
+      </p>
+      <p className="hbg-body">
+        Explore popular 4x4 models such as the Toyota HiLux and LandCruiser, Ford Ranger, Nissan Patrol and Navara, Mitsubishi Triton, Isuzu D-MAX, Jeep Wrangler and Suzuki Jimny. From rugged 4x4 utes and compact off-road vehicles to spacious SUVs, wagons and modified 4x4s, compare options suited to work, family adventures, caravan towing and Australian outback touring.
+      </p>
+      <p className="hbg-body">
+        Use our search filters to find 4x4s by location, price, condition, make, model, body type, fuel type and transmission. Compare important specifications such as drivetrain, ground clearance, low-range gearing, towing capacity, safety features and off-road equipment.
+      </p>
+      <p className="hbg-body">
+        When buying a used 4x4, check its service history, mechanical condition, registration and signs of previous off-road damage or modifications. Whether you&apos;re looking for a dependable workhorse or an adventure-ready vehicle, <Link href="/listings/" className="hbg-link">browse our 4x4 listings</Link>, compare available listings and contact dealers or private sellers directly.
+      </p>
+    </>
+  ),
 };
 
 export default function HomeBuyerGuide() {
