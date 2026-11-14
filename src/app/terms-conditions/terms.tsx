@@ -1,5 +1,7 @@
 'use client'
 
+import ContactEmail from "@/app/components/ContactEmail";
+
 export default function TermsOfUse() {
   return (
     <section className="services static_page section-padding pt-30 pb-30 style-1">
@@ -221,9 +223,7 @@ export default function TermsOfUse() {
               <p>
                 <strong>Marketplace Network Pty Ltd</strong><br />
                 Email:{" "}
-                <a href="mailto:admin@marketplacenetwork.com.au">
-                  admin@marketplacenetwork.com.au
-                </a>
+                <ContactEmail />
               </p>
 
             </div>

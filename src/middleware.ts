@@ -121,6 +121,27 @@ function buildApiParams(filters: Filters): URLSearchParams {
   return p;
 }
 
+/** Product counts from a /pool response body, or null when it isn't a /pool
+ * answer: the backend host's bot challenge (sgcaptcha HTML sent with a 2xx),
+ * an error page or broken JSON. Those used to read as "0 products", which
+ * noindexed busy listings pages that had stock (Ahrefs crawl of 10 Nov 2026:
+ * 515 sitemap URLs). */
+function readPoolCounts(raw: string): { total: number; exclusive: number } | null {
+  const idx = raw.indexOf('{"');
+  if (idx < 0) return null;
+  let data: any;
+  try {
+    data = JSON.parse(raw.substring(idx));
+  } catch {
+    return null;
+  }
+  if (!data || data.success === false) return null;
+  const total = Number(data.counts?.total ?? data.pagination?.total_products ?? NaN);
+  if (!Number.isFinite(total)) return null;
+  const exclusive = Array.isArray(data.exclusive_products) ? data.exclusive_products.length : 0;
+  return { total, exclusive };
+}
+
 async function refreshSeoCache(cacheKey: string, url: URL, request: NextRequest) {
   try {
     const slugParts = url.pathname.replace("/listings", "").split("/").filter(Boolean);
@@ -137,15 +158,11 @@ async function refreshSeoCache(cacheKey: string, url: URL, request: NextRequest)
     });
     clearTimeout(timeoutId);
     if (apiRes.ok) {
-      const data = await apiRes.json();
-      // /pool bucket products into featured/new/used at the top level (no more
-      // flat `products` array) — sum them for a total-count check.
-      const totalCount = data?.counts?.total ?? data?.pagination?.total_products
-        ?? ((data?.featured_products?.length ?? 0) + (data?.new_products?.length ?? 0) + (data?.used_products?.length ?? 0))
-        ?? 0;
-      const exclusiveOnly = data?.exclusive_products ?? [];
-      const isEmpty = totalCount === 0 && exclusiveOnly.length === 0;
-      const hasExclusiveOnly = totalCount === 0 && exclusiveOnly.length > 0;
+      const pool = readPoolCounts(await apiRes.text());
+      // Not a /pool answer (bot challenge, error page) — keep the cached one.
+      if (!pool) return;
+      const isEmpty = pool.total === 0 && pool.exclusive === 0;
+      const hasExclusiveOnly = pool.total === 0 && pool.exclusive > 0;
       // X-Robots-Tag itself is decided by isIndexableListingPath (indexRules.ts) in
       // the main handler, not from this cache — only isEmpty/hasExclusiveOnly
       // (which still require a live product-count check) are cached here.
@@ -488,25 +505,15 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
         clearTimeout(timeoutId);
 
         if (apiRes.ok) {
-          const raw = await apiRes.text();
-          const idx = raw.indexOf('{"');
-          let data: any;
-          try {
-            data = JSON.parse(idx > 0 ? raw.substring(idx) : raw);
-          } catch {
-            data = {};
-          }
+          // null = not a /pool answer (bot challenge, error page): the product
+          // count is unknown, so the index rules alone decide and nothing is cached.
+          const pool = readPoolCounts(await apiRes.text());
 
           // 0 regular products:
           //   - exclusiveOnly also empty → 410 (Vercel shows its own Gone page — no content anyway)
           //   - exclusiveOnly has items  → 200 noindex (Vercel intercepts 410+rewrite, page must show exclusive content)
-          // /pool buckets products into featured/new/used at the top level (no more flat `products` array).
-          const totalCount = data?.counts?.total ?? data?.pagination?.total_products
-            ?? ((data?.featured_products?.length ?? 0) + (data?.new_products?.length ?? 0) + (data?.used_products?.length ?? 0))
-            ?? 0;
-          const empExclusive = data?.exclusive_products ?? [];
-          if (totalCount === 0) {
-            if (empExclusive.length === 0) {
+          if (pool && pool.total === 0) {
+            if (pool.exclusive === 0) {
               // Don't 410 from middleware — ISR/page component handles empty state
               seoCache.set(cacheKey, { isEmpty: true, hasExclusiveOnly: false, expires: Date.now() + CACHE_TTL, staleExpires: Date.now() + CACHE_STALE_TTL });
               robotsHeader = "noindex";
@@ -516,7 +523,7 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
               const rewriteUrl = new URL(`/api/listings-410/${slugParts.join('/')}${url.search}`, request.url);
               return NextResponse.rewrite(rewriteUrl);
             }
-          } else {
+          } else if (pool) {
             seoCache.set(cacheKey, {
               isEmpty: false,
               hasExclusiveOnly: false,

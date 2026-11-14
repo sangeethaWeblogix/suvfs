@@ -1,6 +1,7 @@
 'use client'
 
 import { site } from "@/config/sites";
+import ContactEmail from "@/app/components/ContactEmail";
 
  
 export default function CaravanBuyingSafetyGuide() {
@@ -220,9 +221,7 @@ export default function CaravanBuyingSafetyGuide() {
               <p>You can contact our team at:</p>
 
               <p>
-                <a href="mailto:admin@marketplacenetwork.com.au">
-                  admin@marketplacenetwork.com.au
-                </a>
+                <ContactEmail />
               </p>
 
               <h3>Important Disclaimer</h3>

@@ -4,7 +4,7 @@ import { site } from "@/config/sites";
 import { siteRange } from "@/config/siteRange";
 
 
-import Link from 'next/link'
+import ContactEmail from "@/app/components/ContactEmail";
 
 export default function AboutUs() {
   return (
@@ -70,13 +70,7 @@ export default function AboutUs() {
                 available to assist you with any questions, concerns, or inquiries.
                 We’re here to ensure your experience with Marketplace Network is smooth
                 and satisfactory. Please email your queries to{' '}
-                <Link
-                  href="mailto:admin@marketplacenetwork.com.au"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  admin@marketplacenetwork.com.au
-                </Link>
+                <ContactEmail />
               </p>
 
               <h4 className="wp-block-heading">Browse Marketplace Network Today</h4>

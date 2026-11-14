@@ -1,6 +1,7 @@
 'use client'
 
 import { SITES } from "@/config/sites";
+import ContactEmail from "@/app/components/ContactEmail";
 
 import Link from 'next/link'
 
@@ -158,9 +159,7 @@ export default function PrivacyCollectionStatement() {
 
               <p>
                 <strong>Email:</strong>{" "}
-                <a href="mailto:admin@marketplacenetwork.com.au">
-                  admin@marketplacenetwork.com.au
-                </a>
+                <ContactEmail />
               </p>
 
             </div>
