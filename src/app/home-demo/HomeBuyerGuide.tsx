@@ -159,9 +159,9 @@ export default function HomeBuyerGuide() {
 
             <h2 className="hbg-sell-title">Looking to sell your car?</h2>
             <p className="hbg-sell-body">
-              Whether you&apos;re upgrading or simply ready for a change,{" "}
-              <a href={portalLinks.sell} className="hbg-sell-link">sell your car online</a>{" "}
-              for just $49 incl. GST. Your listing stays live until sold and is advertised across all relevant marketplaces within our network, helping you reach more potential buyers across Australia.
+              Ready to sell? Visit{" "}
+              <a href={portalLinks.sell} className="hbg-sell-link">Sell My Car Online</a>{" "}
+              to advertise your car for just $49 incl. GST. Your listing stays live until sold and is advertised across all relevant marketplaces within our network, helping you reach more potential buyers across Australia.
             </p>
 
 

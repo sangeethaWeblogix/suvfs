@@ -51,17 +51,17 @@ const POPULAR_LOCATIONS = [
   { label: "Ballarat", href: "/listings/victoria-state/ballarat-region/" },
 ];
 
+// Sellers and dealers share one login page on the portal.
+const PORTAL_LOGIN = "https://cars.marketplacenetwork.com.au/seller-login/";
+
 const SELLER_LINKS = [
-  { label: `Sell My ${site.singular}`, href: portalLinks.sell },
-  // disabled: not clickable until the seller module is live
-  { label: "Seller Login", href: "https://cars.marketplacenetwork.com.au/seller-login/", disabled: true },
+  { label: "Sell My Car", href: portalLinks.sell },
+  { label: "Seller Login", href: PORTAL_LOGIN },
 ];
 
 const DEALER_LINKS = [
-  // disabled: not clickable until the dealer module is live
-  { label: "Dealer Login", href: "https://cars.marketplacenetwork.com.au/seller-login/", disabled: true },
+  { label: "Dealer Login", href: PORTAL_LOGIN },
   { label: "Dealer Advertising", href: portalLinks.dealer },
-  { label: "Dealer Sign Up", href: "https://cars.marketplacenetwork.com.au/car-dealer-subscription/", disabled: true },
 ];
 
 const GUIDE_LINKS = [
@@ -180,13 +180,9 @@ const Footer = async () => {
               <ul>
                 {SELLER_LINKS.map((l) => (
                   <li key={l.label}>
-                    {l.disabled ? (
-                      <a className="is-disabled" aria-disabled="true">{l.label}</a>
-                    ) : (
-                      <a href={l.href} target={l.href.startsWith("http") ? "_blank" : undefined} rel={l.href.startsWith("http") ? "noopener noreferrer" : undefined}>
-                        {l.label}
-                      </a>
-                    )}
+                    <a href={l.href} target="_blank" rel="noopener noreferrer">
+                      {l.label}
+                    </a>
                   </li>
                 ))}
               </ul>
@@ -195,13 +191,9 @@ const Footer = async () => {
               <ul>
                 {DEALER_LINKS.map((l) => (
                   <li key={l.label}>
-                    {l.disabled ? (
-                      <a className="is-disabled" aria-disabled="true">{l.label}</a>
-                    ) : (
-                      <a href={l.href} target={l.href.startsWith("http") ? "_blank" : undefined} rel={l.href.startsWith("http") ? "noopener noreferrer" : undefined}>
-                        {l.label}
-                      </a>
-                    )}
+                    <a href={l.href} target="_blank" rel="noopener noreferrer">
+                      {l.label}
+                    </a>
                   </li>
                 ))}
               </ul>

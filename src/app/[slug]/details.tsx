@@ -621,9 +621,9 @@
              from dealers and private sellers across Australia, with listings available by make, model, price, location and {site.noun} type.
            </p>
            <p className="bds-cta-body">
-             <strong>Looking to sell your car?</strong> Whether you&apos;re upgrading or simply ready for a change,{" "}
-             <a href={portalLinks.sell} className="bds-cta-link">sell your car online</a>{" "}
-             for just $49 incl. GST. Your listing stays live until sold and is advertised across all relevant marketplaces
+             <strong>Looking to sell your car?</strong> Ready to sell? Visit{" "}
+             <a href={portalLinks.sell} className="bds-cta-link">Sell My Car Online</a>{" "}
+             to advertise your car for just $49 incl. GST. Your listing stays live until sold and is advertised across all relevant marketplaces
              within our network, helping you reach more potential buyers across Australia.
            </p>
          </div>

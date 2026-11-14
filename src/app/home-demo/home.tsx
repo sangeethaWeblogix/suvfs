@@ -269,12 +269,12 @@ const handleBannerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) =
         <div className="container">
           <div className="sell-banner">
             <div className="sell-content">
-              <h3>Sell Your Car Online Today</h3>
-              <p className="subtitle">Reach thousands of buyers across our network of Australian car marketplaces.</p>
-              <p className="desc">List your car for just $49 incl. GST and it stays live until sold, advertised across all relevant marketplaces in our network.</p>
+              <h3>Sell Your {site.singular} Online Today</h3>
+              <p className="subtitle">Reach potential buyers across Australia through our network of automotive marketplaces.</p>
+              <p className="desc">Advertise your {site.noun} for just $49 incl. GST. Your listing stays live until sold and is advertised across all relevant marketplaces within our network.</p>
               <div className="btns_two">
-                <a href={portalLinks.dealer} className="btn primary-btn">Dealer Sign Up</a>
-                <a href={portalLinks.sell} className="btn secondary-btn">Private Seller - Click Here</a>
+                <a href={portalLinks.sell} className="btn primary-btn">Sell My {site.singular}</a>
+                <a href={portalLinks.dealer} className="btn secondary-btn">Dealer Advertising</a>
               </div>
             </div>
           </div>
