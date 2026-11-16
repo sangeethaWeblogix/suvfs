@@ -1156,6 +1156,256 @@ export const HOME_FAQS: Partial<Record<string, FaqCategory[]>> = {
       ],
     },
   ],
+  convertibles: [
+    {
+      label: "Convertible Roofs & Styles",
+      items: [
+        {
+          question: "What is the difference between soft-top and hardtop convertibles?",
+          answer: `Soft-top convertibles use folding fabric roofs, while retractable hardtops use rigid roof panels. Soft-tops are often lighter, while hardtops may offer greater insulation and security.`,
+        },
+        {
+          question: "What is a roadster?",
+          answer: `A roadster is generally a sporty two-seat open-top car designed around driving enjoyment. Popular examples include the Mazda MX-5 and Porsche Boxster.`,
+        },
+        {
+          question: "What is a cabriolet?",
+          answer: `Cabriolet is another term for a convertible car, commonly used by European manufacturers. Cabriolets can feature soft-top or retractable hardtop roofs and two or more seats.`,
+        },
+        {
+          question: "What is the difference between a targa and a convertible?",
+          answer: `A targa typically features a removable or retractable roof section while retaining more fixed roof structure. Traditional convertibles generally allow a larger roof section to open.`,
+        },
+        {
+          question: "Are convertible cars waterproof in heavy rain?",
+          answer: `Modern convertibles are designed to withstand normal rain when their roofs and seals are maintained. Inspect roof seals, drainage channels and the interior for water leaks.`,
+        },
+        {
+          question: "Are soft-top convertibles secure when parked?",
+          answer: `Soft-top convertibles have locking mechanisms and security features, but fabric roofs may be more vulnerable to damage than metal roofs. Avoid leaving valuables visible.`,
+        },
+        {
+          question: "Do convertible cars have enough boot space?",
+          answer: `Boot space varies considerably between convertible models. Some retractable roofs reduce luggage capacity when lowered. Compare boot dimensions and roof operation before buying.`,
+        },
+      ],
+    },
+    {
+      label: "New, Used & Prices",
+      items: [
+        {
+          question: "Where can I find new convertibles for sale in Australia?",
+          answer: `Browse <a href="/listings/new-condition/">new convertibles for sale</a> on ConvertiblesForSale.com.au. Compare available models from dealerships by price, make, seating and specifications.`,
+        },
+        {
+          question: "Where can I find used convertibles for sale?",
+          answer: `Explore <a href="/listings/used-condition/">used convertibles for sale</a> across Australia. Compare second-hand vehicles by price, age, kilometres, condition and features.`,
+        },
+        {
+          question: "Is it better to buy a new or used convertible?",
+          answer: `New convertibles offer current features and applicable warranties, while used models generally cost less. Consider vehicle condition, roof maintenance, servicing and insurance before deciding.`,
+        },
+        {
+          question: "How much does a new convertible cost in Australia?",
+          answer: `New convertible prices vary by brand, performance and features. Models such as the Mazda MX-5 generally cost less than premium European sports cars and luxury convertibles.`,
+        },
+        {
+          question: "How much does a used convertible cost in Australia?",
+          answer: `Some older used convertibles are advertised for under $20,000, while newer luxury and performance models can exceed $100,000. Prices depend on brand, age, condition and kilometres.`,
+        },
+        {
+          question: "Where can I find cheap convertibles for sale?",
+          answer: `Browse <a href="/listings/between-10000-20000/">convertibles between $10,000 and $20,000</a> or explore other budget categories. Check roof condition, servicing and possible repair costs before purchasing.`,
+        },
+        {
+          question: "Where can I find luxury convertibles for sale?",
+          answer: `Explore <a href="/listings/over-100000/">convertibles over $100,000</a>, including available premium models from Porsche, Ferrari, Mercedes-Benz and other manufacturers.`,
+        },
+      ],
+    },
+    {
+      label: "Convertible Brands & Models",
+      items: [
+        {
+          question: "What are the most popular convertible cars in Australia?",
+          answer: `Well-known convertible models include the Mazda MX-5, Ford Mustang Convertible, BMW 4 Series Convertible, Mercedes-Benz Cabriolet models and Porsche Boxster.`,
+        },
+        {
+          question: "Where can I find Mazda convertibles for sale?",
+          answer: `Browse <a href="/listings/mazda/">Mazda convertibles for sale</a>, including available MX-5 models. Compare manual and automatic variants, prices, condition and features.`,
+        },
+        {
+          question: "Where can I find Ford Mustang convertibles for sale?",
+          answer: `Explore <a href="/listings/ford/">Ford convertibles for sale</a>, including Mustang Convertible models. Compare engine options, transmissions, performance and prices.`,
+        },
+        {
+          question: "Where can I find BMW convertibles for sale?",
+          answer: `Browse <a href="/listings/bmw/">BMW convertibles for sale</a>, including available Z4 roadsters and 2 Series, 4 Series and M performance convertibles.`,
+        },
+        {
+          question: "Where can I find Mercedes-Benz convertibles for sale?",
+          answer: `Explore <a href="/listings/mercedes-benz/">Mercedes-Benz convertibles for sale</a>, including available SL, SLK, C-Class and E-Class cabriolet models.`,
+        },
+        {
+          question: "Where can I find Porsche convertibles for sale?",
+          answer: `Browse <a href="/listings/porsche/">Porsche convertibles for sale</a>, including available Boxster, 718 Spyder, 911 Cabriolet and Targa models.`,
+        },
+        {
+          question: "Where can I find Audi convertibles for sale?",
+          answer: `Explore <a href="/listings/audi/">Audi convertibles for sale</a>, including available A3 and A5 Cabriolet models. Compare prices, roof designs, performance and condition.`,
+        },
+      ],
+    },
+    {
+      label: "Driving & Practicality",
+      items: [
+        {
+          question: "Should I buy a 2-seater or 4-seater convertible?",
+          answer: `A <a href="/listings/2-seats/">2-seater convertible</a> suits buyers prioritising sporty driving, while <a href="/listings/4-seats/">4-seater convertibles</a> offer additional passenger flexibility.`,
+        },
+        {
+          question: "Are 4-seater convertibles practical for families?",
+          answer: `Some four-seat convertibles can accommodate families, but rear-seat space and boot capacity may be limited. Check child-seat compatibility, safety features and everyday usability.`,
+        },
+        {
+          question: "Are manual or automatic convertibles better?",
+          answer: `Manual convertibles appeal to drivers who enjoy greater gear control, while automatics offer convenience in traffic. The better choice depends on driving preferences and vehicle specifications.`,
+        },
+        {
+          question: "What features improve convertible driving comfort?",
+          answer: `Useful features include heated seats, climate control, wind deflectors, adjustable seating and effective roof insulation. These can improve comfort during open-top driving and longer journeys.`,
+        },
+        {
+          question: "What safety features should I look for in a convertible?",
+          answer: `Look for electronic stability control, autonomous emergency braking, suitable rollover protection and airbags. Check the model's safety specifications and applicable ANCAP rating where available.`,
+        },
+      ],
+    },
+    {
+      label: "Inspections & Ownership",
+      items: [
+        {
+          question: "What should I inspect before buying a used convertible?",
+          answer: `Check the engine, transmission, tyres, brakes, service history and roof mechanism. Inspect fabric or hardtop panels, seals, drainage channels and the interior for water damage.`,
+        },
+        {
+          question: "How can I check a convertible for roof leaks?",
+          answer: `Inspect roof seals, windows, carpets, boot lining and drainage channels for moisture or staining. Test the roof operation and consider an independent inspection before purchasing.`,
+        },
+        {
+          question: "Are convertible roofs expensive to repair?",
+          answer: `Repair costs depend on the roof design and the extent of damage. Fabric repairs may be relatively simple, while motors, hydraulic systems and retractable hardtop mechanisms can be expensive.`,
+        },
+        {
+          question: "How often should convertible roofs be maintained?",
+          answer: `Follow the manufacturer's recommendations and regularly inspect seals, fabric, drainage channels and moving components. Keep the roof clean and address leaks or operating problems promptly.`,
+        },
+        {
+          question: "Are convertibles expensive to insure and maintain?",
+          answer: `Costs vary by model, value, performance and roof design. Luxury or high-performance convertibles may have higher insurance, servicing, tyre and roof-repair expenses.`,
+        },
+        {
+          question: "What documents should I check before buying a used convertible?",
+          answer: `Check registration details, VIN, service records and available warranty information. Conduct a PPSR search and consider an independent mechanical and roof inspection before purchasing.`,
+        },
+      ],
+    },
+    {
+      label: "Convertibles for Sale by Location",
+      items: [
+        {
+          question: "Where can I find convertibles for sale in Sydney?",
+          answer: `Browse <a href="/listings/new-south-wales-state/sydney-region/">convertibles for sale in Sydney</a> on ConvertiblesForSale.com.au. Compare new and used vehicles from dealerships and private sellers.`,
+        },
+        {
+          question: "Where can I find convertibles for sale in Melbourne?",
+          answer: `Explore <a href="/listings/victoria-state/melbourne-region/">convertibles for sale in Melbourne</a> and compare available models by make, price, condition, seating and features.`,
+        },
+        {
+          question: "Where can I find convertibles for sale in Brisbane?",
+          answer: `Browse <a href="/listings/queensland-state/brisbane-region/">convertibles for sale in Brisbane</a> and compare available roadsters, cabriolets, sports cars and luxury models.`,
+        },
+        {
+          question: "Where can I find convertibles for sale on the Gold Coast?",
+          answer: `Explore <a href="/listings/queensland-state/gold-coast-region/">convertibles for sale on the Gold Coast</a>, including available new and used vehicles advertised across the region.`,
+        },
+        {
+          question: "Where can I find convertibles for sale in Perth?",
+          answer: `Browse <a href="/listings/western-australia-state/perth-region/">convertibles for sale in Perth</a> and compare available vehicles by make, price, condition and specifications.`,
+        },
+        {
+          question: "How can I find convertibles for sale near me?",
+          answer: `Use the location filters on ConvertiblesForSale.com.au to find vehicles in your state, city or region. Narrow results by make, price and condition.`,
+        },
+      ],
+    },
+    {
+      label: "Selling a Convertible",
+      items: [
+        {
+          question: "How do I sell my convertible online in Australia?",
+          answer: `You can <a href="${SELL}">sell your car online</a> through our unified automotive marketplace network. Create one advertisement, add your vehicle details and photos, and receive enquiries directly.`,
+        },
+        {
+          question: "How much does it cost to advertise a convertible?",
+          answer: `Private sellers pay a one-time fee of $49 including GST through SellMyCarOnline.au. There are no monthly listing fees or commission on the final sale.`,
+        },
+        {
+          question: "How long will my convertible advertisement stay online?",
+          answer: `Your private seller advertisement remains live until your vehicle is sold, with no recurring monthly listing charges.`,
+        },
+        {
+          question: "Will my convertible be advertised across multiple marketplaces?",
+          answer: `Yes. Eligible vehicles are automatically advertised across relevant automotive marketplaces within our network, based on their body type and other vehicle attributes.`,
+        },
+        {
+          question: "What information should I include when selling my convertible?",
+          answer: `Include the make, model, year, kilometres, condition, price, roof type and service history. Add clear photographs showing the roof open and closed, interior and exterior.`,
+        },
+        {
+          question: "Can private sellers and dealerships advertise convertibles?",
+          answer: `Yes. Private sellers can list through SellMyCarOnline.au, while dealerships can <a href="${DEALER}">advertise eligible stock</a> through our unified automotive marketplace network.`,
+        },
+      ],
+    },
+    {
+      label: "General & Buying",
+      items: [
+        {
+          question: "Where can I find convertibles for sale in Australia?",
+          answer: `Browse <a href="/listings/">new and used convertibles for sale</a> on ConvertiblesForSale.com.au. Compare vehicles from dealerships and private sellers across Australia by price, make, model, location and features.`,
+        },
+        {
+          question: "What is a convertible car?",
+          answer: `A convertible is a car with a roof that can be opened or removed for open-air driving. Convertibles include soft-top, retractable hardtop, roadster and cabriolet models.`,
+        },
+        {
+          question: "What is the difference between a convertible and a coupe?",
+          answer: `Convertibles have roofs designed to open or be removed, while coupes generally have fixed roofs. Compare convertibles with <a href="https://www.coupesforsale.com.au/">coupes for sale</a> to explore both styles.`,
+        },
+        {
+          question: "What are the different types of convertibles available in Australia?",
+          answer: `Popular types include soft-top convertibles, retractable hardtops, two-seat roadsters, four-seat cabriolets and targa-roof sports cars. Each offers different levels of practicality, comfort and performance.`,
+        },
+        {
+          question: "How do I choose the right convertible?",
+          answer: `Consider your budget, seating requirements, roof design, driving preferences and running costs. Compare convertible models by price, condition, performance, features and everyday practicality.`,
+        },
+        {
+          question: "Are convertibles suitable for everyday driving?",
+          answer: `Yes. Many modern convertibles provide comfortable interiors, air conditioning and safety features for daily use. Consider roof insulation, boot space, fuel economy and parking requirements.`,
+        },
+        {
+          question: "Are convertibles available from private sellers and dealers?",
+          answer: `Yes. ConvertiblesForSale.com.au features new, used and demo convertibles advertised by Australian dealerships and private sellers. Buyers can compare vehicles and contact advertisers directly.`,
+        },
+        {
+          question: "How can I compare different convertibles for sale?",
+          answer: `Compare convertibles by make, model, year, price, kilometres, roof type, seating, fuel type and transmission. Use the filters on ConvertiblesForSale.com.au to narrow your options.`,
+        },
+      ],
+    },
+  ],
 };
 
 function stripHtml(html: string): string {

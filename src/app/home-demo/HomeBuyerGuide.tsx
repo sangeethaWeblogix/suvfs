@@ -79,6 +79,23 @@ const SITE_COPY: Partial<Record<string, ReactNode>> = {
       </p>
     </>
   ),
+  convertibles: (
+    <>
+      <h2 className="hbg-title">Convertibles for Sale in Australia – Buy with Confidence</h2>
+      <p className="hbg-body">
+        Looking to buy a convertible in Australia? ConvertiblesForSale.com.au helps you browse and compare new and used convertibles for sale from dealerships and private sellers nationwide. Whether you&apos;re buying your first convertible car, upgrading to a luxury model or searching for an affordable second-hand car, find one that suits your budget and driving preferences.
+      </p>
+      <p className="hbg-body">
+        Explore popular convertible models such as the Mazda MX-5, Ford Mustang Convertible, BMW Z4, Mercedes-Benz SL, Porsche Boxster and Audi Cabriolet models. From sporty 2-seater roadsters and practical 4-seater convertibles to luxury cabriolets and high-performance sports cars, compare soft-top and retractable hardtop designs suited to everyday driving, weekend escapes and open-top adventures.
+      </p>
+      <p className="hbg-body">
+        Use our search filters to find convertibles by location, price, condition, make, model, fuel type, transmission and seating capacity. Compare important features such as roof operation, boot space, interior comfort, safety technology and driving performance.
+      </p>
+      <p className="hbg-body">
+        When buying a used convertible, check its service history, mechanical condition, registration, roof seals and folding mechanism for signs of wear or water leaks. Whether you&apos;re looking for a sporty roadster or a luxury convertible, <Link href="/listings/" className="hbg-link">browse our convertible listings</Link>, compare available listings and contact dealers or private sellers directly.
+      </p>
+    </>
+  ),
 };
 
 export default function HomeBuyerGuide() {
